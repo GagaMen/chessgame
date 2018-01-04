@@ -25,7 +25,7 @@ dependencies {
 }
 
 compileKotlin2Js {
-    kotlinOptions.outputFile = "${projectDir}/build/js/client.js"
+    kotlinOptions.outputFile = "${projectDir}/dist/js/client.js"
     kotlinOptions.moduleKind = "amd"
     kotlinOptions.sourceMap = true
 }
@@ -46,5 +46,11 @@ build.doLast {
                 fcp.path = fcp.path.replaceFirst(/.*\//, '')
             }
         }
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("src/main/resources")
+        into "dist"
     }
 }
