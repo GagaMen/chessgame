@@ -1,5 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.2.10'
+    ext.requirejs_version = '2.3.5'
 
     repositories {
         mavenCentral()
@@ -20,4 +21,30 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.webjars:requirejs:$requirejs_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${projectDir}/build/js/client.js"
+    kotlinOptions.moduleKind = "amd"
+    kotlinOptions.sourceMap = true
+}
+
+build.doLast {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${projectDir}/dist/js"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                println(path)
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+            eachFile { fcp ->
+                fcp.path = fcp.path.replaceFirst(/.*\//, '')
+            }
+        }
+    }
 }
