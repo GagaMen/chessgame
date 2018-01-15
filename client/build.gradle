@@ -1,33 +1,40 @@
+group 'htwdd/chessgame'
+version '1.0.0'
+
 buildscript {
     ext.kotlin_version = '1.2.10'
     ext.requirejs_version = '2.3.5'
 
     repositories {
         mavenCentral()
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
     }
 }
 
-group 'htwdd/chessgame'
-version '1.0.0'
-
 apply plugin: 'kotlin2js'
+apply plugin: 'com.moowork.node'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile "org.webjars:requirejs:$requirejs_version"
+    compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
-compileKotlin2Js {
-    kotlinOptions.outputFile = "${projectDir}/dist/js/client.js"
-    kotlinOptions.moduleKind = "amd"
-    kotlinOptions.sourceMap = true
+[compileKotlin2Js, compileTestKotlin2Js]*.configure {
+    kotlinOptions {
+        moduleKind = "amd"
+        sourceMap = true
+    }
 }
 
 build.doLast {
@@ -36,10 +43,9 @@ build.doLast {
             includeEmptyDirs = false
 
             from zipTree(file.absolutePath)
-            into "${projectDir}/dist/js"
+            into "${projectDir}/dist/js/lib"
             include { fileTreeElement ->
                 def path = fileTreeElement.path
-                println(path)
                 path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
             }
             eachFile { fcp ->
@@ -49,8 +55,84 @@ build.doLast {
     }
 
     copy {
+        from "$buildDir/classes/kotlin/main/"
+        into "${projectDir}/dist/js/"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/test/"
+        into "${projectDir}/dist/js/test"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
         includeEmptyDirs = false
-        from new File("src/main/resources")
+        from new File("$buildDir/resources/main")
         into "dist"
     }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/test")
+        into "dist/js/test"
+    }
 }
+
+task release(type: Copy) {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${projectDir}/dist/js/lib"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+            eachFile { fcp ->
+                fcp.path = fcp.path.replaceFirst(/.*\//, '')
+            }
+        }
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/main/"
+        into "${projectDir}/dist/js/"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/test/"
+        into "${projectDir}/dist/js/test"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/main")
+        into "dist"
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/test")
+        into "dist/js/test"
+    }
+}
+configure(release) {
+    group = 'release'
+}
+
+task releaseClean (type: Delete) {
+    delete "dist"
+}
+configure(releaseClean) {
+    group = 'release'
+}
+
+clean.finalizedBy(releaseClean)
