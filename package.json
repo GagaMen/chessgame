@@ -1,0 +1,24 @@
+{
+  "name": "chessgame",
+  "version": "1.0.0",
+  "description": "A implementation of a RESTful chess game",
+  "main": "client.js",
+  "repository": "https://github.com/GagaMen/chessgame.git",
+  "author": "GagaMen <felixdimmel93@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "karma": "^2.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-requirejs": "^1.1.0",
+    "mocha": "^4.1.0",
+    "phantomjs": "^2.1.7",
+    "requirejs": "^2.3.5"
+  },
+  "scripts": {
+    "test": "karma start"
+  }
+}

@@ -5,4 +5,6 @@ class Client(var matches: Map<Int, Match> = emptyMap(),
     fun helloClient() {
         println("Hello Client")
     }
+
+    fun foo() = 10
 }
