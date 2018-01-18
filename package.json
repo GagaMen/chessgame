@@ -20,5 +20,8 @@
   },
   "scripts": {
     "test": "karma start"
+  },
+  "dependencies": {
+    "requirejs": "^2.3.5"
   }
 }
