@@ -2,8 +2,9 @@ group 'htwdd/chessgame'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+    ext.kotlin_version = '1.2.20'
     ext.requirejs_version = '2.3.5'
+    ext.knockoutjs_version = '3.4.2'
 
     repositories {
         mavenCentral()
@@ -12,12 +13,10 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
     }
 }
 
 apply plugin: 'kotlin2js'
-apply plugin: 'com.moowork.node'
 
 repositories {
     mavenCentral()
@@ -27,6 +26,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile "org.webjars:requirejs:$requirejs_version"
+    compile "org.webjars:knockout:$knockoutjs_version"
     compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
@@ -34,6 +34,7 @@ dependencies {
     kotlinOptions {
         moduleKind = "amd"
         sourceMap = true
+        sourceMapEmbedSources = "always"
     }
 }
 

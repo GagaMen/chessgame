@@ -1,4 +1,4 @@
-package htwdd.chessgame.client
+package htwdd.chessgame.client.model
 
 class Match(var id: Int,
             var players: Map<PieceColor, Player>,

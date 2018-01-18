@@ -1,4 +1,4 @@
-package htwdd.chessgame.client
+package htwdd.chessgame.client.model
 
 class PieceSet(var id: Int,
                var activePieces: Array<Piece>,

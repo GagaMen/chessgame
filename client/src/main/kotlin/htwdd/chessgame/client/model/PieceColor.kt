@@ -1,4 +1,4 @@
-package htwdd.chessgame.client
+package htwdd.chessgame.client.model
 
 enum class PieceColor {
     WHITE,
