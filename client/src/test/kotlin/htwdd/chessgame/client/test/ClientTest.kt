@@ -1,21 +1,24 @@
 package htwdd.chessgame.client.test
 
-import htwdd.chessgame.client.Client
+import htwdd.chessgame.client.model.Client
 import kotlin.test.*
 
-class ClientTest {
+class ClientTest() {
+
+    var classUnderTest: Client? = null
 
     @BeforeTest
-    val classUnderTest = Client()
-
+    fun setup() {
+        classUnderTest = Client()
+    }
 
     @Test
     fun testFoo() {
-        assertEquals(10, classUnderTest.foo())
+        assertEquals(10, classUnderTest?.foo())
     }
 
     @Test
     fun testFooWrong() {
-        assertEquals(20, classUnderTest.foo())
+        assertEquals(20, classUnderTest?.foo())
     }
 }
