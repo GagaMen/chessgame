@@ -4,7 +4,7 @@ version '1.0.0'
 buildscript {
     ext.kotlin_version = '1.2.20'
     ext.requirejs_version = '2.3.5'
-    ext.knockoutjs_version = '3.4.2'
+    ext.kotlinx_html_version = '0.6.6'
 
     repositories {
         mavenCentral()
@@ -26,7 +26,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile "org.webjars:requirejs:$requirejs_version"
-    compile "org.webjars:knockout:$knockoutjs_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
     compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
