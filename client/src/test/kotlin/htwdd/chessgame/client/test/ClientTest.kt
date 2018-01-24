@@ -11,14 +11,4 @@ class ClientTest() {
     fun setup() {
         classUnderTest = Client()
     }
-
-    @Test
-    fun testFoo() {
-        assertEquals(10, classUnderTest?.foo())
-    }
-
-    @Test
-    fun testFooWrong() {
-        assertEquals(20, classUnderTest?.foo())
-    }
 }
