@@ -7,19 +7,17 @@
 </head>
 <body>
 
-<p>First name: <input data-bind="value: firstName"/></p>
-<p>Last name: <input data-bind="value: lastName"/></p>
-<h2>Hello, <span data-bind="text: fullName"> </span>!</h2>
+<div class="app"></div>
 
 <script>
     require({
         baseUrl: 'js',
         paths: {
             'kotlin': 'lib/kotlin',
-            'knockout': 'lib/knockout'
+            'kotlinx-html-js': 'lib/kotlinx-html-js'
         }
     });
-    require(['knockout', 'client']);
+    require(['client']);
 </script>
 </body>
 </html>
