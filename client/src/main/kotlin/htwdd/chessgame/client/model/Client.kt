@@ -44,7 +44,7 @@ class Client(var matchCount: Int = 0,
             players[playerCount] = player
             playerCount++
             setChanged()
-            notifyObservers()
+            notifyObservers("updatePlayerList")
         } else {
             //todo: throw error
         }

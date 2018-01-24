@@ -3,13 +3,12 @@ package htwdd.chessgame.client.controller
 import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.Player
-import htwdd.chessgame.client.util.ActionListener
 import htwdd.chessgame.client.view.MainView
 import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.get
 
-class ClientController : ActionListener {
+class ClientController : Controller {
 
     var client: Client
     val mainView: MainView
@@ -51,6 +50,8 @@ class ClientController : ActionListener {
                         (password != null && password is HTMLInputElement && password.type == "password" && password.value != "")
                 ) {
                     client.addPlayer(Player(name.value, password.value))
+                    name.value = ""
+                    password.value = ""
                 } else {
                     //todo: throw exception
                 }
