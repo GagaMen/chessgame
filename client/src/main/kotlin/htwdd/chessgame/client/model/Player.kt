@@ -1,5 +1,9 @@
 package htwdd.chessgame.client.model
 
-class Player(var id: Int,
-             var name: String,
-             var password: String)
+import kotlin.js.Date
+
+data class Player(var name: String,
+                  var password: String) {
+
+    var id: Int = Date().getTime().hashCode()
+}

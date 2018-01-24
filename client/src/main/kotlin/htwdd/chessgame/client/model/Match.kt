@@ -1,7 +1,9 @@
 package htwdd.chessgame.client.model
 
-class Match(var id: Int,
-            var players: Map<PieceColor, Player>,
-            var pieceSets: Map<PieceColor, PieceSet>,
-            var history: Array<Draw>,
-            var matchCode: String)
+data class Match(var players: Map<PieceColor, Player>,
+                 var pieceSets: Map<PieceColor, PieceSet>,
+                 var history: List<Draw>,
+                 var matchCode: String) {
+
+    var id: Int = 0
+}
