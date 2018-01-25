@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app {
+            display: table;
+            table-layout: fixed;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        header, footer {
+            display: table-row;
+            height: 50px;
+            background: #000;
+        }
+
+        .main {
+            display: table-row;
+            height: 100%;
+        }
+
+        .nav--main {
+            width: 400px;
+            height: 400px;
+            position: absolute;
+            left: calc(50% - 200px);
+            top: calc(50% - 250px);
+            background: #fff;
+            border: 1px solid #000;
+            border-radius: 4px;
+            padding: 50px;
+        }
+
+        .nav--main h1 {
+            text-align: center;
+            font-size: 40px;
+        }
+
+        h1 + .nav--list {
+            margin-top: 50px;
+        }
+
+        .nav--list {
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav--list li {
+            list-style: none;
+        }
+
+        .nav--list li + li {
+            margin-top: 30px;
+        }
+
+        .nav--list li a {
+            text-decoration: none;
+        }
+
+        .btn--primary {
+            color: #fff;
+            background: #000;
+            font-size: 22px;
+            width: 200px;
+            padding: 20px;
+            display: block;
+            text-align: center;
+            margin: auto;
+            border-radius: 5px;
+            border: 1px solid #000;
+            transition: color .3s ease, background .3s ease;
+        }
+
+        .btn--primary:hover {
+            background: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header>
+
+    </header>
+    <div class="main">
+        <nav class="nav--main">
+            <h1>The Chess Game</h1>
+            <ul class="nav--list">
+                <li>
+                    <a class="btn--primary" href="#players">Players</a>
+                </li>
+                <li>
+                    <a class="btn--primary" href="#matches">Matches</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <footer>
+
+    </footer>
+</div>
+</body>
+</html>
