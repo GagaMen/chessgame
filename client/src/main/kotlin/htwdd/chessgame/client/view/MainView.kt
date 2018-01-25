@@ -3,6 +3,8 @@ package htwdd.chessgame.client.view
 import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.util.Observable
 import htwdd.chessgame.client.util.Observer
+import htwdd.chessgame.client.view.partial.MatchFormPartial
+import htwdd.chessgame.client.view.partial.MatchListPartial
 import htwdd.chessgame.client.view.partial.PlayerFormPartial
 import htwdd.chessgame.client.view.partial.PlayerListPartial
 import kotlinx.html.dom.create
@@ -29,6 +31,8 @@ class MainView(private val controller: ClientController) : Observer {
         }
 
         val main = document.create.div(classes = "main")
+        main.appendChild(MatchListPartial().getView(controller))
+        main.appendChild(MatchFormPartial().getView(controller))
         main.appendChild(PlayerListPartial().getView(controller))
         main.appendChild(PlayerFormPartial().getView(controller))
 
@@ -46,9 +50,18 @@ class MainView(private val controller: ClientController) : Observer {
         when (arg) {
             "updatePlayerList" -> {
                 val main = document.getElementsByClassName("main")[0]
-                val list = main!!.getElementsByClassName("list--player")[0]
 
+                val list = main!!.getElementsByClassName("list--player")[0]
                 list?.replaceWith(PlayerListPartial().getView(controller))
+
+                val matchForm = main!!.getElementsByClassName("form--match")[0]
+                matchForm?.replaceWith(MatchFormPartial().getView(controller))
+            }
+            "updateMatchList" -> {
+                val main = document.getElementsByClassName("main")[0]
+
+                val list = main!!.getElementsByClassName("list--match")[0]
+                list?.replaceWith(MatchListPartial().getView(controller))
             }
         }
     }

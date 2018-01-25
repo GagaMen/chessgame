@@ -14,7 +14,7 @@ class Client(var matchCount: Int = 0,
             matches[matchCount] = match
             matchCount++
             setChanged()
-            notifyObservers()
+            notifyObservers("updateMatchList")
         } else {
             //todo: throw error
         }
