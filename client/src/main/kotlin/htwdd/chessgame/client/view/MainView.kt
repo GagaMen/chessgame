@@ -25,7 +25,7 @@ class MainView(private val controller: ClientController) : Observer {
         render()
     }
 
-    fun render() {
+    private fun render() {
         val header = document.create.header {
             h1 { +"Chess Game" }
         }
