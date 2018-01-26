@@ -13,6 +13,7 @@ import kotlinx.html.js.div
 import kotlinx.html.js.footer
 import kotlinx.html.js.header
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.dom.clear
@@ -20,12 +21,18 @@ import kotlin.dom.clear
 class MainView(private val controller: ClientController) : Observer {
 
     private val root = document.getElementsByClassName("app")[0] as HTMLDivElement
+    private var header: HTMLElement
+    private var main: HTMLElement
+    private var footer: HTMLElement
 
     init {
-        render()
+        val mainElements = render()
+        header = mainElements[0]
+        main = mainElements[1]
+        footer = mainElements[2]
     }
 
-    private fun render() {
+    private fun render(): Array<HTMLElement> {
         val header = document.create.header {
             h1 { +"Chess Game" }
         }
@@ -44,23 +51,21 @@ class MainView(private val controller: ClientController) : Observer {
         root.appendChild(header)
         root.appendChild(main)
         root.appendChild(footer)
+
+        return arrayOf(header, main, footer)
     }
 
     override fun update(o: Observable?, arg: Any?) {
         when (arg) {
             "updatePlayerList" -> {
-                val main = document.getElementsByClassName("main")[0]
-
-                val list = main!!.getElementsByClassName("list--player")[0]
+                val list = main.getElementsByClassName("list--player")[0]
                 list?.replaceWith(PlayerListPartial().getView(controller))
 
-                val matchForm = main!!.getElementsByClassName("form--match")[0]
+                val matchForm = main.getElementsByClassName("form--match")[0]
                 matchForm?.replaceWith(MatchFormPartial().getView(controller))
             }
             "updateMatchList" -> {
-                val main = document.getElementsByClassName("main")[0]
-
-                val list = main!!.getElementsByClassName("list--match")[0]
+                val list = main.getElementsByClassName("list--match")[0]
                 list?.replaceWith(MatchListPartial().getView(controller))
             }
         }
