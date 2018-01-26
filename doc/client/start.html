@@ -18,10 +18,8 @@
         .app {
             display: table;
             table-layout: fixed;
-            position: relative;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
         }
 
         header, footer {
@@ -69,8 +67,13 @@
             margin-top: 30px;
         }
 
-        .nav--list li a {
-            text-decoration: none;
+        .box--shadow {
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
         }
 
         .btn--primary {
@@ -85,6 +88,7 @@
             border-radius: 5px;
             border: 1px solid #000;
             transition: color .3s ease, background .3s ease;
+            text-decoration: none;
         }
 
         .btn--primary:hover {
@@ -94,7 +98,7 @@
     </style>
 </head>
 <body>
-<div class="app">
+<div class="app box--shadow">
     <header>
 
     </header>
