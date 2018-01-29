@@ -62,6 +62,11 @@ class MainView(private val controller: ClientController) : Observer {
                 main.clear()
                 main.append(PlayerPartial().getView(controller))
             }
+            "showMatch" -> {
+                root.removeClass("box--shadow")
+                main.clear()
+                main.append(MatchPartial().getView(controller))
+            }
         }
     }
 }

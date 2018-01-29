@@ -30,6 +30,10 @@ class StartPartial : Partial {
                     a(classes = "btn btn--primary") {
                         href = "#matches"
                         +"Matches"
+                        onClickFunction = { e ->
+                            e.preventDefault()
+                            controller.actionPerformed("showMatch")
+                        }
                     }
                 }
             }
