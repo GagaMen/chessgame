@@ -1,0 +1,132 @@
+//
+// Defines the breakpoint mixin
+//
+// Usage: @include respond-to(tiny-screen);
+//
+@mixin respond-to($name) {
+
+  // Checks if key exists
+  @if map-has-key($breakpoints, $name) {
+    // Prints a media query based on the value
+    @media #{map-get($breakpoints, $name)} {
+      @content;
+    }
+  }
+    // Checks if the key doesn't exist in the map
+    // and there is no push
+  @else {
+    // Just warn the user
+    @warn "Unfortunately, no value could be retrieved from `#{$name}`. "
+        + "Please make sure it is defined in `$breakpoints` map. "
+        + "Or pass the media query as a second parameter to add it to the map.";
+  }
+}
+
+//
+// Defines the font size mixin
+//
+// This mixin generates rem and px value for a font size.
+//
+// Usage: @include font-size(16px);
+//
+@mixin font-size($font-size, $font-size-base: $font-size-l) {
+
+  $unit: unit($font-size);
+  $val: parseInt($font-size);
+  $base-val: parseInt($font-size-base);
+
+  @if $unit == "px" {
+    font-size: $font-size;
+    font-size: ($val / $base-val) + rem;
+  }
+
+  @if $unit == "rem" {
+    font-size: ($val * $base-val) + px;
+    font-size: $font-size;
+  }
+}
+
+//
+// Defines the linear gradient mixin
+//
+// Do not forget to use this for IE9!
+//
+@mixin linear-gradient($direction, $color-stops...) {
+
+  @if is-direction($direction) == false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background: nth(nth($color-stops, 1), 1);
+  background: linear-gradient($direction, $color-stops);
+}
+
+//
+// Defines the on event mixin
+//
+// This mixin combines some events.
+//
+// Usage: @include on-event(){color:blue};
+//
+@mixin on-event($self: false) {
+  @if $self {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  } @else {
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  }
+}
+
+//
+// Defines the reset blurry mixin
+//
+// This mixin removes blurriness from translated or
+// transformed elements.
+//
+// Usage: @include remove-blurry;
+//
+@mixin reset-blurry() {
+  transform-style: preserve-3d;
+}
+
+//
+// Defines the filter reset mixin
+//
+// Usage: When you need to remove a gradient background,
+// do not forget to use this to reset the IE filter for IE9
+//
+@mixin reset-filter() {
+  filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+}
+
+//
+// Defines the text truncate mixin
+//
+// Usage: @include text-truncate(20px);
+//
+@mixin text-truncate($width) {
+  max-width: $width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//
+// Defines the vertical center mixin
+//
+// Usage: @include vertical-center;
+//
+@mixin vertical-center($position: relative) {
+  position: $position;
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -22,6 +22,8 @@
     "test": "karma start"
   },
   "dependencies": {
+    "bootstrap-grid-only": "^1.0.0",
+    "normalizecss": "^3.0.0",
     "requirejs": "^2.3.5"
   }
 }

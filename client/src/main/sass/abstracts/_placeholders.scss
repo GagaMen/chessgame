@@ -1,0 +1,102 @@
+//
+// Defines the reset space placeholder
+//
+// This placeholder resets padding and margin values
+// of an element.
+//
+// Usage: @extend %reset-space;
+//
+%reset-space {
+  margin: 0;
+  padding: 0;
+}
+
+//
+// Defines the button placeholder
+//
+// This placeholder contains basic button
+// styles, so if you have to define a button class
+// then extend your class from this placeholder.
+//
+// Usage: @extend %button;
+//
+%button {
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+//
+// Defines the heading placeholder
+//
+// This placeholder should contain styles
+// for heading specific tags like h1, h2, header and so on.
+// So you could extend your headings or heading helpers from
+// this placeholder.
+//
+// Usage: @extend %heading;
+//
+%heading {
+
+}
+
+//
+// Defines the content typography placeholder
+//
+// This placeholder should be used for styles which should
+// be equal in different viewports like paragraphs, lists, and so on.
+//
+// Usage: @extend %content-typography;
+//
+%content-typography {
+  line-height: $line-height-m;
+}
+
+//
+%content-max-width {
+  max-width: 760px;
+}
+
+//
+%content-background-img {
+  background-repeat: no-repeat;
+  padding: 105px 0;
+}
+
+//
+%pseudo-absolute {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+//
+%pseudo-inline-block {
+  content: '';
+  display: inline-block;
+}
+
+//
+%pseudo-fixed {
+  content: '';
+  display: block;
+  position: fixed;
+}
+
+//
+%error {
+  background: $color-error-light;
+  border: 1px solid $color-error-dark;
+  color: $color-error-dark;
+  font-style: italic;
+}
+
+//
+%success {
+  background: $color-success-light;
+  border: 1px solid $color-success-dark;
+  color: $color-success-dark;
+  font-style: italic;
+}

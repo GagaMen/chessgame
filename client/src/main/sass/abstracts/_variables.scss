@@ -1,0 +1,65 @@
+// Defines the project fonts
+$font-stack-arial: ('Arial', 'Helvetica', sans-serif);
+$font-stack-roboto: ('Roboto', 'Arial', 'Helvetica', sans-serif);
+$font-stack-georgia: ('Georgia', 'Times New Roman', 'Times', serif);
+
+// Defines the basic project colors
+$color-black: rgb(0, 0, 0);
+$color-white: rgb(255, 255, 255);
+$color-grey: rgb(211, 211, 211);
+$color-darkred: rgb(138, 25, 0);
+$color-lightred: rgb(248, 219, 218);
+$color-green: rgb(79, 138, 16);
+$color-lightgreen: rgb(223, 242, 191);
+$color-error-dark: $color-darkred;
+$color-error-light: $color-lightred;
+$color-success-dark: $color-green;
+$color-success-light: $color-lightgreen;
+
+// Defines the specific project colors
+
+// Defines the project font sizes
+$font-size-xs: 12px;
+$font-size-s: 14px;
+$font-size-m: 16px;
+$font-size-l: 18px;
+$font-size-xl: 24px;
+$font-size-print: 12pt;
+
+// Defines the project line heights
+$line-height-xs: 0.5;
+$line-height-s: 1;
+$line-height-m: 1.3;
+$line-height-l: 1.5;
+$line-height-xl: 2;
+$line-height-default: $line-height-l;
+
+// Defines some z-indizes
+$z-index-xs: 1;
+$z-index-s: 10;
+$z-index-m: 100;
+$z-index-l: 1000;
+$z-index-xl: 5000;
+
+// Defines some max widths
+$max-width-l: 1620px;
+
+// Defines the breakpoints
+$breakpoints: (
+        'tiny': '(min-width: 500px)',
+        'tiny-screen': 'screen and (min-width: 500px)',
+        'tiny-max': '(max-width: 499px)',
+        'tiny-screen-max': 'screen and (max-width: 499px)',
+        'small': '(min-width: 768px)',
+        'small-screen': 'screen and (min-width: 768px)',
+        'small-max': '(max-width: 767px)',
+        'small-screen-max': 'screen and (max-width: 767px)',
+        'medium': '(min-width: 992px)',
+        'medium-max': '(max-width: 991px)',
+        'medium-screen': 'screen and (min-width: 992px)',
+        'medium-screen-max': 'screen and (max-width: 991px)',
+        'large': '(min-width: 1200px)',
+        'large-screen': 'screen and (min-width: 1200px)',
+        'extra-large': '(min-width: 1300px)',
+        'extra-large-screen': 'screen and (min-width: 1300px)'
+);
