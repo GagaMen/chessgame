@@ -13,6 +13,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
+import kotlin.dom.addClass
 import kotlin.dom.clear
 import kotlin.dom.removeClass
 
@@ -67,6 +68,11 @@ class MainView(private val controller: ClientController) : Observer {
                 root.removeClass("box--shadow")
                 main.clear()
                 main.append(MatchPartial().getPartial(controller))
+            }
+            ViewState.START -> {
+                root.addClass("box--shadow")
+                main.clear()
+                main.append(StartPartial().getPartial(controller))
             }
         }
     }

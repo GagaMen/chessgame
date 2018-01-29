@@ -30,6 +30,7 @@ class ClientController : Controller {
             "addMatch" -> addMatch(arg)
             "showPlayer" -> client.changeState(ViewState.PLAYER)
             "showMatch" -> client.changeState(ViewState.MATCH)
+            "showStart" -> client.changeState(ViewState.START)
         }
     }
 
