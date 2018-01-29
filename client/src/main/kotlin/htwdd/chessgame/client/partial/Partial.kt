@@ -1,4 +1,4 @@
-package htwdd.chessgame.client.view.partial
+package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
 import org.w3c.dom.HTMLElement

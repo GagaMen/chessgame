@@ -1,4 +1,4 @@
-package htwdd.chessgame.client.view.partial
+package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
 import kotlinx.html.InputType

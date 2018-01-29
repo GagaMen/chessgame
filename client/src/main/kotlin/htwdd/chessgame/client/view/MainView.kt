@@ -1,9 +1,9 @@
 package htwdd.chessgame.client.view
 
 import htwdd.chessgame.client.controller.ClientController
+import htwdd.chessgame.client.partial.*
 import htwdd.chessgame.client.util.Observable
 import htwdd.chessgame.client.util.Observer
-import htwdd.chessgame.client.view.partial.*
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
 import kotlinx.html.js.footer

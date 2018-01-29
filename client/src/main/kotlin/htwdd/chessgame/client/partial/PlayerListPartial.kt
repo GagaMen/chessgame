@@ -1,4 +1,4 @@
-package htwdd.chessgame.client.view.partial
+package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.controller.Controller
@@ -9,17 +9,14 @@ import kotlinx.html.span
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
-class MatchListPartial : Partial {
+class PlayerListPartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
-            is ClientController -> document.create.ul(classes = "list--match") {
-                controller.getMatches().forEach { match ->
-                    li(classes = "list--match-item") {
+            is ClientController -> document.create.ul(classes = "list--player") {
+                controller.getPlayers().forEach { player ->
+                    li(classes = "list--player-item") {
                         span {
-                            +"${match.value.id}: "
-                            match.value.players.forEach { player ->
-                                +"${player.value?.name} "
-                            }
+                            +"${player.value.id}: ${player.value.name}"
                         }
                     }
                 }
