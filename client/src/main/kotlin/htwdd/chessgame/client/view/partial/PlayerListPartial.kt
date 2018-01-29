@@ -10,7 +10,7 @@ import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
 class PlayerListPartial : Partial {
-    override fun getView(controller: Controller): HTMLElement {
+    override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
             is ClientController -> document.create.ul(classes = "list--player") {
                 controller.getPlayers().forEach { player ->

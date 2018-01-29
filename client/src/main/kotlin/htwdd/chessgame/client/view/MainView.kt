@@ -33,7 +33,7 @@ class MainView(private val controller: ClientController) : Observer {
         val header = document.create.header(classes = "main-header")
 
         val main = document.create.div(classes = "main")
-        main.appendChild(StartPartial().getView(controller))
+        main.appendChild(StartPartial().getPartial(controller))
 
         val footer = document.create.footer(classes = "main-footer")
 
@@ -48,24 +48,24 @@ class MainView(private val controller: ClientController) : Observer {
         when (arg) {
             "updatePlayerList" -> {
                 val list = main.getElementsByClassName("list--player")[0]
-                list?.replaceWith(PlayerListPartial().getView(controller))
+                list?.replaceWith(PlayerListPartial().getPartial(controller))
 
                 val matchForm = main.getElementsByClassName("form--match")[0]
-                matchForm?.replaceWith(MatchFormPartial().getView(controller))
+                matchForm?.replaceWith(MatchFormPartial().getPartial(controller))
             }
             "updateMatchList" -> {
                 val list = main.getElementsByClassName("list--match")[0]
-                list?.replaceWith(MatchListPartial().getView(controller))
+                list?.replaceWith(MatchListPartial().getPartial(controller))
             }
             "showPlayer" -> {
                 root.removeClass("box--shadow")
                 main.clear()
-                main.append(PlayerPartial().getView(controller))
+                main.append(PlayerPartial().getPartial(controller))
             }
             "showMatch" -> {
                 root.removeClass("box--shadow")
                 main.clear()
-                main.append(MatchPartial().getView(controller))
+                main.append(MatchPartial().getPartial(controller))
             }
         }
     }

@@ -9,7 +9,7 @@ import org.w3c.dom.get
 import kotlin.browser.document
 
 class MatchPartial : Partial {
-    override fun getView(controller: Controller): HTMLElement {
+    override fun getPartial(controller: Controller): HTMLElement {
         val matchPartial = document.create.div(classes = "container") {
             div(classes = "row") {
                 div(classes = "col-sm-6") {
@@ -21,8 +21,8 @@ class MatchPartial : Partial {
             }
         }
 
-        val matchList = MatchListPartial().getView(controller)
-        val matchForm = MatchFormPartial().getView(controller)
+        val matchList = MatchListPartial().getPartial(controller)
+        val matchForm = MatchFormPartial().getPartial(controller)
 
         matchPartial.getElementsByClassName("placeholder--match-list")[0]?.replaceWith(matchList)
         matchPartial.getElementsByClassName("placeholder--match-form")[0]?.replaceWith(matchForm)

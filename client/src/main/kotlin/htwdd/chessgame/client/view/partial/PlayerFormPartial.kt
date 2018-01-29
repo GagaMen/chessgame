@@ -12,7 +12,7 @@ import org.w3c.dom.get
 import kotlin.browser.document
 
 class PlayerFormPartial : Partial {
-    override fun getView(controller: Controller): HTMLElement {
+    override fun getPartial(controller: Controller): HTMLElement {
         return document.create.form(classes = "form--player") {
             label {
                 +"Name:"

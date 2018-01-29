@@ -9,7 +9,7 @@ import org.w3c.dom.get
 import kotlin.browser.document
 
 class PlayerPartial : Partial {
-    override fun getView(controller: Controller): HTMLElement {
+    override fun getPartial(controller: Controller): HTMLElement {
         val playerPartial = document.create.div(classes = "container") {
             div(classes = "row") {
                 div(classes = "col-sm-6") {
@@ -21,8 +21,8 @@ class PlayerPartial : Partial {
             }
         }
 
-        val playerList = PlayerListPartial().getView(controller)
-        val playerForm = PlayerFormPartial().getView(controller)
+        val playerList = PlayerListPartial().getPartial(controller)
+        val playerForm = PlayerFormPartial().getPartial(controller)
         playerPartial.getElementsByClassName("placeholder--player-list")[0]?.replaceWith(playerList)
         playerPartial.getElementsByClassName("placeholder--player-form")[0]?.replaceWith(playerForm)
 

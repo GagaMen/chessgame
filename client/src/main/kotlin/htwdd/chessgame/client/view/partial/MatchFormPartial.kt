@@ -11,7 +11,7 @@ import org.w3c.dom.get
 import kotlin.browser.document
 
 class MatchFormPartial : Partial {
-    override fun getView(controller: Controller): HTMLElement {
+    override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
             is ClientController -> document.create.form(classes = "form--match") {
                 label {
