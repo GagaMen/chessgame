@@ -10,7 +10,7 @@ import kotlinx.html.ul
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
-class StartNavPartial : Partial {
+class StartPartial : Partial {
     override fun getView(controller: Controller): HTMLElement {
         return document.create.nav(classes = "nav--main") {
             h1(classes = "text--center") { +"The Chess Game" }

@@ -6,7 +6,7 @@ import htwdd.chessgame.client.util.Observer
 import htwdd.chessgame.client.view.partial.MatchFormPartial
 import htwdd.chessgame.client.view.partial.MatchListPartial
 import htwdd.chessgame.client.view.partial.PlayerListPartial
-import htwdd.chessgame.client.view.partial.StartNavPartial
+import htwdd.chessgame.client.view.partial.StartPartial
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
 import kotlinx.html.js.footer
@@ -34,7 +34,7 @@ class MainView(private val controller: ClientController) : Observer {
         val header = document.create.header(classes = "main-header")
 
         val main = document.create.div(classes = "main")
-        main.appendChild(StartNavPartial().getView(controller))
+        main.appendChild(StartPartial().getView(controller))
 
         val footer = document.create.footer(classes = "main-footer")
 
