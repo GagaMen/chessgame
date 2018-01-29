@@ -5,6 +5,7 @@ buildscript {
     ext.kotlin_version = '1.2.20'
     ext.requirejs_version = '2.3.5'
     ext.kotlinx_html_version = '0.6.6'
+    ext.sass_version = '1.2.2'
 
     repositories {
         mavenCentral()
@@ -13,10 +14,12 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.fgiannesini.libsass.gradle.plugin:libsass-gradle-plugin:+'
     }
 }
 
 apply plugin: 'kotlin2js'
+apply plugin: 'com.github.fgiannesini.libsass.gradle.plugin'
 
 repositories {
     mavenCentral()
@@ -35,6 +38,20 @@ dependencies {
         moduleKind = "amd"
         sourceMap = true
         sourceMapEmbedSources = "always"
+    }
+}
+
+libSassParameters {
+    inputFilePath = "$projectDir/src/main/sass/main.scss"
+    outputFilePath = "$projectDir/dist/css/main.css"
+    watchedDirectoryPath = "$projectDir/src/main/sass"
+    sourceMapEmbed = true
+    sourceMapFilePath "$projectDir/dist/css/main.css.map"
+
+    //Override parameters for task "compileLibSassProduction"
+    libSassProductionParameters {
+        outputStyle "compressed"
+        outputFilePath = "$projectDir/dist/css/main.min.css"
     }
 }
 
