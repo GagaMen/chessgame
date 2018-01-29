@@ -5,6 +5,7 @@ import kotlinx.html.a
 import kotlinx.html.dom.create
 import kotlinx.html.h1
 import kotlinx.html.js.nav
+import kotlinx.html.js.onClickFunction
 import kotlinx.html.li
 import kotlinx.html.ul
 import org.w3c.dom.HTMLElement
@@ -19,6 +20,10 @@ class StartPartial : Partial {
                     a(classes = "btn btn--primary") {
                         href = "#players"
                         +"Players"
+                        onClickFunction = { e ->
+                            e.preventDefault()
+                            controller.actionPerformed("showPlayer")
+                        }
                     }
                 }
                 li {

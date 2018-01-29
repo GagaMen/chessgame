@@ -3,10 +3,7 @@ package htwdd.chessgame.client.view
 import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.util.Observable
 import htwdd.chessgame.client.util.Observer
-import htwdd.chessgame.client.view.partial.MatchFormPartial
-import htwdd.chessgame.client.view.partial.MatchListPartial
-import htwdd.chessgame.client.view.partial.PlayerListPartial
-import htwdd.chessgame.client.view.partial.StartPartial
+import htwdd.chessgame.client.view.partial.*
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
 import kotlinx.html.js.footer
@@ -15,6 +12,8 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
+import kotlin.dom.clear
+import kotlin.dom.removeClass
 
 class MainView(private val controller: ClientController) : Observer {
 
@@ -57,6 +56,11 @@ class MainView(private val controller: ClientController) : Observer {
             "updateMatchList" -> {
                 val list = main.getElementsByClassName("list--match")[0]
                 list?.replaceWith(MatchListPartial().getView(controller))
+            }
+            "showPlayer" -> {
+                root.removeClass("box--shadow")
+                main.clear()
+                main.append(PlayerPartial().getView(controller))
             }
         }
     }

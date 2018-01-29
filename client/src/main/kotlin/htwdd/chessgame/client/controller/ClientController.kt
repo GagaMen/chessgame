@@ -28,6 +28,7 @@ class ClientController : Controller {
         when (e) {
             "addPlayer" -> addPlayer(arg)
             "addMatch" -> addMatch(arg)
+            "showPlayer" -> mainView.update(null, "showPlayer")
         }
     }
 
