@@ -5,10 +5,9 @@ import htwdd.chessgame.client.util.Observable
 import htwdd.chessgame.client.util.Observer
 import htwdd.chessgame.client.view.partial.MatchFormPartial
 import htwdd.chessgame.client.view.partial.MatchListPartial
-import htwdd.chessgame.client.view.partial.PlayerFormPartial
 import htwdd.chessgame.client.view.partial.PlayerListPartial
+import htwdd.chessgame.client.view.partial.StartNavPartial
 import kotlinx.html.dom.create
-import kotlinx.html.h1
 import kotlinx.html.js.div
 import kotlinx.html.js.footer
 import kotlinx.html.js.header
@@ -16,7 +15,6 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
-import kotlin.dom.clear
 
 class MainView(private val controller: ClientController) : Observer {
 
@@ -33,21 +31,13 @@ class MainView(private val controller: ClientController) : Observer {
     }
 
     private fun render(): Array<HTMLElement> {
-        val header = document.create.header {
-            h1 { +"Chess Game" }
-        }
+        val header = document.create.header(classes = "main-header")
 
         val main = document.create.div(classes = "main")
-        main.appendChild(MatchListPartial().getView(controller))
-        main.appendChild(MatchFormPartial().getView(controller))
-        main.appendChild(PlayerListPartial().getView(controller))
-        main.appendChild(PlayerFormPartial().getView(controller))
+        main.appendChild(StartNavPartial().getView(controller))
 
-        val footer = document.create.footer {
+        val footer = document.create.footer(classes = "main-footer")
 
-        }
-
-        root.clear()
         root.appendChild(header)
         root.appendChild(main)
         root.appendChild(footer)
