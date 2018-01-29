@@ -1,6 +1,7 @@
 package htwdd.chessgame.client.view
 
 import htwdd.chessgame.client.controller.ClientController
+import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.partial.*
 import htwdd.chessgame.client.util.Observable
 import htwdd.chessgame.client.util.Observer
@@ -57,12 +58,12 @@ class MainView(private val controller: ClientController) : Observer {
                 val list = main.getElementsByClassName("list--match")[0]
                 list?.replaceWith(MatchListPartial().getPartial(controller))
             }
-            "showPlayer" -> {
+            ViewState.PLAYER -> {
                 root.removeClass("box--shadow")
                 main.clear()
                 main.append(PlayerPartial().getPartial(controller))
             }
-            "showMatch" -> {
+            ViewState.MATCH -> {
                 root.removeClass("box--shadow")
                 main.clear()
                 main.append(MatchPartial().getPartial(controller))

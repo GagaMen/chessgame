@@ -28,8 +28,8 @@ class ClientController : Controller {
         when (e) {
             "addPlayer" -> addPlayer(arg)
             "addMatch" -> addMatch(arg)
-            "showPlayer" -> mainView.update(null, "showPlayer")
-            "showMatch" -> mainView.update(null, "showMatch")
+            "showPlayer" -> client.changeState(ViewState.PLAYER)
+            "showMatch" -> client.changeState(ViewState.MATCH)
         }
     }
 
