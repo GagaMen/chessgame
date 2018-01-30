@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "bootstrap-grid-only": "^1.0.0",
+    "font-awesome": "^4.7.0",
     "normalizecss": "^3.0.0",
     "requirejs": "^2.3.5"
   }
