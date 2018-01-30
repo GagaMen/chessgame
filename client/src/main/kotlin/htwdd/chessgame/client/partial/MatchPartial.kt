@@ -31,7 +31,7 @@ class MatchPartial : Partial {
             }
             div(classes = "row") {
                 div(classes = "col-sm-12") {
-                    a(classes = "btn btn--ghost") {
+                    a(classes = "btn btn--inline btn--ghost") {
                         href = "#start"
                         +"Return"
                         onClickFunction = { e ->

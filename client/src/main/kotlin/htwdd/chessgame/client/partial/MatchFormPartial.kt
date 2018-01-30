@@ -47,7 +47,7 @@ class MatchFormPartial : Partial {
                         }
                     }
                 }
-                input(classes = "form--submit") {
+                input(classes = "btn btn--inline btn--submit") {
                     value = "Submit"
                     type = InputType.submit
                 }
