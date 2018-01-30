@@ -29,7 +29,9 @@ class PlayerTablePartial : Partial {
                             td {
                                 button(classes = "btn btn--symbol btn--symbol-edit") {
                                     attributes["data-id"] = player.value.id.toString()
-                                    +"Edit"
+                                    span(classes = "sr-only") {
+                                        +"Edit player"
+                                    }
                                     onClickFunction = { e ->
                                         e.preventDefault()
                                         controller.actionPerformed("editPlayer", this)
@@ -37,7 +39,9 @@ class PlayerTablePartial : Partial {
                                 }
                                 button(classes = "btn btn--symbol btn--symbol-delete") {
                                     attributes["data-id"] = player.value.id.toString()
-                                    +"Delete"
+                                    span(classes = "sr-only") {
+                                        +"Delete player"
+                                    }
                                     onClickFunction = { e ->
                                         e.preventDefault()
                                         controller.actionPerformed("removePlayer", this)

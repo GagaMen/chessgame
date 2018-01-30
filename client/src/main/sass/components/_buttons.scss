@@ -50,4 +50,30 @@
     width: 150px;
     padding: 10px;
   }
+
+  &--symbol {
+    border: none;
+    display: inline-block;
+    background: transparent;
+
+    + .btn--symbol {
+      margin-left: 5px;
+    }
+
+    &::before {
+      font-family: $font-stack-awesome;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      font-size: 20px;
+    }
+  }
+
+  &--symbol-edit::before {
+    content: "\f040";
+  }
+
+  &--symbol-delete::before {
+    content: "\f1f8";
+  }
 }
