@@ -13,9 +13,11 @@
 "base/_helpers.scss",
 "base/_base.scss";
 // Components
-@import "components/_headings.scss",
-"components/_box.scss",
+@import "components/_box.scss",
 "components/_buttons.scss",
+"components/_form.scss",
+"components/_headings.scss",
+"components/_list.scss",
 "components/_spaces.scss";
 // Layouts
 @import "Layouts/_main-header.scss",

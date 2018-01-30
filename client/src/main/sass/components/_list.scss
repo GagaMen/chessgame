@@ -1,0 +1,13 @@
+.list {
+  &--player {
+    border: 1px solid $color-black;
+
+    li {
+      list-style: none;
+      padding: 10px;
+      &:nth-child(even) {
+        background: $color-grey;
+      }
+    }
+  }
+}
