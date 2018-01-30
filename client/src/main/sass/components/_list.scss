@@ -1,5 +1,6 @@
 .list {
-  &--player {
+  &--player,
+  &--match {
     border: 1px solid $color-black;
 
     li {
