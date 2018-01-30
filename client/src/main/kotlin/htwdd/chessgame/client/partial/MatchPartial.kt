@@ -4,6 +4,7 @@ import htwdd.chessgame.client.controller.Controller
 import kotlinx.html.a
 import kotlinx.html.div
 import kotlinx.html.dom.create
+import kotlinx.html.h1
 import kotlinx.html.js.div
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLElement
@@ -13,6 +14,13 @@ import kotlin.browser.document
 class MatchPartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
         val matchPartial = document.create.div(classes = "container") {
+            div(classes = "row") {
+                div(classes = "col-sm-12") {
+                    h1 {
+                        +"Match overview"
+                    }
+                }
+            }
             div(classes = "row") {
                 div(classes = "col-sm-6") {
                     div(classes = "placeholder--match-list")

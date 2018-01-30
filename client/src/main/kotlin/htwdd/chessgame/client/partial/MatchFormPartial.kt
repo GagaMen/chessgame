@@ -14,9 +14,12 @@ class MatchFormPartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
             is ClientController -> document.create.form(classes = "form--match") {
-                label {
+                h2 {
+                    +"Add new match:"
+                }
+                label(classes = "form--label") {
                     +"Player White:"
-                    select(classes = "match--player-white") {
+                    select(classes = "form--select match--player-white") {
                         option {
                             +"Please choose"
                             value = "-1"
@@ -29,9 +32,9 @@ class MatchFormPartial : Partial {
                         }
                     }
                 }
-                label {
+                label(classes = "form--label") {
                     +"Player Black:"
-                    select(classes = "match--player-black") {
+                    select(classes = "form--select match--player-black") {
                         option {
                             +"Please choose"
                             value = "-1"
@@ -44,7 +47,7 @@ class MatchFormPartial : Partial {
                         }
                     }
                 }
-                input {
+                input(classes = "form--submit") {
                     value = "Submit"
                     type = InputType.submit
                 }
