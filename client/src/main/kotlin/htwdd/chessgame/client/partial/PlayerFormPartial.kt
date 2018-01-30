@@ -1,32 +1,32 @@
 package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
-import kotlinx.html.InputType
+import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.form
-import kotlinx.html.input
 import kotlinx.html.js.onSubmitFunction
-import kotlinx.html.label
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
 
 class PlayerFormPartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
-        return document.create.form(classes = "form--player") {
-            label {
+        return document.create.form(classes = "form form--player") {
+            h2 {
+                +"Add new player:"
+            }
+            label(classes = "form--label") {
                 +"Name:"
-                input(classes = "player--name") {
+                input(classes = "form--input player--name") {
                     type = InputType.text
                 }
             }
-            label {
+            label(classes = "form--label") {
                 +"Password:"
-                input(classes = "player--password") {
+                input(classes = "form--input player--password") {
                     type = InputType.password
                 }
             }
-            input {
+            input(classes = "form--submit") {
                 value = "Submit"
                 type = InputType.submit
             }

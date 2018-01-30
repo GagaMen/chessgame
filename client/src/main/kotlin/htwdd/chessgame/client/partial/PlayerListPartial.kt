@@ -13,10 +13,18 @@ class PlayerListPartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
             is ClientController -> document.create.ul(classes = "list--player") {
-                controller.getPlayers().forEach { player ->
+                if (controller.getPlayers().size > 0) {
+                    controller.getPlayers().forEach { player ->
+                        li(classes = "list--player-item") {
+                            span {
+                                +"${player.value.id}: ${player.value.name}"
+                            }
+                        }
+                    }
+                } else {
                     li(classes = "list--player-item") {
                         span {
-                            +"${player.value.id}: ${player.value.name}"
+                            +"No player registered"
                         }
                     }
                 }
