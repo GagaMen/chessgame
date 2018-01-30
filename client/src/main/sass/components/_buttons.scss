@@ -4,17 +4,30 @@
 .btn {
   @extend %button;
   display: block;
-  font-size: 22px;
-  width: 200px;
-  padding: 10px 20px;
+  border: 1px solid $color-black;
+  border-radius: 5px;
+  transition: color .3s ease, background .3s ease;
 
-  &--primary {
+  &--inline {
+    display: inline-block;
+
+    + .btn--inline {
+      margin-left: 20px;
+    }
+  }
+
+  &--primary,
+  &--ghost {
+    font-size: 22px;
+    width: 200px;
+    padding: 10px 20px;
+    margin: auto;
+  }
+
+  &--primary,
+  &--submit {
     background: $color-black;
     color: $color-white;
-    margin: auto;
-    border: 1px solid $color-black;
-    border-radius: 5px;
-    transition: color .3s ease, background .3s ease;
 
     &:hover {
       background: $color-white;
@@ -22,14 +35,19 @@
     }
   }
 
-  &--ghost {
-    border: 1px solid $color-black;
-    border-radius: 5px;
-    transition: color .3s ease, background .3s ease;
+  &--ghost,
+  &--cancel {
+    background: $color-white;
 
     &:hover {
       background: $color-black;
       color: $color-white;
     }
+  }
+
+  &--submit,
+  &--cancel {
+    width: 150px;
+    padding: 10px;
   }
 }

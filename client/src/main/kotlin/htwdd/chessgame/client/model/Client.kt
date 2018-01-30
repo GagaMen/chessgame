@@ -27,16 +27,6 @@ class Client(var viewState: ViewState = ViewState.START,
         }
     }
 
-    fun removeMatch(match: Match) {
-        val key = match.hashCode()
-
-        if (matches.containsKey(key)) {
-            matches.remove(key)
-        } else {
-            //todo: throw error
-        }
-    }
-
     fun removeMatch(key: Int) {
         if (matches.containsKey(key)) {
             matches.remove(key)
@@ -57,9 +47,13 @@ class Client(var viewState: ViewState = ViewState.START,
         }
     }
 
-    fun removePlayer(player: Player) {
-        if (players.containsKey(player.id)) {
-            players.remove(player.id)
+    fun updatePlayer(playerId: Int, password: String) {
+        if (players.containsKey(playerId)) {
+            players[playerId]?.password = password
+            setChanged()
+            notifyObservers("updatePlayerTable")
+            setChanged()
+            notifyObservers("resetPlayerForm")
         } else {
             //todo: throw error
         }
@@ -68,6 +62,8 @@ class Client(var viewState: ViewState = ViewState.START,
     fun removePlayer(key: Int) {
         if (players.containsKey(key)) {
             players.remove(key)
+            setChanged()
+            notifyObservers("updatePlayerTable")
         } else {
             //todo: throw error
         }

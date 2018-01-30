@@ -2,10 +2,14 @@ package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
 import htwdd.chessgame.client.view.MainView
+import kotlinx.html.BUTTON
 import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
+import kotlin.collections.HashMap
+import kotlin.collections.emptyList
+import kotlin.collections.set
 
 class ClientController : Controller {
 
@@ -26,11 +30,14 @@ class ClientController : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "addPlayer" -> addPlayer(arg)
-            "addMatch" -> addMatch(arg)
+            "showStart" -> client.changeState(ViewState.START)
             "showPlayer" -> client.changeState(ViewState.PLAYER)
             "showMatch" -> client.changeState(ViewState.MATCH)
-            "showStart" -> client.changeState(ViewState.START)
+            "addPlayer" -> addPlayer(arg)
+            "editPlayer" -> editPlayer(arg)
+            "updatePlayer" -> updatePlayer(arg)
+            "removePlayer" -> removePlayer(arg)
+            "addMatch" -> addMatch(arg)
         }
     }
 
@@ -96,6 +103,46 @@ class ClientController : Controller {
                     password.value = ""
                 } else {
                     //todo: throw exception
+                }
+            }
+        }
+    }
+
+    private fun editPlayer(arg: Any?) {
+        when (arg) {
+            is BUTTON -> {
+                val playerId = arg.attributes["data-id"]?.toInt()
+                if (playerId != null && client.players.containsKey(playerId)) {
+                    val player = client.players[playerId]
+                    mainView.update(player, "editPlayer")
+                } else {
+                    //todo error
+                }
+            }
+        }
+    }
+
+    private fun updatePlayer(arg: Any?) {
+        when (arg) {
+            is HTMLFormElement -> {
+                val playerId = arg.attributes["data-id"]?.value?.toInt()
+                val passwordInput = arg.getElementsByClassName("player--password")[0] as HTMLInputElement
+                val newPassword = passwordInput.value
+                if (playerId != null && newPassword != "") {
+                    client.updatePlayer(playerId, newPassword)
+                }
+            }
+        }
+    }
+
+    private fun removePlayer(arg: Any?) {
+        when (arg) {
+            is BUTTON -> {
+                val playerId = arg.attributes["data-id"]?.toInt()
+                if (playerId != null) {
+                    client.removePlayer(playerId)
+                } else {
+                    //todo error
                 }
             }
         }

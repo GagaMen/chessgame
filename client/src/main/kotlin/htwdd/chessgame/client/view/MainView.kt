@@ -1,6 +1,8 @@
 package htwdd.chessgame.client.view
 
 import htwdd.chessgame.client.controller.ClientController
+import htwdd.chessgame.client.model.Client
+import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.partial.*
 import htwdd.chessgame.client.util.Observable
@@ -47,30 +49,48 @@ class MainView(private val controller: ClientController) : Observer {
     }
 
     override fun update(o: Observable?, arg: Any?) {
-        when (arg) {
-            "updatePlayerTable" -> {
-                val table = main.getElementsByClassName("table--player")[0]
-                table?.replaceWith(PlayerTablePartial().getPartial(controller))
+        when (o) {
+            is Client -> {
+                when (arg) {
+                    "updatePlayerTable" -> {
+                        val table = main.getElementsByClassName("table--player")[0]
+                        table?.replaceWith(PlayerTablePartial().getPartial(controller))
+                    }
+                    "resetPlayerForm" -> {
+                        val form = main.getElementsByClassName("form--player")[0]
+                        form?.replaceWith(PlayerFormPartial().getPartial(controller))
+                    }
+                    "updateMatchTable" -> {
+                        val table = main.getElementsByClassName("table--match")[0]
+                        table?.replaceWith(MatchTablePartial().getPartial(controller))
+                    }
+                    ViewState.PLAYER -> {
+                        root.removeClass("box--shadow")
+                        main.clear()
+                        main.append(PlayerPartial().getPartial(controller))
+                    }
+                    ViewState.MATCH -> {
+                        root.removeClass("box--shadow")
+                        main.clear()
+                        main.append(MatchPartial().getPartial(controller))
+                    }
+                    ViewState.START -> {
+                        root.addClass("box--shadow")
+                        main.clear()
+                        main.append(StartPartial().getPartial(controller))
+                    }
+                }
             }
-            "updateMatchTable" -> {
-                val table = main.getElementsByClassName("table--match")[0]
-                table?.replaceWith(MatchTablePartial().getPartial(controller))
-            }
-            ViewState.PLAYER -> {
-                root.removeClass("box--shadow")
-                main.clear()
-                main.append(PlayerPartial().getPartial(controller))
-            }
-            ViewState.MATCH -> {
-                root.removeClass("box--shadow")
-                main.clear()
-                main.append(MatchPartial().getPartial(controller))
-            }
-            ViewState.START -> {
-                root.addClass("box--shadow")
-                main.clear()
-                main.append(StartPartial().getPartial(controller))
+            is Player -> {
+                when (arg) {
+                    "editPlayer" -> {
+                        val form = main.getElementsByClassName("form--player")[0]
+                        form?.replaceWith(PlayerEditFormPartial(o).getPartial(controller))
+                    }
+                }
             }
         }
+
+
     }
 }
