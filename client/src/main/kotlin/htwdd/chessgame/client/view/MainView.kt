@@ -48,16 +48,13 @@ class MainView(private val controller: ClientController) : Observer {
 
     override fun update(o: Observable?, arg: Any?) {
         when (arg) {
-            "updatePlayerList" -> {
-                val list = main.getElementsByClassName("list--player")[0]
-                list?.replaceWith(PlayerListPartial().getPartial(controller))
-
-                val matchForm = main.getElementsByClassName("form--match")[0]
-                matchForm?.replaceWith(MatchFormPartial().getPartial(controller))
+            "updatePlayerTable" -> {
+                val table = main.getElementsByClassName("table--player")[0]
+                table?.replaceWith(PlayerTablePartial().getPartial(controller))
             }
-            "updateMatchList" -> {
-                val list = main.getElementsByClassName("list--match")[0]
-                list?.replaceWith(MatchListPartial().getPartial(controller))
+            "updateMatchTable" -> {
+                val table = main.getElementsByClassName("table--match")[0]
+                table?.replaceWith(MatchTablePartial().getPartial(controller))
             }
             ViewState.PLAYER -> {
                 root.removeClass("box--shadow")

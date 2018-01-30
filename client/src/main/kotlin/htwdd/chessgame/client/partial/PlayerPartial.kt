@@ -43,7 +43,7 @@ class PlayerPartial : Partial {
             }
         }
 
-        val playerList = PlayerListPartial().getPartial(controller)
+        val playerList = PlayerTablePartial().getPartial(controller)
         val playerForm = PlayerFormPartial().getPartial(controller)
         playerPartial.getElementsByClassName("placeholder--player-list")[0]?.replaceWith(playerList)
         playerPartial.getElementsByClassName("placeholder--player-form")[0]?.replaceWith(playerForm)

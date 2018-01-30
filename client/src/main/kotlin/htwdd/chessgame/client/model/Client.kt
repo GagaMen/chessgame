@@ -21,7 +21,7 @@ class Client(var viewState: ViewState = ViewState.START,
             matches[matchCount] = match
             matchCount++
             setChanged()
-            notifyObservers("updateMatchList")
+            notifyObservers("updateMatchTable")
         } else {
             //todo: throw error
         }
@@ -51,7 +51,7 @@ class Client(var viewState: ViewState = ViewState.START,
             players[playerCount] = player
             playerCount++
             setChanged()
-            notifyObservers("updatePlayerList")
+            notifyObservers("updatePlayerTable")
         } else {
             //todo: throw error
         }

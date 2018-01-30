@@ -1,0 +1,25 @@
+.table {
+  &--player,
+  &--match {
+    width: 100%;
+    border: 1px solid $color-black;
+
+    tr {
+      list-style: none;
+      &:nth-child(even) {
+        background: $color-grey;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 5px 10px;
+
+        + td,
+        + th {
+          border-left: 1px solid $color-black;
+        }
+      }
+    }
+  }
+}

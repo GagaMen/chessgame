@@ -43,7 +43,7 @@ class MatchPartial : Partial {
             }
         }
 
-        val matchList = MatchListPartial().getPartial(controller)
+        val matchList = MatchTablePartial().getPartial(controller)
         val matchForm = MatchFormPartial().getPartial(controller)
 
         matchPartial.getElementsByClassName("placeholder--match-list")[0]?.replaceWith(matchList)
