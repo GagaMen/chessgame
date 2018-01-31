@@ -32,6 +32,7 @@ class MatchTablePartial : Partial {
                             }
                             td {
                                 button(classes = "btn btn--symbol btn--symbol-start") {
+                                    title = "Start match"
                                     attributes["data-id"] = match.value.id.toString()
                                     span(classes = "sr-only") {
                                         +"Start match"
@@ -42,6 +43,7 @@ class MatchTablePartial : Partial {
                                     }
                                 }
                                 button(classes = "btn btn--symbol btn--symbol-delete") {
+                                    title = "Delete match"
                                     attributes["data-id"] = match.value.id.toString()
                                     span(classes = "sr-only") {
                                         +"Delete match"

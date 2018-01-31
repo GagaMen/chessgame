@@ -1,13 +1,10 @@
 package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
-import kotlinx.html.a
+import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.h1
 import kotlinx.html.js.nav
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.li
-import kotlinx.html.ul
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
@@ -18,6 +15,7 @@ class StartPartial : Partial {
             ul(classes = "nav--list") {
                 li {
                     a(classes = "btn btn--primary") {
+                        title = "Player overview"
                         href = "#players"
                         +"Players"
                         onClickFunction = { e ->
@@ -28,6 +26,7 @@ class StartPartial : Partial {
                 }
                 li {
                     a(classes = "btn btn--primary") {
+                        title = "Match overview"
                         href = "#matches"
                         +"Matches"
                         onClickFunction = { e ->

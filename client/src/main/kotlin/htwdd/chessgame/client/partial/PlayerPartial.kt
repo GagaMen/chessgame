@@ -7,6 +7,7 @@ import kotlinx.html.dom.create
 import kotlinx.html.h1
 import kotlinx.html.js.div
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.title
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
@@ -32,6 +33,7 @@ class PlayerPartial : Partial {
             div(classes = "row") {
                 div(classes = "col-sm-12") {
                     a(classes = "btn btn--inline btn--ghost") {
+                        title = "Return to start"
                         href = "#start"
                         +"Return"
                         onClickFunction = { e ->

@@ -2,13 +2,11 @@ package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.Player
-import kotlinx.html.InputType
+import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.h2
-import kotlinx.html.input
 import kotlinx.html.js.form
+import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
-import kotlinx.html.label
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
@@ -27,12 +25,18 @@ class PlayerEditFormPartial(val player: Player) : Partial {
                 }
             }
             input(classes = "btn btn--inline btn--submit") {
-                value = "Submit"
+                title = "Update Player"
+                value = "Update Player"
                 type = InputType.submit
             }
             input(classes = "btn btn--inline btn--cancel") {
+                title = "Cancel"
                 value = "Cancel"
                 type = InputType.button
+                onClickFunction = { e ->
+                    e.preventDefault()
+                    controller.actionPerformed("showPlayer")
+                }
             }
             onSubmitFunction = { e ->
                 e.preventDefault()

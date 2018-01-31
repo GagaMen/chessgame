@@ -48,7 +48,8 @@ class MatchFormPartial : Partial {
                     }
                 }
                 input(classes = "btn btn--inline btn--submit") {
-                    value = "Submit"
+                    title = "Add match"
+                    value = "Add match"
                     type = InputType.submit
                 }
                 onSubmitFunction = { e ->

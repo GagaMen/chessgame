@@ -27,7 +27,8 @@ class PlayerFormPartial : Partial {
                 }
             }
             input(classes = "btn btn--inline btn--submit") {
-                value = "Submit"
+                title = "Add player"
+                value = "Add player"
                 type = InputType.submit
             }
             onSubmitFunction = { e ->

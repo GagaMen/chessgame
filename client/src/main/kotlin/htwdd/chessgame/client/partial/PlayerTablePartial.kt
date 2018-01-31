@@ -28,6 +28,7 @@ class PlayerTablePartial : Partial {
                             }
                             td {
                                 button(classes = "btn btn--symbol btn--symbol-edit") {
+                                    title = "Edit player"
                                     attributes["data-id"] = player.value.id.toString()
                                     span(classes = "sr-only") {
                                         +"Edit player"
@@ -38,6 +39,7 @@ class PlayerTablePartial : Partial {
                                     }
                                 }
                                 button(classes = "btn btn--symbol btn--symbol-delete") {
+                                    title = "Delete player"
                                     attributes["data-id"] = player.value.id.toString()
                                     span(classes = "sr-only") {
                                         +"Delete player"
