@@ -73,6 +73,10 @@
     content: "\f040";
   }
 
+  &--symbol-start::before {
+    content: "\f04b";
+  }
+
   &--symbol-delete::before {
     content: "\f1f8";
   }

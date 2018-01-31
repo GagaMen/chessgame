@@ -2,11 +2,10 @@ package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.controller.Controller
+import kotlinx.html.*
 import kotlinx.html.dom.create
+import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.table
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.tr
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
@@ -32,7 +31,26 @@ class MatchTablePartial : Partial {
                                 }
                             }
                             td {
-                                +"Start/Delete"
+                                button(classes = "btn btn--symbol btn--symbol-start") {
+                                    attributes["data-id"] = match.value.id.toString()
+                                    span(classes = "sr-only") {
+                                        +"Start match"
+                                    }
+                                    onClickFunction = { e ->
+                                        e.preventDefault()
+                                        controller.actionPerformed("startMatch", this)
+                                    }
+                                }
+                                button(classes = "btn btn--symbol btn--symbol-delete") {
+                                    attributes["data-id"] = match.value.id.toString()
+                                    span(classes = "sr-only") {
+                                        +"Delete match"
+                                    }
+                                    onClickFunction = { e ->
+                                        e.preventDefault()
+                                        controller.actionPerformed("removeMatch", this)
+                                    }
+                                }
                             }
                         }
                     }

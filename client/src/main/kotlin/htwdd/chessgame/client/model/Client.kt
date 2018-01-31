@@ -30,6 +30,8 @@ class Client(var viewState: ViewState = ViewState.START,
     fun removeMatch(key: Int) {
         if (matches.containsKey(key)) {
             matches.remove(key)
+            setChanged()
+            notifyObservers("updateMatchTable")
         } else {
             //todo: throw error
         }

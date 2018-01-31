@@ -7,8 +7,6 @@ import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
-import kotlin.collections.HashMap
-import kotlin.collections.emptyList
 import kotlin.collections.set
 
 class ClientController : Controller {
@@ -38,6 +36,7 @@ class ClientController : Controller {
             "updatePlayer" -> updatePlayer(arg)
             "removePlayer" -> removePlayer(arg)
             "addMatch" -> addMatch(arg)
+            "removeMatch" -> removeMatch(arg)
         }
     }
 
@@ -81,6 +80,19 @@ class ClientController : Controller {
                     playerBlackSelect.value = "-1"
                 } else {
                     //todo: throw exception
+                }
+            }
+        }
+    }
+
+    private fun removeMatch(arg: Any?) {
+        when (arg) {
+            is BUTTON -> {
+                val matchId = arg.attributes["data-id"]?.toInt()
+                if (matchId != null) {
+                    client.removeMatch(matchId)
+                } else {
+                    //todo error
                 }
             }
         }
