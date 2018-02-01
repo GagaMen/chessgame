@@ -1,0 +1,141 @@
+.board {
+  border: 1px solid $color-black;
+  box-shadow: 0 0 0 30px white, 0 0 0 40px black;
+  margin: 40px;
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    margin-top: 100%;
+  }
+
+  &--legend-left,
+  &--legend-top,
+  &--legend-right,
+  &--legend-bottom {
+    position: absolute;
+
+    span {
+      font-size: 24px;
+    }
+  }
+
+  &--legend-left,
+  &--legend-right {
+    height: 100%;
+    width: 30px;
+    top: 0;
+
+    p {
+      height: 12.5%;
+      position: relative;
+
+      span {
+        position: absolute;
+        top: calc(50% - 12px);
+        left: calc(50% - 7px);
+        line-height: 1;
+      }
+    }
+  }
+
+  &--legend-left {
+    left: -30px;
+  }
+
+  &--legend-right {
+    right: -30px;
+  }
+
+  &--legend-top,
+  &--legend-bottom {
+    height: 30px;
+    width: 100%;
+    left: 0;
+
+    p {
+      display: inline-block;
+      width: 12.5%;
+      height: 30px;
+
+      span {
+        display: block;
+        text-align: center;
+        line-height: 30px;
+      }
+    }
+  }
+
+  &--legend-top {
+    top: -30px;
+  }
+
+  &--legend-bottom {
+    bottom: -30px;
+  }
+
+  &--row {
+    width: 100%;
+    position: absolute;
+    left: 0;
+
+    @for $i from 0 through 7 {
+      $x: $i + 1 + 4; //because of legend blocks is increase by 4
+      $y: 12.5% * $i;
+
+      &:nth-child(#{$x}) {
+        top: $y;
+        @if ($x % 2 != 0) {
+          .board--col:nth-child(even) .board--field {
+            background: $color-black;
+          }
+        } @else {
+          .board--col:nth-child(odd) .board--field {
+            background: $color-black;
+          }
+        }
+      }
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      margin-top: 12.5%;
+    }
+  }
+
+  &--col {
+    width: 12.5%;
+    position: absolute;
+    top: 0;
+
+    @for $i from 0 through 7 {
+      $x: $i + 1;
+      $y: 12.5% * $i;
+
+      &:nth-child(#{$x}) {
+        left: $y;
+      }
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      margin-top: 100%;
+    }
+  }
+
+  &--field {
+    padding: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    &:nth-child(even) {
+      background: $color-black;
+    }
+  }
+}

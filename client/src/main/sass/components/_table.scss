@@ -1,11 +1,11 @@
 .table {
   &--player,
-  &--match {
+  &--match,
+  &--history {
     width: 100%;
     border: 1px solid $color-black;
 
     tr {
-      list-style: none;
       &:nth-child(1) {
         border-bottom: 1px solid $color-black;
       }
@@ -24,5 +24,10 @@
         }
       }
     }
+  }
+
+  &--history-wrapper {
+    overflow-y: auto;
+    max-height: 595px;
   }
 }

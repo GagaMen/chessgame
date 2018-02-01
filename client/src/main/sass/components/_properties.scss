@@ -1,0 +1,9 @@
+.properties {
+  margin-left: 20px;
+
+  &--player {
+    + .properties--history {
+      margin-top: 30px;
+    }
+  }
+}

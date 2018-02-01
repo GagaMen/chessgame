@@ -2,6 +2,7 @@ package htwdd.chessgame.client.view
 
 import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.model.Client
+import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.partial.*
@@ -86,6 +87,14 @@ class MainView(private val controller: ClientController) : Observer {
                     "editPlayer" -> {
                         val form = main.getElementsByClassName("form--player")[0]
                         form?.replaceWith(PlayerEditFormPartial(o).getPartial(controller))
+                    }
+                }
+            }
+            is Match -> {
+                when (arg) {
+                    ViewState.GAME -> {
+                        main.clear()
+                        main.append(GamePartial(o).getPartial(controller))
                     }
                 }
             }

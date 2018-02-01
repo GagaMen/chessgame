@@ -31,6 +31,7 @@ class ClientController : Controller {
             "showStart" -> client.changeState(ViewState.START)
             "showPlayer" -> client.changeState(ViewState.PLAYER)
             "showMatch" -> client.changeState(ViewState.MATCH)
+            "startMatch" -> startMatch(arg)
             "addPlayer" -> addPlayer(arg)
             "editPlayer" -> editPlayer(arg)
             "updatePlayer" -> updatePlayer(arg)
@@ -80,6 +81,20 @@ class ClientController : Controller {
                     playerBlackSelect.value = "-1"
                 } else {
                     //todo: throw exception
+                }
+            }
+        }
+    }
+
+    private fun startMatch(arg: Any?) {
+        when (arg) {
+            is BUTTON -> {
+                val matchId = arg.attributes["data-id"]?.toInt()
+                if (matchId != null && client.matches.containsKey(matchId)) {
+                    val match = client.matches[matchId]
+                    mainView.update(match, ViewState.GAME)
+                } else {
+                    //todo error
                 }
             }
         }
