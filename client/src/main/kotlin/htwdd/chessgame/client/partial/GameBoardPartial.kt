@@ -4,11 +4,12 @@ import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 import htwdd.chessgame.client.model.PieceType
-import kotlinx.html.div
+import htwdd.chessgame.client.util.DraggableUtility
+import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.img
-import kotlinx.html.p
-import kotlinx.html.span
+import kotlinx.html.js.onDragOverFunction
+import kotlinx.html.js.onDragStartFunction
+import kotlinx.html.js.onDropFunction
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
@@ -64,8 +65,14 @@ class GameBoardPartial(val match: Match) : Partial {
                     for (j in 1..8) {
                         div(classes = "board--col") {
                             div(classes = "board--field") {
+                                onDropFunction = { event -> DraggableUtility.drop(event) }
+                                onDragOverFunction = { event -> DraggableUtility.dragOver(event) }
+
                                 if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j))) {
                                     img(classes = "piece--white") {
+                                        draggable = Draggable.htmlTrue
+                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        id = "$i$j"
                                         src = when (activePiecesWhite[Pair(i, j)]?.type) {
                                             PieceType.BISCHOP -> basePath + "bishop_white.svg"
                                             PieceType.KING -> basePath + "king_white.svg"
@@ -78,7 +85,10 @@ class GameBoardPartial(val match: Match) : Partial {
                                     }
                                 }
                                 if (activePiecesBlack != null && activePiecesBlack.contains(Pair(i, j))) {
-                                    img(classes = "piece--white") {
+                                    img(classes = "piece--black") {
+                                        draggable = Draggable.htmlTrue
+                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        id = "$i$j"
                                         src = when (activePiecesBlack[Pair(i, j)]?.type) {
                                             PieceType.BISCHOP -> basePath + "bishop_black.svg"
                                             PieceType.KING -> basePath + "king_black.svg"
@@ -98,3 +108,5 @@ class GameBoardPartial(val match: Match) : Partial {
         }
     }
 }
+
+external fun dataTransfer(): Unit
