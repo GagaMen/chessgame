@@ -1,9 +1,6 @@
 package htwdd.chessgame.client.util
 
-import org.w3c.dom.DragEvent
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLImageElement
-import org.w3c.dom.Node
+import org.w3c.dom.*
 import org.w3c.dom.events.Event
 import kotlin.browser.document
 
@@ -18,7 +15,10 @@ class DraggableUtility {
         }
 
         fun dragOver(event: Event) {
-            event.preventDefault()
+            val currentTarget = event.currentTarget
+            if (!(currentTarget as HTMLElement).hasChildNodes()) {
+                event.preventDefault()
+            }
         }
 
         fun drop(event: Event) {
