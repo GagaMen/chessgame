@@ -26,6 +26,69 @@ class ChessRuleUtility {
             if (row != null && col != null) {
                 when (type) {
                     PieceType.BISCHOP.toString() -> {
+                        //top
+                        if (row != 1) {
+                            //left
+                            if (col != 1) {
+                                var tmpCol = col
+                                for (i in row - 1 downTo 1) {
+                                    tmpCol--
+                                    if (tmpCol != 0) { // out of board
+                                        val field = document.getElementById("board--field-$i-$tmpCol")
+                                        if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, tmpCol))
+                                        else break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                            //right
+                            if (col != 8) {
+                                var tmpCol = col
+                                for (i in row - 1 downTo 1) {
+                                    tmpCol++
+                                    if (tmpCol != 9) { // out of board
+                                        val field = document.getElementById("board--field-$i-$tmpCol")
+                                        if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, tmpCol))
+                                        else break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                        }
+
+                        //bottom
+                        if (row != 8) {
+                            //left
+                            if (col != 1) {
+                                var tmpCol = col
+                                for (i in row + 1..8) {
+                                    tmpCol--
+                                    if (tmpCol != 0) { // out of board
+                                        val field = document.getElementById("board--field-$i-$tmpCol")
+                                        if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, tmpCol))
+                                        else break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                            //right
+                            if (col != 8) {
+                                var tmpCol = col
+                                for (i in row + 1..8) {
+                                    tmpCol++
+                                    if (tmpCol != 9) { // out of board
+                                        val field = document.getElementById("board--field-$i-$tmpCol")
+                                        if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, tmpCol))
+                                        else break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                        }
                     }
                     PieceType.KING.toString() -> {
                         val field1 = document.getElementById("board--field-${row + 1}-$col")
