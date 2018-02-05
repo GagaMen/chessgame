@@ -88,6 +88,39 @@ class ChessRuleUtility {
                     PieceType.QUEEN.toString() -> {
                     }
                     PieceType.ROOK.toString() -> {
+                        //horizontal left
+                        if (col != 1) {
+                            for (i in (col - 1 downTo 1)) {
+                                val field = document.getElementById("board--field-$row-$i")
+                                if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(row, i))
+                                else break
+                            }
+                        }
+                        //horizontal right
+                        if (col != 8) {
+                            for (i in (col + 1..8)) {
+                                val field = document.getElementById("board--field-$row-$i")
+                                if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(row, i))
+                                else break
+                            }
+                        }
+
+                        //vertical top
+                        if (row != 1) {
+                            for (i in (row - 1 downTo 1)) {
+                                val field = document.getElementById("board--field-$i-$col")
+                                if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, col))
+                                else break
+                            }
+                        }
+                        //vertical bottom
+                        if (row != 8) {
+                            for (i in (row + 1..8)) {
+                                val field = document.getElementById("board--field-$i-$col")
+                                if (field != null && !field.hasChildNodes()) validDropFields.add(Pair(i, col))
+                                else break
+                            }
+                        }
                     }
                 }
             }
