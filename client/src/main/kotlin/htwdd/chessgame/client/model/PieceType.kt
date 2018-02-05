@@ -4,7 +4,7 @@ enum class PieceType {
     PAWN,
     KING,
     QUEEN,
-    BISCHOP,
+    BISHOP,
     KNIGHT,
     ROOK
 }

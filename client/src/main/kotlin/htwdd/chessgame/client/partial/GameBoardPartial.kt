@@ -80,9 +80,9 @@ class GameBoardPartial(val match: Match) : Partial {
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesWhite[Pair(i, j)]?.type) {
-                                            PieceType.BISCHOP -> {
+                                            PieceType.BISHOP -> {
                                                 src = basePath + "bishop_white.svg"
-                                                attributes["data-type"] = PieceType.BISCHOP.toString()
+                                                attributes["data-type"] = PieceType.BISHOP.toString()
                                             }
                                             PieceType.KING -> {
                                                 src = basePath + "king_white.svg"
@@ -116,9 +116,9 @@ class GameBoardPartial(val match: Match) : Partial {
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesBlack[Pair(i, j)]?.type) {
-                                            PieceType.BISCHOP -> {
+                                            PieceType.BISHOP -> {
                                                 src = basePath + "bishop_black.svg"
-                                                attributes["data-type"] = PieceType.BISCHOP.toString()
+                                                attributes["data-type"] = PieceType.BISHOP.toString()
                                             }
                                             PieceType.KING -> {
                                                 src = basePath + "king_black.svg"

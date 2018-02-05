@@ -25,7 +25,7 @@ class ChessRuleUtility {
 
             if (row != null && col != null) {
                 when (type) {
-                    PieceType.BISCHOP.toString() -> {
+                    PieceType.BISHOP.toString() -> {
                         //top
                         if (row != 1) {
                             //left
