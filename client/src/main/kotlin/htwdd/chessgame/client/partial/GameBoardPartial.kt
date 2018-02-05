@@ -14,9 +14,9 @@ import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
 class GameBoardPartial(val match: Match) : Partial {
-    val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
-    val activePiecesBlack = match.pieceSets[PieceColor.BLACK]?.activePieces
-    val basePath = "image/"
+    private val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
+    private val activePiecesBlack = match.pieceSets[PieceColor.BLACK]?.activePieces
+    private val basePath = "image/"
 
     override fun getPartial(controller: Controller): HTMLElement {
         return document.create.div(classes = "board") {
@@ -62,9 +62,12 @@ class GameBoardPartial(val match: Match) : Partial {
             }
             for (i in 1..8) {
                 div(classes = "board--row") {
+                    id = "board--row-$i"
                     for (j in 1..8) {
                         div(classes = "board--col") {
+                            id = "board--col-$j"
                             div(classes = "board--field") {
+                                id = "board--field-$i-$j"
                                 onDropFunction = { event -> DraggableUtility.drop(event) }
                                 onDragOverFunction = { event -> DraggableUtility.dragOver(event) }
 
@@ -73,14 +76,31 @@ class GameBoardPartial(val match: Match) : Partial {
                                         draggable = Draggable.htmlTrue
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
                                         id = "$i$j"
-                                        src = when (activePiecesWhite[Pair(i, j)]?.type) {
-                                            PieceType.BISCHOP -> basePath + "bishop_white.svg"
-                                            PieceType.KING -> basePath + "king_white.svg"
-                                            PieceType.KNIGHT -> basePath + "knight_white.svg"
-                                            PieceType.PAWN -> basePath + "pawn_white.svg"
-                                            PieceType.QUEEN -> basePath + "queen_white.svg"
-                                            PieceType.ROOK -> basePath + "rook_white.svg"
-                                            else -> ""
+                                        when (activePiecesWhite[Pair(i, j)]?.type) {
+                                            PieceType.BISCHOP -> {
+                                                src = basePath + "bishop_white.svg"
+                                                attributes["data-type"] = PieceType.BISCHOP.toString()
+                                            }
+                                            PieceType.KING -> {
+                                                src = basePath + "king_white.svg"
+                                                attributes["data-type"] = PieceType.KING.toString()
+                                            }
+                                            PieceType.KNIGHT -> {
+                                                src = basePath + "knight_white.svg"
+                                                attributes["data-type"] = PieceType.KNIGHT.toString()
+                                            }
+                                            PieceType.PAWN -> {
+                                                src = basePath + "pawn_white.svg"
+                                                attributes["data-type"] = PieceType.PAWN.toString()
+                                            }
+                                            PieceType.QUEEN -> {
+                                                src = basePath + "queen_white.svg"
+                                                attributes["data-type"] = PieceType.QUEEN.toString()
+                                            }
+                                            PieceType.ROOK -> {
+                                                src = basePath + "rook_white.svg"
+                                                attributes["data-type"] = PieceType.ROOK.toString()
+                                            }
                                         }
                                     }
                                 }
@@ -89,14 +109,31 @@ class GameBoardPartial(val match: Match) : Partial {
                                         draggable = Draggable.htmlTrue
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
                                         id = "$i$j"
-                                        src = when (activePiecesBlack[Pair(i, j)]?.type) {
-                                            PieceType.BISCHOP -> basePath + "bishop_black.svg"
-                                            PieceType.KING -> basePath + "king_black.svg"
-                                            PieceType.KNIGHT -> basePath + "knight_black.svg"
-                                            PieceType.PAWN -> basePath + "pawn_black.svg"
-                                            PieceType.QUEEN -> basePath + "queen_black.svg"
-                                            PieceType.ROOK -> basePath + "rook_black.svg"
-                                            else -> ""
+                                        when (activePiecesBlack[Pair(i, j)]?.type) {
+                                            PieceType.BISCHOP -> {
+                                                src = basePath + "bishop_black.svg"
+                                                attributes["data-type"] = PieceType.BISCHOP.toString()
+                                            }
+                                            PieceType.KING -> {
+                                                src = basePath + "king_black.svg"
+                                                attributes["data-type"] = PieceType.KING.toString()
+                                            }
+                                            PieceType.KNIGHT -> {
+                                                src = basePath + "knight_black.svg"
+                                                attributes["data-type"] = PieceType.KNIGHT.toString()
+                                            }
+                                            PieceType.PAWN -> {
+                                                src = basePath + "pawn_black.svg"
+                                                attributes["data-type"] = PieceType.PAWN.toString()
+                                            }
+                                            PieceType.QUEEN -> {
+                                                src = basePath + "queen_black.svg"
+                                                attributes["data-type"] = PieceType.QUEEN.toString()
+                                            }
+                                            PieceType.ROOK -> {
+                                                src = basePath + "rook_black.svg"
+                                                attributes["data-type"] = PieceType.ROOK.toString()
+                                            }
                                         }
                                     }
                                 }
