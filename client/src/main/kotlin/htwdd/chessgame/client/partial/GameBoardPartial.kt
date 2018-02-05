@@ -7,9 +7,7 @@ import htwdd.chessgame.client.model.PieceType
 import htwdd.chessgame.client.util.DraggableUtility
 import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.js.onDragOverFunction
-import kotlinx.html.js.onDragStartFunction
-import kotlinx.html.js.onDropFunction
+import kotlinx.html.js.*
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
 
@@ -68,6 +66,8 @@ class GameBoardPartial(val match: Match) : Partial {
                             id = "board--col-$j"
                             div(classes = "board--field") {
                                 id = "board--field-$i-$j"
+                                attributes["data-row"] = i.toString()
+                                attributes["data-col"] = j.toString()
                                 onDropFunction = { event -> DraggableUtility.drop(event) }
                                 onDragOverFunction = { event -> DraggableUtility.dragOver(event) }
 
@@ -75,6 +75,9 @@ class GameBoardPartial(val match: Match) : Partial {
                                     img(classes = "piece--white") {
                                         draggable = Draggable.htmlTrue
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
+                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event) }
+                                        onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesWhite[Pair(i, j)]?.type) {
                                             PieceType.BISCHOP -> {
@@ -108,6 +111,9 @@ class GameBoardPartial(val match: Match) : Partial {
                                     img(classes = "piece--black") {
                                         draggable = Draggable.htmlTrue
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
+                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event) }
+                                        onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesBlack[Pair(i, j)]?.type) {
                                             PieceType.BISCHOP -> {
@@ -145,5 +151,3 @@ class GameBoardPartial(val match: Match) : Partial {
         }
     }
 }
-
-external fun dataTransfer(): Unit

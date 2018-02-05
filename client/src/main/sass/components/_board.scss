@@ -87,12 +87,30 @@
       &:nth-child(#{$x}) {
         top: $y;
         @if ($x % 2 != 0) {
+          .board--col:nth-child(odd) .board--field {
+            background: $color-lightbrown;
+            &.highlighted {
+              background: $color-lightgrey;
+            }
+          }
           .board--col:nth-child(even) .board--field {
-            background: $color-black;
+            background: $color-brown;
+            &.highlighted {
+              background: $color-grey-2;
+            }
           }
         } @else {
           .board--col:nth-child(odd) .board--field {
-            background: $color-black;
+            background: $color-brown;
+            &.highlighted {
+              background: $color-grey-2;
+            }
+          }
+          .board--col:nth-child(even) .board--field {
+            background: $color-lightbrown;
+            &.highlighted {
+              background: $color-lightgrey;
+            }
           }
         }
       }
