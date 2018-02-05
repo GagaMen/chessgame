@@ -4,6 +4,7 @@ import htwdd.chessgame.client.model.PieceColor
 import htwdd.chessgame.client.model.PieceType
 import org.w3c.dom.Element
 import org.w3c.dom.get
+import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class ChessRuleUtility {
@@ -32,18 +33,24 @@ class ChessRuleUtility {
                 PieceType.PAWN.toString() -> {
                     if (row != null && col != null) {
                         if (pieceColor == PieceColor.WHITE) {
-                            validDropFields.add(Pair(row + 1, col))
-                            // start row
-                            if (row == 2) {
-                                validDropFields.add(Pair(row + 2, col))
+                            val field = document.getElementById("board--field-${row + 1}-$col")
+                            if (field != null && !field.hasChildNodes()) {
+                                validDropFields.add(Pair(row + 1, col))
+                                // start row
+                                if (row == 2) {
+                                    validDropFields.add(Pair(row + 2, col))
+                                }
                             }
                         }
 
                         if (pieceColor == PieceColor.BLACK) {
-                            validDropFields.add(Pair(row - 1, col))
-                            // start row
-                            if (row == 7) {
-                                validDropFields.add(Pair(row - 2, col))
+                            val field = document.getElementById("board--field-${row - 1}-$col")
+                            if (field != null && !field.hasChildNodes()) {
+                                validDropFields.add(Pair(row - 1, col))
+                                // start row
+                                if (row == 7) {
+                                    validDropFields.add(Pair(row - 2, col))
+                                }
                             }
                         }
                     }
