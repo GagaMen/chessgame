@@ -47,6 +47,23 @@ class ChessRuleUtility {
                         if (field8 != null && !field8.hasChildNodes()) validDropFields.add(Pair(row + 1, col - 1))
                     }
                     PieceType.KNIGHT.toString() -> {
+                        val field1 = document.getElementById("board--field-${row + 2}-${col + 1}")
+                        val field2 = document.getElementById("board--field-${row + 1}-${col + 2}")
+                        val field3 = document.getElementById("board--field-${row - 1}-${col + 2}")
+                        val field4 = document.getElementById("board--field-${row - 2}-${col + 1}")
+                        val field5 = document.getElementById("board--field-${row - 2}-${col - 1}")
+                        val field6 = document.getElementById("board--field-${row - 1}-${col - 2}")
+                        val field7 = document.getElementById("board--field-${row + 1}-${col - 2}")
+                        val field8 = document.getElementById("board--field-${row + 2}-${col - 1}")
+
+                        if (field1 != null && !field1.hasChildNodes()) validDropFields.add(Pair(row + 2, col + 1))
+                        if (field2 != null && !field2.hasChildNodes()) validDropFields.add(Pair(row + 1, col + 2))
+                        if (field3 != null && !field3.hasChildNodes()) validDropFields.add(Pair(row - 1, col + 2))
+                        if (field4 != null && !field4.hasChildNodes()) validDropFields.add(Pair(row - 2, col + 1))
+                        if (field5 != null && !field5.hasChildNodes()) validDropFields.add(Pair(row - 2, col - 1))
+                        if (field6 != null && !field6.hasChildNodes()) validDropFields.add(Pair(row - 1, col - 2))
+                        if (field7 != null && !field7.hasChildNodes()) validDropFields.add(Pair(row + 1, col - 2))
+                        if (field8 != null && !field8.hasChildNodes()) validDropFields.add(Pair(row + 2, col - 1))
                     }
                     PieceType.PAWN.toString() -> {
                         if (pieceColor == PieceColor.WHITE) {
