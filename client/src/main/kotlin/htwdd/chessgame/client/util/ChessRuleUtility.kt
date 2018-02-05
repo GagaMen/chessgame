@@ -23,23 +23,38 @@ class ChessRuleUtility {
                 // todo throw error
             }
 
-            when (type) {
-                PieceType.BISCHOP.toString() -> {
-                }
-                PieceType.KING.toString() -> {
-                }
-                PieceType.KNIGHT.toString() -> {
-                }
-                PieceType.PAWN.toString() -> {
-                    if (row != null && col != null) {
+            if (row != null && col != null) {
+                when (type) {
+                    PieceType.BISCHOP.toString() -> {
+                    }
+                    PieceType.KING.toString() -> {
+                        val field1 = document.getElementById("board--field-${row + 1}-$col")
+                        val field2 = document.getElementById("board--field-${row + 1}-${col + 1}")
+                        val field3 = document.getElementById("board--field-$row-${col + 1}")
+                        val field4 = document.getElementById("board--field-${row - 1}-${col + 1}")
+                        val field5 = document.getElementById("board--field-${row - 1}-$col")
+                        val field6 = document.getElementById("board--field-${row - 1}-${col - 1}")
+                        val field7 = document.getElementById("board--field-$row-${col - 1}")
+                        val field8 = document.getElementById("board--field-${row + 1}-${col - 1}")
+
+                        if (field1 != null && !field1.hasChildNodes()) validDropFields.add(Pair(row + 1, col))
+                        if (field2 != null && !field2.hasChildNodes()) validDropFields.add(Pair(row + 1, col + 1))
+                        if (field3 != null && !field3.hasChildNodes()) validDropFields.add(Pair(row, col + 1))
+                        if (field4 != null && !field4.hasChildNodes()) validDropFields.add(Pair(row - 1, col + 1))
+                        if (field5 != null && !field5.hasChildNodes()) validDropFields.add(Pair(row - 1, col))
+                        if (field6 != null && !field6.hasChildNodes()) validDropFields.add(Pair(row - 1, col - 1))
+                        if (field7 != null && !field7.hasChildNodes()) validDropFields.add(Pair(row, col - 1))
+                        if (field8 != null && !field8.hasChildNodes()) validDropFields.add(Pair(row + 1, col - 1))
+                    }
+                    PieceType.KNIGHT.toString() -> {
+                    }
+                    PieceType.PAWN.toString() -> {
                         if (pieceColor == PieceColor.WHITE) {
                             val field = document.getElementById("board--field-${row + 1}-$col")
                             if (field != null && !field.hasChildNodes()) {
                                 validDropFields.add(Pair(row + 1, col))
                                 // start row
-                                if (row == 2) {
-                                    validDropFields.add(Pair(row + 2, col))
-                                }
+                                if (row == 2) validDropFields.add(Pair(row + 2, col))
                             }
                         }
 
@@ -48,16 +63,15 @@ class ChessRuleUtility {
                             if (field != null && !field.hasChildNodes()) {
                                 validDropFields.add(Pair(row - 1, col))
                                 // start row
-                                if (row == 7) {
-                                    validDropFields.add(Pair(row - 2, col))
-                                }
+                                if (row == 7) validDropFields.add(Pair(row - 2, col))
                             }
                         }
+
                     }
-                }
-                PieceType.QUEEN.toString() -> {
-                }
-                PieceType.ROOK.toString() -> {
+                    PieceType.QUEEN.toString() -> {
+                    }
+                    PieceType.ROOK.toString() -> {
+                    }
                 }
             }
 
