@@ -73,10 +73,9 @@ class GameBoardPartial(val match: Match) : Partial {
 
                                 if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j))) {
                                     img(classes = "piece--white") {
-                                        draggable = Draggable.htmlTrue
-                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
-                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event) }
+                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesWhite[Pair(i, j)]?.type) {
@@ -109,10 +108,9 @@ class GameBoardPartial(val match: Match) : Partial {
                                 }
                                 if (activePiecesBlack != null && activePiecesBlack.contains(Pair(i, j))) {
                                     img(classes = "piece--black") {
-                                        draggable = Draggable.htmlTrue
-                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event) }
+                                        onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
-                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event) }
+                                        onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
                                         when (activePiecesBlack[Pair(i, j)]?.type) {

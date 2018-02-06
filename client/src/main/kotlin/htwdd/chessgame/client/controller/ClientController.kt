@@ -37,7 +37,7 @@ class ClientController : Controller {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
         pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
 
-        val match = Match(players, pieceSets, emptyList())
+        val match = Match(players, pieceSets, PieceColor.WHITE, emptyList())
 
         client.addPlayer(player1)
         client.addPlayer(player2)
@@ -96,7 +96,7 @@ class ClientController : Controller {
                     pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
                     pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
 
-                    client.addMatch(Match(players, pieceSets, emptyList()))
+                    client.addMatch(Match(players, pieceSets, PieceColor.WHITE, emptyList()))
 
                     //reset form
                     playerWhiteSelect.value = "-1"

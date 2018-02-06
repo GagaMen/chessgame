@@ -1,5 +1,6 @@
 package htwdd.chessgame.client.util
 
+import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 import htwdd.chessgame.client.model.PieceType
 import org.w3c.dom.*
@@ -19,13 +20,13 @@ class DraggableUtility {
         private val queen = QueenMovementUtility()
         private val rook = RookMovementUtility()
 
-        fun dragStart(event: Event) {
+        fun dragStart(event: Event, match: Match) {
             when (event) {
                 is DragEvent -> {
                     val target = event.target
                     if (target is Element) {
                         if (validDropFields.size == 0) {
-                            calculateValidDropFields(target)
+                            calculateValidDropFields(target, match)
                         }
                         validDropFields.forEach {
                             val field = document.getElementById("board--field-${it.first}-${it.second}")
@@ -72,11 +73,11 @@ class DraggableUtility {
             }
         }
 
-        fun mouseOver(event: Event) {
+        fun mouseOver(event: Event, match: Match) {
             val target = event.target
             when (target) {
                 is Element -> {
-                    calculateValidDropFields(target)
+                    calculateValidDropFields(target, match)
                     validDropFields.forEach {
                         val field = document.getElementById("board--field-${it.first}-${it.second}")
                         field?.addClass("highlighted")
@@ -98,7 +99,7 @@ class DraggableUtility {
             }
         }
 
-        fun calculateValidDropFields(image: Element) {
+        private fun calculateValidDropFields(image: Element, match: Match) {
             var pieceColor = PieceColor.WHITE
             val type = image.attributes["data-type"]?.nodeValue
             val parent = image.parentElement
@@ -109,6 +110,10 @@ class DraggableUtility {
                 pieceColor = PieceColor.BLACK
             } else if (!image.hasClass("piece--white")) {
                 // todo throw error
+            }
+
+            if (pieceColor != match.currentColor) {
+                return
             }
 
             if (row != null && col != null) {
