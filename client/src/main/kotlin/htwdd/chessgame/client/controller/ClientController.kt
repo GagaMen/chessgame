@@ -15,8 +15,8 @@ class ClientController : Controller {
     val mainView: MainView
 
     init {
-        client = loadData()
         mainView = MainView(this)
+        client = loadData()
 
         client.addObserver(mainView)
     }
@@ -37,7 +37,8 @@ class ClientController : Controller {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
         pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
 
-        val match = Match(players, pieceSets, PieceColor.WHITE, emptyList())
+        val match = Match(players, pieceSets, PieceColor.WHITE, mutableListOf())
+        match.addObserver(mainView)
 
         client.addPlayer(player1)
         client.addPlayer(player2)
@@ -60,6 +61,7 @@ class ClientController : Controller {
             "removePlayer" -> removePlayer(arg)
             "addMatch" -> addMatch(arg)
             "removeMatch" -> removeMatch(arg)
+            "addDraw" -> addDraw(arg)
         }
     }
 
@@ -96,7 +98,7 @@ class ClientController : Controller {
                     pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
                     pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
 
-                    client.addMatch(Match(players, pieceSets, PieceColor.WHITE, emptyList()))
+                    client.addMatch(Match(players, pieceSets, PieceColor.WHITE, mutableListOf()))
 
                     //reset form
                     playerWhiteSelect.value = "-1"
@@ -192,6 +194,19 @@ class ClientController : Controller {
                     client.removePlayer(playerId)
                 } else {
                     //todo error
+                }
+            }
+        }
+    }
+
+    private fun addDraw(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val draw = arg.second
+
+                if (match is Match && draw is Draw) {
+                    match.addDraw(draw)
                 }
             }
         }

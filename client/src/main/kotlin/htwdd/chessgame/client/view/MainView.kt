@@ -96,6 +96,10 @@ class MainView(private val controller: ClientController) : Observer {
                         main.clear()
                         main.append(GamePartial(o).getPartial(controller))
                     }
+                    "updateGameProperties" -> {
+                        val properties = main.getElementsByClassName("properties")[0]
+                        properties?.replaceWith(GamePropertiesPartial(o).getPartial(controller))
+                    }
                 }
             }
         }

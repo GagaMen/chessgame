@@ -68,7 +68,7 @@ class GameBoardPartial(val match: Match) : Partial {
                                 id = "board--field-$i-$j"
                                 attributes["data-row"] = i.toString()
                                 attributes["data-col"] = j.toString()
-                                onDropFunction = { event -> DraggableUtility.drop(event) }
+                                onDropFunction = { event -> DraggableUtility.drop(event, controller, match) }
                                 onDragOverFunction = { event -> DraggableUtility.dragOver(event) }
 
                                 if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j))) {

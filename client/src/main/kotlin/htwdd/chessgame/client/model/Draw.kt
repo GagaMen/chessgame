@@ -1,8 +1,8 @@
 package htwdd.chessgame.client.model
 
-class Draw(var id: Int,
-           var color: PieceColor,
-           var piece: Piece,
+class Draw(var color: PieceColor,
+           var pieceType: PieceType,
            var start: Field,
-           var end: Field,
-           var drawCode: String)
+           var end: Field) {
+    var drawCode: String = ""
+}

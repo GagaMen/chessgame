@@ -41,7 +41,7 @@ class GamePropertiesPartial(val match: Match) : Partial {
                                         +draw.color.toString()
                                     }
                                     td {
-                                        +draw.piece.type.toString()
+                                        +draw.pieceType.toString()
                                     }
                                     td {
                                         +"Row: ${draw.start.row}, Column: ${draw.start.column}"
