@@ -2,11 +2,8 @@ package htwdd.chessgame.client.util
 
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.*
-import org.w3c.dom.DragEvent
-import org.w3c.dom.Element
-import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.*
 import org.w3c.dom.events.Event
-import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.dom.hasClass
@@ -94,6 +91,37 @@ class DraggableUtility {
 
                                     controller.actionPerformed("addDraw", Pair(match, newDraw))
                                     target.appendChild(image)
+                                }
+                            }
+                        }
+                        is HTMLImageElement -> {
+                            val image = document.getElementById(data)
+                            val parent = image?.parentElement
+                            val targetParent = target.parentElement
+
+                            if (image != null && parent != null && targetParent != null) {
+                                var pieceColor = PieceColor.WHITE
+                                val pieceType = image.attributes["data-type"]?.nodeValue
+
+                                val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull()
+                                val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
+                                val newRow = targetParent.attributes["data-row"]?.nodeValue?.toIntOrNull()
+                                val newCol = targetParent.attributes["data-col"]?.nodeValue?.toIntOrNull()
+
+                                if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
+
+                                if (oldRow != null &&
+                                        oldCol != null &&
+                                        newRow != null &&
+                                        newCol != null &&
+                                        pieceType != null) {
+                                    val newDraw = Draw(pieceColor,
+                                            PieceType.valueOf(pieceType),
+                                            Field(oldRow, oldCol),
+                                            Field(newRow, newCol))
+
+                                    controller.actionPerformed("addDraw", Pair(match, newDraw))
+                                    target.replaceWith(image)
                                 }
                             }
                         }
