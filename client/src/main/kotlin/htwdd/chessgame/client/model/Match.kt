@@ -14,6 +14,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
         history.add(draw)
         updatePieceSet(draw)
         switchColor()
+        updateMatchCode()
         setChanged()
         notifyObservers("updateGameProperties")
     }
@@ -54,6 +55,58 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                 }
             }
         }
+    }
 
+    private fun updateMatchCode() {
+        val sb = StringBuilder()
+        val whitePieceSet = pieceSets[PieceColor.WHITE]
+        val blackPieceSet = pieceSets[PieceColor.BLACK]
+
+        // piece position
+        for (i in 1..8) {
+            var emptyCol = 0
+            for (j in 1..8) {
+                if (whitePieceSet != null && whitePieceSet.activePieces.containsKey(Pair(i, j))) {
+                    if (emptyCol > 0) {
+                        sb.append(emptyCol)
+                        emptyCol = 0
+                    }
+                    val pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type
+                    sb.append(pieceType?.getCode(PieceColor.WHITE))
+                } else if (blackPieceSet != null && blackPieceSet.activePieces.containsKey(Pair(i, j))) {
+                    if (emptyCol > 0) {
+                        sb.append(emptyCol)
+                        emptyCol = 0
+                    }
+                    val pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type
+                    sb.append(pieceType?.getCode(PieceColor.BLACK))
+                } else {
+                    emptyCol++
+                }
+            }
+            if (emptyCol > 0) sb.append(emptyCol)
+            if (i != 8) sb.append("/")
+        }
+
+        // train right
+        sb.append(" ${currentColor.getCode()}")
+
+        // castling right
+        // todo implements castling
+        sb.append(" KQkq")
+
+        // en passant
+        // todo implements en passant
+        sb.append(" -")
+
+        // halfmoves
+        // todo implements halfmoves calculation
+        sb.append(" 0")
+
+        // next train number
+        sb.append(" ${history.size + 1}")
+
+        matchCode = sb.toString()
+        println(matchCode)
     }
 }
