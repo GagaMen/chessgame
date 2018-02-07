@@ -12,7 +12,15 @@ data class Match(var players: HashMap<PieceColor, Player?>,
 
     fun addDraw(draw: Draw) {
         history.add(draw)
+        switchColor()
         setChanged()
         notifyObservers("updateGameProperties")
+    }
+
+    private fun switchColor() {
+        currentColor = when (currentColor) {
+            PieceColor.WHITE -> PieceColor.BLACK
+            PieceColor.BLACK -> PieceColor.WHITE
+        }
     }
 }
