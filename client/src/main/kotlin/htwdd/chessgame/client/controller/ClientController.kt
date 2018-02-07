@@ -11,17 +11,15 @@ import kotlin.collections.set
 
 class ClientController : Controller {
 
-    var client: Client
-    val mainView: MainView
+    private var client: Client
+    private val mainView: MainView = MainView(this)
 
     init {
-        mainView = MainView(this)
         client = loadData()
-
         client.addObserver(mainView)
     }
 
-    fun loadData(): Client {
+    private fun loadData(): Client {
         //todo: load data from server
 
         // test data ------------------------------------------------
