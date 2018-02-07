@@ -60,6 +60,8 @@ class ClientController : Controller {
             "addMatch" -> addMatch(arg)
             "removeMatch" -> removeMatch(arg)
             "addDraw" -> addDraw(arg)
+            "increaseHalfMoves" -> increaseHalfMoves(arg)
+            "resetHalfMoves" -> resetHalfMoves(arg)
         }
     }
 
@@ -207,6 +209,18 @@ class ClientController : Controller {
                     match.addDraw(draw)
                 }
             }
+        }
+    }
+
+    private fun increaseHalfMoves(arg: Any?) {
+        when (arg) {
+            is Match -> arg.halfMoves++
+        }
+    }
+
+    private fun resetHalfMoves(arg: Any?) {
+        when (arg) {
+            is Match -> arg.halfMoves = 0
         }
     }
 }

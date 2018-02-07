@@ -89,6 +89,7 @@ class DraggableUtility {
                                             Field(oldRow, oldCol),
                                             Field(newRow, newCol))
 
+                                    controller.actionPerformed("increaseHalfMoves", match)
                                     controller.actionPerformed("addDraw", Pair(match, newDraw))
                                     target.appendChild(image)
                                 }
@@ -120,6 +121,7 @@ class DraggableUtility {
                                             Field(oldRow, oldCol),
                                             Field(newRow, newCol))
 
+                                    controller.actionPerformed("resetHalfMoves", match)
                                     controller.actionPerformed("addDraw", Pair(match, newDraw))
                                     target.replaceWith(image)
                                 }
