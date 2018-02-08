@@ -32,7 +32,6 @@ class PawnMovementUtility : MovementUtility {
                         validDropFields.add(Pair(row + 1, col - 1))
                     }
                 }
-                // todo implements rule "en passant"
                 if (match?.enPassantField != null && match.enPassantField?.row == row + 1) {
                     if (match.enPassantField?.column == col + 1) {
                         validDropFields.add(Pair(row + 1, col + 1))
@@ -66,7 +65,6 @@ class PawnMovementUtility : MovementUtility {
                         validDropFields.add(Pair(row - 1, col - 1))
                     }
                 }
-                // todo implements rule "en passant"
                 if (match?.enPassantField != null && match.enPassantField?.row == row - 1) {
                     if (match.enPassantField?.column == col + 1) {
                         validDropFields.add(Pair(row - 1, col + 1))
