@@ -74,7 +74,7 @@ class GameBoardPartial(val match: Match) : Partial {
                                 if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j))) {
                                     img(classes = "piece--white") {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
-                                        onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
+                                        onDragEndFunction = { DraggableUtility.dragEnd() }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
@@ -109,7 +109,7 @@ class GameBoardPartial(val match: Match) : Partial {
                                 if (activePiecesBlack != null && activePiecesBlack.contains(Pair(i, j))) {
                                     img(classes = "piece--black") {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
-                                        onDragEndFunction = { event -> DraggableUtility.dragEnd(event) }
+                                        onDragEndFunction = { DraggableUtility.dragEnd() }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
                                         id = "$i$j"
