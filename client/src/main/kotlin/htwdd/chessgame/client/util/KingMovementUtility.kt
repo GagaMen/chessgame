@@ -106,6 +106,65 @@ class KingMovementUtility : MovementUtility {
 
         }
         // todo remove fields in which the king is in check
-        // todo implements rule "rochade"
+        if (match != null) {
+            when (pieceColor) {
+                PieceColor.WHITE -> {
+                    if (match.whiteCastlingKingSide) {
+                        val fieldKingSide1 = document.getElementById("board--field-$row-${col + 1}")
+                        val fieldKingSide2 = document.getElementById("board--field-$row-${col + 2}")
+
+                        if (fieldKingSide1 != null &&
+                                fieldKingSide2 != null &&
+                                !fieldKingSide1.hasChildNodes() &&
+                                !fieldKingSide2.hasChildNodes()) {
+                            validDropFields.add(Pair(row, col + 2))
+                        }
+                    }
+
+                    if (match.whiteCastlingQueenSide) {
+                        val fieldQueenSide1 = document.getElementById("board--field-$row-${col - 1}")
+                        val fieldQueenSide2 = document.getElementById("board--field-$row-${col - 2}")
+                        val fieldQueenSide3 = document.getElementById("board--field-$row-${col - 3}")
+
+                        if (fieldQueenSide1 != null &&
+                                fieldQueenSide2 != null &&
+                                fieldQueenSide3 != null &&
+                                !fieldQueenSide1.hasChildNodes() &&
+                                !fieldQueenSide2.hasChildNodes() &&
+                                !fieldQueenSide3.hasChildNodes()) {
+                            validDropFields.add(Pair(row, col - 2))
+                        }
+                    }
+                }
+                PieceColor.BLACK -> {
+                    if (match.blackCastlingKingSide) {
+                        val fieldKingSide1 = document.getElementById("board--field-$row-${col + 1}")
+                        val fieldKingSide2 = document.getElementById("board--field-$row-${col + 2}")
+
+                        if (fieldKingSide1 != null &&
+                                fieldKingSide2 != null &&
+                                !fieldKingSide1.hasChildNodes() &&
+                                !fieldKingSide2.hasChildNodes()) {
+                            validDropFields.add(Pair(row, col + 2))
+                        }
+                    }
+
+                    if (match.blackCastlingQueenSide) {
+                        val fieldQueenSide1 = document.getElementById("board--field-$row-${col - 1}")
+                        val fieldQueenSide2 = document.getElementById("board--field-$row-${col - 2}")
+                        val fieldQueenSide3 = document.getElementById("board--field-$row-${col - 3}")
+
+                        if (fieldQueenSide1 != null &&
+                                fieldQueenSide2 != null &&
+                                fieldQueenSide3 != null &&
+                                !fieldQueenSide1.hasChildNodes() &&
+                                !fieldQueenSide2.hasChildNodes() &&
+                                !fieldQueenSide3.hasChildNodes()) {
+                            validDropFields.add(Pair(row, col - 2))
+                        }
+                    }
+                }
+            }
+        }
     }
 }

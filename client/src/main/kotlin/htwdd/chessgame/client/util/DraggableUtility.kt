@@ -117,6 +117,50 @@ class DraggableUtility {
                                         controller.actionPerformed("resetEnPassant", match)
                                     }
 
+                                    if (PieceType.valueOf(pieceType) == PieceType.ROOK) {
+                                        when (pieceColor) {
+                                            PieceColor.WHITE -> {
+                                                if (match.whiteCastlingKingSide && oldCol == 8) {
+                                                    controller.actionPerformed("disableKingSide", Pair(match, pieceColor))
+                                                } else if (match.whiteCastlingQueenSide && oldCol == 1) {
+                                                    controller.actionPerformed("disableQueenSide", Pair(match, pieceColor))
+                                                }
+                                            }
+                                            PieceColor.BLACK -> {
+                                                if (match.blackCastlingKingSide && oldCol == 8) {
+                                                    controller.actionPerformed("disableKingSide", Pair(match, pieceColor))
+                                                } else if (match.blackCastlingQueenSide && oldCol == 1) {
+                                                    controller.actionPerformed("disableQueenSide", Pair(match, pieceColor))
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    target.appendChild(image)
+
+                                    if (PieceType.valueOf(pieceType) == PieceType.KING) {
+                                        when (newCol) {
+                                        //kinside
+                                            oldCol + 2 -> {
+                                                val rook = document.getElementById("board--field-$newRow-8")?.firstElementChild
+                                                val rookTarget = document.getElementById("board--field-$newRow-6")
+                                                if (rook != null && rook is HTMLImageElement) {
+                                                    rookTarget?.appendChild(rook)
+                                                    controller.actionPerformed("castling", Pair(match, pieceColor))
+                                                }
+                                            }
+                                        //queenside
+                                            oldCol - 2 -> {
+                                                val rook = document.getElementById("board--field-$newRow-1")?.firstElementChild
+                                                val rookTarget = document.getElementById("board--field-$newRow-4")
+                                                if (rook != null && rook is HTMLImageElement) {
+                                                    rookTarget?.appendChild(rook)
+                                                    controller.actionPerformed("castling", Pair(match, pieceColor))
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     val newDraw = Draw(pieceColor,
                                             PieceType.valueOf(pieceType),
                                             Field(oldRow, oldCol),
@@ -124,7 +168,6 @@ class DraggableUtility {
 
                                     controller.actionPerformed("increaseHalfMoves", match)
                                     controller.actionPerformed("addDraw", Pair(match, newDraw))
-                                    target.appendChild(image)
                                 }
                             }
                         }
@@ -211,7 +254,7 @@ class DraggableUtility {
             if (row != null && col != null) {
                 when (type) {
                     PieceType.BISHOP.toString() -> bishop.setValidDropFields(validDropFields, row, col, pieceColor)
-                    PieceType.KING.toString() -> king.setValidDropFields(validDropFields, row, col, pieceColor)
+                    PieceType.KING.toString() -> king.setValidDropFields(validDropFields, row, col, pieceColor, match)
                     PieceType.KNIGHT.toString() -> knight.setValidDropFields(validDropFields, row, col, pieceColor)
                     PieceType.PAWN.toString() -> pawn.setValidDropFields(validDropFields, row, col, pieceColor, match)
                     PieceType.QUEEN.toString() -> queen.setValidDropFields(validDropFields, row, col, pieceColor)

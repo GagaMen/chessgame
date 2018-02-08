@@ -64,6 +64,9 @@ class ClientController : Controller {
             "resetHalfMoves" -> resetHalfMoves(arg)
             "setEnPassant" -> setEnPassant(arg)
             "resetEnPassant" -> resetEnPassant(arg)
+            "castling" -> castling(arg)
+            "disableKingSide" -> disableKingSide(arg)
+            "disableQueenSide" -> disableQueenSide(arg)
         }
     }
 
@@ -243,6 +246,68 @@ class ClientController : Controller {
         when (arg) {
             is Match -> {
                 arg.enPassantField = null
+            }
+        }
+    }
+
+    private fun castling(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val pieceColor = arg.second
+
+                if (match != null && match is Match) {
+                    when (pieceColor) {
+                        PieceColor.WHITE -> {
+                            match.whiteCastlingKingSide = false
+                            match.whiteCastlingQueenSide = false
+                        }
+                        PieceColor.BLACK -> {
+                            match.blackCastlingKingSide = false
+                            match.blackCastlingQueenSide = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun disableKingSide(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val pieceColor = arg.second
+
+                if (match != null && match is Match) {
+                    when (pieceColor) {
+                        PieceColor.WHITE -> {
+                            match.whiteCastlingKingSide = false
+                        }
+                        PieceColor.BLACK -> {
+                            match.blackCastlingKingSide = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun disableQueenSide(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val pieceColor = arg.second
+
+                if (match != null && match is Match) {
+                    when (pieceColor) {
+                        PieceColor.WHITE -> {
+                            match.whiteCastlingQueenSide = false
+                        }
+                        PieceColor.BLACK -> {
+                            match.blackCastlingQueenSide = false
+                        }
+                    }
+                }
             }
         }
     }

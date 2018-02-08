@@ -6,6 +6,10 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                  var pieceSets: HashMap<PieceColor, PieceSet>,
                  var currentColor: PieceColor,
                  var history: MutableList<Draw>,
+                 var whiteCastlingKingSide: Boolean = true,
+                 var whiteCastlingQueenSide: Boolean = true,
+                 var blackCastlingKingSide: Boolean = true,
+                 var blackCastlingQueenSide: Boolean = true,
                  var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
                  private var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
@@ -94,11 +98,17 @@ data class Match(var players: HashMap<PieceColor, Player?>,
         sb.append(" ${currentColor.getCode()}")
 
         // castling right
-        // todo implements castling
-        sb.append(" KQkq")
+        if (!whiteCastlingKingSide && !whiteCastlingQueenSide && !blackCastlingKingSide && !blackCastlingQueenSide) {
+            sb.append(" -")
+        } else {
+            sb.append(" ")
+            if (whiteCastlingKingSide) sb.append("K")
+            if (whiteCastlingQueenSide) sb.append("Q")
+            if (blackCastlingKingSide) sb.append("k")
+            if (blackCastlingQueenSide) sb.append("q")
+        }
 
         // en passant
-        // todo implements en passant
         if (enPassantField != null) {
             sb.append(" ${(enPassantField?.column?.plus(96))?.toChar()}${enPassantField?.row}")
         } else {
