@@ -62,6 +62,8 @@ class ClientController : Controller {
             "addDraw" -> addDraw(arg)
             "increaseHalfMoves" -> increaseHalfMoves(arg)
             "resetHalfMoves" -> resetHalfMoves(arg)
+            "setEnPassant" -> setEnPassant(arg)
+            "resetEnPassant" -> resetEnPassant(arg)
         }
     }
 
@@ -221,6 +223,27 @@ class ClientController : Controller {
     private fun resetHalfMoves(arg: Any?) {
         when (arg) {
             is Match -> arg.halfMoves = 0
+        }
+    }
+
+    private fun setEnPassant(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val enPassantField = arg.second
+
+                if (match is Match && enPassantField is Field) {
+                    match.enPassantField = enPassantField
+                }
+            }
+        }
+    }
+
+    private fun resetEnPassant(arg: Any?) {
+        when (arg) {
+            is Match -> {
+                arg.enPassantField = null
+            }
         }
     }
 }

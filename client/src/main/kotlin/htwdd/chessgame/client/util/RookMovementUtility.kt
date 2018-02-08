@@ -1,11 +1,12 @@
 package htwdd.chessgame.client.util
 
+import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class RookMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor) {
+    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         //horizontal left
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {

@@ -1,11 +1,12 @@
 package htwdd.chessgame.client.util
 
+import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class KnightMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor) {
+    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         val field1 = document.getElementById("board--field-${row + 2}-${col + 1}")
         val field2 = document.getElementById("board--field-${row + 1}-${col + 2}")
         val field3 = document.getElementById("board--field-${row - 1}-${col + 2}")

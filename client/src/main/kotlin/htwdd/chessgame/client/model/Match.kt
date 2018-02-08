@@ -6,8 +6,9 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                  var pieceSets: HashMap<PieceColor, PieceSet>,
                  var currentColor: PieceColor,
                  var history: MutableList<Draw>,
+                 var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
-                 var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
+                 private var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
 
     var id: Int = 0
 
@@ -98,7 +99,11 @@ data class Match(var players: HashMap<PieceColor, Player?>,
 
         // en passant
         // todo implements en passant
-        sb.append(" -")
+        if (enPassantField != null) {
+            sb.append(" ${(enPassantField?.column?.plus(96))?.toChar()}${enPassantField?.row}")
+        } else {
+            sb.append(" -")
+        }
 
         // halfMoves
         sb.append(" $halfMoves")

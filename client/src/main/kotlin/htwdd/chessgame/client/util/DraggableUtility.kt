@@ -6,8 +6,10 @@ import org.w3c.dom.*
 import org.w3c.dom.events.Event
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlin.dom.clear
 import kotlin.dom.hasClass
 import kotlin.dom.removeClass
+import kotlin.math.absoluteValue
 
 class DraggableUtility {
     companion object {
@@ -48,7 +50,7 @@ class DraggableUtility {
             }
         }
 
-        fun dragEnd(event: Event) {
+        fun dragEnd() {
             validDropFields.forEach {
                 val field = document.getElementById("board--field-${it.first}-${it.second}")
                 field?.removeClass("highlighted")
@@ -84,6 +86,37 @@ class DraggableUtility {
                                         newRow != null &&
                                         newCol != null &&
                                         pieceType != null) {
+
+                                    if (PieceType.valueOf(pieceType) == PieceType.PAWN) {
+                                        if ((oldRow - newRow).absoluteValue == 2) {
+                                            val enPassantField: Field? = when {
+                                                oldRow < newRow -> {
+                                                    Field(3, oldCol)
+                                                }
+                                                oldRow > newRow -> {
+                                                    Field(6, oldCol)
+                                                }
+                                                else -> null
+                                            }
+                                            if (enPassantField != null) controller.actionPerformed("setEnPassant", Pair(match, enPassantField))
+                                        } else if (newRow == match.enPassantField?.row && newCol == match.enPassantField?.column) {
+                                            when {
+                                                oldRow < newRow -> {
+                                                    document.getElementById("board--field-5-$newCol")
+                                                }
+                                                oldRow > newRow -> {
+                                                    document.getElementById("board--field-4-$newCol")
+                                                }
+                                                else -> null
+                                            }?.clear()
+                                            controller.actionPerformed("resetEnPassant", match)
+                                        } else {
+                                            controller.actionPerformed("resetEnPassant", match)
+                                        }
+                                    } else {
+                                        controller.actionPerformed("resetEnPassant", match)
+                                    }
+
                                     val newDraw = Draw(pieceColor,
                                             PieceType.valueOf(pieceType),
                                             Field(oldRow, oldCol),
@@ -180,7 +213,7 @@ class DraggableUtility {
                     PieceType.BISHOP.toString() -> bishop.setValidDropFields(validDropFields, row, col, pieceColor)
                     PieceType.KING.toString() -> king.setValidDropFields(validDropFields, row, col, pieceColor)
                     PieceType.KNIGHT.toString() -> knight.setValidDropFields(validDropFields, row, col, pieceColor)
-                    PieceType.PAWN.toString() -> pawn.setValidDropFields(validDropFields, row, col, pieceColor)
+                    PieceType.PAWN.toString() -> pawn.setValidDropFields(validDropFields, row, col, pieceColor, match)
                     PieceType.QUEEN.toString() -> queen.setValidDropFields(validDropFields, row, col, pieceColor)
                     PieceType.ROOK.toString() -> rook.setValidDropFields(validDropFields, row, col, pieceColor)
                 }

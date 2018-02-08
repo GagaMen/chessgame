@@ -1,11 +1,12 @@
 package htwdd.chessgame.client.util
 
+import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class PawnMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor) {
+    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         when (pieceColor) {
             PieceColor.WHITE -> {
                 val field1 = document.getElementById("board--field-${row + 1}-$col")
@@ -32,6 +33,14 @@ class PawnMovementUtility : MovementUtility {
                     }
                 }
                 // todo implements rule "en passant"
+                if (match?.enPassantField != null && match.enPassantField?.row == row + 1) {
+                    if (match.enPassantField?.column == col + 1) {
+                        validDropFields.add(Pair(row + 1, col + 1))
+                    }
+                    if (match.enPassantField?.column == col - 1) {
+                        validDropFields.add(Pair(row + 1, col - 1))
+                    }
+                }
             }
             PieceColor.BLACK -> {
                 val field1 = document.getElementById("board--field-${row - 1}-$col")
@@ -58,6 +67,14 @@ class PawnMovementUtility : MovementUtility {
                     }
                 }
                 // todo implements rule "en passant"
+                if (match?.enPassantField != null && match.enPassantField?.row == row - 1) {
+                    if (match.enPassantField?.column == col + 1) {
+                        validDropFields.add(Pair(row - 1, col + 1))
+                    }
+                    if (match.enPassantField?.column == col - 1) {
+                        validDropFields.add(Pair(row - 1, col - 1))
+                    }
+                }
             }
         }
     }
