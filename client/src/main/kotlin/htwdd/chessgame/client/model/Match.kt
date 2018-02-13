@@ -49,12 +49,16 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                     PieceColor.WHITE -> {
                         val opposingPieceSet = pieceSets[PieceColor.BLACK]
                         if (opposingPieceSet != null && opposingPieceSet.activePieces.containsKey(endPosition)) {
+                            val capturedPiece = opposingPieceSet.activePieces[endPosition]
+                            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
                             opposingPieceSet.activePieces.remove(endPosition)
                         }
                     }
                     PieceColor.BLACK -> {
                         val opposingPieceSet = pieceSets[PieceColor.WHITE]
                         if (opposingPieceSet != null && opposingPieceSet.activePieces.containsKey(endPosition)) {
+                            val capturedPiece = opposingPieceSet.activePieces[endPosition]
+                            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
                             opposingPieceSet.activePieces.remove(endPosition)
                         }
                     }

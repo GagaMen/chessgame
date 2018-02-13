@@ -3,6 +3,7 @@ package htwdd.chessgame.client.partial
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
+import htwdd.chessgame.client.model.PieceType
 import kotlinx.html.*
 import kotlinx.html.dom.create
 import org.w3c.dom.HTMLElement
@@ -15,11 +16,103 @@ class GamePropertiesPartial(val match: Match) : Partial {
                 h2 {
                     +"Players:"
                 }
-                p {
-                    +"Player White: ${match.players[PieceColor.WHITE]?.name}"
+                div(classes = "player--white") {
+                    p {
+                        +"Player White: ${match.players[PieceColor.WHITE]?.name}"
+                    }
+                    table(classes = "table--captured-pieces") {
+                        var pawn = 0
+                        var queen = 0
+                        var bishop = 0
+                        var knight = 0
+                        var rook = 0
+                        match.pieceSets[PieceColor.WHITE]?.capturedPieces?.forEach {
+                            when (it.type) {
+                                PieceType.PAWN -> pawn++
+                                PieceType.QUEEN -> queen++
+                                PieceType.BISHOP -> bishop++
+                                PieceType.KNIGHT -> knight++
+                                PieceType.ROOK -> rook++
+                                else -> {
+                                }
+                            }
+                        }
+                        tr {
+                            th {
+                                +"Captured Pieces"
+                                colSpan = "2"
+                            }
+                        }
+                        tr {
+                            td { +"Pawn" }
+                            td { +"$pawn" }
+                        }
+                        tr {
+                            td { +"Queen" }
+                            td { +"$queen" }
+                        }
+                        tr {
+                            td { +"Bishop" }
+                            td { +"$bishop" }
+                        }
+                        tr {
+                            td { +"Knight" }
+                            td { +"$knight" }
+                        }
+                        tr {
+                            td { +"Rook" }
+                            td { +"$rook" }
+                        }
+                    }
                 }
-                p {
-                    +"Player Black: ${match.players[PieceColor.BLACK]?.name}"
+                div(classes = "player--black") {
+                    p {
+                        +"Player Black: ${match.players[PieceColor.BLACK]?.name}"
+                    }
+                    table(classes = "table--captured-pieces") {
+                        var pawn = 0
+                        var queen = 0
+                        var bishop = 0
+                        var knight = 0
+                        var rook = 0
+                        match.pieceSets[PieceColor.BLACK]?.capturedPieces?.forEach {
+                            when (it.type) {
+                                PieceType.PAWN -> pawn++
+                                PieceType.QUEEN -> queen++
+                                PieceType.BISHOP -> bishop++
+                                PieceType.KNIGHT -> knight++
+                                PieceType.ROOK -> rook++
+                                else -> {
+                                }
+                            }
+                        }
+                        tr {
+                            th {
+                                +"Captured Pieces"
+                                colSpan = "2"
+                            }
+                        }
+                        tr {
+                            td { +"Pawn" }
+                            td { +"$pawn" }
+                        }
+                        tr {
+                            td { +"Queen" }
+                            td { +"$queen" }
+                        }
+                        tr {
+                            td { +"Bishop" }
+                            td { +"$bishop" }
+                        }
+                        tr {
+                            td { +"Knight" }
+                            td { +"$knight" }
+                        }
+                        tr {
+                            td { +"Rook" }
+                            td { +"$rook" }
+                        }
+                    }
                 }
             }
             div(classes = "properties--history") {

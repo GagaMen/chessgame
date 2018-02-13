@@ -1,9 +1,9 @@
 .table {
   &--player,
   &--match,
-  &--history {
+  &--history,
+  &--captured-pieces {
     width: 100%;
-    border: 1px solid $color-black;
 
     tr {
       &:nth-child(1) {
@@ -28,6 +28,13 @@
 
   &--history-wrapper {
     overflow-y: auto;
-    max-height: 595px;
+    max-height: 410px;
+  }
+
+  &--player,
+  &--match,
+  &--history-wrapper,
+  &--captured-pieces {
+    border: 1px solid $color-black;
   }
 }

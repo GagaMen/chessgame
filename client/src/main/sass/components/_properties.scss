@@ -5,5 +5,16 @@
     + .properties--history {
       margin-top: 30px;
     }
+
+    .player--white,
+    .player--black {
+      margin-top: 10px;
+      width: 49%;
+      display: inline-block;
+    }
+
+    .player--black {
+      margin-left: 2%;
+    }
   }
 }
