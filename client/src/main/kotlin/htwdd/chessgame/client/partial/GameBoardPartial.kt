@@ -9,7 +9,10 @@ import kotlinx.html.*
 import kotlinx.html.dom.create
 import kotlinx.html.js.*
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.get
 import kotlin.browser.document
+import kotlin.dom.addClass
+import kotlin.dom.hasClass
 
 class GameBoardPartial(val match: Match) : Partial {
     private val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
@@ -146,6 +149,83 @@ class GameBoardPartial(val match: Match) : Partial {
                     }
                 }
             }
+            div(classes = "board--popup hidden") {
+                h2(classes = "text--center") {
+                    +"Pawn conversion"
+                }
+                button(classes = "btn btn--piece-type") {
+                    +"Queen"
+                    onClickFunction = { e ->
+                        e.preventDefault()
+                        convertPiece(PieceType.QUEEN)
+                        controller.actionPerformed("convertPiece", Pair(match, PieceType.QUEEN))
+                    }
+                }
+                button(classes = "btn btn--piece-type") {
+                    +"Bishop"
+                    onClickFunction = { e ->
+                        e.preventDefault()
+                        convertPiece(PieceType.BISHOP)
+                        controller.actionPerformed("convertPiece", Pair(match, PieceType.BISHOP))
+                    }
+                }
+                button(classes = "btn btn--piece-type") {
+                    +"Rook"
+                    onClickFunction = { e ->
+                        e.preventDefault()
+                        convertPiece(PieceType.ROOK)
+                        controller.actionPerformed("convertPiece", Pair(match, PieceType.ROOK))
+                    }
+                }
+                button(classes = "btn btn--piece-type") {
+                    +"Knight"
+                    onClickFunction = { e ->
+                        e.preventDefault()
+                        convertPiece(PieceType.KNIGHT)
+                        controller.actionPerformed("convertPiece", Pair(match, PieceType.KNIGHT))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun convertPiece(pieceType: PieceType) {
+        val popup = document.getElementsByClassName("board--popup")[0]
+        val row = popup!!.attributes["data-row"]?.nodeValue?.toIntOrNull()
+        val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull()
+
+        if (row != null && col != null) {
+            val image = document.getElementById("board--field-$row-$col")?.firstElementChild
+            val pieceColor = when {
+                image!!.hasClass("piece--white") -> {
+                    PieceColor.WHITE
+                }
+                image.hasClass("piece--black") -> {
+                    PieceColor.BLACK
+                }
+                else -> null
+            }
+            when (pieceType) {
+                PieceType.QUEEN -> {
+                    image.attributes["data-type"]?.nodeValue = PieceType.QUEEN.toString()
+                    image.attributes["src"]?.nodeValue = basePath + "queen_${pieceColor.toString().toLowerCase()}.svg"
+                }
+                PieceType.BISHOP -> {
+                    image.attributes["data-type"]?.nodeValue = PieceType.BISHOP.toString()
+                    image.attributes["src"]?.nodeValue = basePath + "bishop_${pieceColor.toString().toLowerCase()}.svg"
+                }
+                PieceType.ROOK -> {
+                    image.attributes["data-type"]?.nodeValue = PieceType.ROOK.toString()
+                    image.attributes["src"]?.nodeValue = basePath + "rook_${pieceColor.toString().toLowerCase()}.svg"
+                }
+                PieceType.KNIGHT -> {
+                    image.attributes["data-type"]?.nodeValue = PieceType.KNIGHT.toString()
+                    image.attributes["src"]?.nodeValue = basePath + "knight_${pieceColor.toString().toLowerCase()}.svg"
+                }
+                else -> {
+                }
+            }
+            popup.addClass("hidden")
         }
     }
 }

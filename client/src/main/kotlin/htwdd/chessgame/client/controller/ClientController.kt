@@ -7,6 +7,7 @@ import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
+import kotlin.browser.document
 import kotlin.collections.set
 
 class ClientController : Controller {
@@ -67,6 +68,7 @@ class ClientController : Controller {
             "castling" -> castling(arg)
             "disableKingSide" -> disableKingSide(arg)
             "disableQueenSide" -> disableQueenSide(arg)
+            "convertPiece" -> convertPiece(arg)
         }
     }
 
@@ -305,6 +307,36 @@ class ClientController : Controller {
                         }
                         PieceColor.BLACK -> {
                             match.blackCastlingQueenSide = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun convertPiece(arg: Any?) {
+        when (arg) {
+            is Pair<*, *> -> {
+                val match = arg.first
+                val pieceType = arg.second
+                val popup = document.getElementsByClassName("board--popup")[0]
+
+                if (match != null &&
+                        pieceType != null &&
+                        popup != null &&
+                        match is Match &&
+                        pieceType is PieceType) {
+                    val row = popup.attributes["data-row"]?.nodeValue?.toIntOrNull()
+                    val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull()
+
+                    if (row != null && col != null) {
+                        val pieceColor = when (match.currentColor) {
+                            PieceColor.WHITE -> PieceColor.BLACK
+                            PieceColor.BLACK -> PieceColor.WHITE
+                        }
+                        val pieceSet = match.pieceSets[pieceColor]?.activePieces
+                        if (pieceSet != null && pieceSet.containsKey(Pair(row, col))) {
+                            pieceSet[Pair(row, col)]?.type = pieceType
                         }
                     }
                 }

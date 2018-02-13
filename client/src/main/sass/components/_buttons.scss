@@ -36,7 +36,8 @@
   }
 
   &--ghost,
-  &--cancel {
+  &--cancel,
+  &--piece-type {
     background: $color-white;
 
     &:hover {
@@ -46,9 +47,17 @@
   }
 
   &--submit,
-  &--cancel {
+  &--cancel,
+  &--piece-type {
     width: 150px;
     padding: 10px;
+  }
+
+  &--piece-type {
+    margin: auto;
+    + .btn--piece-type {
+      margin-top: 5px;
+    }
   }
 
   &--symbol {

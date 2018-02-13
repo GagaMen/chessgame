@@ -72,7 +72,7 @@ class DraggableUtility {
 
                             if (image != null && parent != null) {
                                 var pieceColor = PieceColor.WHITE
-                                val pieceType = image.attributes["data-type"]?.nodeValue
+                                var pieceType = image.attributes["data-type"]?.nodeValue
 
                                 val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull()
                                 val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
@@ -110,6 +110,11 @@ class DraggableUtility {
                                                 else -> null
                                             }?.clear()
                                             controller.actionPerformed("resetEnPassant", match)
+                                        } else if (newRow == 1 || newRow == 8) {
+                                            val popup = document.getElementsByClassName("board--popup")[0]
+                                            popup?.setAttribute("data-row", newRow.toString())
+                                            popup?.setAttribute("data-col", newCol.toString())
+                                            popup?.removeClass("hidden")
                                         } else {
                                             controller.actionPerformed("resetEnPassant", match)
                                         }
