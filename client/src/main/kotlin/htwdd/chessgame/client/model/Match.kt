@@ -33,66 +33,59 @@ data class Match(var players: HashMap<PieceColor, Player?>,
     }
 
     private fun updatePieceSet(draw: Draw) {
-        val pieceSet = pieceSets[draw.color]
         val startPosition = Pair(draw.start.row, draw.start.column)
         val endPosition = Pair(draw.end.row, draw.end.column)
+        val pieceSet = pieceSets[draw.color] ?: return
+        val piece = pieceSet.activePieces[startPosition] ?: return
 
-        if (pieceSet != null) {
-            val piece = pieceSet.activePieces[startPosition]
+        piece.position = draw.end
+        pieceSet.activePieces.remove(startPosition)
+        pieceSet.activePieces[endPosition] = piece
 
-            if (piece != null) {
-                piece.position = draw.end
-                pieceSet.activePieces.remove(startPosition)
-                pieceSet.activePieces[endPosition] = piece
+        val pieceColor = when (draw.color) {
+            PieceColor.WHITE -> PieceColor.BLACK
+            PieceColor.BLACK -> PieceColor.WHITE
+        }
 
-                when (draw.color) {
-                    PieceColor.WHITE -> {
-                        val opposingPieceSet = pieceSets[PieceColor.BLACK]
-                        if (opposingPieceSet != null && opposingPieceSet.activePieces.containsKey(endPosition)) {
-                            val capturedPiece = opposingPieceSet.activePieces[endPosition]
-                            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-                            opposingPieceSet.activePieces.remove(endPosition)
-                        }
-                    }
-                    PieceColor.BLACK -> {
-                        val opposingPieceSet = pieceSets[PieceColor.WHITE]
-                        if (opposingPieceSet != null && opposingPieceSet.activePieces.containsKey(endPosition)) {
-                            val capturedPiece = opposingPieceSet.activePieces[endPosition]
-                            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-                            opposingPieceSet.activePieces.remove(endPosition)
-                        }
-                    }
-                }
-            }
+        val opposingPieceSet = pieceSets[pieceColor] ?: return
+        if (opposingPieceSet.activePieces.containsKey(endPosition)) {
+            val capturedPiece = opposingPieceSet.activePieces[endPosition]
+            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
+            opposingPieceSet.activePieces.remove(endPosition)
         }
     }
 
     private fun updateMatchCode() {
         val sb = StringBuilder()
-        val whitePieceSet = pieceSets[PieceColor.WHITE]
-        val blackPieceSet = pieceSets[PieceColor.BLACK]
+        val whitePieceSet = pieceSets[PieceColor.WHITE] ?: return
+        val blackPieceSet = pieceSets[PieceColor.BLACK] ?: return
 
         // piece position
         for (i in 1..8) {
             var emptyCol = 0
             for (j in 1..8) {
-                if (whitePieceSet != null && whitePieceSet.activePieces.containsKey(Pair(i, j))) {
-                    if (emptyCol > 0) {
-                        sb.append(emptyCol)
-                        emptyCol = 0
+                var pieceType: PieceType? = null
+                var pieceColor: PieceColor? = null
+
+                when {
+                    whitePieceSet.activePieces.containsKey(Pair(i, j)) -> {
+                        pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: return
+                        pieceColor = PieceColor.WHITE
                     }
-                    val pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type
-                    sb.append(pieceType?.getCode(PieceColor.WHITE))
-                } else if (blackPieceSet != null && blackPieceSet.activePieces.containsKey(Pair(i, j))) {
-                    if (emptyCol > 0) {
-                        sb.append(emptyCol)
-                        emptyCol = 0
+                    blackPieceSet.activePieces.containsKey(Pair(i, j)) -> {
+                        pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: return
+                        pieceColor = PieceColor.BLACK
                     }
-                    val pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type
-                    sb.append(pieceType?.getCode(PieceColor.BLACK))
-                } else {
-                    emptyCol++
+                    else -> emptyCol++
                 }
+
+                if (pieceType == null || pieceColor == null) continue
+
+                if (emptyCol > 0) {
+                    sb.append(emptyCol)
+                    emptyCol = 0
+                }
+                sb.append(pieceType.getCode(pieceColor))
             }
             if (emptyCol > 0) sb.append(emptyCol)
             if (i != 8) sb.append("/")
@@ -126,6 +119,5 @@ data class Match(var players: HashMap<PieceColor, Player?>,
         sb.append(" ${history.size + 1}")
 
         matchCode = sb.toString()
-        println(matchCode)
     }
 }
