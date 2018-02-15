@@ -6,7 +6,6 @@ import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.partial.GamePartial
 import htwdd.chessgame.client.partial.GamePropertiesPartial
 import htwdd.chessgame.client.util.Observable
-import htwdd.chessgame.client.util.Observer
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
 import org.w3c.dom.HTMLDivElement
@@ -15,11 +14,11 @@ import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.dom.clear
 
-class GameView(private val controller: Controller) : Observer {
+class GameView(private val controller: Controller) : View {
     private val root = document.getElementsByClassName("app")[0] as HTMLDivElement
     private var main: HTMLElement = document.create.div(classes = "main")
 
-    private fun render() {
+    override fun render() {
         root.clear()
         root.appendChild(main)
     }
