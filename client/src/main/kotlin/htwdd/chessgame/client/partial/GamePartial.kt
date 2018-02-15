@@ -3,10 +3,13 @@ package htwdd.chessgame.client.partial
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
+import kotlinx.html.a
 import kotlinx.html.div
 import kotlinx.html.dom.create
 import kotlinx.html.h1
 import kotlinx.html.js.div
+import kotlinx.html.js.onClickFunction
+import kotlinx.html.title
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
@@ -27,6 +30,19 @@ class GamePartial(val match: Match) : Partial {
                 }
                 div(classes = "col-sm-4") {
                     div(classes = "placeholder--game-properties")
+                }
+            }
+            div(classes = "row") {
+                div(classes = "col-sm-12") {
+                    a(classes = "btn btn--inline btn--ghost") {
+                        title = "Return to start"
+                        href = "#start"
+                        +"Return"
+                        onClickFunction = { e ->
+                            e.preventDefault()
+                            controller.actionPerformed("showMatch")
+                        }
+                    }
                 }
             }
         }

@@ -9,10 +9,11 @@ class Client(private var viewState: ViewState = ViewState.START,
              var players: HashMap<Int, Player> = HashMap()) : Observable() {
 
 
-    fun changeState(viewState: ViewState) {
+    fun changeState(viewState: ViewState, arg: Any? = null) {
         this.viewState = viewState
         setChanged()
-        notifyObservers(viewState)
+        if (arg != null) notifyObservers(arg)
+        else notifyObservers(viewState)
     }
 
     fun addMatch(match: Match) {

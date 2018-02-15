@@ -1,7 +1,7 @@
 package htwdd.chessgame.client.partial
 
-import htwdd.chessgame.client.controller.ClientController
 import htwdd.chessgame.client.controller.Controller
+import htwdd.chessgame.client.controller.PlayerController
 import kotlinx.html.*
 import kotlinx.html.dom.create
 import kotlinx.html.js.onClickFunction
@@ -11,7 +11,7 @@ import kotlin.browser.document
 class PlayerTablePartial : Partial {
     override fun getPartial(controller: Controller): HTMLElement {
         return when (controller) {
-            is ClientController -> document.create.table(classes = "table--player") {
+            is PlayerController -> document.create.table(classes = "table--player") {
                 tr {
                     th { +"ID" }
                     th { +"Name" }
