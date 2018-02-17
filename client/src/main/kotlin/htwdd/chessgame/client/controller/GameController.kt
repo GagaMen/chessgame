@@ -3,6 +3,7 @@ package htwdd.chessgame.client.controller
 import htwdd.chessgame.client.model.*
 import htwdd.chessgame.client.view.GameView
 import kotlinx.html.BUTTON
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.get
 import kotlin.browser.document
 
@@ -24,7 +25,7 @@ class GameController(private val client: Client) : Controller {
             "resetHalfMovesAction" -> resetHalfMovesAction(arg)
             "setEnPassantFieldAction" -> setEnPassantFieldAction(arg)
             "resetEnPassantFieldAction" -> resetEnPassantFieldAction(arg)
-            "castlingAction" -> castlingAction(arg)
+            "disableCastlingAction" -> disableCastlingAction(arg)
             "disableKingSideCastlingAction" -> disableKingSideCastlingAction(arg)
             "disableQueenSideCastlingAction" -> disableQueenSideCastlingAction(arg)
             "convertPieceAction" -> convertPieceAction(arg)
@@ -42,14 +43,15 @@ class GameController(private val client: Client) : Controller {
     private fun startMatchAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
-                val matchId = arg.attributes["data-id"]?.toInt()
-                if (matchId != null && client.matches.containsKey(matchId)) {
-                    val match = client.matches[matchId]
-                    match?.addObserver(gameView)
-                    client.changeState(ViewState.GAME, match)
-                } else {
-                    //todo error
+                val matchId = arg.attributes["data-id"]?.toIntOrNull() ?: return
+
+                if (!client.matches.containsKey(matchId)) {
+                    return
                 }
+
+                val match = client.matches[matchId]
+                match?.addObserver(gameView)
+                client.changeState(ViewState.GAME, match)
             }
         }
     }
@@ -57,12 +59,10 @@ class GameController(private val client: Client) : Controller {
     private fun addDrawAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val draw = arg.second
+                val match = arg.first as? Match ?: return
+                val draw = arg.second as? Draw ?: return
 
-                if (match is Match && draw is Draw) {
-                    match.addDraw(draw)
-                }
+                match.addDraw(draw)
             }
         }
     }
@@ -82,40 +82,34 @@ class GameController(private val client: Client) : Controller {
     private fun setEnPassantFieldAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val enPassantField = arg.second
+                val match = arg.first as? Match ?: return
+                val enPassantField = arg.second as? Field ?: return
 
-                if (match is Match && enPassantField is Field) {
-                    match.enPassantField = enPassantField
-                }
+                match.enPassantField = enPassantField
             }
         }
     }
 
     private fun resetEnPassantFieldAction(arg: Any?) {
         when (arg) {
-            is Match -> {
-                arg.enPassantField = null
-            }
+            is Match -> arg.enPassantField = null
         }
     }
 
-    private fun castlingAction(arg: Any?) {
+    private fun disableCastlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val pieceColor = arg.second
+                val match = arg.first as? Match ?: return
+                val pieceColor = arg.second as? PieceColor ?: return
 
-                if (match != null && match is Match) {
-                    when (pieceColor) {
-                        PieceColor.WHITE -> {
-                            match.whiteCastlingKingSide = false
-                            match.whiteCastlingQueenSide = false
-                        }
-                        PieceColor.BLACK -> {
-                            match.blackCastlingKingSide = false
-                            match.blackCastlingQueenSide = false
-                        }
+                when (pieceColor) {
+                    PieceColor.WHITE -> {
+                        match.whiteCastlingKingSide = false
+                        match.whiteCastlingQueenSide = false
+                    }
+                    PieceColor.BLACK -> {
+                        match.blackCastlingKingSide = false
+                        match.blackCastlingQueenSide = false
                     }
                 }
             }
@@ -125,17 +119,15 @@ class GameController(private val client: Client) : Controller {
     private fun disableKingSideCastlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val pieceColor = arg.second
+                val match = arg.first as? Match ?: return
+                val pieceColor = arg.second as? PieceColor ?: return
 
-                if (match != null && match is Match) {
-                    when (pieceColor) {
-                        PieceColor.WHITE -> {
-                            match.whiteCastlingKingSide = false
-                        }
-                        PieceColor.BLACK -> {
-                            match.blackCastlingKingSide = false
-                        }
+                when (pieceColor) {
+                    PieceColor.WHITE -> {
+                        match.whiteCastlingKingSide = false
+                    }
+                    PieceColor.BLACK -> {
+                        match.blackCastlingKingSide = false
                     }
                 }
             }
@@ -145,17 +137,15 @@ class GameController(private val client: Client) : Controller {
     private fun disableQueenSideCastlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val pieceColor = arg.second
+                val match = arg.first as? Match ?: return
+                val pieceColor = arg.second as? PieceColor ?: return
 
-                if (match != null && match is Match) {
-                    when (pieceColor) {
-                        PieceColor.WHITE -> {
-                            match.whiteCastlingQueenSide = false
-                        }
-                        PieceColor.BLACK -> {
-                            match.blackCastlingQueenSide = false
-                        }
+                when (pieceColor) {
+                    PieceColor.WHITE -> {
+                        match.whiteCastlingQueenSide = false
+                    }
+                    PieceColor.BLACK -> {
+                        match.blackCastlingQueenSide = false
                     }
                 }
             }
@@ -165,29 +155,25 @@ class GameController(private val client: Client) : Controller {
     private fun convertPieceAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
-                val match = arg.first
-                val pieceType = arg.second
-                val popup = document.getElementsByClassName("board--popup")[0]
+                val match = arg.first as? Match ?: return
+                val pieceType = arg.second as? PieceType ?: return
+                val popup = document.getElementsByClassName("board--popup")[0] as? HTMLDivElement ?: return
+                val row = popup.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+                val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
 
-                if (match != null &&
-                        pieceType != null &&
-                        popup != null &&
-                        match is Match &&
-                        pieceType is PieceType) {
-                    val row = popup.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                    val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull()
-
-                    if (row != null && col != null) {
-                        val pieceColor = when (match.currentColor) {
-                            PieceColor.WHITE -> PieceColor.BLACK
-                            PieceColor.BLACK -> PieceColor.WHITE
-                        }
-                        val pieceSet = match.pieceSets[pieceColor]?.activePieces
-                        if (pieceSet != null && pieceSet.containsKey(Pair(row, col))) {
-                            pieceSet[Pair(row, col)]?.type = pieceType
-                        }
-                    }
+                val pieceColor = when (match.currentColor) {
+                    PieceColor.WHITE -> PieceColor.BLACK
+                    PieceColor.BLACK -> PieceColor.WHITE
                 }
+
+                val pieceSet = match.pieceSets[pieceColor]?.activePieces ?: return
+
+                if (!pieceSet.containsKey(Pair(row, col))) {
+                    // don't contains key
+                    return
+                }
+
+                pieceSet[Pair(row, col)]?.type = pieceType
             }
         }
     }

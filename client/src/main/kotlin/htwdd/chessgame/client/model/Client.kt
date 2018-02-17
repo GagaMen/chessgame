@@ -49,8 +49,6 @@ class Client(private var viewState: ViewState = ViewState.START,
 
         players[playerId]?.password = password
         setChanged()
-        notifyObservers("updatePlayerTable")
-        setChanged()
         notifyObservers("resetPlayerForm")
     }
 

@@ -98,7 +98,7 @@ class DraggableUtility {
                                                 }
                                                 else -> null
                                             }
-                                            if (enPassantField != null) controller.actionPerformed("setEnPassantAction", Pair(match, enPassantField))
+                                            if (enPassantField != null) controller.actionPerformed("setEnPassantFieldAction", Pair(match, enPassantField))
                                         } else if (newRow == match.enPassantField?.row && newCol == match.enPassantField?.column) {
                                             when {
                                                 oldRow < newRow -> {
@@ -109,33 +109,33 @@ class DraggableUtility {
                                                 }
                                                 else -> null
                                             }?.clear()
-                                            controller.actionPerformed("resetEnPassantAction", match)
+                                            controller.actionPerformed("resetEnPassantFieldAction", match)
                                         } else if (newRow == 1 || newRow == 8) {
                                             val popup = document.getElementsByClassName("board--popup")[0]
                                             popup?.setAttribute("data-row", newRow.toString())
                                             popup?.setAttribute("data-col", newCol.toString())
                                             popup?.removeClass("hidden")
                                         } else {
-                                            controller.actionPerformed("resetEnPassantAction", match)
+                                            controller.actionPerformed("resetEnPassantFieldAction", match)
                                         }
                                     } else {
-                                        controller.actionPerformed("resetEnPassantAction", match)
+                                        controller.actionPerformed("resetEnPassantFieldAction", match)
                                     }
 
                                     if (PieceType.valueOf(pieceType) == PieceType.ROOK) {
                                         when (pieceColor) {
                                             PieceColor.WHITE -> {
                                                 if (match.whiteCastlingKingSide && oldCol == 8) {
-                                                    controller.actionPerformed("disableKingSideAction", Pair(match, pieceColor))
+                                                    controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
                                                 } else if (match.whiteCastlingQueenSide && oldCol == 1) {
-                                                    controller.actionPerformed("disableQueenSideAction", Pair(match, pieceColor))
+                                                    controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
                                                 }
                                             }
                                             PieceColor.BLACK -> {
                                                 if (match.blackCastlingKingSide && oldCol == 8) {
-                                                    controller.actionPerformed("disableKingSideAction", Pair(match, pieceColor))
+                                                    controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
                                                 } else if (match.blackCastlingQueenSide && oldCol == 1) {
-                                                    controller.actionPerformed("disableQueenSideAction", Pair(match, pieceColor))
+                                                    controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
                                                 }
                                             }
                                         }
@@ -162,7 +162,7 @@ class DraggableUtility {
                                                 }
                                             }
                                         }
-                                        controller.actionPerformed("castlingAction", Pair(match, pieceColor))
+                                        controller.actionPerformed("disableCastlingAction", Pair(match, pieceColor))
                                     }
 
                                     val newDraw = Draw(pieceColor,

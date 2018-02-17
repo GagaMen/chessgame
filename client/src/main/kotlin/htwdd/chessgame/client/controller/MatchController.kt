@@ -45,37 +45,35 @@ class MatchController(val client: Client) : Controller {
     private fun addMatchAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
-                val playerWhiteSelect = arg[0]
-                val playerBlackSelect = arg[1]
+                val players = HashMap<PieceColor, Player?>()
+                val pieceSets = HashMap<PieceColor, PieceSet>()
+                val playerWhiteSelect = arg[0] as? HTMLSelectElement ?: return
+                val playerBlackSelect = arg[1] as? HTMLSelectElement ?: return
 
-                if (
-                        (playerWhiteSelect != null && playerWhiteSelect is HTMLSelectElement && playerWhiteSelect.value != "-1") &&
-                        (playerBlackSelect != null && playerBlackSelect is HTMLSelectElement && playerBlackSelect.value != "-1")
-                ) {
-                    val players = HashMap<PieceColor, Player?>()
-                    val playerWhiteID = playerWhiteSelect.value.toInt()
-                    val playerBlackID = playerBlackSelect.value.toInt()
-
-                    if (client.players.containsKey(playerWhiteID) && client.players.containsKey(playerBlackID)) {
-                        players[PieceColor.WHITE] = client.players[playerWhiteID]
-                        players[PieceColor.BLACK] = client.players[playerBlackID]
-                    } else {
-                        //todo: throw exception
-                    }
-
-                    val pieceSets = HashMap<PieceColor, PieceSet>()
-                    pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
-                    pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
-
-                    val match = Match(players, pieceSets, PieceColor.WHITE, mutableListOf())
-                    client.addMatch(match)
-
-                    //reset form
-                    playerWhiteSelect.value = "-1"
-                    playerBlackSelect.value = "-1"
-                } else {
-                    //todo: throw exception
+                if (playerWhiteSelect.value == "-1" || playerBlackSelect.value == "-1") {
+                    // empty type
+                    return
                 }
+
+                val playerWhiteID = playerWhiteSelect.value.toIntOrNull() ?: return
+                val playerBlackID = playerBlackSelect.value.toIntOrNull() ?: return
+
+                if (!client.players.containsKey(playerWhiteID) || !client.players.containsKey(playerBlackID)) {
+                    // don't contains players
+                    return
+                }
+
+                players[PieceColor.WHITE] = client.players[playerWhiteID]
+                players[PieceColor.BLACK] = client.players[playerBlackID]
+                pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
+                pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
+
+                val match = Match(players, pieceSets, PieceColor.WHITE, mutableListOf())
+                client.addMatch(match)
+
+                //reset form
+                playerWhiteSelect.value = "-1"
+                playerBlackSelect.value = "-1"
             }
         }
     }
@@ -83,12 +81,8 @@ class MatchController(val client: Client) : Controller {
     private fun removeMatchAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
-                val matchId = arg.attributes["data-id"]?.toInt()
-                if (matchId != null) {
-                    client.removeMatch(matchId)
-                } else {
-                    //todo error
-                }
+                val matchId = arg.attributes["data-id"]?.toIntOrNull() ?: return
+                client.removeMatch(matchId)
             }
         }
     }
