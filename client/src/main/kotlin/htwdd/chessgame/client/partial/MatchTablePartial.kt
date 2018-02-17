@@ -50,7 +50,7 @@ class MatchTablePartial : Partial {
                                     }
                                     onClickFunction = { e ->
                                         e.preventDefault()
-                                        controller.actionPerformed("removeMatch", this)
+                                        controller.actionPerformed("removeMatchAction", this)
                                     }
                                 }
                             }

@@ -40,7 +40,7 @@ class PlayerEditFormPartial(val player: Player) : Partial {
             }
             onSubmitFunction = { e ->
                 e.preventDefault()
-                controller.actionPerformed("updatePlayer", document.getElementsByClassName("form--player")[0])
+                controller.actionPerformed("updatePlayerAction", document.getElementsByClassName("form--player")[0])
             }
         }
     }

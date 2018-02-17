@@ -158,7 +158,7 @@ class GameBoardPartial(val match: Match) : Partial {
                     onClickFunction = { e ->
                         e.preventDefault()
                         convertPiece(PieceType.QUEEN)
-                        controller.actionPerformed("convertPiece", Pair(match, PieceType.QUEEN))
+                        controller.actionPerformed("convertPieceAction", Pair(match, PieceType.QUEEN))
                     }
                 }
                 button(classes = "btn btn--piece-type") {
@@ -166,7 +166,7 @@ class GameBoardPartial(val match: Match) : Partial {
                     onClickFunction = { e ->
                         e.preventDefault()
                         convertPiece(PieceType.BISHOP)
-                        controller.actionPerformed("convertPiece", Pair(match, PieceType.BISHOP))
+                        controller.actionPerformed("convertPieceAction", Pair(match, PieceType.BISHOP))
                     }
                 }
                 button(classes = "btn btn--piece-type") {
@@ -174,7 +174,7 @@ class GameBoardPartial(val match: Match) : Partial {
                     onClickFunction = { e ->
                         e.preventDefault()
                         convertPiece(PieceType.ROOK)
-                        controller.actionPerformed("convertPiece", Pair(match, PieceType.ROOK))
+                        controller.actionPerformed("convertPieceAction", Pair(match, PieceType.ROOK))
                     }
                 }
                 button(classes = "btn btn--piece-type") {
@@ -182,7 +182,7 @@ class GameBoardPartial(val match: Match) : Partial {
                     onClickFunction = { e ->
                         e.preventDefault()
                         convertPiece(PieceType.KNIGHT)
-                        controller.actionPerformed("convertPiece", Pair(match, PieceType.KNIGHT))
+                        controller.actionPerformed("convertPieceAction", Pair(match, PieceType.KNIGHT))
                     }
                 }
             }

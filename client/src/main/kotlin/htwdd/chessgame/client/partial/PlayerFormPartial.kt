@@ -33,7 +33,7 @@ class PlayerFormPartial : Partial {
             }
             onSubmitFunction = { e ->
                 e.preventDefault()
-                controller.actionPerformed("addPlayer", document.getElementsByClassName("form--player")[0])
+                controller.actionPerformed("addPlayerAction", document.getElementsByClassName("form--player")[0])
             }
         }
     }
