@@ -16,22 +16,30 @@ class GameController(private val client: Client) : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "showStart" -> client.changeState(ViewState.START)
-            "showMatch" -> client.changeState(ViewState.MATCH)
-            "startMatch" -> startMatch(arg)
-            "addDraw" -> addDraw(arg)
-            "increaseHalfMoves" -> increaseHalfMoves(arg)
-            "resetHalfMoves" -> resetHalfMoves(arg)
-            "setEnPassant" -> setEnPassant(arg)
-            "resetEnPassant" -> resetEnPassant(arg)
-            "castling" -> castling(arg)
-            "disableKingSide" -> disableKingSide(arg)
-            "disableQueenSide" -> disableQueenSide(arg)
-            "convertPiece" -> convertPiece(arg)
+            "showStartAction" -> showStartAction()
+            "showMatchAction" -> showMatchAction()
+            "startMatchAction" -> startMatchAction(arg)
+            "addDrawAction" -> addDrawAction(arg)
+            "increaseHalfMovesAction" -> increaseHalfMovesAction(arg)
+            "resetHalfMovesAction" -> resetHalfMovesAction(arg)
+            "setEnPassantFieldAction" -> setEnPassantFieldAction(arg)
+            "resetEnPassantFieldAction" -> resetEnPassantFieldAction(arg)
+            "castlingAction" -> castlingAction(arg)
+            "disableKingSideCastlingAction" -> disableKingSideCastlingAction(arg)
+            "disableQueenSideCastlingAction" -> disableQueenSideCastlingAction(arg)
+            "convertPieceAction" -> convertPieceAction(arg)
         }
     }
 
-    private fun startMatch(arg: Any?) {
+    private fun showStartAction() {
+        client.changeState(ViewState.START)
+    }
+
+    private fun showMatchAction() {
+        client.changeState(ViewState.MATCH)
+    }
+
+    private fun startMatchAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
                 val matchId = arg.attributes["data-id"]?.toInt()
@@ -46,7 +54,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun addDraw(arg: Any?) {
+    private fun addDrawAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first
@@ -59,19 +67,19 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun increaseHalfMoves(arg: Any?) {
+    private fun increaseHalfMovesAction(arg: Any?) {
         when (arg) {
             is Match -> arg.halfMoves++
         }
     }
 
-    private fun resetHalfMoves(arg: Any?) {
+    private fun resetHalfMovesAction(arg: Any?) {
         when (arg) {
             is Match -> arg.halfMoves = 0
         }
     }
 
-    private fun setEnPassant(arg: Any?) {
+    private fun setEnPassantFieldAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first
@@ -84,7 +92,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun resetEnPassant(arg: Any?) {
+    private fun resetEnPassantFieldAction(arg: Any?) {
         when (arg) {
             is Match -> {
                 arg.enPassantField = null
@@ -92,7 +100,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun castling(arg: Any?) {
+    private fun castlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first
@@ -114,7 +122,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun disableKingSide(arg: Any?) {
+    private fun disableKingSideCastlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first
@@ -134,7 +142,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun disableQueenSide(arg: Any?) {
+    private fun disableQueenSideCastlingAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first
@@ -154,7 +162,7 @@ class GameController(private val client: Client) : Controller {
         }
     }
 
-    private fun convertPiece(arg: Any?) {
+    private fun convertPieceAction(arg: Any?) {
         when (arg) {
             is Pair<*, *> -> {
                 val match = arg.first

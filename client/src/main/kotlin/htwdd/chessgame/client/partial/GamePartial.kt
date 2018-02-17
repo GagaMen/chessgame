@@ -40,7 +40,7 @@ class GamePartial(val match: Match) : Partial {
                         +"Return"
                         onClickFunction = { e ->
                             e.preventDefault()
-                            controller.actionPerformed("showMatch")
+                            controller.actionPerformed("showMatchAction")
                         }
                     }
                 }

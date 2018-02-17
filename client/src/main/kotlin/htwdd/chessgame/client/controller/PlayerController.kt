@@ -19,12 +19,12 @@ class PlayerController(val client: Client) : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "showStart" -> client.changeState(ViewState.START)
-            "showPlayer" -> client.changeState(ViewState.PLAYER)
-            "addPlayer" -> addPlayer(arg)
-            "editPlayer" -> editPlayer(arg)
-            "updatePlayer" -> updatePlayer(arg)
-            "removePlayer" -> removePlayer(arg)
+            "showStartAction" -> showStartAction()
+            "showPlayerAction" -> showPlayerAction()
+            "addPlayerAction" -> addPlayerAction(arg)
+            "editPlayerAction" -> editPlayerAction(arg)
+            "updatePlayerAction" -> updatePlayerAction(arg)
+            "removePlayerAction" -> removePlayerAction(arg)
         }
     }
 
@@ -32,7 +32,15 @@ class PlayerController(val client: Client) : Controller {
         return client.players
     }
 
-    private fun addPlayer(arg: Any?) {
+    private fun showStartAction() {
+        client.changeState(ViewState.START)
+    }
+
+    private fun showPlayerAction() {
+        client.changeState(ViewState.PLAYER)
+    }
+
+    private fun addPlayerAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
                 val name = arg[0]
@@ -54,13 +62,13 @@ class PlayerController(val client: Client) : Controller {
         }
     }
 
-    private fun editPlayer(arg: Any?) {
+    private fun editPlayerAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toInt()
                 if (playerId != null && client.players.containsKey(playerId)) {
                     val player = client.players[playerId]
-                    playerView.update(player, "editPlayer")
+                    playerView.update(player, "editPlayerAction")
                 } else {
                     //todo error
                 }
@@ -68,7 +76,7 @@ class PlayerController(val client: Client) : Controller {
         }
     }
 
-    private fun updatePlayer(arg: Any?) {
+    private fun updatePlayerAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
                 val playerId = arg.attributes["data-id"]?.value?.toInt()
@@ -81,7 +89,7 @@ class PlayerController(val client: Client) : Controller {
         }
     }
 
-    private fun removePlayer(arg: Any?) {
+    private fun removePlayerAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toInt()

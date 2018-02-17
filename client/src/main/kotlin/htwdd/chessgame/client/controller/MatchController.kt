@@ -18,11 +18,11 @@ class MatchController(val client: Client) : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "showStart" -> client.changeState(ViewState.START)
-            "showMatch" -> client.changeState(ViewState.MATCH)
-            "addMatch" -> addMatch(arg)
-            "startMatch" -> gameController.actionPerformed(e, arg)
-            "removeMatch" -> removeMatch(arg)
+            "showStartAction" -> showStartAction()
+            "showMatchAction" -> showMatchAction()
+            "addMatchAction" -> addMatchAction(arg)
+            "startMatchAction" -> gameController.actionPerformed(e, arg)
+            "removeMatchAction" -> removeMatchAction(arg)
         }
     }
 
@@ -34,7 +34,15 @@ class MatchController(val client: Client) : Controller {
         return client.players
     }
 
-    private fun addMatch(arg: Any?) {
+    private fun showStartAction() {
+        client.changeState(ViewState.START)
+    }
+
+    private fun showMatchAction() {
+        client.changeState(ViewState.MATCH)
+    }
+
+    private fun addMatchAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
                 val playerWhiteSelect = arg[0]
@@ -72,7 +80,7 @@ class MatchController(val client: Client) : Controller {
         }
     }
 
-    private fun removeMatch(arg: Any?) {
+    private fun removeMatchAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
                 val matchId = arg.attributes["data-id"]?.toInt()
