@@ -72,7 +72,7 @@ class DraggableUtility {
 
                             if (image != null && parent != null) {
                                 var pieceColor = PieceColor.WHITE
-                                var pieceType = image.attributes["data-type"]?.nodeValue
+                                val pieceType = image.attributes["data-type"]?.nodeValue
 
                                 val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull()
                                 val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
@@ -151,7 +151,6 @@ class DraggableUtility {
                                                 val rookTarget = document.getElementById("board--field-$newRow-6")
                                                 if (rook != null && rook is HTMLImageElement) {
                                                     rookTarget?.appendChild(rook)
-                                                    controller.actionPerformed("castling", Pair(match, pieceColor))
                                                 }
                                             }
                                         //queenside
@@ -160,10 +159,10 @@ class DraggableUtility {
                                                 val rookTarget = document.getElementById("board--field-$newRow-4")
                                                 if (rook != null && rook is HTMLImageElement) {
                                                     rookTarget?.appendChild(rook)
-                                                    controller.actionPerformed("castling", Pair(match, pieceColor))
                                                 }
                                             }
                                         }
+                                        controller.actionPerformed("castling", Pair(match, pieceColor))
                                     }
 
                                     val newDraw = Draw(pieceColor,
