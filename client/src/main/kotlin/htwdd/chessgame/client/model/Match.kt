@@ -33,8 +33,8 @@ data class Match(var players: HashMap<PieceColor, Player?>,
     }
 
     private fun updatePieceSet(draw: Draw) {
-        val startPosition = Pair(draw.start.row, draw.start.column)
-        val endPosition = Pair(draw.end.row, draw.end.column)
+        val startPosition = draw.start.getAsPair()
+        val endPosition = draw.end.getAsPair()
         val pieceSet = pieceSets[draw.color] ?: return
         val piece = pieceSet.activePieces[startPosition] ?: return
 
