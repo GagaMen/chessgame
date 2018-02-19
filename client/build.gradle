@@ -2,7 +2,7 @@ group 'htwdd/chessgame'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.20'
+    ext.kotlin_version = '1.2.21'
     ext.requirejs_version = '2.3.5'
     ext.kotlinx_html_version = '0.6.6'
     ext.sass_version = '1.2.2'
