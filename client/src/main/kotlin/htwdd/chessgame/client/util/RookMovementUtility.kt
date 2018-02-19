@@ -6,7 +6,7 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class RookMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+    override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         //horizontal left
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {
@@ -16,11 +16,11 @@ class RookMovementUtility : MovementUtility {
                         val child = field.firstElementChild
                         if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                 (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                            validDropFields.add(Pair(row, i))
+                            movementFields.add(Pair(row, i))
                         }
                         break
                     } else {
-                        validDropFields.add(Pair(row, i))
+                        movementFields.add(Pair(row, i))
                     }
                 } else break
             }
@@ -34,11 +34,11 @@ class RookMovementUtility : MovementUtility {
                         val child = field.firstElementChild
                         if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                 (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                            validDropFields.add(Pair(row, i))
+                            movementFields.add(Pair(row, i))
                         }
                         break
                     } else {
-                        validDropFields.add(Pair(row, i))
+                        movementFields.add(Pair(row, i))
                     }
                 } else break
             }
@@ -53,11 +53,11 @@ class RookMovementUtility : MovementUtility {
                         val child = field.firstElementChild
                         if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                 (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                            validDropFields.add(Pair(i, col))
+                            movementFields.add(Pair(i, col))
                         }
                         break
                     } else {
-                        validDropFields.add(Pair(i, col))
+                        movementFields.add(Pair(i, col))
                     }
                 } else break
             }
@@ -71,14 +71,18 @@ class RookMovementUtility : MovementUtility {
                         val child = field.firstElementChild
                         if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                 (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                            validDropFields.add(Pair(i, col))
+                            movementFields.add(Pair(i, col))
                         }
                         break
                     } else {
-                        validDropFields.add(Pair(i, col))
+                        movementFields.add(Pair(i, col))
                     }
                 } else break
             }
         }
+    }
+
+    override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+        getMovementFields(threatedFields, row, col, pieceColor, match)
     }
 }

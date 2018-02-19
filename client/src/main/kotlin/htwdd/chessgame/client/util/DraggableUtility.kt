@@ -50,12 +50,13 @@ class DraggableUtility {
             }
         }
 
-        fun dragEnd() {
+        fun dragEnd(match: Match) {
             validDropFields.forEach {
                 val field = document.getElementById("board--field-${it.first}-${it.second}")
                 field?.removeClass("highlighted")
             }
             validDropFields.clear()
+            CheckUtility.calcThreatedFields(match)
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
@@ -257,12 +258,12 @@ class DraggableUtility {
 
             if (row != null && col != null) {
                 when (type) {
-                    PieceType.BISHOP.toString() -> bishop.setValidDropFields(validDropFields, row, col, pieceColor)
-                    PieceType.KING.toString() -> king.setValidDropFields(validDropFields, row, col, pieceColor, match)
-                    PieceType.KNIGHT.toString() -> knight.setValidDropFields(validDropFields, row, col, pieceColor)
-                    PieceType.PAWN.toString() -> pawn.setValidDropFields(validDropFields, row, col, pieceColor, match)
-                    PieceType.QUEEN.toString() -> queen.setValidDropFields(validDropFields, row, col, pieceColor)
-                    PieceType.ROOK.toString() -> rook.setValidDropFields(validDropFields, row, col, pieceColor)
+                    PieceType.BISHOP.toString() -> bishop.getMovementFields(validDropFields, row, col, pieceColor)
+                    PieceType.KING.toString() -> king.getMovementFields(validDropFields, row, col, pieceColor, match)
+                    PieceType.KNIGHT.toString() -> knight.getMovementFields(validDropFields, row, col, pieceColor)
+                    PieceType.PAWN.toString() -> pawn.getMovementFields(validDropFields, row, col, pieceColor, match)
+                    PieceType.QUEEN.toString() -> queen.getMovementFields(validDropFields, row, col, pieceColor)
+                    PieceType.ROOK.toString() -> rook.getMovementFields(validDropFields, row, col, pieceColor)
                 }
             }
         }

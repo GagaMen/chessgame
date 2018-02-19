@@ -6,7 +6,7 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class BishopMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+    override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         //top
         if (row != 1) {
 
@@ -22,13 +22,13 @@ class BishopMovementUtility : MovementUtility {
                                 val child = field.firstElementChild
                                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                                    validDropFields.add(Pair(i, tmpCol))
+                                    movementFields.add(Pair(i, tmpCol))
                                     break
                                 } else {
                                     break
                                 }
                             } else {
-                                validDropFields.add(Pair(i, tmpCol))
+                                movementFields.add(Pair(i, tmpCol))
                             }
                         } else break
                     } else {
@@ -49,13 +49,13 @@ class BishopMovementUtility : MovementUtility {
                                 val child = field.firstElementChild
                                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                                    validDropFields.add(Pair(i, tmpCol))
+                                    movementFields.add(Pair(i, tmpCol))
                                     break
                                 } else {
                                     break
                                 }
                             } else {
-                                validDropFields.add(Pair(i, tmpCol))
+                                movementFields.add(Pair(i, tmpCol))
                             }
                         } else break
                     } else {
@@ -80,13 +80,13 @@ class BishopMovementUtility : MovementUtility {
                                 val child = field.firstElementChild
                                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                                    validDropFields.add(Pair(i, tmpCol))
+                                    movementFields.add(Pair(i, tmpCol))
                                     break
                                 } else {
                                     break
                                 }
                             } else {
-                                validDropFields.add(Pair(i, tmpCol))
+                                movementFields.add(Pair(i, tmpCol))
                             }
                         } else break
                     } else {
@@ -107,13 +107,13 @@ class BishopMovementUtility : MovementUtility {
                                 val child = field.firstElementChild
                                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                                    validDropFields.add(Pair(i, tmpCol))
+                                    movementFields.add(Pair(i, tmpCol))
                                     break
                                 } else {
                                     break
                                 }
                             } else {
-                                validDropFields.add(Pair(i, tmpCol))
+                                movementFields.add(Pair(i, tmpCol))
                             }
                         } else break
                     } else {
@@ -122,5 +122,9 @@ class BishopMovementUtility : MovementUtility {
                 }
             }
         }
+    }
+
+    override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+        getMovementFields(threatedFields, row, col, pieceColor, match)
     }
 }

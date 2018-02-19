@@ -6,7 +6,7 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 class KnightMovementUtility : MovementUtility {
-    override fun setValidDropFields(validDropFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+    override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
         val field1 = document.getElementById("board--field-${row + 2}-${col + 1}")
         val field2 = document.getElementById("board--field-${row + 1}-${col + 2}")
         val field3 = document.getElementById("board--field-${row - 1}-${col + 2}")
@@ -21,10 +21,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field1.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row + 2, col + 1))
+                    movementFields.add(Pair(row + 2, col + 1))
                 }
             } else {
-                validDropFields.add(Pair(row + 2, col + 1))
+                movementFields.add(Pair(row + 2, col + 1))
             }
         }
         if (field2 != null) {
@@ -32,10 +32,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field2.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row + 1, col + 2))
+                    movementFields.add(Pair(row + 1, col + 2))
                 }
             } else {
-                validDropFields.add(Pair(row + 1, col + 2))
+                movementFields.add(Pair(row + 1, col + 2))
             }
         }
         if (field3 != null) {
@@ -43,10 +43,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field3.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row - 1, col + 2))
+                    movementFields.add(Pair(row - 1, col + 2))
                 }
             } else {
-                validDropFields.add(Pair(row - 1, col + 2))
+                movementFields.add(Pair(row - 1, col + 2))
             }
         }
         if (field4 != null) {
@@ -54,10 +54,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field4.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row - 2, col + 1))
+                    movementFields.add(Pair(row - 2, col + 1))
                 }
             } else {
-                validDropFields.add(Pair(row - 2, col + 1))
+                movementFields.add(Pair(row - 2, col + 1))
             }
         }
         if (field5 != null) {
@@ -65,10 +65,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field5.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row - 2, col - 1))
+                    movementFields.add(Pair(row - 2, col - 1))
                 }
             } else {
-                validDropFields.add(Pair(row - 2, col - 1))
+                movementFields.add(Pair(row - 2, col - 1))
             }
         }
         if (field6 != null) {
@@ -76,10 +76,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field6.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row - 1, col - 2))
+                    movementFields.add(Pair(row - 1, col - 2))
                 }
             } else {
-                validDropFields.add(Pair(row - 1, col - 2))
+                movementFields.add(Pair(row - 1, col - 2))
             }
         }
         if (field7 != null) {
@@ -87,10 +87,10 @@ class KnightMovementUtility : MovementUtility {
                 val child = field7.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row + 1, col - 2))
+                    movementFields.add(Pair(row + 1, col - 2))
                 }
             } else {
-                validDropFields.add(Pair(row + 1, col - 2))
+                movementFields.add(Pair(row + 1, col - 2))
             }
         }
         if (field8 != null) {
@@ -98,11 +98,15 @@ class KnightMovementUtility : MovementUtility {
                 val child = field8.firstElementChild
                 if ((pieceColor == PieceColor.WHITE && child!!.hasClass("piece--black")) ||
                         (pieceColor == PieceColor.BLACK && child!!.hasClass("piece--white"))) {
-                    validDropFields.add(Pair(row + 2, col - 1))
+                    movementFields.add(Pair(row + 2, col - 1))
                 }
             } else {
-                validDropFields.add(Pair(row + 2, col - 1))
+                movementFields.add(Pair(row + 2, col - 1))
             }
         }
+    }
+
+    override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, pieceColor: PieceColor, match: Match?) {
+        getMovementFields(threatedFields, row, col, pieceColor, match)
     }
 }
