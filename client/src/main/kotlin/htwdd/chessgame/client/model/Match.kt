@@ -26,10 +26,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
     }
 
     private fun switchColor() {
-        currentColor = when (currentColor) {
-            PieceColor.WHITE -> PieceColor.BLACK
-            PieceColor.BLACK -> PieceColor.WHITE
-        }
+        currentColor = currentColor.getOpposite()
     }
 
     private fun updatePieceSet(draw: Draw) {
@@ -42,12 +39,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
         pieceSet.activePieces.remove(startPosition)
         pieceSet.activePieces[endPosition] = piece
 
-        val pieceColor = when (draw.color) {
-            PieceColor.WHITE -> PieceColor.BLACK
-            PieceColor.BLACK -> PieceColor.WHITE
-        }
-
-        val opposingPieceSet = pieceSets[pieceColor] ?: return
+        val opposingPieceSet = pieceSets[draw.color.getOpposite()] ?: return
         if (opposingPieceSet.activePieces.containsKey(endPosition)) {
             val capturedPiece = opposingPieceSet.activePieces[endPosition]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)

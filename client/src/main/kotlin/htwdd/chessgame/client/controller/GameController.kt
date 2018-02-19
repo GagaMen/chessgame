@@ -161,10 +161,7 @@ class GameController(private val client: Client) : Controller {
                 val row = popup.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
                 val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
 
-                val pieceColor = when (match.currentColor) {
-                    PieceColor.WHITE -> PieceColor.BLACK
-                    PieceColor.BLACK -> PieceColor.WHITE
-                }
+                val pieceColor = match.currentColor.getOpposite()
 
                 val pieceSet = match.pieceSets[pieceColor]?.activePieces ?: return
 

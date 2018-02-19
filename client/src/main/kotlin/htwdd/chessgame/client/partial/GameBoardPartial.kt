@@ -12,7 +12,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.dom.addClass
-import kotlin.dom.hasClass
 
 class GameBoardPartial(val match: Match) : Partial {
     private val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
@@ -196,30 +195,22 @@ class GameBoardPartial(val match: Match) : Partial {
 
         if (row != null && col != null) {
             val image = document.getElementById("board--field-$row-$col")?.firstElementChild
-            val pieceColor = when {
-                image!!.hasClass("piece--white") -> {
-                    PieceColor.WHITE
-                }
-                image.hasClass("piece--black") -> {
-                    PieceColor.BLACK
-                }
-                else -> null
-            }
+            val pieceColor = match.currentColor.getOpposite()
             when (pieceType) {
                 PieceType.QUEEN -> {
-                    image.attributes["data-type"]?.nodeValue = PieceType.QUEEN.toString()
+                    image!!.attributes["data-type"]?.nodeValue = PieceType.QUEEN.toString()
                     image.attributes["src"]?.nodeValue = basePath + "queen_${pieceColor.toString().toLowerCase()}.svg"
                 }
                 PieceType.BISHOP -> {
-                    image.attributes["data-type"]?.nodeValue = PieceType.BISHOP.toString()
+                    image!!.attributes["data-type"]?.nodeValue = PieceType.BISHOP.toString()
                     image.attributes["src"]?.nodeValue = basePath + "bishop_${pieceColor.toString().toLowerCase()}.svg"
                 }
                 PieceType.ROOK -> {
-                    image.attributes["data-type"]?.nodeValue = PieceType.ROOK.toString()
+                    image!!.attributes["data-type"]?.nodeValue = PieceType.ROOK.toString()
                     image.attributes["src"]?.nodeValue = basePath + "rook_${pieceColor.toString().toLowerCase()}.svg"
                 }
                 PieceType.KNIGHT -> {
-                    image.attributes["data-type"]?.nodeValue = PieceType.KNIGHT.toString()
+                    image!!.attributes["data-type"]?.nodeValue = PieceType.KNIGHT.toString()
                     image.attributes["src"]?.nodeValue = basePath + "knight_${pieceColor.toString().toLowerCase()}.svg"
                 }
                 else -> {
