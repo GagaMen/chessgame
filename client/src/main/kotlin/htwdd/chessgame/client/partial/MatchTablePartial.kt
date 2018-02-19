@@ -39,7 +39,7 @@ class MatchTablePartial : Partial {
                                     }
                                     onClickFunction = { e ->
                                         e.preventDefault()
-                                        controller.actionPerformed("startMatch", this)
+                                        controller.actionPerformed("startMatchAction", this)
                                     }
                                 }
                                 button(classes = "btn btn--symbol btn--symbol-delete") {
@@ -50,7 +50,7 @@ class MatchTablePartial : Partial {
                                     }
                                     onClickFunction = { e ->
                                         e.preventDefault()
-                                        controller.actionPerformed("removeMatch", this)
+                                        controller.actionPerformed("removeMatchAction", this)
                                     }
                                 }
                             }

@@ -35,12 +35,12 @@ class PlayerEditFormPartial(val player: Player) : Partial {
                 type = InputType.button
                 onClickFunction = { e ->
                     e.preventDefault()
-                    controller.actionPerformed("showPlayer")
+                    controller.actionPerformed("showPlayerAction")
                 }
             }
             onSubmitFunction = { e ->
                 e.preventDefault()
-                controller.actionPerformed("updatePlayer", document.getElementsByClassName("form--player")[0])
+                controller.actionPerformed("updatePlayerAction", document.getElementsByClassName("form--player")[0])
             }
         }
     }

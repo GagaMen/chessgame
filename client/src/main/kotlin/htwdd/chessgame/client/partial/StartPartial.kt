@@ -20,7 +20,7 @@ class StartPartial : Partial {
                         +"Players"
                         onClickFunction = { e ->
                             e.preventDefault()
-                            controller.actionPerformed("showPlayer")
+                            controller.actionPerformed("showPlayerAction")
                         }
                     }
                 }
@@ -31,7 +31,7 @@ class StartPartial : Partial {
                         +"Matches"
                         onClickFunction = { e ->
                             e.preventDefault()
-                            controller.actionPerformed("showMatch")
+                            controller.actionPerformed("showMatchAction")
                         }
                     }
                 }

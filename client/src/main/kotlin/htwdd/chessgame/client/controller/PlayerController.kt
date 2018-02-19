@@ -5,6 +5,7 @@ import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.view.PlayerView
 import kotlinx.html.BUTTON
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.get
@@ -19,12 +20,12 @@ class PlayerController(val client: Client) : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "showStart" -> client.changeState(ViewState.START)
-            "showPlayer" -> client.changeState(ViewState.PLAYER)
-            "addPlayer" -> addPlayer(arg)
-            "editPlayer" -> editPlayer(arg)
-            "updatePlayer" -> updatePlayer(arg)
-            "removePlayer" -> removePlayer(arg)
+            "showStartAction" -> showStartAction()
+            "showPlayerAction" -> showPlayerAction()
+            "addPlayerAction" -> addPlayerAction(arg)
+            "editPlayerAction" -> editPlayerAction(arg)
+            "updatePlayerAction" -> updatePlayerAction(arg)
+            "removePlayerAction" -> removePlayerAction(arg)
         }
     }
 
@@ -32,64 +33,73 @@ class PlayerController(val client: Client) : Controller {
         return client.players
     }
 
-    private fun addPlayer(arg: Any?) {
+    private fun showStartAction() {
+        client.changeState(ViewState.START)
+    }
+
+    private fun showPlayerAction() {
+        client.changeState(ViewState.PLAYER)
+    }
+
+    private fun addPlayerAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
-                val name = arg[0]
-                val password = arg[1]
+                val name = arg[0] as? HTMLInputElement ?: return
+                val password = arg[1] as? HTMLInputElement ?: return
 
-                if (
-                        (name != null && name is HTMLInputElement && name.type == "text" && name.value != "") &&
-                        (password != null && password is HTMLInputElement && password.type == "password" && password.value != "")
-                ) {
-                    client.addPlayer(Player(name.value, password.value))
-
-                    //reset form
-                    name.value = ""
-                    password.value = ""
-                } else {
-                    //todo: throw exception
+                if (name.type != "text" || password.type != "password") {
+                    // wrong type
+                    return
                 }
+
+                if (name.value == "" || password.value == "") {
+                    // empty value
+                    return
+                }
+
+                client.addPlayer(Player(name.value, password.value))
+                name.value = ""
+                password.value = ""
             }
         }
     }
 
-    private fun editPlayer(arg: Any?) {
+    private fun editPlayerAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
-                val playerId = arg.attributes["data-id"]?.toInt()
-                if (playerId != null && client.players.containsKey(playerId)) {
-                    val player = client.players[playerId]
-                    playerView.update(player, "editPlayer")
-                } else {
-                    //todo error
+                val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
+
+                if (!client.players.containsKey(playerId)) {
+                    return
                 }
+
+                playerView.update(client.players[playerId], "editPlayer")
             }
         }
     }
 
-    private fun updatePlayer(arg: Any?) {
+    private fun updatePlayerAction(arg: Any?) {
         when (arg) {
             is HTMLFormElement -> {
-                val playerId = arg.attributes["data-id"]?.value?.toInt()
-                val passwordInput = arg.getElementsByClassName("player--password")[0] as HTMLInputElement
+                val playerId = arg.attributes["data-id"]?.value?.toIntOrNull() ?: return
+                val passwordInput = arg.getElementsByClassName("player--password")[0] as? HTMLInputElement ?: return
                 val newPassword = passwordInput.value
-                if (playerId != null && newPassword != "") {
-                    client.updatePlayer(playerId, newPassword)
+
+                if (newPassword == "") {
+                    // empty value
+                    return
                 }
+
+                client.updatePlayer(playerId, newPassword)
             }
         }
     }
 
-    private fun removePlayer(arg: Any?) {
+    private fun removePlayerAction(arg: Any?) {
         when (arg) {
             is BUTTON -> {
-                val playerId = arg.attributes["data-id"]?.toInt()
-                if (playerId != null) {
-                    client.removePlayer(playerId)
-                } else {
-                    //todo error
-                }
+                val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
+                client.removePlayer(playerId)
             }
         }
     }

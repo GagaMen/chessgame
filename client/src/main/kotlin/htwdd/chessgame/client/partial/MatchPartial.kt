@@ -38,7 +38,7 @@ class MatchPartial : Partial {
                         +"Return"
                         onClickFunction = { e ->
                             e.preventDefault()
-                            controller.actionPerformed("showStart")
+                            controller.actionPerformed("showStartAction")
                         }
                     }
                 }

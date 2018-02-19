@@ -16,8 +16,16 @@ class StartController(private val client: Client) : Controller {
 
     override fun actionPerformed(e: Any, arg: Any?) {
         when (e) {
-            "showPlayer" -> client.changeState(ViewState.PLAYER)
-            "showMatch" -> client.changeState(ViewState.MATCH)
+            "showPlayerAction" -> showPlayerAction()
+            "showMatchAction" -> showMatchAction()
         }
+    }
+
+    private fun showPlayerAction() {
+        client.changeState(ViewState.PLAYER)
+    }
+
+    private fun showMatchAction() {
+        client.changeState(ViewState.MATCH)
     }
 }

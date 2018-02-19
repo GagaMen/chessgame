@@ -35,7 +35,7 @@ class PlayerTablePartial : Partial {
                                     }
                                     onClickFunction = { e ->
                                         e.preventDefault()
-                                        controller.actionPerformed("editPlayer", this)
+                                        controller.actionPerformed("editPlayerAction", this)
                                     }
                                 }
                                 button(classes = "btn btn--symbol btn--symbol-delete") {
@@ -46,7 +46,7 @@ class PlayerTablePartial : Partial {
                                     }
                                     onClickFunction = { e ->
                                         e.preventDefault()
-                                        controller.actionPerformed("removePlayer", this)
+                                        controller.actionPerformed("removePlayerAction", this)
                                     }
                                 }
                             }

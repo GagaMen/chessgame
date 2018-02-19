@@ -54,7 +54,7 @@ class MatchFormPartial : Partial {
                 }
                 onSubmitFunction = { e ->
                     e.preventDefault()
-                    controller.actionPerformed("addMatch", document.getElementsByClassName("form--match")[0])
+                    controller.actionPerformed("addMatchAction", document.getElementsByClassName("form--match")[0])
                 }
             }
             else -> document.create.form()
