@@ -56,7 +56,8 @@ class DraggableUtility {
                 field?.removeClass("highlighted")
             }
             validDropFields.clear()
-            CheckUtility.calcThreatedFields(match)
+            match.check = CheckUtility.calcThreatedFields(match)
+            if (match.check) println("${match.currentColor} is in check")
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
@@ -258,28 +259,34 @@ class DraggableUtility {
 
             when (type) {
                 PieceType.BISHOP.toString() -> {
-                    //bishop.getMovementFields(validDropFields, row, col, pieceColor)
-                    bishop.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) bishop.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else bishop.getMovementFields(validDropFields, row, col, match)
+//                    bishop.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KING.toString() -> {
-                    //king.getMovementFields(validDropFields, row, col, pieceColor, match)
-                    king.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) king.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else king.getMovementFields(validDropFields, row, col, match)
+//                    king.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KNIGHT.toString() -> {
-                    //knight.getMovementFields(validDropFields, row, col, pieceColor)
-                    knight.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) knight.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else knight.getMovementFields(validDropFields, row, col, match)
+//                    knight.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.PAWN.toString() -> {
-                    //pawn.getMovementFields(validDropFields, row, col, pieceColor, match)
-                    pawn.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) pawn.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else pawn.getMovementFields(validDropFields, row, col, match)
+//                    pawn.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.QUEEN.toString() -> {
-                    //queen.getMovementFields(validDropFields, row, col, pieceColor)
-                    queen.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) queen.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else queen.getMovementFields(validDropFields, row, col, match)
+//                    queen.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.ROOK.toString() -> {
-                    //rook.getMovementFields(validDropFields, row, col, pieceColor)
-                    rook.getMovementFields(validDropFields, row, col, match)
+                    if (match.check) rook.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
+                    else rook.getMovementFields(validDropFields, row, col, match)
+//                    rook.getMovementFields(validDropFields, row, col, match)
                 }
             }
         }

@@ -3,7 +3,7 @@ package htwdd.chessgame.client.util
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceColor
 
-class PawnMovementUtility : MovementUtility {
+class PawnMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return
 

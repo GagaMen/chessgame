@@ -2,7 +2,7 @@ package htwdd.chessgame.client.util
 
 import htwdd.chessgame.client.model.Match
 
-class KnightMovementUtility : MovementUtility {
+class KnightMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return
 

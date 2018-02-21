@@ -45,11 +45,7 @@ class CheckUtility {
             threatedFields.forEach {
                 if (currentPieces.containsKey(Pair(it.first, it.second))) {
                     val piece = currentPieces[Pair(it.first, it.second)] ?: return@forEach
-                    if (piece.type == PieceType.KING) {
-                        match.check = true
-                        println("${match.currentColor} is in check")
-                        return true
-                    }
+                    if (piece.type == PieceType.KING) return true
                 }
             }
 

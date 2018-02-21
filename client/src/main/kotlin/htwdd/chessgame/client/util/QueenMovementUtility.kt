@@ -2,7 +2,7 @@ package htwdd.chessgame.client.util
 
 import htwdd.chessgame.client.model.Match
 
-class QueenMovementUtility : MovementUtility {
+class QueenMovementUtility : MovementUtility() {
     private val bishop = BishopMovementUtility()
     private val rook = RookMovementUtility()
 
