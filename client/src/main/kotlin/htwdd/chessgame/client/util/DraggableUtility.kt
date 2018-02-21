@@ -241,10 +241,10 @@ class DraggableUtility {
 
         private fun calculateValidDropFields(image: Element, match: Match) {
             var pieceColor = PieceColor.WHITE
-            val type = image.attributes["data-type"]?.nodeValue
-            val parent = image.parentElement
-            val row = parent!!.attributes["data-row"]?.nodeValue?.toIntOrNull()
-            val col = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
+            val type = image.attributes["data-type"]?.nodeValue ?: return
+            val parent = image.parentElement ?: return
+            val row = parent.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+            val col = parent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
 
             if (image.hasClass("piece--black")) {
                 pieceColor = PieceColor.BLACK
@@ -256,14 +256,30 @@ class DraggableUtility {
                 return
             }
 
-            if (row != null && col != null) {
-                when (type) {
-                    PieceType.BISHOP.toString() -> bishop.getMovementFields(validDropFields, row, col, pieceColor)
-                    PieceType.KING.toString() -> king.getMovementFields(validDropFields, row, col, pieceColor, match)
-                    PieceType.KNIGHT.toString() -> knight.getMovementFields(validDropFields, row, col, pieceColor)
-                    PieceType.PAWN.toString() -> pawn.getMovementFields(validDropFields, row, col, pieceColor, match)
-                    PieceType.QUEEN.toString() -> queen.getMovementFields(validDropFields, row, col, pieceColor)
-                    PieceType.ROOK.toString() -> rook.getMovementFields(validDropFields, row, col, pieceColor)
+            when (type) {
+                PieceType.BISHOP.toString() -> {
+                    //bishop.getMovementFields(validDropFields, row, col, pieceColor)
+                    bishop.getMovementFields(validDropFields, row, col, match)
+                }
+                PieceType.KING.toString() -> {
+                    //king.getMovementFields(validDropFields, row, col, pieceColor, match)
+                    king.getMovementFields(validDropFields, row, col, match)
+                }
+                PieceType.KNIGHT.toString() -> {
+                    //knight.getMovementFields(validDropFields, row, col, pieceColor)
+                    knight.getMovementFields(validDropFields, row, col, match)
+                }
+                PieceType.PAWN.toString() -> {
+                    //pawn.getMovementFields(validDropFields, row, col, pieceColor, match)
+                    pawn.getMovementFields(validDropFields, row, col, match)
+                }
+                PieceType.QUEEN.toString() -> {
+                    //queen.getMovementFields(validDropFields, row, col, pieceColor)
+                    queen.getMovementFields(validDropFields, row, col, match)
+                }
+                PieceType.ROOK.toString() -> {
+                    //rook.getMovementFields(validDropFields, row, col, pieceColor)
+                    rook.getMovementFields(validDropFields, row, col, match)
                 }
             }
         }

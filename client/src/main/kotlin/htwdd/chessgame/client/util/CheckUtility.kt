@@ -2,8 +2,6 @@ package htwdd.chessgame.client.util
 
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.PieceType
-import org.w3c.dom.get
-import kotlin.browser.document
 
 class CheckUtility {
     companion object {
@@ -15,43 +13,47 @@ class CheckUtility {
         private val queen = QueenMovementUtility()
         private val rook = RookMovementUtility()
 
-        fun calcThreatedFields(match: Match) {
-            val pieceColor = match.currentColor.getOpposite()
-            val pieceSet = match.pieceSets[pieceColor]
+        fun calcThreatedFields(match: Match): Boolean {
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
+            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return false
 
             threatedFields.clear()
 
-            pieceSet?.activePieces?.forEach {
+            opposingPieces.forEach {
                 when (it.value.type) {
                     PieceType.BISHOP -> {
-                        bishop.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor)
+                        bishop.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                     PieceType.PAWN -> {
-                        pawn.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor, match)
+                        pawn.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                     PieceType.KING -> {
-                        king.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor, match)
+                        king.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                     PieceType.QUEEN -> {
-                        queen.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor)
+                        queen.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                     PieceType.KNIGHT -> {
-                        knight.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor)
+                        knight.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                     PieceType.ROOK -> {
-                        rook.getThreadedFields(threatedFields, it.key.first, it.key.second, pieceColor)
+                        rook.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                 }
             }
 
             threatedFields.forEach {
-                val field = document.getElementById("board--field-${it.first}-${it.second}")
-                val image = field?.firstElementChild ?: return@forEach
-                if (image.attributes["data-type"]?.value == PieceType.KING.toString()) {
-                    println("${match.currentColor} is in check")
-                    return
+                if (currentPieces.containsKey(Pair(it.first, it.second))) {
+                    val piece = currentPieces[Pair(it.first, it.second)] ?: return@forEach
+                    if (piece.type == PieceType.KING) {
+                        match.check = true
+                        println("${match.currentColor} is in check")
+                        return true
+                    }
                 }
             }
+
+            return false
         }
     }
 }

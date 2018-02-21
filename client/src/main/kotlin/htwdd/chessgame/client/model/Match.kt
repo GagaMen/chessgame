@@ -12,6 +12,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                  var blackCastlingQueenSide: Boolean = true,
                  var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
+                 var check: Boolean = false,
                  private var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
 
     var id: Int = 0
