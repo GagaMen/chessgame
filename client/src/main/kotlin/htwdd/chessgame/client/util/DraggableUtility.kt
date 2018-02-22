@@ -45,6 +45,8 @@ class DraggableUtility {
         }
 
         fun dragEnd(match: Match) {
+            if (match.checkmate) return
+
             validDropFields.forEach {
                 document.getElementById("board--field-${it.first}-${it.second}")?.removeClass("highlighted")
             }
@@ -55,9 +57,14 @@ class DraggableUtility {
                     match.checkmate = true
                     println("${match.currentColor} checkmate!")
                 } else {
-                    println("${match.currentColor} is in check")
+                    match.switchCheck(match.currentColor)
                 }
             }
+
+            if (match.check[match.currentColor.getOpposite()]!!) {
+                match.switchCheck(match.currentColor.getOpposite())
+            }
+
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {

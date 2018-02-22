@@ -64,6 +64,9 @@ class GamePropertiesPartial(val match: Match) : Partial {
                             td { +"$rook" }
                         }
                     }
+                    p {
+                        +"Check: ${match.check[PieceColor.WHITE]}"
+                    }
                 }
                 div(classes = "player--black") {
                     p {
@@ -112,6 +115,9 @@ class GamePropertiesPartial(val match: Match) : Partial {
                             td { +"Rook" }
                             td { +"$rook" }
                         }
+                    }
+                    p {
+                        +"Check: ${match.check[PieceColor.BLACK]}"
                     }
                 }
             }
