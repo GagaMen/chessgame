@@ -51,5 +51,38 @@ class CheckUtility {
 
             return false
         }
+
+        fun checkmate(match: Match): Boolean {
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
+            val movementFields = HashSet<Pair<Int, Int>>()
+
+            currentPieces.forEach {
+                val tmpMovementFields = HashSet<Pair<Int, Int>>()
+                when (it.value.type) {
+                    PieceType.BISHOP -> {
+                        bishop.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                    PieceType.KING -> {
+                        king.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                    PieceType.KNIGHT -> {
+                        knight.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                    PieceType.PAWN -> {
+                        pawn.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                    PieceType.QUEEN -> {
+                        queen.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                    PieceType.ROOK -> {
+                        rook.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                    }
+                }
+                movementFields.addAll(tmpMovementFields)
+            }
+
+            if (movementFields.size == 0) return true
+            return false
+        }
     }
 }

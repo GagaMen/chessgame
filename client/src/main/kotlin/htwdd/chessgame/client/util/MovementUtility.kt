@@ -3,12 +3,13 @@ package htwdd.chessgame.client.util
 import htwdd.chessgame.client.model.Match
 
 abstract class MovementUtility : Movement {
-    fun getMovementFieldsWhenInCheck(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
+    fun getFilteredMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return
         val copyOfCurrentPieces = HashMap(currentPieces)
         val copyOfOpposingPieces = HashMap(opposingPieces)
         val field = Pair(row, col)
+
         getMovementFields(movementFields, row, col, match)
 
         movementFields.forEach {

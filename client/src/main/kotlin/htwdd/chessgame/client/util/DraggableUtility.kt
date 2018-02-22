@@ -22,6 +22,8 @@ class DraggableUtility {
         private val rook = RookMovementUtility()
 
         fun dragStart(event: Event, match: Match) {
+            if (match.checkmate) return
+
             val target = event.target as? Element ?: return
             if (event !is DragEvent) return
 
@@ -48,8 +50,14 @@ class DraggableUtility {
             }
             validDropFields.clear()
 
-            match.check = CheckUtility.calcThreatedFields(match)
-            if (match.check) println("${match.currentColor} is in check")
+            if (CheckUtility.calcThreatedFields(match)) {
+                if (CheckUtility.checkmate(match)) {
+                    match.checkmate = true
+                    println("${match.currentColor} checkmate!")
+                } else {
+                    println("${match.currentColor} is in check")
+                }
+            }
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
@@ -149,28 +157,22 @@ class DraggableUtility {
 
             when (type) {
                 PieceType.BISHOP.toString() -> {
-                    if (match.check) bishop.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else bishop.getMovementFields(validDropFields, row, col, match)
+                    bishop.getFilteredMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KING.toString() -> {
-                    if (match.check) king.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else king.getMovementFields(validDropFields, row, col, match)
+                    king.getFilteredMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KNIGHT.toString() -> {
-                    if (match.check) knight.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else knight.getMovementFields(validDropFields, row, col, match)
+                    knight.getFilteredMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.PAWN.toString() -> {
-                    if (match.check) pawn.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else pawn.getMovementFields(validDropFields, row, col, match)
+                    pawn.getFilteredMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.QUEEN.toString() -> {
-                    if (match.check) queen.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else queen.getMovementFields(validDropFields, row, col, match)
+                    queen.getFilteredMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.ROOK.toString() -> {
-                    if (match.check) rook.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
-                    else rook.getMovementFields(validDropFields, row, col, match)
+                    rook.getFilteredMovementFields(validDropFields, row, col, match)
                 }
             }
         }
