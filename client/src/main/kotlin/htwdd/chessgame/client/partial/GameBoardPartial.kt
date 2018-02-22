@@ -78,7 +78,7 @@ class GameBoardPartial(val match: Match) : Partial {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { DraggableUtility.dragEnd(match) }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
-                                        onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
+                                        onMouseOutFunction = { DraggableUtility.mouseOut() }
                                         id = "$i$j"
                                         when (activePiecesWhite[Pair(i, j)]?.type) {
                                             PieceType.BISHOP -> {
@@ -113,7 +113,7 @@ class GameBoardPartial(val match: Match) : Partial {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { DraggableUtility.dragEnd(match) }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
-                                        onMouseOutFunction = { event -> DraggableUtility.mouseOut(event) }
+                                        onMouseOutFunction = { DraggableUtility.mouseOut() }
                                         id = "$i$j"
                                         when (activePiecesBlack[Pair(i, j)]?.type) {
                                             PieceType.BISHOP -> {

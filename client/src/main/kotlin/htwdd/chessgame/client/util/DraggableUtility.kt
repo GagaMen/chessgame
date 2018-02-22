@@ -22,222 +22,119 @@ class DraggableUtility {
         private val rook = RookMovementUtility()
 
         fun dragStart(event: Event, match: Match) {
-            when (event) {
-                is DragEvent -> {
-                    val target = event.target
-                    if (target is Element) {
-                        if (validDropFields.size == 0) {
-                            calculateValidDropFields(target, match)
-                        }
-                        validDropFields.forEach {
-                            val field = document.getElementById("board--field-${it.first}-${it.second}")
-                            field?.addClass("highlighted")
-                        }
-                        event.dataTransfer?.setData("text", target.id)
-                    }
-                }
+            val target = event.target as? Element ?: return
+            if (event !is DragEvent) return
+
+            if (validDropFields.size == 0) calculateValidDropFields(target, match)
+
+            validDropFields.forEach {
+                document.getElementById("board--field-${it.first}-${it.second}")?.addClass("highlighted")
             }
+
+            event.dataTransfer?.setData("text", target.id)
         }
 
         fun dragOver(event: Event) {
-            val currentTarget = event.currentTarget
-            if (currentTarget is Element) {
-                val row = currentTarget.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                val col = currentTarget.attributes["data-col"]?.nodeValue?.toIntOrNull()
-                if (row != null && col != null && validDropFields.contains(Pair(row, col))) {
-                    event.preventDefault()
-                }
-            }
+            val currentTarget = (event.currentTarget ?: return) as? Element ?: return
+            val row = currentTarget.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+            val col = currentTarget.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+
+            if (validDropFields.contains(Pair(row, col))) event.preventDefault()
         }
 
         fun dragEnd(match: Match) {
             validDropFields.forEach {
-                val field = document.getElementById("board--field-${it.first}-${it.second}")
-                field?.removeClass("highlighted")
+                document.getElementById("board--field-${it.first}-${it.second}")?.removeClass("highlighted")
             }
             validDropFields.clear()
+
             match.check = CheckUtility.calcThreatedFields(match)
             if (match.check) println("${match.currentColor} is in check")
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
             event.preventDefault()
-            when (event) {
-                is DragEvent -> {
-                    val data = event.dataTransfer?.getData("text") ?: ""
-                    val target = event.target
 
-                    when (target) {
-                        is HTMLDivElement -> {
-                            val image = document.getElementById(data)
-                            val parent = image?.parentElement
+            if (event !is DragEvent) return
 
-                            if (image != null && parent != null) {
-                                var pieceColor = PieceColor.WHITE
-                                val pieceType = image.attributes["data-type"]?.nodeValue
+            val target = event.target ?: return
+            val data = event.dataTransfer?.getData("text") ?: ""
 
-                                val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                                val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
-                                val newRow = target.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                                val newCol = target.attributes["data-col"]?.nodeValue?.toIntOrNull()
+            when (target) {
+                is HTMLDivElement -> {
+                    val image = document.getElementById(data) ?: return
+                    val parent = image.parentElement ?: return
+                    var pieceColor = PieceColor.WHITE
+                    val pieceType = image.attributes["data-type"]?.nodeValue ?: ""
+                    val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+                    val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+                    val newRow = target.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+                    val newCol = target.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
 
-                                if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
+                    if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
 
-                                if (oldRow != null &&
-                                        oldCol != null &&
-                                        newRow != null &&
-                                        newCol != null &&
-                                        pieceType != null) {
+                    target.appendChild(image)
 
-                                    if (PieceType.valueOf(pieceType) == PieceType.PAWN) {
-                                        if ((oldRow - newRow).absoluteValue == 2) {
-                                            val enPassantField: Field? = when {
-                                                oldRow < newRow -> {
-                                                    Field(3, oldCol)
-                                                }
-                                                oldRow > newRow -> {
-                                                    Field(6, oldCol)
-                                                }
-                                                else -> null
-                                            }
-                                            if (enPassantField != null) controller.actionPerformed("setEnPassantFieldAction", Pair(match, enPassantField))
-                                        } else if (newRow == match.enPassantField?.row && newCol == match.enPassantField?.column) {
-                                            when {
-                                                oldRow < newRow -> {
-                                                    document.getElementById("board--field-5-$newCol")
-                                                }
-                                                oldRow > newRow -> {
-                                                    document.getElementById("board--field-4-$newCol")
-                                                }
-                                                else -> null
-                                            }?.clear()
-                                            controller.actionPerformed("resetEnPassantFieldAction", match)
-                                        } else if (newRow == 1 || newRow == 8) {
-                                            val popup = document.getElementsByClassName("board--popup")[0]
-                                            popup?.setAttribute("data-row", newRow.toString())
-                                            popup?.setAttribute("data-col", newCol.toString())
-                                            popup?.removeClass("hidden")
-                                        } else {
-                                            controller.actionPerformed("resetEnPassantFieldAction", match)
-                                        }
-                                    } else {
-                                        controller.actionPerformed("resetEnPassantFieldAction", match)
-                                    }
-
-                                    if (PieceType.valueOf(pieceType) == PieceType.ROOK) {
-                                        when (pieceColor) {
-                                            PieceColor.WHITE -> {
-                                                if (match.whiteCastlingKingSide && oldCol == 8) {
-                                                    controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
-                                                } else if (match.whiteCastlingQueenSide && oldCol == 1) {
-                                                    controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
-                                                }
-                                            }
-                                            PieceColor.BLACK -> {
-                                                if (match.blackCastlingKingSide && oldCol == 8) {
-                                                    controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
-                                                } else if (match.blackCastlingQueenSide && oldCol == 1) {
-                                                    controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    target.appendChild(image)
-
-                                    if (PieceType.valueOf(pieceType) == PieceType.KING) {
-                                        when (newCol) {
-                                        //kinside
-                                            oldCol + 2 -> {
-                                                val rook = document.getElementById("board--field-$newRow-8")?.firstElementChild
-                                                val rookTarget = document.getElementById("board--field-$newRow-6")
-                                                if (rook != null && rook is HTMLImageElement) {
-                                                    rookTarget?.appendChild(rook)
-                                                }
-                                            }
-                                        //queenside
-                                            oldCol - 2 -> {
-                                                val rook = document.getElementById("board--field-$newRow-1")?.firstElementChild
-                                                val rookTarget = document.getElementById("board--field-$newRow-4")
-                                                if (rook != null && rook is HTMLImageElement) {
-                                                    rookTarget?.appendChild(rook)
-                                                }
-                                            }
-                                        }
-                                        controller.actionPerformed("disableCastlingAction", Pair(match, pieceColor))
-                                    }
-
-                                    val newDraw = Draw(pieceColor,
-                                            PieceType.valueOf(pieceType),
-                                            Field(oldRow, oldCol),
-                                            Field(newRow, newCol))
-
-                                    controller.actionPerformed("increaseHalfMovesAction", match)
-                                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
-                                }
-                            }
-                        }
-                        is HTMLImageElement -> {
-                            val image = document.getElementById(data)
-                            val parent = image?.parentElement
-                            val targetParent = target.parentElement
-
-                            if (image != null && parent != null && targetParent != null) {
-                                var pieceColor = PieceColor.WHITE
-                                val pieceType = image.attributes["data-type"]?.nodeValue
-
-                                val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                                val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull()
-                                val newRow = targetParent.attributes["data-row"]?.nodeValue?.toIntOrNull()
-                                val newCol = targetParent.attributes["data-col"]?.nodeValue?.toIntOrNull()
-
-                                if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
-
-                                if (oldRow != null &&
-                                        oldCol != null &&
-                                        newRow != null &&
-                                        newCol != null &&
-                                        pieceType != null) {
-                                    val newDraw = Draw(pieceColor,
-                                            PieceType.valueOf(pieceType),
-                                            Field(oldRow, oldCol),
-                                            Field(newRow, newCol))
-
-                                    controller.actionPerformed("resetHalfMovesAction", match)
-                                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
-                                    target.replaceWith(image)
-                                }
-                            }
-                        }
+                    when (PieceType.valueOf(pieceType)) {
+                        PieceType.PAWN -> dropPawn(controller, match, oldRow, oldCol, newRow, newCol, pieceColor)
+                        PieceType.ROOK -> dropRook(controller, match, oldCol, pieceColor)
+                        PieceType.KING -> dropKing(controller, match, oldCol, newRow, newCol, pieceColor)
+                        else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
+
+                    val newDraw = Draw(pieceColor,
+                            PieceType.valueOf(pieceType),
+                            Field(oldRow, oldCol),
+                            Field(newRow, newCol))
+
+                    controller.actionPerformed("increaseHalfMovesAction", match)
+                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
+                }
+                is HTMLImageElement -> {
+                    val image = document.getElementById(data) ?: return
+                    val parent = image.parentElement ?: return
+                    val targetParent = target.parentElement ?: return
+                    var pieceColor = PieceColor.WHITE
+                    val pieceType = image.attributes["data-type"]?.nodeValue ?: ""
+                    val oldRow = parent.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+                    val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+                    val newRow = targetParent.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
+                    val newCol = targetParent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+
+                    if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
+
+                    target.replaceWith(image)
+
+                    when (PieceType.valueOf(pieceType)) {
+                        PieceType.PAWN -> dropPawn(controller, match, oldRow, oldCol, newRow, newCol, pieceColor)
+                        else -> controller.actionPerformed("resetEnPassantFieldAction", match)
+                    }
+
+                    val newDraw = Draw(pieceColor,
+                            PieceType.valueOf(pieceType),
+                            Field(oldRow, oldCol),
+                            Field(newRow, newCol))
+
+                    controller.actionPerformed("resetHalfMovesAction", match)
+                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
                 }
             }
         }
 
         fun mouseOver(event: Event, match: Match) {
-            val target = event.target
-            when (target) {
-                is Element -> {
-                    calculateValidDropFields(target, match)
-                    validDropFields.forEach {
-                        val field = document.getElementById("board--field-${it.first}-${it.second}")
-                        field?.addClass("highlighted")
-                    }
-                }
+            val target = (event.target ?: return) as? Element ?: return
+
+            calculateValidDropFields(target, match)
+            validDropFields.forEach {
+                document.getElementById("board--field-${it.first}-${it.second}")?.addClass("highlighted")
             }
         }
 
-        fun mouseOut(event: Event) {
-            val target = event.target
-            when (target) {
-                is Element -> {
-                    validDropFields.forEach {
-                        val field = document.getElementById("board--field-${it.first}-${it.second}")
-                        field?.removeClass("highlighted")
-                    }
-                    validDropFields.clear()
-                }
+        fun mouseOut() {
+            validDropFields.forEach {
+                document.getElementById("board--field-${it.first}-${it.second}")?.removeClass("highlighted")
             }
+            validDropFields.clear()
         }
 
         private fun calculateValidDropFields(image: Element, match: Match) {
@@ -247,46 +144,97 @@ class DraggableUtility {
             val row = parent.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
             val col = parent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
 
-            if (image.hasClass("piece--black")) {
-                pieceColor = PieceColor.BLACK
-            } else if (!image.hasClass("piece--white")) {
-                // todo throw error
-            }
-
-            if (pieceColor != match.currentColor) {
-                return
-            }
+            if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
+            if (pieceColor != match.currentColor) return
 
             when (type) {
                 PieceType.BISHOP.toString() -> {
                     if (match.check) bishop.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else bishop.getMovementFields(validDropFields, row, col, match)
-//                    bishop.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KING.toString() -> {
                     if (match.check) king.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else king.getMovementFields(validDropFields, row, col, match)
-//                    king.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.KNIGHT.toString() -> {
                     if (match.check) knight.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else knight.getMovementFields(validDropFields, row, col, match)
-//                    knight.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.PAWN.toString() -> {
                     if (match.check) pawn.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else pawn.getMovementFields(validDropFields, row, col, match)
-//                    pawn.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.QUEEN.toString() -> {
                     if (match.check) queen.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else queen.getMovementFields(validDropFields, row, col, match)
-//                    queen.getMovementFields(validDropFields, row, col, match)
                 }
                 PieceType.ROOK.toString() -> {
                     if (match.check) rook.getMovementFieldsWhenInCheck(validDropFields, row, col, match)
                     else rook.getMovementFields(validDropFields, row, col, match)
-//                    rook.getMovementFields(validDropFields, row, col, match)
+                }
+            }
+        }
+
+        private fun dropPawn(controller: Controller, match: Match, oldRow: Int, oldCol: Int, newRow: Int, newCol: Int, pieceColor: PieceColor) {
+            if ((oldRow - newRow).absoluteValue == 2) {
+                val row = when (pieceColor) {
+                    PieceColor.WHITE -> 3
+                    PieceColor.BLACK -> 6
+                }
+                controller.actionPerformed("setEnPassantFieldAction", Pair(match, Field(row, oldCol)))
+                return
+            }
+
+            if (newRow == match.enPassantField?.row && newCol == match.enPassantField?.column) {
+                val row = when (pieceColor) {
+                    PieceColor.WHITE -> 5
+                    PieceColor.BLACK -> 4
+                }
+                document.getElementById("board--field-$row-$newCol")?.clear()
+                controller.actionPerformed("resetEnPassantFieldAction", match)
+                return
+            }
+
+
+            if (newRow == 1 || newRow == 8) {
+                val popup = document.getElementsByClassName("board--popup")[0] ?: return
+                popup.setAttribute("data-row", newRow.toString())
+                popup.setAttribute("data-col", newCol.toString())
+                popup.removeClass("hidden")
+                return
+            }
+
+            controller.actionPerformed("resetEnPassantFieldAction", match)
+        }
+
+        private fun dropRook(controller: Controller, match: Match, oldCol: Int, pieceColor: PieceColor) {
+            controller.actionPerformed("resetEnPassantFieldAction", match)
+
+            if ((match.whiteCastlingKingSide || match.blackCastlingKingSide) && oldCol == 8) {
+                controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
+            }
+
+            if ((match.whiteCastlingQueenSide || match.blackCastlingQueenSide) && oldCol == 1) {
+                controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
+            }
+        }
+
+        private fun dropKing(controller: Controller, match: Match, oldCol: Int, newRow: Int, newCol: Int, pieceColor: PieceColor) {
+            controller.actionPerformed("resetEnPassantFieldAction", match)
+            controller.actionPerformed("disableCastlingAction", Pair(match, pieceColor))
+
+            when (newCol) {
+                oldCol + 2 -> {
+                    val rook = (document.getElementById("board--field-$newRow-8")?.firstElementChild ?: return)
+                            as? HTMLImageElement ?: return
+                    val rookTarget = document.getElementById("board--field-$newRow-6") ?: return
+                    rookTarget.appendChild(rook)
+                }
+                oldCol - 2 -> {
+                    val rook = (document.getElementById("board--field-$newRow-1")?.firstElementChild ?: return)
+                            as? HTMLImageElement ?: return
+                    val rookTarget = document.getElementById("board--field-$newRow-4") ?: return
+                    rookTarget.appendChild(rook)
                 }
             }
         }
