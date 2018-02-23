@@ -200,7 +200,7 @@ class DraggableUtility {
                     PieceColor.BLACK -> 4
                 }
                 document.getElementById("board--field-$row-$newCol")?.clear()
-                controller.actionPerformed("resetEnPassantFieldAction", match)
+                //controller.actionPerformed("resetEnPassantFieldAction", match)
                 return
             }
 

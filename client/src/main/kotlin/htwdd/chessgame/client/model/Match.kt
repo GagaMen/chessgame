@@ -40,6 +40,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
     private fun updatePieceSet(draw: Draw) {
         val startPosition = draw.start.getAsPair()
         val endPosition = draw.end.getAsPair()
+        var enPassantPosition: Pair<Int, Int>? = null
         val pieceSet = pieceSets[draw.color] ?: return
         val piece = pieceSet.activePieces[startPosition] ?: return
 
@@ -48,10 +49,27 @@ data class Match(var players: HashMap<PieceColor, Player?>,
         pieceSet.activePieces[endPosition] = piece
 
         val opposingPieceSet = pieceSets[draw.color.getOpposite()] ?: return
+
+        if (enPassantField != null &&
+                enPassantField?.row == endPosition.first &&
+                enPassantField?.column == endPosition.second) {
+            enPassantPosition = when (currentColor) {
+                PieceColor.WHITE -> Pair(5, endPosition.second)
+                PieceColor.BLACK -> Pair(4, endPosition.second)
+            }
+        }
+
         if (opposingPieceSet.activePieces.containsKey(endPosition)) {
             val capturedPiece = opposingPieceSet.activePieces[endPosition]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
             opposingPieceSet.activePieces.remove(endPosition)
+        }
+
+        if (opposingPieceSet.activePieces.containsKey(enPassantPosition)) {
+            val capturedPiece = opposingPieceSet.activePieces[enPassantPosition]
+            if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
+            opposingPieceSet.activePieces.remove(enPassantPosition)
+            enPassantField = null
         }
     }
 
