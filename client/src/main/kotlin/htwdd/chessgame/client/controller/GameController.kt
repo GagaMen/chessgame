@@ -171,6 +171,14 @@ class GameController(private val client: Client) : Controller {
                 }
 
                 pieceSet[Pair(row, col)]?.type = pieceType
+
+                val draw = match.history[match.history.lastIndex]
+                draw.drawCode = "${draw.drawCode}${pieceType.getDrawCode()}"
+
+                match.history.removeAt(match.history.lastIndex)
+                match.history.add(draw)
+
+                println(match.history[match.history.lastIndex].drawCode)
             }
         }
     }

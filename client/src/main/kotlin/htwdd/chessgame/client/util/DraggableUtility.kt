@@ -65,6 +65,7 @@ class DraggableUtility {
                 match.switchCheck(match.currentColor.getOpposite())
             }
 
+            match.history[match.history.lastIndex].setDrawCode()
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
@@ -85,22 +86,36 @@ class DraggableUtility {
                     val oldCol = parent.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
                     val newRow = target.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
                     val newCol = target.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+                    var throwEnPassant = false
+                    var kingsideCastling = false
+                    var queensideCastling = false
 
                     if (image.hasClass("piece--black")) pieceColor = PieceColor.BLACK
 
                     target.appendChild(image)
 
                     when (PieceType.valueOf(pieceType)) {
-                        PieceType.PAWN -> dropPawn(controller, match, oldRow, oldCol, newRow, newCol, pieceColor)
+                        PieceType.PAWN -> throwEnPassant = dropPawn(controller, match, oldRow, oldCol, newRow, newCol, pieceColor)
                         PieceType.ROOK -> dropRook(controller, match, oldCol, pieceColor)
-                        PieceType.KING -> dropKing(controller, match, oldCol, newRow, newCol, pieceColor)
+                        PieceType.KING -> {
+                            dropKing(controller, match, oldCol, newRow, newCol, pieceColor)
+                            when (newCol) {
+                                oldCol + 2 -> kingsideCastling = true
+                                oldCol - 2 -> queensideCastling = true
+                            }
+                        }
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
                     val newDraw = Draw(pieceColor,
                             PieceType.valueOf(pieceType),
                             Field(oldRow, oldCol),
-                            Field(newRow, newCol))
+                            Field(newRow, newCol),
+                            match,
+                            throwEnPassant,
+                            throwEnPassant,
+                            kingsideCastling,
+                            queensideCastling)
 
                     controller.actionPerformed("increaseHalfMovesAction", match)
                     controller.actionPerformed("addDrawAction", Pair(match, newDraw))
@@ -128,7 +143,9 @@ class DraggableUtility {
                     val newDraw = Draw(pieceColor,
                             PieceType.valueOf(pieceType),
                             Field(oldRow, oldCol),
-                            Field(newRow, newCol))
+                            Field(newRow, newCol),
+                            match,
+                            true)
 
                     controller.actionPerformed("resetHalfMovesAction", match)
                     controller.actionPerformed("addDrawAction", Pair(match, newDraw))
@@ -184,14 +201,14 @@ class DraggableUtility {
             }
         }
 
-        private fun dropPawn(controller: Controller, match: Match, oldRow: Int, oldCol: Int, newRow: Int, newCol: Int, pieceColor: PieceColor) {
+        private fun dropPawn(controller: Controller, match: Match, oldRow: Int, oldCol: Int, newRow: Int, newCol: Int, pieceColor: PieceColor): Boolean {
             if ((oldRow - newRow).absoluteValue == 2) {
                 val row = when (pieceColor) {
                     PieceColor.WHITE -> 3
                     PieceColor.BLACK -> 6
                 }
                 controller.actionPerformed("setEnPassantFieldAction", Pair(match, Field(row, oldCol)))
-                return
+                return false
             }
 
             if (newRow == match.enPassantField?.row && newCol == match.enPassantField?.column) {
@@ -200,20 +217,20 @@ class DraggableUtility {
                     PieceColor.BLACK -> 4
                 }
                 document.getElementById("board--field-$row-$newCol")?.clear()
-                //controller.actionPerformed("resetEnPassantFieldAction", match)
-                return
+                return true
             }
 
 
             if (newRow == 1 || newRow == 8) {
-                val popup = document.getElementsByClassName("board--popup")[0] ?: return
+                val popup = document.getElementsByClassName("board--popup")[0] ?: return false
                 popup.setAttribute("data-row", newRow.toString())
                 popup.setAttribute("data-col", newCol.toString())
                 popup.removeClass("hidden")
-                return
+                return false
             }
 
             controller.actionPerformed("resetEnPassantFieldAction", match)
+            return false
         }
 
         private fun dropRook(controller: Controller, match: Match, oldCol: Int, pieceColor: PieceColor) {

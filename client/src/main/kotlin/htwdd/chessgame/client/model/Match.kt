@@ -103,7 +103,7 @@ data class Match(var players: HashMap<PieceColor, Player?>,
                     sb.append(emptyCol)
                     emptyCol = 0
                 }
-                sb.append(pieceType.getCode(pieceColor))
+                sb.append(pieceType.getMatchCode(pieceColor))
             }
             if (emptyCol > 0) sb.append(emptyCol)
             if (i != 8) sb.append("/")

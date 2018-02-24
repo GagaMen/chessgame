@@ -5,7 +5,6 @@ import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.view.PlayerView
 import kotlinx.html.BUTTON
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.get
