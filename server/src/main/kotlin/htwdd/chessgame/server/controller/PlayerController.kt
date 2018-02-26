@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.*
 class PlayerController {
     private final val playerList: HashMap<Int, Player> = HashMap()
 
-    @RequestMapping("*", method = [RequestMethod.GET, RequestMethod.POST])
-    fun wrongRequestFallback(): String {
-        return "Wrong request"
-    }
-
     @GetMapping("/player")
     fun getPlayerList(): HashMap<Int, Player> {
         return playerList
@@ -23,7 +18,7 @@ class PlayerController {
         return "No player with id \"$id\" registered!"
     }
 
-    @DeleteMapping("player/{id}")
+    @DeleteMapping("/player/{id}")
     fun deletePlayerById(@PathVariable id: Int): Boolean {
         if (playerList.containsKey(id)) {
             playerList.remove(id)
@@ -32,8 +27,8 @@ class PlayerController {
         return false
     }
 
-    @PutMapping("player")
-    fun addPlayer(@RequestParam id: Int,
+    @PutMapping("/player/{id}")
+    fun addPlayer(@PathVariable id: Int,
                   @RequestParam name: String,
                   @RequestParam password: String): Boolean {
         if (!playerList.containsKey(id)) {
@@ -43,7 +38,7 @@ class PlayerController {
         return false
     }
 
-    @PatchMapping("player/{id}")
+    @PatchMapping("/player/{id}")
     fun updatePlayer(@PathVariable id: Int,
                      @RequestParam password: String): Boolean {
         if (playerList.containsKey(id)) {
