@@ -30,12 +30,14 @@ jar {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
     jcenter()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'ninja.sakib:PultusORM:v1.7'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

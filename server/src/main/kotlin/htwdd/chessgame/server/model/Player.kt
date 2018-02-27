@@ -1,5 +1,10 @@
 package htwdd.chessgame.server.model
 
-data class Player(val id: Int,
-                  val name: String,
-                  var password: String)
+import ninja.sakib.pultusorm.annotations.AutoIncrement
+import ninja.sakib.pultusorm.annotations.PrimaryKey
+
+data class Player(val name: String = "", val password: String = "") {
+    @PrimaryKey
+    @AutoIncrement
+    var id: Int = 0
+}
