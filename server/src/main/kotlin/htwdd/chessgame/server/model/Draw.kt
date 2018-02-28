@@ -1,11 +1,20 @@
 package htwdd.chessgame.server.model
 
-class Draw(val color: PieceColor,
-           val pieceType: PieceType,
-           val start: Field,
-           val end: Field,
-           private val match: Match,
-           private val throwPiece: Boolean = false,
-           private val throwEnPassant: Boolean = false,
-           private val kingsideCastling: Boolean = false,
-           private val queensideCastling: Boolean = false)
+import ninja.sakib.pultusorm.annotations.AutoIncrement
+import ninja.sakib.pultusorm.annotations.PrimaryKey
+
+data class Draw(var color: String = "",
+                var pieceType: String = "",
+                var startRow: Int = -1,
+                var startColumn: Int = -1,
+                var endRow: Int = -1,
+                var endColumn: Int = -1,
+                var throwPiece: Boolean = false,
+                var throwEnPassant: Boolean = false,
+                var kingsideCastling: Boolean = false,
+                var queensideCastling: Boolean = false,
+                var drawCode: String = "") {
+    @PrimaryKey
+    @AutoIncrement
+    var id: Int = 0
+}
