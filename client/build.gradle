@@ -1,23 +1,156 @@
-buildscript {
-    ext.kotlin_version = '1.2.10'
-
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 group 'htwdd/chessgame'
 version '1.0.0'
 
+buildscript {
+    ext.kotlin_version = '1.2.21'
+    ext.requirejs_version = '2.3.5'
+    ext.kotlinx_html_version = '0.6.6'
+    ext.sass_version = '1.2.2'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.fgiannesini.libsass.gradle.plugin:libsass-gradle-plugin:+'
+    }
+}
+
 apply plugin: 'kotlin2js'
+apply plugin: 'com.github.fgiannesini.libsass.gradle.plugin'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.webjars:requirejs:$requirejs_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
+    compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
+
+[compileKotlin2Js, compileTestKotlin2Js]*.configure {
+    kotlinOptions {
+        moduleKind = "amd"
+        sourceMap = true
+        sourceMapEmbedSources = "always"
+    }
+}
+
+libSassParameters {
+    inputFilePath = "$projectDir/src/main/sass/main.scss"
+    outputFilePath = "$projectDir/dist/css/main.css"
+    watchedDirectoryPath = "$projectDir/src/main/sass"
+    sourceMapEmbed = true
+    sourceMapFilePath "$projectDir/dist/css/main.css.map"
+
+    //Override parameters for task "compileLibSassProduction"
+    libSassProductionParameters {
+        outputStyle "compressed"
+        outputFilePath = "$projectDir/dist/css/main.min.css"
+    }
+}
+
+build.doLast {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${projectDir}/dist/js/lib"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+            eachFile { fcp ->
+                fcp.path = fcp.path.replaceFirst(/.*\//, '')
+            }
+        }
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/main/"
+        into "${projectDir}/dist/js/"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/test/"
+        into "${projectDir}/dist/js/test"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/main")
+        into "dist"
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/test")
+        into "dist/js/test"
+    }
+}
+
+task release(type: Copy) {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${projectDir}/dist/js/lib"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+            eachFile { fcp ->
+                fcp.path = fcp.path.replaceFirst(/.*\//, '')
+            }
+        }
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/main/"
+        into "${projectDir}/dist/js/"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        from "$buildDir/classes/kotlin/test/"
+        into "${projectDir}/dist/js/test"
+        include '*.js'
+        include '*.js.map'
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/main")
+        into "dist"
+    }
+
+    copy {
+        includeEmptyDirs = false
+        from new File("$buildDir/resources/test")
+        into "dist/js/test"
+    }
+}
+configure(release) {
+    group = 'release'
+}
+
+task releaseClean (type: Delete) {
+    delete "dist"
+}
+configure(releaseClean) {
+    group = 'release'
+}
+
+clean.finalizedBy(releaseClean)

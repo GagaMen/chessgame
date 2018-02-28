@@ -1,0 +1,141 @@
+/**
+ * Defines the text helpers
+ */
+.text {
+
+  &--center {
+    text-align: center;
+  }
+
+  &--left {
+    text-align: left;
+  }
+
+  &--right {
+    text-align: right;
+  }
+
+  &--justify {
+    text-align: justify;
+  }
+
+  &--small {
+    @include font-size($font-size-s);
+  }
+
+  &--middle {
+    @include font-size($font-size-m);
+  }
+
+  &--large {
+    @include font-size($font-size-l);
+  }
+
+  &--truncate {
+    @include text-truncate(400px);
+  }
+
+  &--indent {
+    margin-left: 25px;
+  }
+
+  &--nowrap {
+    white-space: nowrap;
+  }
+
+  &--break {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+
+/**
+ * Defines the grid and content flow helpers
+ */
+.group::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.overlay {
+
+  &--left-bottom {
+    left: 0;
+    bottom: 0;
+  }
+
+  &--left-top {
+    left: 0;
+    top: 0;
+  }
+
+  &--right-bottom {
+    right: 0;
+    bottom: 0;
+  }
+
+  &--right-top {
+    right: 0;
+    top: 0;
+  }
+
+  &--all {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+/**
+ * Defines the heading helpers
+ */
+.heading {
+
+}
+
+.subheading {
+
+}
+
+/**
+ * Defines the form helpers
+ */
+.require {
+
+  &::after {
+    content: "*";
+  }
+
+  &--hint {
+
+    &::before {
+      content: "*";
+      margin-right: 5px;
+    }
+  }
+}
+
+.label-radio,
+.label-checkbox {
+  float: left;
+  width: auto;
+}
+
+.vertical-resizable {
+  resize: vertical;
+}

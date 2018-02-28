@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chess Game</title>
+    <link rel="shortcut icon" type="image/x-icon" href="icon/favicon.ico">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/lib/require.min.js"></script>
+</head>
+
+<body>
+
+<div class="app box--shadow"></div>
+
+<script>
+    require({
+        baseUrl: 'js',
+        paths: {
+            'kotlin': 'lib/kotlin',
+            'kotlinx-html-js': 'lib/kotlinx-html-js'
+        }
+    });
+    require(['client']);
+</script>
+</body>
+</html>

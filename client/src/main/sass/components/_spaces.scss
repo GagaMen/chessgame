@@ -1,0 +1,14 @@
+h1, h2, h3, h4, h5, h6 {
+  + ul {
+    margin-top: 30px;
+  }
+  + .btn--piece-type {
+    margin-top: 10px;
+  }
+}
+
+.row {
+  + .row {
+    margin-top: 50px;
+  }
+}

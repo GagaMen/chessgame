@@ -1,0 +1,42 @@
+$font-size-h1: 40px;
+$font-size-h2: 36px;
+$font-size-h3: 32px;
+$font-size-h4: 28px;
+$font-size-h5: 24px;
+$font-size-h6: 20px;
+$reduce-factor-s: .9;
+$reduce-factor-m: .7;
+
+/**
+ * Defines the headings
+ */
+h1, h2, h3, h4, h5, h6 {
+  color: $color-black;
+  font-weight: 700;
+  line-height: $line-height-default;
+  margin: 0; // reset normalize css
+}
+
+h1 {
+  @include font-size($font-size-h1 * $reduce-factor-s);
+}
+
+h2 {
+  @include font-size($font-size-h2 * $reduce-factor-s);
+}
+
+h3 {
+  @include font-size($font-size-h3 * $reduce-factor-s);
+}
+
+h4 {
+  @include font-size($font-size-h4 * $reduce-factor-s);
+}
+
+h5 {
+  @include font-size($font-size-h5 * $reduce-factor-s);
+}
+
+h6 {
+  @include font-size($font-size-h6 * $reduce-factor-s);
+}

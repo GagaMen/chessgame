@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+// Abstracts
+@import "abstracts/_variables.scss",
+"abstracts/_functions.scss",
+"abstracts/_mixins.scss",
+"abstracts/_placeholders.scss";
+// Vendors
+@import "vendor/_normalize.scss",
+"vendor/_bootstrap-grid.scss";
+// Base
+@import "base/_fonts.scss",
+"base/_helpers.scss",
+"base/_base.scss";
+// Components
+@import "components/_board.scss",
+"components/_box.scss",
+"components/_buttons.scss",
+"components/_form.scss",
+"components/_headings.scss",
+"components/_properties.scss",
+"components/_spaces.scss",
+"components/table";
+// Layouts
+@import "Layouts/_main-header.scss",
+"Layouts/_main-footer.scss",
+"Layouts/_nav-main.scss";

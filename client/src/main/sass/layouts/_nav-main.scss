@@ -1,0 +1,23 @@
+.nav {
+  &--main {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    left: calc(50% - 200px);
+    top: calc(50% - 250px);
+    background: $color-white;
+    border: 1px solid $color-black;
+    border-radius: 4px;
+    padding: 50px;
+  }
+
+  &--list {
+    li {
+      list-style: none;
+
+      + li {
+        margin-top: 30px;
+      }
+    }
+  }
+}
