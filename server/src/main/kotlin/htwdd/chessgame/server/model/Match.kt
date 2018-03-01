@@ -6,18 +6,18 @@ import ninja.sakib.pultusorm.annotations.PrimaryKey
 
 data class Match(var playerWhite: Int = -1,
                  var playerBlack: Int = -1,
-                 @Ignore private var currentColor: PieceColor = PieceColor.WHITE,
+                 @Ignore var currentColor: PieceColor = PieceColor.WHITE,
                  var history: String = "",
                  @Ignore var historyList: MutableList<Draw> = mutableListOf(),
-                 @Ignore private var whiteCastlingKingSide: Boolean = true,
-                 @Ignore private var whiteCastlingQueenSide: Boolean = true,
-                 @Ignore private var blackCastlingKingSide: Boolean = true,
-                 @Ignore private var blackCastlingQueenSide: Boolean = true,
-                 @Ignore private var enPassantField: Field? = null,
-                 @Ignore private var halfMoves: Int = 0,
+                 @Ignore var whiteCastlingKingSide: Boolean = true,
+                 @Ignore var whiteCastlingQueenSide: Boolean = true,
+                 @Ignore var blackCastlingKingSide: Boolean = true,
+                 @Ignore var blackCastlingQueenSide: Boolean = true,
+                 @Ignore var enPassantField: Field? = null,
+                 @Ignore var halfMoves: Int = 0,
                  @Ignore var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
                  @Ignore var checkmate: Boolean = false,
-                 private var matchCode: String = "rnbqkbnr/pp1ppppp/8/2p5/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 1") {
+                 var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
     @PrimaryKey
     @AutoIncrement
     val id: Int = 0
