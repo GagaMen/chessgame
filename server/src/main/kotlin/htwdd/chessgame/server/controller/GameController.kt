@@ -13,7 +13,7 @@ class GameController {
     fun getDrawsByMatchId(@PathVariable id: Int): MutableList<Draw> {
         val drawList: MutableList<Draw> = mutableListOf()
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         pultusORM.find(Draw(), condition)

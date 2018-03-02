@@ -27,7 +27,7 @@ class DrawController {
     @GetMapping("draw/{id}")
     fun getDrawById(@PathVariable id: Int): Any {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         pultusORM.find(Draw(), condition)
@@ -43,7 +43,7 @@ class DrawController {
     @DeleteMapping("draw/{id}")
     fun deleteDrawById(@PathVariable id: Int): Boolean {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         return pultusORM.delete(Draw(), condition)
@@ -60,7 +60,7 @@ class DrawController {
                 @RequestParam drawCode: String): Boolean {
         var match: Match? = null
         val condition = PultusORMCondition.Builder()
-                .eq("ID", matchId)
+                .eq("id", matchId)
                 .build()
 
         pultusORM.find(Match(), condition)
@@ -77,7 +77,7 @@ class DrawController {
                 startColumn = startCol,
                 endRow = endRow,
                 endColumn = endCol,
-                matchID = matchId,
+                matchId = matchId,
                 drawCode = drawCode))
     }
 }

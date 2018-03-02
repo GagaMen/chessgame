@@ -26,7 +26,7 @@ class PlayerController {
     @GetMapping("/player/{id}")
     fun getPlayerById(@PathVariable id: Int): Any {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         pultusORM.find(Player(), condition)
@@ -41,7 +41,7 @@ class PlayerController {
     @DeleteMapping("/player/{id}")
     fun deletePlayerById(@PathVariable id: Int): Boolean {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         return pultusORM.delete(Player(), condition)
@@ -57,10 +57,10 @@ class PlayerController {
     fun updatePlayer(@PathVariable id: Int,
                      @RequestParam password: String): Boolean {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
         val updater = PultusORMUpdater.Builder()
-                .set("PASSWORD", password)
+                .set("password", password)
                 .condition(condition)
                 .build()
 

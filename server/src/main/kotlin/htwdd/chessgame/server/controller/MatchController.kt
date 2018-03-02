@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 class MatchController {
     private val pultusORM: PultusORM = PultusORM("chessgame.db")
 
-    @GetMapping("/match")
+    @GetMapping("match")
     fun getMatchList(): HashMap<Int, Match> {
         val matchList = HashMap<Int, Match>()
 
@@ -28,10 +28,10 @@ class MatchController {
         return matchList
     }
 
-    @GetMapping("/match/{id}")
+    @GetMapping("match/{id}")
     fun getMatchById(@PathVariable id: Int): Any {
         val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+                .eq("id", id)
                 .build()
 
         pultusORM.find(Match(), condition)
@@ -47,24 +47,28 @@ class MatchController {
         return "No match with id \"$id\" registered!"
     }
 
-    @DeleteMapping("/match/{id}")
+    @DeleteMapping("match/{id}")
     fun deleteMatchById(@PathVariable id: Int): Boolean {
-        val condition = PultusORMCondition.Builder()
-                .eq("ID", id)
+        val matchCondition = PultusORMCondition.Builder()
+                .eq("id", id)
+                .build()
+        val drawCondition = PultusORMCondition.Builder()
+                .eq("matchId", id)
                 .build()
 
-        return pultusORM.delete(Match(), condition)
+        if (!pultusORM.delete(Draw(), drawCondition)) return false
+        return pultusORM.delete(Match(), matchCondition)
     }
 
-    @PutMapping("/match")
+    @PutMapping("match")
     fun addMatch(@RequestParam playerWhiteId: Int,
                  @RequestParam playerBlackId: Int): Boolean {
         var playerWhite: Player? = null
         var playerBlack: Player? = null
         val condition = PultusORMCondition.Builder()
-                .eq("ID", playerWhiteId)
+                .eq("id", playerWhiteId)
                 .or()
-                .eq("ID", playerBlackId)
+                .eq("id", playerBlackId)
                 .build()
 
         pultusORM.find(Player(), condition)
@@ -80,9 +84,9 @@ class MatchController {
 
     private fun setPlayer(match: Match) {
         val playerCondition = PultusORMCondition.Builder()
-                .eq("ID", match.playerWhite)
+                .eq("id", match.playerWhite)
                 .or()
-                .eq("ID", match.playerBlack)
+                .eq("id", match.playerBlack)
                 .build()
 
         pultusORM.find(Player(), playerCondition)
@@ -95,7 +99,7 @@ class MatchController {
 
     private fun setHistory(match: Match) {
         val condition = PultusORMCondition.Builder()
-                .eq("MATCHID", match.id)
+                .eq("matchId", match.id)
                 .build()
 
         pultusORM.find(Draw(), condition)
