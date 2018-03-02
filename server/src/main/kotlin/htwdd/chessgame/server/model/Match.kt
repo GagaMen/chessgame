@@ -6,9 +6,8 @@ import ninja.sakib.pultusorm.annotations.PrimaryKey
 
 data class Match(var playerWhite: Int = -1,
                  var playerBlack: Int = -1,
-                 @Ignore var currentColor: PieceColor = PieceColor.WHITE,
-                 var history: String = "",
-                 @Ignore var historyList: MutableList<Draw> = mutableListOf(),
+                 @Ignore var currentColor: PieceColor? = null,
+                 @Ignore var history: MutableList<Draw> = mutableListOf(),
                  @Ignore var whiteCastlingKingSide: Boolean = true,
                  @Ignore var whiteCastlingQueenSide: Boolean = true,
                  @Ignore var blackCastlingKingSide: Boolean = true,
@@ -22,12 +21,13 @@ data class Match(var playerWhite: Int = -1,
     @AutoIncrement
     val id: Int = 0
     @Ignore
-    private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap()
+    var players: HashMap<PieceColor, Player> = HashMap()
+    @Ignore
+    var pieceSets: HashMap<PieceColor, PieceSet> = HashMap()
 
     init {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE)
         pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK)
-        setValuesByMatchCode()
     }
 
     fun setValuesByMatchCode() {
