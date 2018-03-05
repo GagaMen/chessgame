@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 class PlayerController {
     private val pultusORM: PultusORM = PultusORM("chessgame.db")
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("/player")
     fun getPlayerList(): HashMap<Int, Player> {
         val playerList = HashMap<Int, Player>()
@@ -23,6 +24,7 @@ class PlayerController {
         return playerList
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("/player/{id}")
     fun getPlayerById(@PathVariable id: Int): Any {
         val condition = PultusORMCondition.Builder()
@@ -38,6 +40,7 @@ class PlayerController {
         return "No player with id \"$id\" registered!"
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("/player/{id}")
     fun deletePlayerById(@PathVariable id: Int): Boolean {
         val condition = PultusORMCondition.Builder()
@@ -47,12 +50,14 @@ class PlayerController {
         return pultusORM.delete(Player(), condition)
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @PutMapping("/player")
     fun addPlayer(@RequestParam name: String,
                   @RequestParam password: String): Boolean {
         return pultusORM.save(Player(name, password))
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping("/player/{id}")
     fun updatePlayer(@PathVariable id: Int,
                      @RequestParam password: String): Boolean {

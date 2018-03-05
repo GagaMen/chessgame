@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 class DrawController {
     private val pultusORM: PultusORM = PultusORM("chessgame.db")
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw")
     fun getDrawList(): MutableList<Draw> {
         val drawList: MutableList<Draw> = mutableListOf()
@@ -24,6 +25,7 @@ class DrawController {
         return drawList
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw/{id}")
     fun getDrawById(@PathVariable id: Int): Any {
         val condition = PultusORMCondition.Builder()
@@ -40,6 +42,7 @@ class DrawController {
         return "No draw with id \"$id\" registered!"
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("draw/{id}")
     fun deleteDrawById(@PathVariable id: Int): Boolean {
         val condition = PultusORMCondition.Builder()
@@ -49,6 +52,7 @@ class DrawController {
         return pultusORM.delete(Draw(), condition)
     }
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @PutMapping("draw")
     fun addDraw(@RequestParam matchId: Int,
                 @RequestParam color: String,

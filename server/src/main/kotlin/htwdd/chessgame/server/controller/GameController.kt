@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 class GameController {
     private val pultusORM: PultusORM = PultusORM("chessgame.db")
 
+    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match/{id}/draw")
     fun getDrawsByMatchId(@PathVariable id: Int): MutableList<Draw> {
         val drawList: MutableList<Draw> = mutableListOf()
