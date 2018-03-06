@@ -7,10 +7,23 @@ import htwdd.chessgame.server.model.Player
 import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 class MatchController {
     private val pultusORM: PultusORM = PultusORM("chessgame.db")
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @RequestMapping("match", method = [RequestMethod.OPTIONS])
+    fun matchOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,PUT,OPTIONS")
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @RequestMapping("match/{id}", method = [RequestMethod.OPTIONS])
+    fun matchByIdOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
+    }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match")
