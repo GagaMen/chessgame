@@ -1,10 +1,9 @@
 package htwdd.chessgame.server.model
 
-import ninja.sakib.pultusorm.annotations.AutoIncrement
-import ninja.sakib.pultusorm.annotations.PrimaryKey
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 
-data class Player(val name: String = "", val password: String = "") {
-    @PrimaryKey
-    @AutoIncrement
-    var id: Int = 0
-}
+@DatabaseTable(tableName = "Player")
+data class Player(@DatabaseField(generatedId = true) val id: Int = 0,
+                  @DatabaseField var name: String = "",
+                  @DatabaseField var password: String = "")

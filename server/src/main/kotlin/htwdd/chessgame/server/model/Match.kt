@@ -1,28 +1,25 @@
 package htwdd.chessgame.server.model
 
-import ninja.sakib.pultusorm.annotations.AutoIncrement
-import ninja.sakib.pultusorm.annotations.Ignore
-import ninja.sakib.pultusorm.annotations.PrimaryKey
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.field.ForeignCollectionField
+import com.j256.ormlite.table.DatabaseTable
 
-data class Match(var playerWhite: Int = -1,
-                 var playerBlack: Int = -1,
-                 @Ignore var currentColor: PieceColor? = null,
-                 @Ignore var history: MutableList<Draw> = mutableListOf(),
-                 @Ignore var whiteCastlingKingSide: Boolean = true,
-                 @Ignore var whiteCastlingQueenSide: Boolean = true,
-                 @Ignore var blackCastlingKingSide: Boolean = true,
-                 @Ignore var blackCastlingQueenSide: Boolean = true,
-                 @Ignore var enPassantField: Field? = null,
-                 @Ignore var halfMoves: Int = 0,
-                 @Ignore var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
-                 @Ignore var checkmate: Boolean = false,
-                 var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-    @PrimaryKey
-    @AutoIncrement
-    val id: Int = 0
-    @Ignore
-    var players: HashMap<PieceColor, Player> = HashMap()
-    @Ignore
+@DatabaseTable(tableName = "Match")
+data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
+                 @DatabaseField(foreign = true) val playerWhite: Player? = null,
+                 @DatabaseField(foreign = true) val playerBlack: Player? = null,
+                 @DatabaseField var currentColor: PieceColor = PieceColor.WHITE,
+                 @ForeignCollectionField var history: Collection<Draw> = mutableListOf(),
+                 var whiteCastlingKingSide: Boolean = true,
+                 var whiteCastlingQueenSide: Boolean = true,
+                 var blackCastlingKingSide: Boolean = true,
+                 var blackCastlingQueenSide: Boolean = true,
+                 var enPassantField: Field? = null,
+                 var halfMoves: Int = 0,
+                 var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
+                 var checkmate: Boolean = false,
+                 @DatabaseField var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+
     var pieceSets: HashMap<PieceColor, PieceSet> = HashMap()
 
     init {

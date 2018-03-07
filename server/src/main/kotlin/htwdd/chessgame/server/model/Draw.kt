@@ -1,39 +1,25 @@
 package htwdd.chessgame.server.model
 
-import ninja.sakib.pultusorm.annotations.AutoIncrement
-import ninja.sakib.pultusorm.annotations.Ignore
-import ninja.sakib.pultusorm.annotations.PrimaryKey
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 
-data class Draw(var colorString: String = "",
-                @Ignore var color: PieceColor? = null,
-                var pieceTypeString: String = "",
-                @Ignore var pieceType: PieceType? = null,
-                var startRow: Int = -1,
-                var startColumn: Int = -1,
-                @Ignore var start: Field? = null,
-                var endRow: Int = -1,
-                var endColumn: Int = -1,
-                @Ignore var end: Field? = null,
-                var matchId: Int = -1,
-                @Ignore var throwPiece: Boolean = false,
-                @Ignore var throwEnPassant: Boolean = false,
-                @Ignore var kingsideCastling: Boolean = false,
-                @Ignore var queensideCastling: Boolean = false,
-                var drawCode: String = "") {
-    @PrimaryKey
-    @AutoIncrement
-    var id: Int = 0
+@DatabaseTable(tableName = "Draw")
+data class Draw(@DatabaseField(generatedId = true) val id: Int = 0,
+                @DatabaseField var color: PieceColor? = null,
+                @DatabaseField var pieceType: PieceType? = null,
+                @DatabaseField(foreign = true) var start: Field? = null,
+                @DatabaseField(foreign = true) var end: Field? = null,
+                @DatabaseField(foreign = true) var match: Match? = null,
+                var throwPiece: Boolean = false,
+                var throwEnPassant: Boolean = false,
+                var kingsideCastling: Boolean = false,
+                var queensideCastling: Boolean = false,
+                @DatabaseField var drawCode: String = "") {
 
     fun setValuesByDrawCode() {
         if (drawCode.contains("x")) throwPiece = true
         if (drawCode.contains("e.p.")) throwEnPassant = true
         if (drawCode.contains("O-O")) kingsideCastling = true
         if (drawCode.contains("O-O-O")) queensideCastling = true
-
-        color = PieceColor.valueOf(colorString)
-        pieceType = PieceType.valueOf(pieceTypeString)
-
-        start = Field(startRow, startColumn)
-        end = Field(endRow, endColumn)
     }
 }
