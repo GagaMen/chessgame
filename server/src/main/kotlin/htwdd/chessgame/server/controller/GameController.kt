@@ -17,7 +17,7 @@ class GameController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match/{id}/draw")
-    fun getDrawsByMatchId(@PathVariable id: Int): Collection<Draw> {
+    fun getDrawsByMatchId(@PathVariable id: Int): MutableList<Draw> {
         val drawList = mutableListOf<Draw>()
         drawDao!!.queryForEq("match_id", id).forEach { drawList.add(it) }
         return drawList
