@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 class PlayerController {
     private val playerDao = DatabaseUtility.playerDao
+    private val matchDao = DatabaseUtility.matchDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("player", method = [RequestMethod.OPTIONS])
@@ -38,6 +39,12 @@ class PlayerController {
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("player/{id}")
     fun deletePlayerById(@PathVariable id: Int): Boolean {
+        val queryBuilder = matchDao!!.queryBuilder()
+        val query = queryBuilder.where().eq("playerWhite_id", id).or().eq("playerBlack_id", id).prepare()
+
+        // check if player is in use
+        if (matchDao.query(query).size > 0) return false
+
         if (playerDao!!.deleteById(id) != 1) return false
         return true
     }
