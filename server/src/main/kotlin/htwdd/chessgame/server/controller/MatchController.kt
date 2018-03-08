@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse
 class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
+    private val drawDao = DatabaseUtility.drawDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("match", method = [RequestMethod.OPTIONS])
@@ -40,6 +41,12 @@ class MatchController {
     @DeleteMapping("match/{id}")
     fun deleteMatchById(@PathVariable id: Int): Boolean {
         if (matchDao!!.deleteById(id) != 1) return false
+
+        // delete draw history of match
+        val deleteBuilder = drawDao!!.deleteBuilder()
+        deleteBuilder.where().eq("match_id", id)
+        deleteBuilder.delete()
+
         return true
     }
 
