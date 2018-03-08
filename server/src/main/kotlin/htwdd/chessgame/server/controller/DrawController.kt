@@ -40,7 +40,12 @@ class DrawController {
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("draw/{id}")
     fun deleteDrawById(@PathVariable id: Int): Boolean {
-        if (drawDao!!.deleteById(id) != 1) return false
+        val draw = drawDao!!.queryForId(id) ?: return false
+
+        // check if player is in use
+        if (matchDao!!.queryForId(draw.match?.id) != null) return false
+
+        if (drawDao.delete(draw) != 1) return false
         return true
     }
 
