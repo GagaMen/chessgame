@@ -1,87 +1,73 @@
 package htwdd.chessgame.server.controller
 
-import htwdd.chessgame.server.model.Draw
-import htwdd.chessgame.server.model.Match
-import ninja.sakib.pultusorm.core.PultusORM
-import ninja.sakib.pultusorm.core.PultusORMCondition
+import htwdd.chessgame.server.model.*
+import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 class DrawController {
-    private val pultusORM: PultusORM = PultusORM("chessgame.db")
+    private val drawDao = DatabaseUtility.drawDao
+    private val matchDao = DatabaseUtility.matchDao
+    private val fieldDao = DatabaseUtility.fieldDao
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @RequestMapping("draw", method = [RequestMethod.OPTIONS])
+    fun drawOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @RequestMapping("draw/{id}", method = [RequestMethod.OPTIONS])
+    fun drawByIdOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
+    }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw")
     fun getDrawList(): MutableList<Draw> {
         val drawList: MutableList<Draw> = mutableListOf()
-
-        pultusORM.find(Draw())
-                .filterIsInstance<Draw>()
-                .forEach { draw ->
-                    draw.setValuesByDrawCode()
-                    drawList.add(draw)
-                }
-
+        drawDao!!.queryForAll().forEach { drawList.add(it) }
         return drawList
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw/{id}")
     fun getDrawById(@PathVariable id: Int): Any {
-        val condition = PultusORMCondition.Builder()
-                .eq("id", id)
-                .build()
-
-        pultusORM.find(Draw(), condition)
-                .filterIsInstance<Draw>()
-                .forEach { draw ->
-                    draw.setValuesByDrawCode()
-                    return draw
-                }
-
-        return "No draw with id \"$id\" registered!"
+        return drawDao!!.queryForId(id) ?: return "No draw with id \"$id\" registered!"
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("draw/{id}")
     fun deleteDrawById(@PathVariable id: Int): Boolean {
-        val condition = PultusORMCondition.Builder()
-                .eq("id", id)
-                .build()
-
-        return pultusORM.delete(Draw(), condition)
+        if (drawDao!!.deleteById(id) != 1) return false
+        return true
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PutMapping("draw")
+    @PostMapping("draw")
     fun addDraw(@RequestParam matchId: Int,
                 @RequestParam color: String,
                 @RequestParam type: String,
                 @RequestParam startRow: Int,
-                @RequestParam startCol: Int,
+                @RequestParam startColumn: Int,
                 @RequestParam endRow: Int,
-                @RequestParam endCol: Int,
+                @RequestParam endColumn: Int,
                 @RequestParam drawCode: String): Boolean {
-        var match: Match? = null
-        val condition = PultusORMCondition.Builder()
-                .eq("id", matchId)
-                .build()
+        val match = matchDao!!.queryForId(matchId) ?: return false
+        val startField = Field(startRow, startColumn)
+        if (fieldDao!!.create(startField) != 1) return false
+        val endField = Field(endRow, endColumn)
+        if (fieldDao.create(endField) != 1) return false
 
-        pultusORM.find(Match(), condition)
-                .filterIsInstance<Match>()
-                .forEach { it ->
-                    if (it.id == matchId) match = it
-                }
+        val draw = Draw(color = PieceColor.valueOf(color),
+                pieceType = PieceType.valueOf(type),
+                start = startField,
+                end = endField,
+                drawCode = drawCode,
+                match = match)
 
-        if (match == null) return false
-
-        return pultusORM.save(Draw(colorString = color,
-                pieceTypeString = type,
-                startRow = startRow,
-                startColumn = startCol,
-                endRow = endRow,
-                endColumn = endCol,
-                matchId = matchId,
-                drawCode = drawCode))
+        if (drawDao!!.create(draw) != 1) return false
+        return true
     }
 }

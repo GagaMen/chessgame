@@ -4,12 +4,23 @@ import htwdd.chessgame.client.controller.MatchController
 import htwdd.chessgame.client.controller.PlayerController
 import htwdd.chessgame.client.controller.StartController
 import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.util.RequestUtility.Companion.get
+import htwdd.chessgame.client.util.RequestUtility.Companion.head
+import org.w3c.xhr.XMLHttpRequest
 
 fun main(args: Array<String>) {
     val client = loadData()
     StartController(client)
     PlayerController(client)
     MatchController(client)
+
+    get("http://127.0.0.1:8080/match") {
+        if (it.target is XMLHttpRequest) {
+            println((it.target as XMLHttpRequest).responseText)
+        }
+    }
+
+    head("http://127.0.0.1:8080/match")
 }
 
 private fun loadData(): Client {
