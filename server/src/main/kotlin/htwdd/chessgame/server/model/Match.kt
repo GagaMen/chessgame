@@ -6,8 +6,8 @@ import com.j256.ormlite.table.DatabaseTable
 
 @DatabaseTable(tableName = "Match")
 data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
-                 @DatabaseField(foreign = true, foreignAutoCreate = true, canBeNull = false) val playerWhite: Player? = null,
-                 @DatabaseField(foreign = true, foreignAutoCreate = true, canBeNull = false) val playerBlack: Player? = null,
+                 @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false) val playerWhite: Player? = null,
+                 @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false) val playerBlack: Player? = null,
                  @DatabaseField var currentColor: PieceColor = PieceColor.WHITE,
                  var whiteCastlingKingSide: Boolean = true,
                  var whiteCastlingQueenSide: Boolean = true,
