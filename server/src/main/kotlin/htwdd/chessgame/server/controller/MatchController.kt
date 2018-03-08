@@ -53,4 +53,22 @@ class MatchController {
         if (matchDao!!.create(Match(playerWhite = playerWhite, playerBlack = playerBlack)) != 1) return false
         return true
     }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @PatchMapping("match/{id}")
+    fun updateMatch(@PathVariable id: Int,
+                    @RequestParam checkWhite: Boolean,
+                    @RequestParam checkBlack: Boolean,
+                    @RequestParam checkmate: Boolean,
+                    @RequestParam matchCode: String): Boolean {
+        val match = matchDao!!.queryForId(id)
+
+        match.checkWhite = checkWhite
+        match.checkBlack = checkBlack
+        match.checkmate = checkmate
+        match.matchCode = matchCode
+
+        if (matchDao.update(match) != 1) return false
+        return true
+    }
 }

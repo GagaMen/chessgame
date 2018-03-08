@@ -15,8 +15,9 @@ data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
                  var blackCastlingQueenSide: Boolean = true,
                  var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
-                 var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
-                 var checkmate: Boolean = false,
+                 @DatabaseField var checkWhite: Boolean = false,
+                 @DatabaseField var checkBlack: Boolean = false,
+                 @DatabaseField var checkmate: Boolean = false,
                  @DatabaseField var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
 
     var pieceSets: HashMap<PieceColor, PieceSet> = HashMap()
