@@ -9,7 +9,15 @@ import org.springframework.web.bind.annotation.RestController
 class ErrorController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("*", "**/*", method = [RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE])
+    @RequestMapping("*", "**/*", method = [
+        RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.PATCH,
+        RequestMethod.DELETE,
+        RequestMethod.HEAD,
+        RequestMethod.OPTIONS]
+    )
     fun wrongRequestFallback(): String {
         return "Wrong request"
     }
