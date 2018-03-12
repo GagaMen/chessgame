@@ -2,34 +2,40 @@ group 'htwdd/chessgame'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.30'
     ext.requirejs_version = '2.3.5'
     ext.kotlinx_html_version = '0.6.6'
     ext.sass_version = '1.2.2'
+    ext.serialization_version = '0.4.2'
 
     repositories {
         mavenCentral()
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.fgiannesini.libsass.gradle.plugin:libsass-gradle-plugin:+'
+        classpath "com.github.fgiannesini.libsass.gradle.plugin:libsass-gradle-plugin:+"
+        classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
     }
 }
 
 apply plugin: 'kotlin2js'
 apply plugin: 'com.github.fgiannesini.libsass.gradle.plugin'
+apply plugin: 'kotlinx-serialization'
 
 repositories {
     mavenCentral()
     jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile "org.webjars:requirejs:$requirejs_version"
     compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
     compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
