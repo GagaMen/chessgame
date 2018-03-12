@@ -1,8 +1,10 @@
 package htwdd.chessgame.client.model
 
 import htwdd.chessgame.client.util.Observable
+import kotlinx.serialization.SerialId
+import kotlinx.serialization.Serializable
 
-data class Player(var name: String,
-                  var password: String) : Observable() {
-    var id: Int = 0
-}
+@Serializable
+data class Player(var id: Int = 0,
+                  var name: String,
+                  var password: String) : Observable()

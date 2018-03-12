@@ -1,22 +1,24 @@
 package htwdd.chessgame.client.model
 
 import htwdd.chessgame.client.util.Observable
+import kotlinx.serialization.Optional
+import kotlinx.serialization.Serializable
 
-data class Match(var players: HashMap<PieceColor, Player?>,
-                 var pieceSets: HashMap<PieceColor, PieceSet>,
-                 var currentColor: PieceColor,
-                 var history: MutableList<Draw>,
-                 var whiteCastlingKingSide: Boolean = true,
-                 var whiteCastlingQueenSide: Boolean = true,
-                 var blackCastlingKingSide: Boolean = true,
-                 var blackCastlingQueenSide: Boolean = true,
-                 var enPassantField: Field? = null,
-                 var halfMoves: Int = 0,
+@Serializable
+data class Match(var id: Int = 0,
+                 var players: HashMap<PieceColor, Player?> = HashMap(),
+                 @Optional var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
+                 @Optional var currentColor: PieceColor = PieceColor.WHITE,
+                 @Optional var history: MutableList<Draw> = mutableListOf(),
+                 @Optional var whiteCastlingKingSide: Boolean = true,
+                 @Optional var whiteCastlingQueenSide: Boolean = true,
+                 @Optional var blackCastlingKingSide: Boolean = true,
+                 @Optional var blackCastlingQueenSide: Boolean = true,
+                 @Optional var enPassantField: Field? = null,
+                 @Optional var halfMoves: Int = 0,
                  var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
                  var checkmate: Boolean = false,
                  private var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
-
-    var id: Int = 0
 
     fun addDraw(draw: Draw) {
         history.add(draw)
@@ -38,8 +40,8 @@ data class Match(var players: HashMap<PieceColor, Player?>,
     }
 
     private fun updatePieceSet(draw: Draw) {
-        val startPosition = draw.start.getAsPair()
-        val endPosition = draw.end.getAsPair()
+        val startPosition = draw.start.asPair()
+        val endPosition = draw.end.asPair()
         var enPassantPosition: Pair<Int, Int>? = null
         val pieceSet = pieceSets[draw.color] ?: return
         val piece = pieceSet.activePieces[startPosition] ?: return

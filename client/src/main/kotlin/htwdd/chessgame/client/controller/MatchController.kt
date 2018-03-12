@@ -68,7 +68,7 @@ class MatchController(val client: Client) : Controller {
                 pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
                 pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
 
-                val match = Match(players, pieceSets, PieceColor.WHITE, mutableListOf())
+                val match = Match(players = players, pieceSets = pieceSets, currentColor = PieceColor.WHITE, history = mutableListOf())
                 client.addMatch(match)
 
                 //reset form

@@ -56,7 +56,7 @@ class PlayerController(val client: Client) : Controller {
                     return
                 }
 
-                client.addPlayer(Player(name.value, password.value))
+                client.addPlayer(Player(name = name.value, password =  password.value))
                 name.value = ""
                 password.value = ""
             }

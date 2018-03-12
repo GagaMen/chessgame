@@ -107,15 +107,15 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val newDraw = Draw(pieceColor,
-                            PieceType.valueOf(pieceType),
-                            Field(oldRow, oldCol),
-                            Field(newRow, newCol),
-                            match,
-                            throwEnPassant,
-                            throwEnPassant,
-                            kingsideCastling,
-                            queensideCastling)
+                    val newDraw = Draw(color = pieceColor,
+                            pieceType = PieceType.valueOf(pieceType),
+                            start = Field(oldRow, oldCol),
+                            end = Field(newRow, newCol),
+                            match = match,
+                            throwPiece = throwEnPassant,
+                            throwEnPassant = throwEnPassant,
+                            kingsideCastling = kingsideCastling,
+                            queensideCastling = queensideCastling)
 
                     controller.actionPerformed("increaseHalfMovesAction", match)
                     controller.actionPerformed("addDrawAction", Pair(match, newDraw))
@@ -140,12 +140,12 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val newDraw = Draw(pieceColor,
-                            PieceType.valueOf(pieceType),
-                            Field(oldRow, oldCol),
-                            Field(newRow, newCol),
-                            match,
-                            true)
+                    val newDraw = Draw(color = pieceColor,
+                            pieceType = PieceType.valueOf(pieceType),
+                            start = Field(oldRow, oldCol),
+                            end = Field(newRow, newCol),
+                            match = match,
+                            throwPiece = true)
 
                     controller.actionPerformed("resetHalfMovesAction", match)
                     controller.actionPerformed("addDrawAction", Pair(match, newDraw))
