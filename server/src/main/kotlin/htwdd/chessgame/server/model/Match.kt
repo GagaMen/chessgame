@@ -1,30 +1,30 @@
 package htwdd.chessgame.server.model
 
+import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
-import com.j256.ormlite.field.ForeignCollectionField
 import com.j256.ormlite.table.DatabaseTable
 
 @DatabaseTable(tableName = "Match")
 data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
-                 @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false) val playerWhite: Player? = null,
-                 @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false) val playerBlack: Player? = null,
-                 @DatabaseField var currentColor: PieceColor = PieceColor.WHITE,
+                 @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false) val players: HashMap<PieceColor, Player> = HashMap(),
+                 private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
+                 @DatabaseField private var currentColor: PieceColor = PieceColor.WHITE,
+                 val history: MutableList<Draw> = mutableListOf(),
                  var whiteCastlingKingSide: Boolean = true,
                  var whiteCastlingQueenSide: Boolean = true,
                  var blackCastlingKingSide: Boolean = true,
                  var blackCastlingQueenSide: Boolean = true,
                  var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
-                 @DatabaseField var checkWhite: Boolean = false,
-                 @DatabaseField var checkBlack: Boolean = false,
+                 @DatabaseField(dataType = DataType.SERIALIZABLE) var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
                  @DatabaseField var checkmate: Boolean = false,
                  @DatabaseField var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-
-    var pieceSets: HashMap<PieceColor, PieceSet> = HashMap()
 
     init {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE)
         pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK)
+
+        setValuesByMatchCode()
     }
 
     fun setValuesByMatchCode() {
@@ -106,7 +106,7 @@ data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
 
     private fun setPiece(pieceColor: PieceColor, pieceType: PieceType, field: Field) {
         val pieces = pieceSets[pieceColor]?.activePieces
-        pieces!![field.getAsPair()] = Piece(pieceType, field)
+        pieces!![field.asPair()] = Piece(pieceType, field)
     }
 
     private fun setColor(str: String) {

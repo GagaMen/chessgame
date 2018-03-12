@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable
 class Field(@DatabaseField(generatedId = true) val id: Int = 0,
             @DatabaseField var row: Int = 0,
             @DatabaseField var column: Int = 0) {
-    fun getAsPair(): Pair<Int, Int> {
+    fun asPair(): Pair<Int, Int> {
         return Pair(row, column)
     }
 }
