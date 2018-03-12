@@ -20,6 +20,10 @@ data class Match(var id: Int = 0,
                  var checkmate: Boolean = false,
                  private var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
 
+    init {
+        initObservable()
+    }
+
     fun addDraw(draw: Draw) {
         history.add(draw)
         updatePieceSet(draw)

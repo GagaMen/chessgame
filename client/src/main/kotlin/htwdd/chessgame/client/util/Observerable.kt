@@ -3,8 +3,14 @@ package htwdd.chessgame.client.util
 import kotlin.jvm.Synchronized
 
 open class Observable {
-    private var changed = false
-    private val obs: HashSet<Observer> = HashSet()
+    var changed = false
+    var obs: HashSet<Observer> = HashSet()
+
+    // workaround for serialization
+    fun initObservable() {
+        changed = false
+        obs = HashSet()
+    }
 
     @Synchronized
     fun addObserver(o: Observer?) {

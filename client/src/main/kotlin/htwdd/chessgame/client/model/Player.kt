@@ -7,4 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Player(var id: Int = 0,
                   var name: String,
-                  var password: String) : Observable()
+                  var password: String) : Observable() {
+    init {
+        initObservable()
+    }
+}

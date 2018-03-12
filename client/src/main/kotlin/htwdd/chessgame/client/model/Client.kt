@@ -8,6 +8,9 @@ class Client(private var viewState: ViewState = ViewState.START,
              private var playerCount: Int = 0,
              var players: HashMap<Int, Player> = HashMap()) : Observable() {
 
+    init {
+        initObservable()
+    }
 
     fun changeState(viewState: ViewState, arg: Any? = null) {
         this.viewState = viewState
