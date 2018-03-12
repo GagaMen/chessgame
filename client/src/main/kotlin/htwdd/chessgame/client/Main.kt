@@ -5,7 +5,7 @@ import htwdd.chessgame.client.controller.PlayerController
 import htwdd.chessgame.client.controller.StartController
 import htwdd.chessgame.client.model.*
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
-import htwdd.chessgame.client.util.RequestUtility.Companion.head
+import kotlinx.serialization.json.JSON
 import org.w3c.xhr.XMLHttpRequest
 
 fun main(args: Array<String>) {
@@ -13,40 +13,34 @@ fun main(args: Array<String>) {
     StartController(client)
     PlayerController(client)
     MatchController(client)
-
-    get("http://127.0.0.1:8080/match") {
-        if (it.target is XMLHttpRequest) {
-            println((it.target as XMLHttpRequest).responseText)
-        }
-    }
-
-    head("http://127.0.0.1:8080/match")
 }
 
 private fun loadData(): Client {
-    //todo: load data from server
-
-    // test data ------------------------------------------------
     val client = Client()
-    val player1 = Player("Player1", "123456")
-    val player2 = Player("Player2", "123456")
 
-    val players = HashMap<PieceColor, Player?>()
-    players[PieceColor.WHITE] = player1
-    players[PieceColor.BLACK] = player2
+    get("http://127.0.0.1:8080/player") {
+        if (it.target is XMLHttpRequest) {
+            val playerHashMap = JSON.parse<PlayerHashMap>((it.target as XMLHttpRequest).responseText)
+            playerHashMap.player.forEach { client.addPlayer(it.value) }
+        }
+    }
 
-    val pieceSets = HashMap<PieceColor, PieceSet>()
-    pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE, initialize = true)
-    pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK, initialize = true)
+    get("http://127.0.0.1:8080/match") {
+        if (it.target is XMLHttpRequest) {
+            val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
+            matchHashMap.matches.forEach { (matchId, match) ->
 
-    val match = Match(players, pieceSets, PieceColor.WHITE, mutableListOf())
-    //match.addObserver(mainView)
+                get("http://127.0.0.1:8080/match/$matchId/draw") {
+                    if (it.target is XMLHttpRequest) {
+                        val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+                        match.history = drawList.draws
+                    }
+                }
 
-    client.addPlayer(player1)
-    client.addPlayer(player2)
-    client.addMatch(match)
-
-    //------------------------------------------------------------
+                client.addMatch(match)
+            }
+        }
+    }
 
     return client
 }
