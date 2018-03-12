@@ -1,6 +1,7 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.Player
+import htwdd.chessgame.server.model.PlayerHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -24,10 +25,11 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("player")
-    fun getPlayerList(): HashMap<Int, Player> {
+    fun getPlayerList(): PlayerHashMap {
         val playerList = HashMap<Int, Player>()
         playerDao!!.queryForAll().forEach { playerList[it.id] = it }
-        return playerList
+
+        return PlayerHashMap(playerList)
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])

@@ -1,6 +1,7 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.Draw
+import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -17,9 +18,9 @@ class GameController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match/{id}/draw")
-    fun getDrawsByMatchId(@PathVariable id: Int): MutableList<Draw> {
+    fun getDrawsByMatchId(@PathVariable id: Int): DrawList {
         val drawList = mutableListOf<Draw>()
         drawDao!!.queryForEq("match_id", id).forEach { drawList.add(it) }
-        return drawList
+        return DrawList(drawList)
     }
 }

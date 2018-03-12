@@ -1,6 +1,9 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.Match
+import htwdd.chessgame.server.model.MatchHashMap
+import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -25,16 +28,30 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match")
-    fun getMatchList(): HashMap<Int, Match> {
+    fun getMatchList(): MatchHashMap {
         val matchList =  HashMap<Int, Match>()
-        matchDao!!.queryForAll().forEach { matchList[it.id] = it }
-        return matchList
+        matchDao!!.queryForAll().forEach { match ->
+//            drawDao!!.queryForEq("match_id", match.id).forEach { draw ->
+//                match.history.add(draw)
+//            }
+            match.players.forEach{ playerDao!!.refresh(it.value) }
+            match.setValuesByMatchCode()
+            matchList[match.id] = match
+        }
+
+        return MatchHashMap(matchList)
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match/{id}")
     fun getMatchById(@PathVariable id: Int): Any {
-        return matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
+        val match = matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
+//        drawDao!!.queryForEq("match_id", match.id).forEach { draw ->
+//            match.history.add(draw)
+//        }
+        match.players.forEach{ playerDao!!.refresh(it.value) }
+        match.setValuesByMatchCode()
+        return match
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
@@ -57,7 +74,11 @@ class MatchController {
         val playerWhite = playerDao!!.queryForId(playerWhiteId) ?: return false
         val playerBlack = playerDao.queryForId(playerBlackId) ?: return false
 
-        if (matchDao!!.create(Match(playerWhite = playerWhite, playerBlack = playerBlack)) != 1) return false
+        val players = HashMap<PieceColor, Player>()
+        players[PieceColor.WHITE] = playerWhite
+        players[PieceColor.BLACK] = playerBlack
+
+        if (matchDao!!.create(Match(players = players)) != 1) return false
         return true
     }
 
@@ -68,10 +89,10 @@ class MatchController {
                     @RequestParam checkBlack: Boolean,
                     @RequestParam checkmate: Boolean,
                     @RequestParam matchCode: String): Boolean {
-        val match = matchDao!!.queryForId(id)
+        val match = matchDao!!.queryForId(id) ?: return false
 
-        match.checkWhite = checkWhite
-        match.checkBlack = checkBlack
+        match.check[PieceColor.WHITE] = checkWhite
+        match.check[PieceColor.BLACK] = checkBlack
         match.checkmate = checkmate
         match.matchCode = matchCode
 
