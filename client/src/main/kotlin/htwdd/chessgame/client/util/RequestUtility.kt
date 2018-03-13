@@ -18,37 +18,35 @@ class RequestUtility {
 
             if (callback != null) request.onload = callback
             request.open("POST", url)
-            var paramsAsJson = ""
-            params.forEach { (key, value) ->
-                if (paramsAsJson != "") paramsAsJson += "&"
-                paramsAsJson += "$key=$value"
-            }
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            request.send(paramsAsJson)
+            request.send(parseParams(params))
         }
 
-        fun put(url: String, callback: ((Event) -> dynamic)? = null) {
+        fun put(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
             val request = XMLHttpRequest()
 
             if (callback != null) request.onload = callback
             request.open("PUT", url)
-            request.send()
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            request.send(parseParams(params))
         }
 
-        fun patch(url: String, callback: ((Event) -> dynamic)? = null) {
+        fun patch(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
             val request = XMLHttpRequest()
 
             if (callback != null) request.onload = callback
             request.open("PATCH", url)
-            request.send()
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            request.send(parseParams(params))
         }
 
-        fun delete(url: String, callback: ((Event) -> dynamic)? = null) {
+        fun delete(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
             val request = XMLHttpRequest()
 
             if (callback != null) request.onload = callback
             request.open("DELETE", url)
-            request.send()
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            request.send(parseParams(params))
         }
 
         fun head(url: String, callback: ((Event) -> dynamic)? = null) {
@@ -65,6 +63,17 @@ class RequestUtility {
             if (callback != null) request.onload = callback
             request.open("OPTIONS", url)
             request.send()
+        }
+
+        private fun parseParams(params: Array<out Pair<String, Any>>): String {
+            var paramsAsJSONString = ""
+
+            params.forEach { (key, value) ->
+                if (paramsAsJSONString != "") paramsAsJSONString += "&"
+                paramsAsJSONString += "$key=$value"
+            }
+
+            return paramsAsJSONString
         }
     }
 }
