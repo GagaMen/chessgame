@@ -7,6 +7,8 @@ import com.j256.ormlite.table.DatabaseTable
 @DatabaseTable(tableName = "Match")
 data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
                  @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false) val players: HashMap<PieceColor, Player> = HashMap(),
+                 @DatabaseField(foreign = true) private val playerWhite: Player? = null,
+                 @DatabaseField(foreign = true) private val playerBlack: Player? = null,
                  private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
                  @DatabaseField private var currentColor: PieceColor = PieceColor.WHITE,
                  val history: MutableList<Draw> = mutableListOf(),

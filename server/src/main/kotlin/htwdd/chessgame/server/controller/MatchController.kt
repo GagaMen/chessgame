@@ -78,7 +78,7 @@ class MatchController {
         players[PieceColor.WHITE] = playerWhite
         players[PieceColor.BLACK] = playerBlack
 
-        if (matchDao!!.create(Match(players = players)) != 1) return false
+        if (matchDao!!.create(Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)) != 1) return false
         return true
     }
 

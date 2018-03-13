@@ -54,9 +54,10 @@ class PlayerController {
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping("player")
     fun addPlayer(@RequestParam name: String,
-                  @RequestParam password: String): Boolean {
-        if (playerDao!!.create(Player(name = name, password = password)) != 1) return false
-        return true
+                  @RequestParam password: String): Player? {
+        val player = Player(name = name, password = password)
+        if (playerDao!!.create(player) != 1) return null
+        return player
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])

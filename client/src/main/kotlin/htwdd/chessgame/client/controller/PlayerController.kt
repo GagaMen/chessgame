@@ -3,11 +3,15 @@ package htwdd.chessgame.client.controller
 import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
+import htwdd.chessgame.client.util.RequestUtility
+import htwdd.chessgame.client.util.RequestUtility.Companion.post
 import htwdd.chessgame.client.view.PlayerView
 import kotlinx.html.BUTTON
+import kotlinx.serialization.json.JSON
 import org.w3c.dom.HTMLFormElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.get
+import org.w3c.xhr.XMLHttpRequest
 
 class PlayerController(val client: Client) : Controller {
 
@@ -46,17 +50,16 @@ class PlayerController(val client: Client) : Controller {
                 val name = arg[0] as? HTMLInputElement ?: return
                 val password = arg[1] as? HTMLInputElement ?: return
 
-                if (name.type != "text" || password.type != "password") {
-                    // wrong type
-                    return
+                if (name.type != "text" || password.type != "password") return
+                if (name.value == "" || password.value == "") return
+
+                post("http://localhost:8080/player", Pair("name", name.value), Pair("password", password.value)) {
+                    if (it.target is XMLHttpRequest) {
+                        val player = JSON.parse<Player>((it.target as XMLHttpRequest).responseText)
+                        client.addPlayer(player)
+                    }
                 }
 
-                if (name.value == "" || password.value == "") {
-                    // empty value
-                    return
-                }
-
-                client.addPlayer(Player(name = name.value, password =  password.value))
                 name.value = ""
                 password.value = ""
             }
@@ -68,9 +71,7 @@ class PlayerController(val client: Client) : Controller {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                if (!client.players.containsKey(playerId)) {
-                    return
-                }
+                if (!client.players.containsKey(playerId)) return
 
                 playerView.update(client.players[playerId], "editPlayer")
             }
@@ -84,12 +85,14 @@ class PlayerController(val client: Client) : Controller {
                 val passwordInput = arg.getElementsByClassName("player--password")[0] as? HTMLInputElement ?: return
                 val newPassword = passwordInput.value
 
-                if (newPassword == "") {
-                    // empty value
-                    return
-                }
+                if (newPassword == "") return
 
-                client.updatePlayer(playerId, newPassword)
+                RequestUtility.patch("http://localhost:8080/player/$playerId", Pair("password", newPassword)) {
+                    if (it.target is XMLHttpRequest) {
+                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
+                        if (response) client.updatePlayer(playerId, newPassword)
+                    }
+                }
             }
         }
     }
@@ -98,7 +101,13 @@ class PlayerController(val client: Client) : Controller {
         when (arg) {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
-                client.removePlayer(playerId)
+
+                RequestUtility.delete("http://localhost:8080/player/$playerId") {
+                    if (it.target is XMLHttpRequest) {
+                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
+                        if (response) client.removePlayer(playerId)
+                    }
+                }
             }
         }
     }
