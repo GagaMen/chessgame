@@ -3,7 +3,8 @@ package htwdd.chessgame.client.controller
 import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
-import htwdd.chessgame.client.util.RequestUtility
+import htwdd.chessgame.client.util.RequestUtility.Companion.delete
+import htwdd.chessgame.client.util.RequestUtility.Companion.patch
 import htwdd.chessgame.client.util.RequestUtility.Companion.post
 import htwdd.chessgame.client.view.PlayerView
 import kotlinx.html.BUTTON
@@ -87,7 +88,7 @@ class PlayerController(val client: Client) : Controller {
 
                 if (newPassword == "") return
 
-                RequestUtility.patch("http://localhost:8080/player/$playerId", Pair("password", newPassword)) {
+                patch("http://localhost:8080/player/$playerId", Pair("password", newPassword)) {
                     if (it.target is XMLHttpRequest) {
                         val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
                         if (response) client.updatePlayer(playerId, newPassword)
@@ -102,7 +103,7 @@ class PlayerController(val client: Client) : Controller {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                RequestUtility.delete("http://localhost:8080/player/$playerId") {
+                delete("http://localhost:8080/player/$playerId") {
                     if (it.target is XMLHttpRequest) {
                         val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
                         if (response) client.removePlayer(playerId)
