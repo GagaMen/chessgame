@@ -13,12 +13,18 @@ class RequestUtility {
             request.send()
         }
 
-        fun post(url: String, callback: ((Event) -> dynamic)? = null) {
+        fun post(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
             val request = XMLHttpRequest()
 
             if (callback != null) request.onload = callback
             request.open("POST", url)
-            request.send()
+            var paramsAsJson = ""
+            params.forEach { (key, value) ->
+                if (paramsAsJson != "") paramsAsJson += "&"
+                paramsAsJson += "$key=$value"
+            }
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            request.send(paramsAsJson)
         }
 
         fun put(url: String, callback: ((Event) -> dynamic)? = null) {
