@@ -3,9 +3,7 @@ package htwdd.chessgame.client.model
 import htwdd.chessgame.client.util.Observable
 
 class Client(private var viewState: ViewState = ViewState.START,
-             private var matchCount: Int = 0,
              var matches: HashMap<Int, Match> = HashMap(),
-             private var playerCount: Int = 0,
              var players: HashMap<Int, Player> = HashMap()) : Observable() {
 
     init {
@@ -20,11 +18,9 @@ class Client(private var viewState: ViewState = ViewState.START,
     }
 
     fun addMatch(match: Match) {
-        if (matches.containsKey(matchCount)) return
+        if (matches.containsKey(match.id)) return
 
-        match.id = matchCount
-        matches[matchCount] = match
-        matchCount++
+        matches[match.id] = match
         setChanged()
         notifyObservers("updateMatchTable")
     }
@@ -38,11 +34,9 @@ class Client(private var viewState: ViewState = ViewState.START,
     }
 
     fun addPlayer(player: Player) {
-        if (players.containsKey(playerCount)) return
+        if (players.containsKey(player.id)) return
 
-        player.id = playerCount
-        players[playerCount] = player
-        playerCount++
+        players[player.id] = player
         setChanged()
         notifyObservers("updatePlayerTable")
     }

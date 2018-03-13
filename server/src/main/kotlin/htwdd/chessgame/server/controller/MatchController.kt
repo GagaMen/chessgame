@@ -31,9 +31,6 @@ class MatchController {
     fun getMatchList(): MatchHashMap {
         val matchList =  HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
-//            drawDao!!.queryForEq("match_id", match.id).forEach { draw ->
-//                match.history.add(draw)
-//            }
             match.players.forEach{ playerDao!!.refresh(it.value) }
             match.setValuesByMatchCode()
             matchList[match.id] = match
@@ -46,9 +43,6 @@ class MatchController {
     @GetMapping("match/{id}")
     fun getMatchById(@PathVariable id: Int): Any {
         val match = matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
-//        drawDao!!.queryForEq("match_id", match.id).forEach { draw ->
-//            match.history.add(draw)
-//        }
         match.players.forEach{ playerDao!!.refresh(it.value) }
         match.setValuesByMatchCode()
         return match
@@ -70,16 +64,18 @@ class MatchController {
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping("match")
     fun addMatch(@RequestParam playerWhiteId: Int,
-                 @RequestParam playerBlackId: Int): Boolean {
-        val playerWhite = playerDao!!.queryForId(playerWhiteId) ?: return false
-        val playerBlack = playerDao.queryForId(playerBlackId) ?: return false
+                 @RequestParam playerBlackId: Int): Match? {
+        val playerWhite = playerDao!!.queryForId(playerWhiteId) ?: return null
+        val playerBlack = playerDao.queryForId(playerBlackId) ?: return null
 
         val players = HashMap<PieceColor, Player>()
         players[PieceColor.WHITE] = playerWhite
         players[PieceColor.BLACK] = playerBlack
 
-        if (matchDao!!.create(Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)) != 1) return false
-        return true
+        val match = Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)
+
+        if (matchDao!!.create(match) != 1) return null
+        return match
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
