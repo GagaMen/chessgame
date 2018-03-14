@@ -58,12 +58,12 @@ class DrawController {
                 @RequestParam startColumn: Int,
                 @RequestParam endRow: Int,
                 @RequestParam endColumn: Int,
-                @RequestParam drawCode: String): Boolean {
-        val match = matchDao!!.queryForId(matchId) ?: return false
-        val startField = Field(startRow, startColumn)
-        if (fieldDao!!.create(startField) != 1) return false
-        val endField = Field(endRow, endColumn)
-        if (fieldDao.create(endField) != 1) return false
+                @RequestParam drawCode: String): Draw? {
+        val match = matchDao!!.queryForId(matchId) ?: return null
+        val startField = Field(row = startRow, column = startColumn)
+        if (fieldDao!!.create(startField) != 1) return null
+        val endField = Field(row = endRow, column = endColumn)
+        if (fieldDao.create(endField) != 1) return null
 
         val draw = Draw(color = PieceColor.valueOf(color),
                 pieceType = PieceType.valueOf(type),
@@ -72,7 +72,7 @@ class DrawController {
                 drawCode = drawCode,
                 match = match)
 
-        if (drawDao!!.create(draw) != 1) return false
-        return true
+        if (drawDao!!.create(draw) != 1) return null
+        return draw
     }
 }

@@ -65,6 +65,7 @@ class MatchController(val client: Client) : Controller {
                 post("http://localhost:8080/match", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
                     if (it.target is XMLHttpRequest) {
                         val match = JSON.parse<Match>((it.target as XMLHttpRequest).responseText)
+                        match.setPieceSetsByMatchCode()
                         client.addMatch(match)
                     }
                 }

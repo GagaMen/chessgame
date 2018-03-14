@@ -2,8 +2,11 @@ package htwdd.chessgame.client.util
 
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.util.RequestUtility.Companion.post
+import kotlinx.serialization.json.JSON
 import org.w3c.dom.*
 import org.w3c.dom.events.Event
+import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.dom.clear
@@ -44,28 +47,13 @@ class DraggableUtility {
             if (validDropFields.contains(Pair(row, col))) event.preventDefault()
         }
 
-        fun dragEnd(match: Match) {
+        fun dragEnd(controller: Controller, match: Match) {
             if (match.checkmate) return
 
             validDropFields.forEach {
                 document.getElementById("board--field-${it.first}-${it.second}")?.removeClass("highlighted")
             }
             validDropFields.clear()
-
-            if (CheckUtility.calcThreatedFields(match)) {
-                if (CheckUtility.checkmate(match)) {
-                    match.checkmate = true
-                    println("${match.currentColor} checkmate!")
-                } else {
-                    match.switchCheck(match.currentColor)
-                }
-            }
-
-            if (match.check[match.currentColor.getOpposite()]!!) {
-                match.switchCheck(match.currentColor.getOpposite())
-            }
-
-            match.history[match.history.lastIndex].setDrawCode()
         }
 
         fun drop(event: Event, controller: Controller, match: Match) {
@@ -107,18 +95,30 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val newDraw = Draw(color = pieceColor,
-                            pieceType = PieceType.valueOf(pieceType),
-                            start = Field(oldRow, oldCol),
-                            end = Field(newRow, newCol),
-                            match = match,
-                            throwPiece = throwEnPassant,
-                            throwEnPassant = throwEnPassant,
-                            kingsideCastling = kingsideCastling,
-                            queensideCastling = queensideCastling)
+                    val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
+                            Field(oldRow, oldCol),
+                            Field(newRow, newCol),
+                            match,
+                            throwEnPassant,
+                            throwEnPassant,
+                            kingsideCastling,
+                            queensideCastling) ?: return
 
-                    controller.actionPerformed("increaseHalfMovesAction", match)
-                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
+                    post("http://127.0.0.1:8080/draw",
+                            Pair("matchId", match.id),
+                            Pair("color", pieceColor),
+                            Pair("type", pieceType),
+                            Pair("startRow", oldRow),
+                            Pair("startColumn", oldCol),
+                            Pair("endRow", newRow),
+                            Pair("endColumn", newCol),
+                            Pair("drawCode", drawCode)) {
+                        if (it.target is XMLHttpRequest) {
+                            val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                            controller.actionPerformed("increaseHalfMovesAction", match)
+                            controller.actionPerformed("addDrawAction", Pair(match, draw))
+                        }
+                    }
                 }
                 is HTMLImageElement -> {
                     val image = document.getElementById(data) ?: return
@@ -140,15 +140,27 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val newDraw = Draw(color = pieceColor,
-                            pieceType = PieceType.valueOf(pieceType),
-                            start = Field(oldRow, oldCol),
-                            end = Field(newRow, newCol),
-                            match = match,
-                            throwPiece = true)
+                    val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
+                            Field(oldRow, oldCol),
+                            Field(newRow, newCol),
+                            match,
+                            true) ?: return
 
-                    controller.actionPerformed("resetHalfMovesAction", match)
-                    controller.actionPerformed("addDrawAction", Pair(match, newDraw))
+                    post("http://127.0.0.1:8080/draw",
+                            Pair("matchId", match.id),
+                            Pair("color", pieceColor),
+                            Pair("type", pieceType),
+                            Pair("startRow", oldRow),
+                            Pair("startColumn", oldCol),
+                            Pair("endRow", newRow),
+                            Pair("endColumn", newCol),
+                            Pair("drawCode", drawCode)) {
+                        if (it.target is XMLHttpRequest) {
+                            val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                            controller.actionPerformed("increaseHalfMovesAction", match)
+                            controller.actionPerformed("addDrawAction", Pair(match, draw))
+                        }
+                    }
                 }
             }
         }

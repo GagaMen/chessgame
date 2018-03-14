@@ -10,7 +10,7 @@ data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
                  @DatabaseField(foreign = true) private val playerWhite: Player? = null,
                  @DatabaseField(foreign = true) private val playerBlack: Player? = null,
                  private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
-                 @DatabaseField private var currentColor: PieceColor = PieceColor.WHITE,
+                 @DatabaseField var currentColor: PieceColor = PieceColor.WHITE,
                  val history: MutableList<Draw> = mutableListOf(),
                  var whiteCastlingKingSide: Boolean = true,
                  var whiteCastlingQueenSide: Boolean = true,
@@ -20,7 +20,7 @@ data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
                  var halfMoves: Int = 0,
                  @DatabaseField(dataType = DataType.SERIALIZABLE) var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
                  @DatabaseField var checkmate: Boolean = false,
-                 @DatabaseField var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+                 @DatabaseField var matchCode: String = "RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w KQkq - 0 1") {
 
     init {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE)
@@ -138,7 +138,7 @@ data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
                 val separation = str.split("")
                 val column = separation[1].toCharArray()[0].toInt() % 96
                 val row = separation[2].toInt()
-                Field(row, column)
+                Field(row = row, column = column)
             }
         }
     }

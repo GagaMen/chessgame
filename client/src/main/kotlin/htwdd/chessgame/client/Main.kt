@@ -30,6 +30,8 @@ private fun loadData(): Client {
             val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
             matchHashMap.matches.forEach { (matchId, match) ->
 
+                match.setPieceSetsByMatchCode()
+
                 get("http://127.0.0.1:8080/match/$matchId/draw") {
                     if (it.target is XMLHttpRequest) {
                         val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
