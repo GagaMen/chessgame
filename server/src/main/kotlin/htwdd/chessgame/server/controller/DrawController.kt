@@ -1,6 +1,9 @@
 package htwdd.chessgame.server.controller
 
-import htwdd.chessgame.server.model.*
+import htwdd.chessgame.server.model.Draw
+import htwdd.chessgame.server.model.Field
+import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.PieceType
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -42,8 +45,17 @@ class DrawController {
     fun deleteDrawById(@PathVariable id: Int): Boolean {
         val draw = drawDao!!.queryForId(id) ?: return false
 
-        // check if player is in use
+        // check if draw is in use
         if (matchDao!!.queryForId(draw.match?.id) != null) return false
+
+        fieldDao!!.delete(fieldDao.query(
+                fieldDao.queryBuilder()
+                        .where()
+                        .eq("id", draw.start?.id)
+                        .or()
+                        .eq("id", draw.end?.id)
+                        .prepare()
+        ))
 
         if (drawDao.delete(draw) != 1) return false
         return true

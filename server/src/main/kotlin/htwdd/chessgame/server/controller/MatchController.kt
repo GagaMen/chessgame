@@ -13,6 +13,7 @@ class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
     private val drawDao = DatabaseUtility.drawDao
+    private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("match", method = [RequestMethod.OPTIONS])
@@ -53,10 +54,25 @@ class MatchController {
     fun deleteMatchById(@PathVariable id: Int): Boolean {
         if (matchDao!!.deleteById(id) != 1) return false
 
-        // delete draw history of match
-        val deleteBuilder = drawDao!!.deleteBuilder()
-        deleteBuilder.where().eq("match_id", id)
-        deleteBuilder.delete()
+        val draws = drawDao!!.query(drawDao.queryBuilder()
+                .where()
+                .eq("match_id", id)
+                .prepare())
+
+        val fieldList = mutableListOf<Int>()
+        draws.forEach {
+            fieldList.add(it.start!!.id)
+            fieldList.add(it.end!!.id)
+        }
+
+        fieldDao!!.delete(fieldDao.query(
+                fieldDao.queryBuilder()
+                        .where()
+                        .`in`("id", fieldList)
+                        .prepare()
+        ))
+
+        drawDao.delete(draws)
 
         return true
     }
