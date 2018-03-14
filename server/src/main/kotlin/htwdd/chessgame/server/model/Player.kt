@@ -6,5 +6,5 @@ import java.io.Serializable
 
 @DatabaseTable(tableName = "Player")
 data class Player(@DatabaseField(generatedId = true) val id: Int = 0,
-                  @DatabaseField var name: String = "",
-                  @DatabaseField var password: String = ""): Serializable
+                  @DatabaseField(canBeNull = false) var name: String = "",
+                  @DatabaseField(canBeNull = false) var password: String = "") : Serializable
