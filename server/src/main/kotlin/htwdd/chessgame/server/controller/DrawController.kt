@@ -30,14 +30,19 @@ class DrawController {
     @GetMapping("draw")
     fun getDrawList(): MutableList<Draw> {
         val drawList: MutableList<Draw> = mutableListOf()
-        drawDao!!.queryForAll().forEach { drawList.add(it) }
+        drawDao!!.queryForAll().forEach {
+            it.setValuesByDrawCode()
+            drawList.add(it)
+        }
         return drawList
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw/{id}")
     fun getDrawById(@PathVariable id: Int): Any {
-        return drawDao!!.queryForId(id) ?: return "No draw with id \"$id\" registered!"
+        val draw = drawDao!!.queryForId(id) ?: return "No draw with id \"$id\" registered!"
+        draw.setValuesByDrawCode()
+        return draw
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])

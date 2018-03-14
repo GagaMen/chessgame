@@ -20,7 +20,10 @@ class GameController {
     @GetMapping("match/{id}/draw")
     fun getDrawsByMatchId(@PathVariable id: Int): DrawList {
         val drawList = mutableListOf<Draw>()
-        drawDao!!.queryForEq("match_id", id).forEach { drawList.add(it) }
+        drawDao!!.queryForEq("match_id", id).forEach {
+            it.setValuesByDrawCode()
+            drawList.add(it)
+        }
         return DrawList(drawList)
     }
 }
