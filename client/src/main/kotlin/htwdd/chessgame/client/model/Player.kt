@@ -1,7 +1,6 @@
 package htwdd.chessgame.client.model
 
 import htwdd.chessgame.client.util.Observable
-import kotlinx.serialization.SerialId
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -152,7 +152,7 @@ configure(release) {
     group = 'release'
 }
 
-task releaseClean (type: Delete) {
+task releaseClean(type: Delete) {
     delete "dist"
 }
 configure(releaseClean) {

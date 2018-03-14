@@ -30,9 +30,9 @@ class MatchController {
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match")
     fun getMatchList(): MatchHashMap {
-        val matchList =  HashMap<Int, Match>()
+        val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
-            match.players.forEach{ playerDao!!.refresh(it.value) }
+            match.players.forEach { playerDao!!.refresh(it.value) }
             match.setValuesByMatchCode()
             matchList[match.id] = match
         }
@@ -44,7 +44,7 @@ class MatchController {
     @GetMapping("match/{id}")
     fun getMatchById(@PathVariable id: Int): Any {
         val match = matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
-        match.players.forEach{ playerDao!!.refresh(it.value) }
+        match.players.forEach { playerDao!!.refresh(it.value) }
         match.setValuesByMatchCode()
         return match
     }

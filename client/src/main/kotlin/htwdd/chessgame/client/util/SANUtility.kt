@@ -23,7 +23,7 @@ class SANUtility {
                 if (pieceType != PieceType.PAWN) sb.append(pieceType.getDrawCode())
 
                 val activePieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return null
-                activePieces.forEach piece@ { piece ->
+                activePieces.forEach piece@{ piece ->
                     if (pieceType == PieceType.PAWN || piece.value.type != pieceType) return@piece
                     if (piece.value.position.row == end.row && piece.value.position.column == end.column) return@piece
 
@@ -39,7 +39,7 @@ class SANUtility {
                     val movementFields = HashSet<Pair<Int, Int>>()
                     movementUtility.getFilteredMovementFields(movementFields, piece.value.position.row, piece.value.position.column, match)
 
-                    movementFields.forEach field@ { field ->
+                    movementFields.forEach field@{ field ->
                         if (field.first != end.row || field.second != end.column) return@field
                         if (start.column == piece.value.position.column) sb.append("${start.row}")
                         else sb.append("${start.column.plus(96).toChar()}")

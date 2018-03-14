@@ -1,7 +1,7 @@
 package htwdd.chessgame.client.test
 
 import htwdd.chessgame.client.model.Client
-import kotlin.test.*
+import kotlin.test.BeforeTest
 
 class ClientTest() {
 
