@@ -3,7 +3,11 @@ package htwdd.chessgame.client
 import htwdd.chessgame.client.controller.MatchController
 import htwdd.chessgame.client.controller.PlayerController
 import htwdd.chessgame.client.controller.StartController
-import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.model.Client
+import htwdd.chessgame.client.model.DrawList
+import htwdd.chessgame.client.model.MatchHashMap
+import htwdd.chessgame.client.model.PlayerHashMap
+import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import kotlinx.serialization.json.JSON
 import org.w3c.xhr.XMLHttpRequest
@@ -30,7 +34,7 @@ private fun loadData(): Client {
             val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
             matchHashMap.matches.forEach { (matchId, match) ->
 
-                match.setPieceSetsByMatchCode()
+                FENUtility.setByCode(match)
 
                 get("http://127.0.0.1:8080/match/$matchId/draw") {
                     if (it.target is XMLHttpRequest) {

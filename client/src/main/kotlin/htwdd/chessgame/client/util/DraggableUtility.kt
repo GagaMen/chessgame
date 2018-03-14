@@ -47,7 +47,7 @@ class DraggableUtility {
             if (validDropFields.contains(Pair(row, col))) event.preventDefault()
         }
 
-        fun dragEnd(controller: Controller, match: Match) {
+        fun dragEnd(match: Match) {
             if (match.checkmate) return
 
             validDropFields.forEach {

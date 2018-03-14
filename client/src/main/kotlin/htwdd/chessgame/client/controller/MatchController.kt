@@ -4,6 +4,7 @@ import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.Match
 import htwdd.chessgame.client.model.Player
 import htwdd.chessgame.client.model.ViewState
+import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.delete
 import htwdd.chessgame.client.util.RequestUtility.Companion.post
 import htwdd.chessgame.client.view.MatchView
@@ -65,7 +66,7 @@ class MatchController(val client: Client) : Controller {
                 post("http://localhost:8080/match", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
                     if (it.target is XMLHttpRequest) {
                         val match = JSON.parse<Match>((it.target as XMLHttpRequest).responseText)
-                        match.setPieceSetsByMatchCode()
+                        FENUtility.setByCode(match)
                         client.addMatch(match)
                     }
                 }

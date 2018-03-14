@@ -1,6 +1,7 @@
 package htwdd.chessgame.client.model
 
 import htwdd.chessgame.client.util.CheckUtility
+import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.Observable
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
@@ -31,7 +32,7 @@ data class Match(var id: Int = 0,
         history.add(draw)
         updatePieceSet(draw)
         switchColor()
-        updateMatchCode()
+        FENUtility.calc(this)
         updateCheck()
         setChanged()
         notifyObservers("updateGameProperties")
@@ -75,143 +76,6 @@ data class Match(var id: Int = 0,
             opposingPieceSet.activePieces.remove(enPassantPosition)
             enPassantField = null
         }
-    }
-
-    private fun updateMatchCode() {
-        val sb = StringBuilder()
-        val whitePieceSet = pieceSets[PieceColor.WHITE] ?: return
-        val blackPieceSet = pieceSets[PieceColor.BLACK] ?: return
-
-        // piece position
-        for (i in 1..8) {
-            var emptyCol = 0
-            for (j in 1..8) {
-                var pieceType: PieceType? = null
-                var pieceColor: PieceColor? = null
-
-                when {
-                    whitePieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                        pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: return
-                        pieceColor = PieceColor.WHITE
-                    }
-                    blackPieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                        pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: return
-                        pieceColor = PieceColor.BLACK
-                    }
-                    else -> emptyCol++
-                }
-
-                if (pieceType == null || pieceColor == null) continue
-
-                if (emptyCol > 0) {
-                    sb.append(emptyCol)
-                    emptyCol = 0
-                }
-                sb.append(pieceType.getMatchCode(pieceColor))
-            }
-            if (emptyCol > 0) sb.append(emptyCol)
-            if (i != 8) sb.append("/")
-        }
-
-        // train right
-        sb.append(" ${currentColor.getCode()}")
-
-        // castling right
-        if (!whiteCastlingKingSide && !whiteCastlingQueenSide && !blackCastlingKingSide && !blackCastlingQueenSide) {
-            sb.append(" -")
-        } else {
-            sb.append(" ")
-            if (whiteCastlingKingSide) sb.append("K")
-            if (whiteCastlingQueenSide) sb.append("Q")
-            if (blackCastlingKingSide) sb.append("k")
-            if (blackCastlingQueenSide) sb.append("q")
-        }
-
-        // en passant
-        if (enPassantField != null) {
-            sb.append(" ${(enPassantField?.column?.plus(96))?.toChar()}${enPassantField?.row}")
-        } else {
-            sb.append(" -")
-        }
-
-        // halfMoves
-        sb.append(" $halfMoves")
-
-        // next train number
-        sb.append(" ${history.size + 1}")
-
-        matchCode = sb.toString()
-    }
-
-    fun setPieceSetsByMatchCode() {
-        val separation = matchCode.split(" ")[0].split("/")
-
-        for (i in separation.indices) {
-            var column = 1
-
-            separation[i].split("").forEach { char ->
-                when (char) {
-                    "" -> return@forEach
-                    "P" -> {
-                        setPiece(PieceColor.WHITE, PieceType.PAWN, Field(i + 1, column))
-                        column++
-                    }
-                    "K" -> {
-                        setPiece(PieceColor.WHITE, PieceType.KING, Field(i + 1, column))
-                        column++
-                    }
-                    "Q" -> {
-                        setPiece(PieceColor.WHITE, PieceType.QUEEN, Field(i + 1, column))
-                        column++
-                    }
-                    "B" -> {
-                        setPiece(PieceColor.WHITE, PieceType.BISHOP, Field(i + 1, column))
-                        column++
-                    }
-                    "N" -> {
-                        setPiece(PieceColor.WHITE, PieceType.KNIGHT, Field(i + 1, column))
-                        column++
-                    }
-                    "R" -> {
-                        setPiece(PieceColor.WHITE, PieceType.ROOK, Field(i + 1, column))
-                        column++
-                    }
-                    "p" -> {
-                        setPiece(PieceColor.BLACK, PieceType.PAWN, Field(i + 1, column))
-                        column++
-                    }
-                    "k" -> {
-                        setPiece(PieceColor.BLACK, PieceType.KING, Field(i + 1, column))
-                        column++
-                    }
-                    "q" -> {
-                        setPiece(PieceColor.BLACK, PieceType.QUEEN, Field(i + 1, column))
-                        column++
-                    }
-                    "b" -> {
-                        setPiece(PieceColor.BLACK, PieceType.BISHOP, Field(i + 1, column))
-                        column++
-                    }
-                    "n" -> {
-                        setPiece(PieceColor.BLACK, PieceType.KNIGHT, Field(i + 1, column))
-                        column++
-                    }
-                    "r" -> {
-                        setPiece(PieceColor.BLACK, PieceType.ROOK, Field(i + 1, column))
-                        column++
-                    }
-                    else -> {
-                        val number = char.toIntOrNull() ?: return@forEach
-                        column += number
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setPiece(pieceColor: PieceColor, pieceType: PieceType, field: Field) {
-        val pieces = pieceSets[pieceColor]?.activePieces
-        pieces!![field.asPair()] = Piece(pieceType, field)
     }
 
     private fun updateCheck() {
