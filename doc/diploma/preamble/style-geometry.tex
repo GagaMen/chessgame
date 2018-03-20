@@ -39,9 +39,9 @@
    %vdivide=,     % { top margin , height , bottom margin }
    %divide=,      % ={A,B,C} %  is interpreted as hdivide={A,B,C} and vdivide={A,B,C}.
 %%% Margin
-   %left=,        % left margin (for oneside) or inner margin (for twoside) of total body
+   left=4cm,        % left margin (for oneside) or inner margin (for twoside) of total body
                   % alias: lmargin, inner
-   %right=,       % right or outer margin of total body
+   right=2cm,       % right or outer margin of total body
                   % alias: rmargin outer
    % set \oddsidemargin to 3.6pt 
    %  can not be set directly, must be calculated:
@@ -49,10 +49,10 @@
    inner=\dimexpr1in-10mm+3.6pt\relax,
    % set top (sets multiple values, for example \topmargin)
    %  such that it matches typearea with DIV 12 approx.
-   top = 120pt, 
-   %top=,         % top margin of the page.
+   %top = 120pt, 
+   top=3cm,         % top margin of the page.
                   % Alias : tmargin
-   %bottom=,      % bottom margin of the page
+   bottom=3cm,      % bottom margin of the page
                   % Alias : bmargin
    %hmargin=,     % left and right margin. hmargin={ left margin , right margin }
    %vmargin=,     % top and bottom margin. vmargin={ top margin , bottom margin }
@@ -69,8 +69,8 @@
    bindingoffset=10mm,  % removes a specified space for binding
 %%% Dimensionen
    headheight=28.5pt,  % Alias:  head
-   %headsep=,     % separation between header and text
-   %footskip=,    % distance separation between baseline of last line of text and baseline of footer
+   headsep=1.25cm,     % separation between header and text
+   footskip=1.25cm,    % distance separation between baseline of last line of text and baseline of footer
                   % Alias: foot
    %nohead,       % eliminates spaces for the head of the page
                   % equivalent to both \headheight=0pt and \headsep=0pt.
