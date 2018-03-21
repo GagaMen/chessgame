@@ -148,10 +148,6 @@
 \include{content/0-title}
 \cleardoublepage
 
-% -- declaration --
-% (only in bachelor/master thesis)
-\input{content/Z-Declaration.tex}
-
 \frontmatter
 \IfPackageLoaded{scrpage2}{\pagestyle{scrheadings}}
 
@@ -203,6 +199,12 @@
 % _Remove_ if no listing with caption is defined
 \IfDefined{lstlistoflistings}{\cleardoublepage\lstlistoflistings}
 
+\input{content/Z-Thanks.tex}
+
+% -- declaration --
+% (only in bachelor/master thesis)
+\input{content/Z-Declaration.tex}
+
 % --- Appendix --- --- --- --- --- --- ---
 \cleardoublepage\IfDefined{phantomsection}{\phantomsection}
 \appendix
@@ -218,8 +220,6 @@
   \cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:index}%
   \printindex%
 }% end of index
-
-\input{content/Z-Thanks.tex}
 
 %%% document END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
