@@ -132,8 +132,12 @@
 
 %% document content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \includeonly{
- content/0-title,
- content/0-Introduction,
+	content/0-Title,
+	content/1-Introduction,
+	content/2-Basics,
+	content/3-Konception,
+	content/4-Implementation,
+	content/5-Conclusion
 } % end includeonly
 
 %%% document start %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -145,7 +149,7 @@
 \pagestyle{empty}
 
 % -- title page --
-\include{content/0-title}
+\include{content/0-Title}
 \cleardoublepage
 
 \frontmatter
@@ -175,7 +179,11 @@
 % (files loaded with include must not have the prefix .tex)
 %
 
-\include{content/0-Introduction}
+\include{content/1-Introduction}
+\include{content/2-Basics}
+\include{content/3-Konception}
+\include{content/4-Implementation}
+\include{content/5-Conclusion}
 
 %%% -- end of main content
 
