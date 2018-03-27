@@ -2,4 +2,26 @@
 % !TeX spellcheck = de_DE
 % !TeX root = ../Diploma.tex
 
-\chapter{Konzeption}
+\chapter{Konzeption des Servers}
+In diesem Kapitel wird das Konzept des Servers als RESTful Webservice erarbeitet. Im ersten Abschnitt werden dabei alle Anforderungen ermittelt, die der Webservice mitbringen muss.
+Dabei wird auf die verwendeten Technologien bzw. genutzte Bibliotheken eingegangen. Zusätzlich werden alle einzelnen Einstiegspunkte des Webservices definiert und erläutert. 
+
+\section{Anforderungen}
+Im Mittelpunkt des RESTful Webservices stehen seine Resourcen. Ein Schachspiel kann dabei in die drei Ressourcen Spieler, Partie und Zug eingeteilt werden. Diese werden im nachfolgenden näher beschrieben. Dabei ist zu beachten das der Webservice eine SQLite Datenbank verwenden soll, welche sich um die Datenspeicherung und auch um die Generierung eindeutiger Id's der einzelnen Ressourcen kümmern soll. Somit ist die Addressierbarkeit die laut \cite[7]{kretzschmar} \todo[inline]{ggf. auf eigenes Kapitel verweisen} gefordert ist gewährleistet.
+
+\subsection{Ressource: Player (Spieler)}
+Der Player soll zusätzlich zur Id noch die Eigenschaften Name und Passwort besitzen. Desweiteren soll die Möglichkeit bestehen den Player zu überschreiben und das Passwort zu ändern.
+\begin{figure} [H]
+\centering
+\begin{tikzpicture}[auto,node distance=1.5cm]
+  \node[entity] (player) {Player}
+    [grow=up,sibling distance=3cm]
+    child {node[attribute] {password}}
+    child {node[attribute] {name}}
+    child {node[attribute] {\underline{id}}};
+\end{tikzpicture}	
+\end{figure}
+
+\subsection{Ressource: Match (Partie)}
+
+\subsection{Ressource: Draw (Zug)}
