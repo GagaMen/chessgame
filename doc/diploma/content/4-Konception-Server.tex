@@ -10,7 +10,7 @@ Dabei wird auf die verwendeten Technologien bzw. genutzte Bibliotheken eingegang
 Im Mittelpunkt des RESTful Webservices stehen seine Resourcen. Ein Schachspiel kann dabei in die drei Ressourcen Spieler, Partie und Zug eingeteilt werden. Diese werden im nachfolgenden näher beschrieben. Dabei ist zu beachten das der Webservice eine SQLite Datenbank verwenden soll, welche sich um die Datenspeicherung und auch um die Generierung eindeutiger Id's der einzelnen Ressourcen kümmern soll. Somit ist die Addressierbarkeit die laut \cite[7]{kretzschmar} \todo[inline]{ggf. auf eigenes Kapitel verweisen} gefordert ist gewährleistet.
 
 \subsection{Ressource: Player (Spieler)}
-Der Player soll zusätzlich zur Id noch die Eigenschaften Name und Passwort besitzen. Desweiteren soll die Möglichkeit bestehen den Player zu überschreiben und das Passwort zu ändern.
+Der Player soll zusätzlich zur Id noch die Eigenschaften Name und Passwort besitzen. Des weiteren soll die Möglichkeit bestehen den Player zu überschreiben und das Passwort zu ändern.
 \begin{figure} [H]
 \centering
 \begin{tikzpicture}[auto,node distance=1.5cm]
@@ -25,3 +25,16 @@ Der Player soll zusätzlich zur Id noch die Eigenschaften Name und Passwort besi
 \subsection{Ressource: Match (Partie)}
 
 \subsection{Ressource: Draw (Zug)}
+
+
+\section{Verwendete Bibliotheken}
+\subsection{Spring}
+\subsection{SQLite}
+\subsection{ORMLite}
+
+\section{Ressourcenzugriffe mithilfe von Spring Controllern}
+\subsection{Player Controller}
+\subsection{Match Controller}
+\subsection{Draw Controller}
+\subsection{Game Controller}
+\subsection{Error Controller}
