@@ -3,29 +3,25 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Konzeption des Servers}
-In diesem Kapitel wird das Konzept des Servers als RESTful Webservice erarbeitet. Im ersten Abschnitt werden dabei alle Anforderungen ermittelt, die der Webservice mitbringen muss.
-Dabei wird auf die verwendeten Technologien bzw. genutzte Bibliotheken eingegangen. Zusätzlich werden alle einzelnen Einstiegspunkte des Webservices definiert und erläutert. 
+Inhalt dieses Kapitels soll die Planung sein, welche für die Umsetzung des RESTful Schachservers benötigt wird. Dabei dient der erste Abschnitt für eine Erläuterung der Anforderungen, welche der Server mitbringen bzw. erfüllen soll. Im zweiten Abschnitt werden die verwendeten Bibliotheken in den Punkten Zweck, Einrichtung und Verwendung näher erläutert. Der letzte Abschnitt dieses Kapitels befasst sich anschließend damit, wie der Zugriff auf einzelne Ressourcen des REST-Server erfolgen soll. Dabei werden alle möglichen Request-Methoden für die jeweiligen Ressourcen näher beleuchtet.
 
-\section{Anforderungen}
-Im Mittelpunkt des RESTful Webservices stehen seine Resourcen. Ein Schachspiel kann dabei in die drei Ressourcen Spieler, Partie und Zug eingeteilt werden. Diese werden im nachfolgenden näher beschrieben. Dabei ist zu beachten das der Webservice eine SQLite Datenbank verwenden soll, welche sich um die Datenspeicherung und auch um die Generierung eindeutiger Id's der einzelnen Ressourcen kümmern soll. Somit ist die Addressierbarkeit die laut \cite[7]{kretzschmar} \todo[inline]{ggf. auf eigenes Kapitel verweisen} gefordert ist gewährleistet.
+\section{Anforderungen}\label{sec:anforderungen}
+Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Bereitstellung aller benötigten Ressourcen sein. Dabei sollen Elemente erstellt, ggf. bearbeitet und gelöscht werden können. Zusätzlich soll die Möglichkeit bestehen, einzelne oder alle gespeicherten Elemente einer Ressource abzufragen. Des weiteren sollen alle Ressourcenelemente in einer SQLite Datenbank gespeichert werden, welche für jedes Element eindeutige ID's generiert.\\
+\\
+Um ein Schachspiel abzubilden bedarf es dabei der Ressourcen Player (Spieler), Match (Partie) und Draw (Zug), welche in den nachfolgenden \hyperref[sec:resplayer, sec:resdraw]{Unterabschnitten~\ref{sec:resplayer} bis \ref{sec:resdraw}} näher betrachtet werden.\\
+\\
+Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei Sie den Server als Grundlage gestellt bekommen sollen.
 
-\subsection{Ressource: Player (Spieler)}
-Der Player soll zusätzlich zur Id noch die Eigenschaften Name und Passwort besitzen. Des weiteren soll die Möglichkeit bestehen den Player zu überschreiben und das Passwort zu ändern.
-\begin{figure} [H]
-\centering
-\begin{tikzpicture}[auto,node distance=1.5cm]
-  \node[entity] (player) {Player}
-    [grow=up,sibling distance=3cm]
-    child {node[attribute] {password}}
-    child {node[attribute] {name}}
-    child {node[attribute] {\underline{id}}};
-\end{tikzpicture}	
-\end{figure}
+\subsection{Ressource: Player (Spieler)}\label{sec:resplayer}
+Neben der ID die wie schon in Abschnitt \ref{sec:anforderungen} erwähnt durch die SQLite Datenbank generiert werden soll, besitzt der Player noch die Information über den Name und das Passwort des Players.\\
+\\
+Eine nachträgliche Änderung des Namens soll dabei nicht gestattet sein. Das Passwort hingegen soll zu jeder Zeit aktualisierbar sein.
 
-\subsection{Ressource: Match (Partie)}
+\subsection{Ressource: Match (Partie)}\label{sec:resmatch}
+Auch bei der Ressource Match wird die ID durch SQLite generiert. Des weiteren besitzt ein Match Informationen über die beiden Spieler(Weiß/Schwarz) und deren Figurenstellung. Ein Match weiß außerdem welche Farbe am Zug ist, ob einem Spieler eine Rochade zur Verfügung steht, ob ein Feld existiert für ein Schlag en passant und wie viele Halbzüge getätigt wurde seit dem zuletzt ein Bauer gezogen oder eine Figur geschlagen wurde. Zusätzlich kann über ein Match ermittelt werden ob ein Spieler im Schach steht oder das Spiel schon bis zum Schachmatt gespielt wurde. Zuletzt hält das Match noch den aktuellen Stand in der \gls{FEN}.
 
-\subsection{Ressource: Draw (Zug)}
-
+\subsection{Ressource: Draw (Zug)}\label{sec:resdraw}
+Die Ressource Draw speichert zusätzlich zur ID die Farbe des Spielers, die Art der Spielfigur, Start- und Endfeld, ob eine Figur geschlagen wurde und wenn ja ob durch en passant und ob seitens der Dame oder des König rochiert wurde. Zusätzlich hält der Draw seine Daten in der \gls{SAN}.
 
 \section{Verwendete Bibliotheken}
 \subsection{Spring}
