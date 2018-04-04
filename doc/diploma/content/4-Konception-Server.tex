@@ -3,14 +3,14 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Konzeption des Servers}
-Inhalt dieses Kapitels soll die Planung sein, welche für die Umsetzung des RESTful Schachservers benötigt wird. Dabei dient der erste Abschnitt für eine Erläuterung der Anforderungen, welche der Server mitbringen bzw. erfüllen soll. Im zweiten Abschnitt werden die verwendeten Bibliotheken in den Punkten Zweck, Einrichtung und Verwendung näher erläutert. Der letzte Abschnitt dieses Kapitels befasst sich anschließend damit, wie der Zugriff auf einzelne Ressourcen des REST-Server erfolgen soll. Dabei werden alle möglichen Request-Methoden für die jeweiligen Ressourcen näher beleuchtet.
+Inhalt dieses Kapitels soll die Planung sein, welche für die Umsetzung des RESTful Schachservers benötigt wird. Dabei dient der erste Abschnitt für eine Erläuterung der Anforderungen, welche der Server mitbringen bzw. erfüllen soll. Im zweiten Abschnitt werden die verwendeten Bibliotheken bzw. Frameworks in den Punkten Zweck, Einrichtung und Verwendung näher erläutert. Der letzte Abschnitt dieses Kapitels befasst sich anschließend damit, wie der Zugriff auf einzelne Ressourcen des REST-Server erfolgen soll. Dabei werden alle möglichen Request-Methoden für die jeweiligen Ressourcen näher beleuchtet.
 
 \section{Anforderungen}\label{sec:anforderungen}
-Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Bereitstellung aller benötigten Ressourcen sein. Dabei sollen Elemente erstellt, ggf. bearbeitet und gelöscht werden können. Zusätzlich soll die Möglichkeit bestehen, einzelne oder alle gespeicherten Elemente einer Ressource abzufragen. Des weiteren sollen alle Ressourcenelemente in einer SQLite Datenbank gespeichert werden, welche für jedes Element eindeutige ID's generiert.\\
+Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Bereitstellung aller benötigten Ressourcen sein. Dabei sollen Elemente erstellt, ggf. bearbeitet und gelöscht werden können. Zusätzlich soll die Möglichkeit bestehen, einzelne oder alle gespeicherten Elemente einer Ressource abzufragen. Des weiteren sollen alle Ressourcenelemente in einer SQLite Datenbank gespeichert werden, welche für jedes Element eine eindeutige ID generiert.\\
 \\
 Um ein Schachspiel abzubilden bedarf es dabei der Ressourcen Player (Spieler), Match (Partie) und Draw (Zug), welche in den nachfolgenden \hyperref[sec:resplayer, sec:resdraw]{Unterabschnitten~\ref{sec:resplayer} bis \ref{sec:resdraw}} näher betrachtet werden.\\
 \\
-Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei Sie den Server als Grundlage gestellt bekommen sollen.
+Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei der Server als Grundlage dienen soll.
 
 \subsection{Ressource: Player (Spieler)}\label{sec:resplayer}
 Neben der ID die wie schon in Abschnitt \ref{sec:anforderungen} erwähnt durch die SQLite Datenbank generiert werden soll, besitzt der Player noch die Information über den Name und das Passwort des Players.\\
@@ -23,10 +23,55 @@ Auch bei der Ressource Match wird die ID durch SQLite generiert. Des weiteren be
 \subsection{Ressource: Draw (Zug)}\label{sec:resdraw}
 Die Ressource Draw speichert zusätzlich zur ID die Farbe des Spielers, die Art der Spielfigur, Start- und Endfeld, ob eine Figur geschlagen wurde und wenn ja ob durch en passant und ob seitens der Dame oder des König rochiert wurde. Zusätzlich hält der Draw seine Daten in der \gls{SAN}.
 
-\section{Verwendete Bibliotheken}
-\subsection{Spring}
-\subsection{SQLite}
-\subsection{ORMLite}
+
+\section{Verwendete Bibliotheken/Frameworks}
+Die verwendeten Bibliotheken sollen die Umsetzung des Projektes vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibormlite]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibormlite}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
+
+\subsection{Spring}\label{sec:bibspring}
+Spring wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich das leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Framework nutzen zu können.\footcite{proSpring5}\\
+\\
+Um Spring in einem Projekt einzubinden, müssen folgende Zeile, zusätzlich zu denen welche Kotlin benötigt, in der Build-Datei \enquote{build.gradle} eingefügt werden:
+\begin{lstlisting}[caption={Einbindung des Spring Framework mithilfe von Gradle}]
+buildscript {
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-allopen:1.2.30"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE"
+	}
+}
+apply plugin: "kotlin-spring"
+apply plugin: "org.springframework.boot"
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-web"
+}
+\end{lstlisting}
+Zu beachten ist dabei das Gradle nur eine Lösung für die Einbindung ist. Da aber für die Umsetzung ebenfalls Gradle verwendet wird, werden alle anderen Lösungen an dieser Stelle vernachlässigt.\\
+\\ 
+Für die Erstellung eines \gls{REST} \gls{API} muss zunächst ein Controller für eine Ressource angelegt werden, dabei ist es sinnvoll für jede einen eigenen Controller zu definieren. Innerhalb werden anschließend alle Einstiegspunkte erzeugt. Als Beispiel soll ein klassisches \textit{Hello World} dienen siehe \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}}. Dafür wird eine Klasse \textit{GreetingController} mit einer Funktion \textit{getGreeting} definiert. Als Parameter bekommt diese Funktion einen Namen übergeben, welcher standardmäßig den String \textit{World} hält. An dieser Stelle kommt das Spring Framework ins Spiel. Dieses stellt eine Reihe von Annotation bereit, wobei \textit{@RestController} einen Controller für das \gls{API}, \textit{@GetMapping} ein Einstiegspunkt (Request Methode: GET) und \textit{@RequestParam} einen Parameter für diese Funktion definiert. 
+\begin{lstlisting}[caption={Beispiel: Spring Controller}]
+import org.springframework.web.bind.annotation.*
+
+@RestController
+class GreetingController {
+	@GetMapping("/greeting")
+	fun getGreeting(@RequestParam name: String = "World"): String {
+		return "Hello $name!"
+	}
+}
+\end{lstlisting}\label{lst:springcontroller}
+Abschließend muss nur noch der Startpunkt für die Applikation definiert werden. Dafür wird wieder mithilfe einer Annotation ein Klasse erzeugt, welche aber keinerlei Informationen benötigt. Anschließend muss diese in der Main-Funktion gerufen werden siehe \hyperref[]{}.
+\begin{lstlisting}[caption={Beispiel: Spring Application Class}]
+@SpringBootApplication
+class Application
+
+fun main(args: Array<String>) {
+	SpringApplication.run(Application::class.java, *args)
+}
+\end{lstlisting}\label{lst:springmain}
+Für eine detaillierte Beschreibung dieses Beispiels stehen auf den Internetseiten \cite{springTutorialKotlin} und \cite{springTutorial} weitere Informationen bereit.
+
+\subsection{SQLite}\label{sec:bibsqlite}
+
+\subsection{ORMLite}\label{sec:bibormlite}
 
 \section{Ressourcenzugriffe mithilfe von Spring Controllern}
 \subsection{Player Controller}
