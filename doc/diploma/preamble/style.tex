@@ -506,13 +506,13 @@
 \newcommand\SectionFontStyle{\rmfamily}
 
 \IfDefined{chapter}{%
-   \setkomafont{chapter}{\Large\SectionFontStyle}    % Chapter
+   \setkomafont{chapter}{\Large\bfseries\SectionFontStyle}    % Chapter
 }
 
 \setkomafont{sectioning}{\SectionFontStyle}
-%\setkomafont{section}{\usekomafont{sectioning}}
-%\setkomafont{subsection}{\usekomafont{sectioning}}
-%\setkomafont{subsubsection}{\usekomafont{sectioning}}
+\setkomafont{section}{\large\bfseries\usekomafont{sectioning}}
+\setkomafont{subsection}{\normalsize\bfseries\usekomafont{sectioning}}
+\setkomafont{subsubsection}{\normalsize\itshape\usekomafont{sectioning}}
 \setkomafont{paragraph}{\rmfamily\itshape} 
 \setkomafont{subparagraph}{\rmfamily}
 
