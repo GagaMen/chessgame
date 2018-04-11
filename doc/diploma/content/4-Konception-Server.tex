@@ -146,8 +146,23 @@ connectionSource.close();
 \footnotetext{verändert nach \cite{ormlite}}
 
 \section{Ressourcenzugriffe mithilfe von Spring Controllern}
-\subsection{Player Controller}
-\subsection{Match Controller}
-\subsection{Draw Controller}
-\subsection{Game Controller}
-\subsection{Error Controller}
+Die einzelnen Zugriffe auf die Ressourcen werden in den \hyperref[sec:playerController, sec:errorcontroller]{Kapiteln~\ref{sec:playerController} bis \ref{sec:errorController}} nach ihrer Art bzw. deren Aufgaben in einzelne Controller unterteilt, um eine gute Übersicht zu wahren. Für alle Einstiegspunkte der \gls{REST}-\gls{API} soll die Request-Methode \enquote{OPTIONS} bereitstehen. Über diesen Request kann ermittelt werden welche Request-Methoden für den jeweiligen Einstiegspunkt zur Verfügung stehen. Alle Anfragen geben dabei ihr Feedback in der \gls{JSON} zurück. \todo[inline]{ggf. noch XML erwähnen bzw. wenn es nicht mit angeboten wird erwähnen das es vernachlässigt wird.}
+
+\subsection{Player Controller}\label{sec:playerController}
+Der Player Controller soll zwei Einstiegspunkt an den glspl{URI} \enquote{/player/} und \enquote{/player/{id}}. Der Parameter \textit{{id}} dient dabei als Platzhalter für eine ID eines Players, welche wiederum eine Zahl darstellt.\\
+\\
+Am ersten Einstiegspunkt soll eine Liste aller Spieler über einen GET-Request bereitgestellt werden können. Des weiteren soll an diesem die Möglichkeit bestehen einen neuen Player mithilfe eines POST-Requests zu erzeugen. Dabei muss als Parameter der Name und das Passwort des Players mitgegeben werden. Die ID wird dabei von der SQLite-Datenbank automatisch mittels \textit{Autoincrement} erzeugt. Bei erfolgreicher Erstellung des Players wird dieser als Objekt zurückgegeben, ansonsten \textit{NULL}.\\
+\\
+Am zweiten Einstiegspunkt soll ein einzelner existierender Player über einen GET-Request bereitgestellt, über einen DELETE-Request gelöscht und über einen PATCH-Request soll das Passwort aktualisiert werden können. Der GET- und DELETE-Request beziehen sich dabei auf einen Player anhand der ID innerhalb des \gls{URI} und benötigen keine weiteren Parameter. Um das Passwort des Players zu aktualisieren muss dieses natürlich als Parameter mitgegeben werden, aber auch bei diesem Request wird anhand der ID der Player identifiziert.
+
+\subsection{Match Controller}\label{sec:matchController}
+
+
+\subsection{Draw Controller}\label{sec:drawController}
+
+
+\subsection{Game Controller}\label{sec:gameController}
+Der Game Controller soll dazu dienen Match bezogene Daten zu ermitteln. Dabei soll mittels GET-Request ein Liste aller Draws die ein Match besitzt, über den \gls{URI} \enquote{/match/{id}/draw}, bereitgestellt werden. Der Parameter \textit{{id}} dient dabei wieder als Platzhalter für die ID des Matches von welchem alle Draws ermittelt werden sollen.
+
+\subsection{Error Controller}\label{sec:errorController}
+Mithilfe des Error Controllers soll gewährleistet werden, dass alle nicht in der \gls{REST}-\gls{API} definierten Einstiegspunkte, bzw. nicht definierte Request-Methoden an den Einstiegspunkten abgefangen werden. Tritt so ein Fall auf soll \enquote{Wrong Request} vom Server zurückgegeben werden. Somit wird verhindert das ein Nutzer des \gls{API} einen Serverfehler, mit dem HTTP-Statuscode \textit{500}\footnote{siehe \cite[A.2.5]{kretzschmar}}.
