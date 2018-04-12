@@ -146,6 +146,7 @@ connectionSource.close();
 \footnotetext{verändert nach \cite{ormlite}}
 
 \section{Ressourcenzugriffe mithilfe von Spring Controllern}
+\todo{ggf. theoretischer formulieren und erst spezifisch im Implemtierungsteil}
 Die einzelnen Zugriffe auf die Ressourcen werden in den \hyperref[sec:playerController, sec:errorcontroller]{Kapiteln~\ref{sec:playerController} bis \ref{sec:errorController}} nach ihrer Art bzw. deren Aufgaben in einzelne Controller unterteilt, um eine gute Übersicht zu wahren. Für alle Einstiegspunkte der \gls{REST}-\gls{API} soll die Request-Methode \enquote{OPTIONS} bereitstehen. Über diesen Request kann ermittelt werden welche Request-Methoden für den jeweiligen Einstiegspunkt zur Verfügung stehen. Alle Anfragen geben dabei ihr Feedback in der \gls{JSON} zurück. \todo[inline]{ggf. noch XML erwähnen bzw. wenn es nicht mit angeboten wird erwähnen das es vernachlässigt wird.}
 
 \subsection{Player Controller}\label{sec:playerController}

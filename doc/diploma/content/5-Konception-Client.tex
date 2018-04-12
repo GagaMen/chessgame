@@ -3,3 +3,16 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Konzeption des Clients}
+In diesem Kapitel soll die Konzeption für den Schachclient näher erläutert werden, welches als Grundbaustein für die Implementierung dienen soll. 
+
+\section{Anforderungen}
+Als grundlegende Anforderung an den Client ist die Verwaltung von Playern und Matches zu sehen. Dabei soll über die Startseite eine Möglichkeit bestehen auf die jeweiligen Verwaltungsseiten und wieder zurück zu gelangen. Auf den Unterseiten sollen dabei auf der linken Seite eine Übersichtsliste zu den bisher angelegten Playern oder Matches angezeigt werden. Auf der Rechten Seite soll ein Formular zur Erstellung der Objekte bereitstehen. Innerhalb der Liste soll für jedes Element eine Toolbar verfügbar sein, über welche Aktionen angesteuert werden können. \\
+\\
+Für einen Player muss dabei die Möglichkeit bestehen gelöscht oder bearbeitet werden zu können. Im Falle einer Bearbeitung soll das Formular zur Erstellung ausgetauscht werden. Sofern erfolgreich der Player aktualisiert oder die Bearbeitung abgebrochen wird, wird das Formular wieder zurückgetauscht.\\
+\\
+Bei einem Match soll neben dem Löschen die Möglichkeit bestehen es zu starten. Sobald ein Match gestartet wird soll eine Weiterleitung zu einer neue Seite erfolgen. Auf dieser sollen sich auf der linken Seite ein Schachbrett und auf der rechten Seite Statusinformationen zum gestarteten Match befinden, wie zum Beispiel eine Liste aller bisher gespielten Züge. Die sich auf dem Schachbrett befindlichen Figuren sollen dabei mittels Drag\&Drop bewegt werden können. Für eine vereinfachte Spielweise sollen Figuren ihre möglichen Spielzüge via \textit{Mouseover} anzeigen.\\
+\\
+Des weiteren soll der Client registrieren sobald ein Spieler Schach gesetzt wurde und dies in den Statusinformationen anzeigen. Sobald ein Spieler im Schach steht, sollen nur noch Züge möglich sein, um die Situation zu beenden. Sollte keine Möglichkeit bestehen aus dem Schach zu gelangen, soll eine Meldung mit \enquote{Schachmatt} erscheinen. Anschließend sollen keine Züge mehr durchführbar sein.
+\todo[inline]{Einbindung der KI definieren}
+
+\section{Informationsermittlung für den Datenaustausch mit dem Server}
