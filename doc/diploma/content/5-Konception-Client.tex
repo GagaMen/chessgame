@@ -15,4 +15,42 @@ Bei einem Match soll neben dem Löschen die Möglichkeit bestehen es zu starten.
 Des weiteren soll der Client registrieren sobald ein Spieler Schach gesetzt wurde und dies in den Statusinformationen anzeigen. Sobald ein Spieler im Schach steht, sollen nur noch Züge möglich sein, um die Situation zu beenden. Sollte keine Möglichkeit bestehen aus dem Schach zu gelangen, soll eine Meldung mit \enquote{Schachmatt} erscheinen. Anschließend sollen keine Züge mehr durchführbar sein.
 \todo[inline]{Einbindung der KI definieren}
 
-\section{Informationsermittlung für den Datenaustausch mit dem Server}
+\section{Verwendete Bibliotheken/Frameworks}
+
+\subsection{RequireJS}
+RequireJS ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\footnote{siehe \cite{requirejs}}\\
+\\
+Für die Modulbeschreibung innerhalb von JavaScript stehen mehrere Formate bereit. RequireJS setzt dabei auf das Format \gls{AMD}. Das \hyperref[lst:amdExample]{Listing~\ref{lst:amdExample}} stellt ein einfaches Beispiel für die Definition eines \gls{AMD}-Moduls bereit. In dem Zeitschriftartikel \cite{jsModuleDefinitions} können zu den einzelnen Modul-Formaten und deren Einsatzmöglichkeiten nähere Informationen nachgelesen werden.
+\begin{lstlisting}[style=lstStyleFramed, caption={[Beispiel: Moduldefinition mittels \acrfull{AMD}\protect\footnote{Quelle: \cite{requirejsExample}}] Beispiel: Moduldefinition mittels \acrfull{AMD}\protect\footnotemark}, label=lst:amdExample]
+define(['jquery'] , function ($) {
+	return function () {};
+});
+\end{lstlisting}
+\footnotetext{Quelle: \cite{requirejsExample}}
+
+\subsection{kotlinx.html}
+Die Kotlinx.html ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
+\\
+Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
+\begin{lstlisting}[style=lstStyleFramed, caption={[Beispiel: Verwendung der Bibliothek kontlinx.html\protect\footnote{Quelle: \cite{kotlinxHtmlExample}}] Beispiel: Verwendung der Bibliothek kontlinx.html\protect\footnotemark}, label=lst:kotlinxHtmlExample]
+import kotlinx.html.*
+import kotlinx.html.dom.*
+
+val myDiv = document.create.div {
+	p { +"text inside" }
+}
+\end{lstlisting}
+\footnotetext{Quelle: \cite{kotlinxHtmlExample}}
+\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kotlinx.html (Ergebnis)}, label=lst:kotlinxHtmlParseExample]
+<div>
+	<p>
+		text inside
+	</p>
+</div>
+\end{lstlisting}
+
+\subsection{kotlinx.serialization}
+
+
+\section{Informationsermittlung für den Datenaustausch zwischen Client und Server}
+
