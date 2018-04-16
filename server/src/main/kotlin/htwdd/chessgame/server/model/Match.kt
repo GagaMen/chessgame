@@ -5,22 +5,31 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
 @DatabaseTable(tableName = "Match")
-data class Match(@DatabaseField(generatedId = true) val id: Int = 0,
-                 @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false) val players: HashMap<PieceColor, Player> = HashMap(),
-                 @DatabaseField(foreign = true, canBeNull = false, unique = true) private val playerWhite: Player? = null,
-                 @DatabaseField(foreign = true, canBeNull = false, unique = true) private val playerBlack: Player? = null,
-                 private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
-                 @DatabaseField(canBeNull = false) var currentColor: PieceColor = PieceColor.WHITE,
-                 val history: MutableList<Draw> = mutableListOf(),
-                 var whiteCastlingKingSide: Boolean = true,
-                 var whiteCastlingQueenSide: Boolean = true,
-                 var blackCastlingKingSide: Boolean = true,
-                 var blackCastlingQueenSide: Boolean = true,
-                 var enPassantField: Field? = null,
-                 var halfMoves: Int = 0,
-                 @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false) var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
-                 @DatabaseField(canBeNull = false) var checkmate: Boolean = false,
-                 @DatabaseField(canBeNull = false) var matchCode: String = "RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w KQkq - 0 1") {
+data class Match(
+        @DatabaseField(generatedId = true)
+        val id: Int = 0,
+        @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
+        val players: HashMap<PieceColor, Player> = HashMap(),
+        @DatabaseField(foreign = true, canBeNull = false, unique = true)
+        private val playerWhite: Player? = null,
+        @DatabaseField(foreign = true, canBeNull = false, unique = true)
+        private val playerBlack: Player? = null,
+        private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
+        @DatabaseField(canBeNull = false)
+        var currentColor: PieceColor = PieceColor.WHITE,
+        val history: MutableList<Draw> = mutableListOf(),
+        var whiteCastlingKingSide: Boolean = true,
+        var whiteCastlingQueenSide: Boolean = true,
+        var blackCastlingKingSide: Boolean = true,
+        var blackCastlingQueenSide: Boolean = true,
+        var enPassantField: Field? = null,
+        var halfMoves: Int = 0,
+        @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
+        var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
+        @DatabaseField(canBeNull = false)
+        var checkmate: Boolean = false,
+        @DatabaseField(canBeNull = false)
+        var matchCode: String = "RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w KQkq - 0 1") {
 
     init {
         pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE)
