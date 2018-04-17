@@ -33,7 +33,7 @@ class MatchController {
         val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
             match.players.forEach { playerDao!!.refresh(it.value) }
-            match.setValuesByMatchCode()
+            match.setPieceSetsByMatchCode()
             matchList[match.id] = match
         }
 
@@ -45,7 +45,7 @@ class MatchController {
     fun getMatchById(@PathVariable id: Int): Any {
         val match = matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
         match.players.forEach { playerDao!!.refresh(it.value) }
-        match.setValuesByMatchCode()
+        match.setPieceSetsByMatchCode()
         return match
     }
 
@@ -58,19 +58,6 @@ class MatchController {
                 .where()
                 .eq("match_id", id)
                 .prepare())
-
-        val fieldList = mutableListOf<Int>()
-        draws.forEach {
-            fieldList.add(it.start!!.id)
-            fieldList.add(it.end!!.id)
-        }
-
-        fieldDao!!.delete(fieldDao.query(
-                fieldDao.queryBuilder()
-                        .where()
-                        .`in`("id", fieldList)
-                        .prepare()
-        ))
 
         drawDao.delete(draws)
 
@@ -92,23 +79,5 @@ class MatchController {
 
         if (matchDao!!.create(match) != 1) return null
         return match
-    }
-
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @PatchMapping("match/{id}")
-    fun updateMatch(@PathVariable id: Int,
-                    @RequestParam checkWhite: Boolean,
-                    @RequestParam checkBlack: Boolean,
-                    @RequestParam checkmate: Boolean,
-                    @RequestParam matchCode: String): Boolean {
-        val match = matchDao!!.queryForId(id) ?: return false
-
-        match.check[PieceColor.WHITE] = checkWhite
-        match.check[PieceColor.BLACK] = checkBlack
-        match.checkmate = checkmate
-        match.matchCode = matchCode
-
-        if (matchDao.update(match) != 1) return false
-        return true
     }
 }
