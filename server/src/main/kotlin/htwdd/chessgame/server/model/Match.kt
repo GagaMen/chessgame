@@ -1,115 +1,106 @@
 package htwdd.chessgame.server.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.j256.ormlite.field.DataType
+import com.j256.ormlite.field.DataType.*
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceType.*
 
 @DatabaseTable(tableName = "Match")
 data class Match(
         @DatabaseField(generatedId = true)
         val id: Int = 0,
-        @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
+        @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
         val players: HashMap<PieceColor, Player> = HashMap(),
         @DatabaseField(foreign = true, canBeNull = false, unique = true)
         private val playerWhite: Player? = null,
         @DatabaseField(foreign = true, canBeNull = false, unique = true)
         private val playerBlack: Player? = null,
-        private var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
+//        @JsonIgnore
+        var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(pieceColor = WHITE), BLACK to PieceSet(pieceColor = BLACK)), //todo make this maybe with extra class for parsing
         @DatabaseField(canBeNull = false)
-        var currentColor: PieceColor = PieceColor.WHITE,
+        var currentColor: PieceColor = WHITE,
         val history: MutableList<Draw> = mutableListOf(),
-        var whiteCastlingKingSide: Boolean = true,
-        var whiteCastlingQueenSide: Boolean = true,
-        var blackCastlingKingSide: Boolean = true,
-        var blackCastlingQueenSide: Boolean = true,
+        @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
+        @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
         var enPassantField: Field? = null,
+        @DatabaseField(canBeNull = false)
         var halfMoves: Int = 0,
-        @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
-        var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
+        @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        var check: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to false, BLACK to false),
         @DatabaseField(canBeNull = false)
         var checkmate: Boolean = false,
         @DatabaseField(canBeNull = false)
-        var matchCode: String = "RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w KQkq - 0 1") {
+        var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
 
-    init {
-        pieceSets[PieceColor.WHITE] = PieceSet(pieceColor = PieceColor.WHITE)
-        pieceSets[PieceColor.BLACK] = PieceSet(pieceColor = PieceColor.BLACK)
+    fun setPieceSetsByMatchCode() {
+        val separate = matchCode.split(" ")
+        val rows = separate[0].split("/")
 
-        setValuesByMatchCode()
-    }
+        for (i in rows.indices) {
+            val row = 8 - i
+            var column = 1
 
-    fun setValuesByMatchCode() {
-        val separate = matchCode.split("/", " ")
-
-        for (i in separate.indices) {
-            when {
-                i < 8 -> setPieceSets(i + 1, separate[i])
-                i == 8 -> setColor(separate[i])
-                i == 9 -> setCastling(separate[i])
-                i == 10 -> setEnPassant(separate[i])
-                i == 11 -> setHalfMoves(separate[i])
-            }
-        }
-    }
-
-    private fun setPieceSets(row: Int, str: String) {
-        val separation = str.split("")
-        var column = 1
-
-        separation.forEach { char ->
-            when (char) {
-                "" -> return@forEach
-                "p" -> {
-                    setPiece(PieceColor.WHITE, PieceType.PAWN, Field(row, column))
-                    column++
-                }
-                "k" -> {
-                    setPiece(PieceColor.WHITE, PieceType.KING, Field(row, column))
-                    column++
-                }
-                "q" -> {
-                    setPiece(PieceColor.WHITE, PieceType.QUEEN, Field(row, column))
-                    column++
-                }
-                "b" -> {
-                    setPiece(PieceColor.WHITE, PieceType.BISHOP, Field(row, column))
-                    column++
-                }
-                "n" -> {
-                    setPiece(PieceColor.WHITE, PieceType.KNIGHT, Field(row, column))
-                    column++
-                }
-                "r" -> {
-                    setPiece(PieceColor.WHITE, PieceType.ROOK, Field(row, column))
-                    column++
-                }
-                "P" -> {
-                    setPiece(PieceColor.BLACK, PieceType.PAWN, Field(row, column))
-                    column++
-                }
-                "K" -> {
-                    setPiece(PieceColor.BLACK, PieceType.KING, Field(row, column))
-                    column++
-                }
-                "Q" -> {
-                    setPiece(PieceColor.BLACK, PieceType.QUEEN, Field(row, column))
-                    column++
-                }
-                "B" -> {
-                    setPiece(PieceColor.BLACK, PieceType.BISHOP, Field(row, column))
-                    column++
-                }
-                "N" -> {
-                    setPiece(PieceColor.BLACK, PieceType.KNIGHT, Field(row, column))
-                    column++
-                }
-                "R" -> {
-                    setPiece(PieceColor.BLACK, PieceType.ROOK, Field(row, column))
-                    column++
-                }
-                else -> {
-                    val number = char.toIntOrNull() ?: return@forEach
-                    column += number
+            rows[i].split("").forEach { char ->
+                when (char) {
+                    "" -> return@forEach
+                    "p" -> {
+                        setPiece(BLACK, PAWN, Field(row = row, column = column))
+                        column++
+                    }
+                    "k" -> {
+                        setPiece(BLACK, KING, Field(row = row, column = column))
+                        column++
+                    }
+                    "q" -> {
+                        setPiece(BLACK, QUEEN, Field(row = row, column = column))
+                        column++
+                    }
+                    "b" -> {
+                        setPiece(BLACK, BISHOP, Field(row = row, column = column))
+                        column++
+                    }
+                    "n" -> {
+                        setPiece(BLACK, KNIGHT, Field(row = row, column = column))
+                        column++
+                    }
+                    "r" -> {
+                        setPiece(BLACK, ROOK, Field(row = row, column = column))
+                        column++
+                    }
+                    "P" -> {
+                        setPiece(WHITE, PAWN, Field(row = row, column = column))
+                        column++
+                    }
+                    "K" -> {
+                        setPiece(WHITE, KING, Field(row = row, column = column))
+                        column++
+                    }
+                    "Q" -> {
+                        setPiece(WHITE, QUEEN, Field(row = row, column = column))
+                        column++
+                    }
+                    "B" -> {
+                        setPiece(WHITE, BISHOP, Field(row = row, column = column))
+                        column++
+                    }
+                    "N" -> {
+                        setPiece(WHITE, KNIGHT, Field(row = row, column = column))
+                        column++
+                    }
+                    "R" -> {
+                        setPiece(WHITE, ROOK, Field(row = row, column = column))
+                        column++
+                    }
+                    else -> {
+                        val number = char.toIntOrNull() ?: return@forEach
+                        column += number
+                    }
                 }
             }
         }
@@ -120,40 +111,7 @@ data class Match(
         pieces!![field.asPair()] = Piece(pieceType, field)
     }
 
-    private fun setColor(str: String) {
-        when (str) {
-            "w" -> currentColor = PieceColor.WHITE
-            "b" -> currentColor = PieceColor.BLACK
-        }
-    }
-
-    private fun setCastling(str: String) {
-        val separation = str.split("")
-
-        separation.forEach { char ->
-            when (char) {
-                "K" -> whiteCastlingKingSide = true
-                "Q" -> whiteCastlingQueenSide = true
-                "k" -> blackCastlingKingSide = true
-                "q" -> blackCastlingQueenSide = true
-            }
-        }
-    }
-
-    private fun setEnPassant(str: String) {
-        enPassantField = when (str) {
-            "-" -> null
-            else -> {
-                val separation = str.split("")
-                val column = separation[1].toCharArray()[0].toInt() % 96
-                val row = separation[2].toInt()
-                Field(row = row, column = column)
-            }
-        }
-    }
-
-    private fun setHalfMoves(str: String) {
-        val count = str.toIntOrNull() ?: return
-        halfMoves = count
+    fun switchColor() {
+        currentColor = currentColor.getOpposite()
     }
 }
