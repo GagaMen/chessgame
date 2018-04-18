@@ -77,6 +77,7 @@ class MatchController {
         players[PieceColor.BLACK] = playerBlack
 
         val match = Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)
+        match.setPieceSetsByMatchCode()
 
         if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
         return match

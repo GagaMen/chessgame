@@ -1,13 +1,12 @@
 package htwdd.chessgame.server.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DataType.*
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import htwdd.chessgame.server.model.PieceColor.BLACK
-import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceColor.*
 import htwdd.chessgame.server.model.PieceType.*
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
+import htwdd.chessgame.server.util.FENUtility
 
 @DatabaseTable(tableName = "Match")
 data class Match(
@@ -15,9 +14,9 @@ data class Match(
         val id: Int = 0,
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
         val players: HashMap<PieceColor, Player> = HashMap(),
-        @DatabaseField(foreign = true, canBeNull = false, unique = true)
+        @DatabaseField(foreign = true, canBeNull = false)
         private val playerWhite: Player? = null,
-        @DatabaseField(foreign = true, canBeNull = false, unique = true)
+        @DatabaseField(foreign = true, canBeNull = false)
         private val playerBlack: Player? = null,
 //        @JsonIgnore
         var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(pieceColor = WHITE), BLACK to PieceSet(pieceColor = BLACK)), //todo make this maybe with extra class for parsing
@@ -111,7 +110,119 @@ data class Match(
         pieces!![field.asPair()] = Piece(pieceType, field)
     }
 
-    fun switchColor() {
+    fun updateByDraw(draw: Draw) {
+        updatePieceSets(draw)
+
+        if (draw.throwPiece || draw.pieceType == PAWN) {
+            halfMoves = 0
+        } else {
+            halfMoves++
+        }
+
+        if (draw.kingsideCastling || draw.queensideCastling) {
+            kingsideCastling[currentColor] = false
+            queensideCastling[currentColor] = false
+        }
+
+        if (draw.pieceType == PAWN && (
+                        (currentColor == WHITE && draw.endField?.row == 4) ||
+                                (currentColor == BLACK && draw.endField?.row == 5))
+        ) {
+            pieceSets[currentColor]?.activePieces?.forEach {
+                if (it.value.type != PAWN) return@forEach
+                if (it.key.second != draw.endField?.column) return@forEach
+
+                val row = when (currentColor) {
+                    WHITE -> 3
+                    BLACK -> 6
+                }
+
+                if (enPassantField == null) {
+                    enPassantField = Field(row = row, column = draw.endField?.column!!)
+                    fieldDao!!.create(enPassantField) // todo maybe throw an error
+                } else {
+                    enPassantField?.row = row
+                    enPassantField?.column = draw.endField?.column!!
+                    fieldDao!!.update(enPassantField)
+                }
+            }
+        }
+
+        check[currentColor] = draw.check
+        checkmate = draw.checkmate
+
+        switchColor()
+
+        FENUtility.calc(this)
+    }
+
+    private fun switchColor() {
         currentColor = currentColor.getOpposite()
+    }
+
+    private fun updatePieceSets(draw: Draw): Boolean {
+        val activePieces = pieceSets[currentColor]?.activePieces ?: return false
+        val opposingActivePieces = pieceSets[currentColor.getOpposite()]?.activePieces ?: return false
+        val capturedPieces = pieceSets[currentColor]?.capturedPieces ?: return false
+
+        if (draw.kingsideCastling || draw.queensideCastling) {
+            val row = when (currentColor) {
+                WHITE -> 1
+                BLACK -> 8
+            }
+            val column = when {
+                draw.kingsideCastling -> 8
+                draw.queensideCastling -> 1
+                else -> 0 // at no time possible
+            }
+            val king = activePieces[Pair(row, 5)] ?: return false
+            val rook = activePieces[Pair(row, column)] ?: return false
+            activePieces.remove(Pair(row, 5))
+            activePieces.remove(Pair(row, column))
+
+            val kingColumn = when {
+                draw.kingsideCastling -> 7
+                draw.queensideCastling -> 3
+                else -> 0 // at no time possible
+            }
+            val rookColumn = when {
+                draw.kingsideCastling -> 6
+                draw.queensideCastling -> 4
+                else -> 0 // at no time possible
+            }
+
+            king.position.row = row
+            king.position.column = kingColumn
+            rook.position.row = row
+            rook.position.column = rookColumn
+
+            activePieces[Pair(row, kingColumn)] = king
+            activePieces[Pair(row, rookColumn)] = rook
+        } else {
+            val piece = activePieces[draw.startField?.asPair()] ?: return false
+            activePieces.remove(draw.startField?.asPair())
+
+            piece.position.row = draw.endField?.row!!
+            piece.position.column = draw.endField?.column!!
+
+            activePieces[draw.endField?.asPair()!!] = piece
+
+            if (draw.throwPiece) {
+                var capturedPiecePosition = draw.endField?.asPair()!!
+                if (draw.throwEnPassant) {
+                    capturedPiecePosition = when (currentColor) {
+                        WHITE -> Pair(6, draw.endField?.column!!)
+                        BLACK -> Pair(3, draw.endField?.column!!)
+                    }
+                }
+
+                val capturedPiece = opposingActivePieces[capturedPiecePosition] ?: return false
+                opposingActivePieces.remove(capturedPiecePosition)
+
+                capturedPieces.add(capturedPiece)
+            }
+        }
+
+        return true
     }
 }
