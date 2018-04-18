@@ -36,26 +36,29 @@ data class Draw(
 
     fun setValuesByDrawCode(): Boolean {
         val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()
-        val matchResult = regex.find(drawCode) ?: return false
+        val matchResult: MatchResult
 
         when {
-            drawCode.contains("^O-O-O") -> {
+            drawCode.contains("^O-O-O".toRegex()) -> {
                 pieceType = PieceType.KING
                 queensideCastling = true
                 return true
             }
-            drawCode.contains("^O-O") -> {
+            drawCode.contains("^O-O".toRegex()) -> {
                 pieceType = PieceType.KING
                 kingsideCastling = true
                 return true
             }
-            else -> pieceType = when (matchResult.groups[1]?.value) {
-                "K" -> PieceType.KING
-                "Q" -> PieceType.QUEEN
-                "B" -> PieceType.BISHOP
-                "N" -> PieceType.KNIGHT
-                "R" -> PieceType.ROOK
-                else -> PieceType.PAWN
+            else -> {
+                matchResult = regex.find(drawCode) ?: return false
+                pieceType = when (matchResult.groups[1]?.value) {
+                    "K" -> PieceType.KING
+                    "Q" -> PieceType.QUEEN
+                    "B" -> PieceType.BISHOP
+                    "N" -> PieceType.KNIGHT
+                    "R" -> PieceType.ROOK
+                    else -> PieceType.PAWN
+                }
             }
         }
 

@@ -1,6 +1,8 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.*
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.PieceType.*
 import htwdd.chessgame.server.util.*
 import org.springframework.web.bind.annotation.*
@@ -98,7 +100,11 @@ class DrawController {
             ROOK -> RookMovementUtility()
             else -> return false
         }
-        //todo check castling
+
+        // validate castling
+        if (draw.pieceType == KING && (draw.kingsideCastling || draw.queensideCastling)) {
+            return validateCastling(draw, match)
+        }
 
         val possibleStartFields = calcPossibleStartFields(draw, match)
 
@@ -117,6 +123,35 @@ class DrawController {
         }
 
         return false
+    }
+
+    private fun validateCastling(draw: Draw, match: Match): Boolean {
+        val activePieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
+        val kingPosition = when (match.currentColor) {
+            WHITE -> Pair(1,5)
+            BLACK -> Pair(8,5)
+        }
+
+        draw.startField = Field(row = kingPosition.first, column = kingPosition.second)
+
+        if (!activePieces.containsKey(kingPosition)) return false
+        else {
+            val piece = activePieces[kingPosition] ?: return false
+            if (piece.type != KING) return false
+        }
+
+        val movementFields = HashSet<Pair<Int, Int>>()
+        val kingMovementUtility = KingMovementUtility()
+
+        kingMovementUtility.getFilteredMovementFields(movementFields, kingPosition.first, kingPosition.second, match)
+
+        if (draw.kingsideCastling && !movementFields.contains(Pair(kingPosition.first, 7))) return false
+        if (draw.queensideCastling && !movementFields.contains(Pair(kingPosition.first, 3))) return false
+
+        if (draw.kingsideCastling) draw.endField = Field(row = kingPosition.first, column = 7)
+        if (draw.queensideCastling) draw.endField = Field(row = kingPosition.first, column = 3)
+
+        return true
     }
 
     private fun calcPossibleStartFields(draw: Draw, match: Match): HashSet<Pair<Int, Int>> {
@@ -161,11 +196,13 @@ class DrawController {
             match.halfMoves++
         }
 
-        if (draw.kingsideCastling) match.kingsideCastling[match.currentColor] = false
-        if (draw.queensideCastling) match.queensideCastling[match.currentColor] = false
+        if (draw.kingsideCastling || draw.queensideCastling) {
+            match.kingsideCastling[match.currentColor] = false
+            match.queensideCastling[match.currentColor] = false
+        }
 
         if (draw.pieceType == PAWN && (
-                        (match.currentColor == PieceColor.WHITE && draw.endField?.row == 4) ||
+                        (match.currentColor == WHITE && draw.endField?.row == 4) ||
                                 (match.currentColor == PieceColor.BLACK && draw.endField?.row == 5))
         ) {
             match.pieceSets[match.currentColor]?.activePieces?.forEach {
@@ -173,7 +210,7 @@ class DrawController {
                 if (it.key.second != draw.endField?.column) return@forEach
 
                 val row = when (match.currentColor) {
-                    PieceColor.WHITE -> 3
+                    WHITE -> 3
                     PieceColor.BLACK -> 6
                 }
 
@@ -205,7 +242,7 @@ class DrawController {
 
         if (draw.kingsideCastling || draw.queensideCastling) {
             val row = when (match.currentColor) {
-                PieceColor.WHITE -> 1
+                WHITE -> 1
                 PieceColor.BLACK -> 8
             }
             val column = when {
@@ -249,7 +286,7 @@ class DrawController {
                 var capturedPiecePosition = draw.endField?.asPair()!!
                 if (draw.throwEnPassant) {
                     capturedPiecePosition = when (match.currentColor) {
-                        PieceColor.WHITE -> Pair(6, draw.endField?.column!!)
+                        WHITE -> Pair(6, draw.endField?.column!!)
                         PieceColor.BLACK -> Pair(3, draw.endField?.column!!)
                     }
                 }
