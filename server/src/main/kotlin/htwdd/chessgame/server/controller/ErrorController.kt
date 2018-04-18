@@ -1,5 +1,6 @@
 package htwdd.chessgame.server.controller
 
+import htwdd.chessgame.server.exceptions.BadRequestException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -18,7 +19,7 @@ class ErrorController {
         RequestMethod.HEAD,
         RequestMethod.OPTIONS]
     )
-    fun wrongRequestFallback(): String {
-        return "Wrong request"
+    fun wrongRequestFallback() {
+        throw BadRequestException("The request method isn't defined on this entry point.")
     }
 }

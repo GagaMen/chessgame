@@ -3,7 +3,10 @@ package htwdd.chessgame.server.controller
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.model.PlayerHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -33,30 +36,32 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("player/{id}")
-    fun getPlayerById(@PathVariable id: Int): Any {
-        return playerDao!!.queryForId(id) ?: return "No player with id \"$id\" registered!"
+    @GetMapping(value = ["player/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getPlayerById(@PathVariable id: Int): Player {
+        return playerDao!!.queryForId(id) ?: throw IllegalArgumentException("No player with the id '$id' registered!")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping("player/{id}")
-    fun deletePlayerById(@PathVariable id: Int): Boolean {
+    fun deletePlayerById(@PathVariable id: Int) {
         val queryBuilder = matchDao!!.queryBuilder()
         val query = queryBuilder.where().eq("playerWhite_id", id).or().eq("playerBlack_id", id).prepare()
 
-        // check if player is in use
-        if (matchDao.query(query).size > 0) return false
+        if (!playerDao!!.idExists(id)) throw IllegalArgumentException("No player with the id '$id' registered!")
 
-        if (playerDao!!.deleteById(id) != 1) return false
-        return true
+        // check if player is in use
+        if (matchDao.query(query).size > 0) throw RuntimeException("The player with the id '$id' is still in use by a match!")
+
+        if (playerDao.deleteById(id) != 1) throw SQLException("Can't delete player with the id '$id'!")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping("player")
+    @ResponseStatus(HttpStatus.CREATED)
     fun addPlayer(@RequestParam name: String,
-                  @RequestParam password: String): Player? {
+                  @RequestParam password: String): Player {
         val player = Player(name = name, password = password)
-        if (playerDao!!.create(player) != 1) return null
+        if (playerDao!!.create(player) != 1) throw SQLException("Can't create player!")
         return player
     }
 
@@ -64,25 +69,23 @@ class PlayerController {
     @PutMapping("player/{id}")
     fun replacePlayer(@PathVariable id: Int,
                       @RequestParam name: String,
-                      @RequestParam password: String): Boolean {
-        val player = playerDao!!.queryForId(id) ?: return false
+                      @RequestParam password: String) {
+        val player = playerDao!!.queryForId(id) ?: throw IllegalArgumentException("No player with the id '$id' registered!")
 
         player.name = name
         player.password = password
 
-        if (playerDao.update(player) != 1) return false
-        return true
+        if (playerDao.update(player) != 1) throw SQLException("Can't replace player!")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping("player/{id}")
     fun updatePlayer(@PathVariable id: Int,
-                     @RequestParam password: String): Boolean {
-        val player = playerDao!!.queryForId(id) ?: return false
+                     @RequestParam password: String) {
+        val player = playerDao!!.queryForId(id) ?: throw IllegalArgumentException("No player with the id '$id' registered!")
 
         player.password = password
 
-        if (playerDao.update(player) != 1) return false
-        return true
+        if (playerDao.update(player) != 1) throw SQLException("Can't update player!")
     }
 }
