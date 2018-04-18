@@ -81,7 +81,7 @@ data class Draw(
         if (matchResult.groups[7] != null) throwEnPassant = true
 
         if (matchResult.groups[8] != null) {
-            val checkCode = matchResult.groups[10]?.value ?: return false
+            val checkCode = matchResult.groups[8]?.value ?: return false
             if (checkCode == "+") check = true
             if (checkCode == "++" || checkCode == "#") checkmate = true
         }
