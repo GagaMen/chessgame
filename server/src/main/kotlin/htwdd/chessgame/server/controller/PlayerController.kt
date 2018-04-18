@@ -75,7 +75,7 @@ class PlayerController {
         player.name = name
         player.password = password
 
-        if (playerDao.update(player) != 1) throw SQLException("Can't replace player!")
+        if (playerDao.update(player) != 1) throw SQLException("Can't replace player with the id '$id'!")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
@@ -86,6 +86,6 @@ class PlayerController {
 
         player.password = password
 
-        if (playerDao.update(player) != 1) throw SQLException("Can't update player!")
+        if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
     }
 }
