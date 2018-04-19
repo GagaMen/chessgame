@@ -27,6 +27,7 @@ data class Match(
         var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
         var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
+        @DatabaseField(foreign = true, foreignAutoRefresh = true)
         var enPassantField: Field? = null,
         @DatabaseField(canBeNull = false)
         var halfMoves: Int = 0,
@@ -146,6 +147,9 @@ data class Match(
                     fieldDao!!.update(enPassantField)
                 }
             }
+        } else if (enPassantField != null) {
+            enPassantField!!.row = 0
+            enPassantField!!.column = 0
         }
 
         check[currentColor] = draw.check
@@ -211,8 +215,8 @@ data class Match(
                 var capturedPiecePosition = draw.endField?.asPair()!!
                 if (draw.throwEnPassant) {
                     capturedPiecePosition = when (currentColor) {
-                        WHITE -> Pair(6, draw.endField?.column!!)
-                        BLACK -> Pair(3, draw.endField?.column!!)
+                        WHITE -> Pair(5, draw.endField?.column!!)
+                        BLACK -> Pair(4, draw.endField?.column!!)
                     }
                 }
 

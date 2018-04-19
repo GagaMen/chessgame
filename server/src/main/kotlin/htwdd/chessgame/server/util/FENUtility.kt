@@ -60,7 +60,7 @@ class FENUtility {
             }
 
             // en passant
-            if (match.enPassantField != null) {
+            if (match.enPassantField != null && match.enPassantField?.row != 0 && match.enPassantField?.column != 0) {
                 sb.append(" ${(match.enPassantField?.column?.plus(96))?.toChar()}${match.enPassantField?.row}")
             } else {
                 sb.append(" -")
