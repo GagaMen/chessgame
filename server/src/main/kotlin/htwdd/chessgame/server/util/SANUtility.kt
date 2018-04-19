@@ -24,6 +24,7 @@ class SANUtility {
             val possibleStartFields = calcPossibleStartFields(draw, match)
 
             possibleStartFields.forEach {
+                movementFields.clear()
                 movementUtility.getFilteredMovementFields(movementFields, it.first, it.second, match)
                 if (movementFields.contains(draw.endField?.asPair())) {
                     if (
@@ -70,7 +71,7 @@ class SANUtility {
         }
 
         private fun calcPossibleStartFields(draw: Draw, match: Match): HashSet<Pair<Int, Int>> {
-            val possibleStartFields = HashSet<Pair<Int, Int>>()
+            var possibleStartFields = HashSet<Pair<Int, Int>>()
             val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()
             val matchResult = regex.find(draw.drawCode) ?: return possibleStartFields
 
@@ -87,16 +88,12 @@ class SANUtility {
 
             if (startInfo == "") return possibleStartFields
 
-            if (startInfo.toIntOrNull() == null) { // column
+            possibleStartFields = if (startInfo.toIntOrNull() == null) {
                 val column = startInfo.toCharArray()[0].toInt() % 96
-                possibleStartFields.forEach {
-                    if (it.second != column) possibleStartFields.remove(it)
-                }
-            } else { // row
+                possibleStartFields.filter { it.second == column }.toHashSet()
+            } else {
                 val row = startInfo.toInt()
-                possibleStartFields.forEach {
-                    if (it.first != row) possibleStartFields.remove(it)
-                }
+                possibleStartFields.filter { it.first == row }.toHashSet()
             }
 
             return possibleStartFields
