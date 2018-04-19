@@ -50,6 +50,7 @@ class PlayerController {
         if (!playerDao!!.idExists(id)) throw IllegalArgumentException("No player with the id '$id' registered!")
 
         // check if player is in use
+        // todo show message on the client that all matches of the player are deleted and delete all match references
         if (matchDao.query(query).size > 0) throw RuntimeException("The player with the id '$id' is still in use by a match!")
 
         if (playerDao.deleteById(id) != 1) throw SQLException("Can't delete player with the id '$id'!")
