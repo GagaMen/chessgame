@@ -2,7 +2,9 @@ package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.*
 import htwdd.chessgame.server.util.*
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -36,31 +38,18 @@ class DrawController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("draw/{id}")
-    fun getDrawById(@PathVariable id: Int): Any {
-        val draw = drawDao!!.queryForId(id) ?: return "No draw with id \"$id\" registered!"
-        draw.setValuesByDrawCode()
-        return draw
-    }
-
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @DeleteMapping("draw/{id}")
-    fun deleteDrawById(@PathVariable id: Int): Boolean {
-        val draw = drawDao!!.queryForId(id) ?: return false
-
-        // check if draw is in use
-        if (matchDao!!.queryForId(draw.match?.id) != null) return false
-
-        if (drawDao.delete(draw) != 1) return false
-        return true
+    fun getDrawById(@PathVariable id: Int): Draw {
+        return drawDao!!.queryForId(id) ?: throw IllegalArgumentException("No draw with id '$id' registered!")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping("draw")
+    @ResponseStatus(HttpStatus.CREATED)
     fun addDraw(@RequestParam matchId: Int,
                 @RequestParam drawCode: String,
                 @RequestParam(required = false) startColumn: Int? = null,
                 @RequestParam(required = false) startRow: Int? = null): Draw? {
-        val match = matchDao!!.queryForId(matchId) ?: return null
+        val match = matchDao!!.queryForId(matchId) ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
         match.setPieceSetsByMatchCode()
 
         val draw = Draw(color = match.currentColor,
@@ -68,16 +57,16 @@ class DrawController {
                 drawCode = drawCode)
 
         if (startRow != null && startColumn != null) draw.startField = Field(row = startRow, column = startColumn)
-        if (!draw.setValuesByDrawCode()) return null
+        if (!draw.setValuesByDrawCode()) throw RuntimeException("Can't setting draw values by drawCode!")
 
-        if (!SANUtility.validateSAN(draw, match)) return null
+        if (!SANUtility.validateSAN(draw, match)) throw RuntimeException("The draw isn't valid!")
 
-        if (fieldDao!!.create(draw.startField) != 1) return null
-        if (fieldDao.create(draw.endField) != 1) return null
+        if (fieldDao!!.create(draw.startField) != 1) throw SQLException("Can't create start field!")
+        if (fieldDao.create(draw.endField) != 1) throw SQLException("Can't create end field!")
         if (drawDao!!.create(draw) != 1) {
             fieldDao.delete(draw.startField)
             fieldDao.delete(draw.endField)
-            return null
+            throw SQLException("Can't create draw!")
         }
 
         match.updateByDraw(draw)
