@@ -5,6 +5,7 @@ import htwdd.chessgame.server.model.MatchHashMap
 import htwdd.chessgame.server.model.PieceColor
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
@@ -67,6 +68,7 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping("match")
+    @ResponseStatus(HttpStatus.CREATED)
     fun addMatch(@RequestParam playerWhiteId: Int,
                  @RequestParam playerBlackId: Int): Match {
         val playerWhite = playerDao!!.queryForId(playerWhiteId) ?: throw IllegalArgumentException("No player with the id '$playerWhiteId' registered!")
