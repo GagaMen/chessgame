@@ -8,8 +8,8 @@ class FENUtility {
 
         fun calc(match: Match) {
             val sb = StringBuilder()
-            val whitePieceSet = match.pieceSets[PieceColor.WHITE] ?: return
-            val blackPieceSet = match.pieceSets[PieceColor.BLACK] ?: return
+            val whitePieceSet = match.pieceSets[PieceColor.WHITE] ?: throw NullPointerException()
+            val blackPieceSet = match.pieceSets[PieceColor.BLACK] ?: throw NullPointerException()
 
             // piece position
             for (i in 8 downTo 1) {
@@ -20,11 +20,11 @@ class FENUtility {
 
                     when {
                         whitePieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                            pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: return
+                            pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: throw NullPointerException()
                             pieceColor = PieceColor.WHITE
                         }
                         blackPieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                            pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: return
+                            pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: throw NullPointerException()
                             pieceColor = PieceColor.BLACK
                         }
                         else -> emptyCol++

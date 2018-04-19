@@ -14,8 +14,8 @@ class CheckUtility {
         private val rook = RookMovementUtility()
 
         fun calcThreatedFields(match: Match): Boolean {
-            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
-            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return false
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
 
             threatedFields.clear()
 
@@ -53,7 +53,7 @@ class CheckUtility {
         }
 
         fun checkmate(match: Match): Boolean {
-            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
             val movementFields = HashSet<Pair<Int, Int>>()
 
             currentPieces.forEach {

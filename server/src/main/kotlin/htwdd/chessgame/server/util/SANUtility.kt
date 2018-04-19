@@ -42,7 +42,7 @@ class SANUtility {
         }
 
         private fun validateCastling(draw: Draw, match: Match): Boolean {
-            val activePieces = match.pieceSets[match.currentColor]?.activePieces ?: return false
+            val activePieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player ${match.currentColor} is null!")
             val kingPosition = when (match.currentColor) {
                 PieceColor.WHITE -> Pair(1,5)
                 PieceColor.BLACK -> Pair(8,5)
@@ -52,7 +52,7 @@ class SANUtility {
 
             if (!activePieces.containsKey(kingPosition)) return false
             else {
-                val piece = activePieces[kingPosition] ?: return false
+                val piece = activePieces[kingPosition] ?: throw NullPointerException("Can't get piece!")
                 if (piece.type != PieceType.KING) return false
             }
 

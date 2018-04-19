@@ -5,7 +5,7 @@ import htwdd.chessgame.server.model.PieceColor
 
 class PawnMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
 
         when (match.currentColor) {
             PieceColor.WHITE -> {
@@ -56,7 +56,7 @@ class PawnMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces ?: return
+        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
 
         when (match.currentColor.getOpposite()) {
             PieceColor.WHITE -> {

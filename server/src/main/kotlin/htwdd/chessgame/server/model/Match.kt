@@ -7,6 +7,7 @@ import htwdd.chessgame.server.model.PieceColor.*
 import htwdd.chessgame.server.model.PieceType.*
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
 import htwdd.chessgame.server.util.FENUtility
+import java.sql.SQLException
 
 @DatabaseTable(tableName = "Match")
 data class Match(
@@ -19,7 +20,7 @@ data class Match(
         @DatabaseField(foreign = true, canBeNull = false)
         private val playerBlack: Player? = null,
 //        @JsonIgnore
-        var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(pieceColor = WHITE), BLACK to PieceSet(pieceColor = BLACK)), //todo make this maybe with extra class for parsing
+        var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(), BLACK to PieceSet()), //todo make this maybe with extra class for parsing
         @DatabaseField(canBeNull = false)
         var currentColor: PieceColor = WHITE,
         val history: MutableList<Draw> = mutableListOf(),
@@ -140,11 +141,11 @@ data class Match(
 
                 if (enPassantField == null) {
                     enPassantField = Field(row = row, column = draw.endField?.column!!)
-                    fieldDao!!.create(enPassantField) // todo maybe throw an error
+                    if (fieldDao!!.create(enPassantField) != 1) throw SQLException("Can't create en passant field!")
                 } else {
                     enPassantField?.row = row
                     enPassantField?.column = draw.endField?.column!!
-                    fieldDao!!.update(enPassantField)
+                    if (fieldDao!!.update(enPassantField) != 1) throw SQLException("Can't update en passant field!")
                 }
             }
         } else if (enPassantField != null) {
@@ -164,10 +165,10 @@ data class Match(
         currentColor = currentColor.getOpposite()
     }
 
-    private fun updatePieceSets(draw: Draw): Boolean {
-        val activePieces = pieceSets[currentColor]?.activePieces ?: return false
-        val opposingActivePieces = pieceSets[currentColor.getOpposite()]?.activePieces ?: return false
-        val capturedPieces = pieceSets[currentColor]?.capturedPieces ?: return false
+    private fun updatePieceSets(draw: Draw) {
+        val activePieces = pieceSets[currentColor]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player $currentColor is null!")
+        val opposingActivePieces = pieceSets[currentColor.getOpposite()]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player ${currentColor.getOpposite()} is null!")
+        val capturedPieces = pieceSets[currentColor]?.capturedPieces ?: throw NullPointerException("The HashSet of captured pieces is null!")
 
         if (draw.kingsideCastling || draw.queensideCastling) {
             val row = when (currentColor) {
@@ -179,8 +180,8 @@ data class Match(
                 draw.queensideCastling -> 1
                 else -> 0 // at no time possible
             }
-            val king = activePieces[Pair(row, 5)] ?: return false
-            val rook = activePieces[Pair(row, column)] ?: return false
+            val king = activePieces[Pair(row, 5)] ?: throw NullPointerException("Castling: Can't get king piece!")
+            val rook = activePieces[Pair(row, column)] ?: throw NullPointerException("Castling: Can't get rook piece!")
             activePieces.remove(Pair(row, 5))
             activePieces.remove(Pair(row, column))
 
@@ -203,7 +204,7 @@ data class Match(
             activePieces[Pair(row, kingColumn)] = king
             activePieces[Pair(row, rookColumn)] = rook
         } else {
-            val piece = activePieces[draw.startField?.asPair()] ?: return false
+            val piece = activePieces[draw.startField?.asPair()] ?: throw NullPointerException("Can't get piece!")
             activePieces.remove(draw.startField?.asPair())
 
             piece.position.row = draw.endField?.row!!
@@ -220,13 +221,11 @@ data class Match(
                     }
                 }
 
-                val capturedPiece = opposingActivePieces[capturedPiecePosition] ?: return false
+                val capturedPiece = opposingActivePieces[capturedPiecePosition] ?: throw NullPointerException("Can't get captured piece!")
                 opposingActivePieces.remove(capturedPiecePosition)
 
                 capturedPieces.add(capturedPiece)
             }
         }
-
-        return true
     }
 }

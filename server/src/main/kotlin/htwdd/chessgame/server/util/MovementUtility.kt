@@ -4,8 +4,8 @@ import htwdd.chessgame.server.model.Match
 
 abstract class MovementUtility : Movement {
     fun getFilteredMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
         val copyOfCurrentPieces = HashMap(currentPieces)
         val copyOfOpposingPieces = HashMap(opposingPieces)
         val field = Pair(row, col)

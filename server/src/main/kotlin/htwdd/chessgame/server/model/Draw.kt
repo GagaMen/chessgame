@@ -34,7 +34,7 @@ data class Draw(
         @DatabaseField(canBeNull = false)
         var drawCode: String = "") {
 
-    fun setValuesByDrawCode(): Boolean {
+    fun setValuesByDrawCode() {
         val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()
         val matchResult: MatchResult
 
@@ -42,15 +42,15 @@ data class Draw(
             drawCode.contains("^O-O-O".toRegex()) -> {
                 pieceType = PieceType.KING
                 queensideCastling = true
-                return true
+                return
             }
             drawCode.contains("^O-O".toRegex()) -> {
                 pieceType = PieceType.KING
                 kingsideCastling = true
-                return true
+                return
             }
             else -> {
-                matchResult = regex.find(drawCode) ?: return false
+                matchResult = regex.find(drawCode) ?: throw NullPointerException("Can't parse drawCode with regex!")
                 pieceType = when (matchResult.groups[1]?.value) {
                     "K" -> PieceType.KING
                     "Q" -> PieceType.QUEEN
@@ -64,9 +64,9 @@ data class Draw(
 
         if (matchResult.groups[3] != null) throwPiece = true
 
-        if (matchResult.groups[4] == null || matchResult.groups[5] == null) return false
-        val column = matchResult.groups[4]?.value?.toCharArray()?.get(0)?.toInt() ?: return false
-        val row = matchResult.groups[5]?.value?.toInt() ?: return false
+        if (matchResult.groups[4] == null || matchResult.groups[5] == null) throw IllegalArgumentException("The draw isn't valid!")
+        val column = matchResult.groups[4]?.value?.toCharArray()?.get(0)?.toInt() ?: throw NullPointerException("Can't convert column of end position from drawCode to Int!")
+        val row = matchResult.groups[5]?.value?.toInt() ?: throw NullPointerException("Can't convert row of end position from drawCode to Int!")
         endField = Field(row = row, column = column % 96)
 
         if (matchResult.groups[6] != null) {
@@ -81,11 +81,9 @@ data class Draw(
         if (matchResult.groups[7] != null) throwEnPassant = true
 
         if (matchResult.groups[8] != null) {
-            val checkCode = matchResult.groups[8]?.value ?: return false
+            val checkCode = matchResult.groups[8]?.value ?: ""
             if (checkCode == "+") check = true
             if (checkCode == "++" || checkCode == "#") checkmate = true
         }
-
-        return true
     }
 }
