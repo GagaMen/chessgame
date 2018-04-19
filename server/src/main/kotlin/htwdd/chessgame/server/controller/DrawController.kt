@@ -48,7 +48,7 @@ class DrawController {
     fun addDraw(@RequestParam matchId: Int,
                 @RequestParam drawCode: String,
                 @RequestParam(required = false) startColumn: Int? = null,
-                @RequestParam(required = false) startRow: Int? = null): Draw? {
+                @RequestParam(required = false) startRow: Int? = null): Draw {
         val match = matchDao!!.queryForId(matchId) ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
         match.setPieceSetsByMatchCode()
 
@@ -57,7 +57,7 @@ class DrawController {
                 drawCode = drawCode)
 
         if (startRow != null && startColumn != null) draw.startField = Field(row = startRow, column = startColumn)
-        if (!draw.setValuesByDrawCode()) throw RuntimeException("Can't setting draw values by drawCode!")
+        draw.setValuesByDrawCode()
 
         if (!SANUtility.validateSAN(draw, match)) throw RuntimeException("The draw isn't valid!")
 
