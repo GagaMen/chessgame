@@ -4,8 +4,10 @@ import htwdd.chessgame.server.model.Match
 
 class RookMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {
@@ -38,8 +40,10 @@ class RookMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
-        val currentPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {

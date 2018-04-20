@@ -1,14 +1,16 @@
 package htwdd.chessgame.server.util
 
 import htwdd.chessgame.server.model.Match
-import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
 
 class PawnMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         when (match.currentColor) {
-            PieceColor.WHITE -> {
+            WHITE -> {
                 if (!opposingPieces.containsKey(Pair(row + 1, col))) {
                     movementFields.add(Pair(row + 1, col))
                     if (row == 2 && !opposingPieces.containsKey(Pair(row + 2, col))) {
@@ -30,7 +32,7 @@ class PawnMovementUtility : MovementUtility() {
                     }
                 }
             }
-            PieceColor.BLACK -> {
+            BLACK -> {
                 if (!opposingPieces.containsKey(Pair(row - 1, col))) {
                     movementFields.add(Pair(row - 1, col))
                     if (row == 7 && !opposingPieces.containsKey(Pair(row - 2, col))) {
@@ -56,10 +58,11 @@ class PawnMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
 
         when (match.currentColor.getOpposite()) {
-            PieceColor.WHITE -> {
+            WHITE -> {
                 if (opposingPieces.containsKey(Pair(row + 1, col + 1))) {
                     threatedFields.add(Pair(row + 1, col + 1))
                 }
@@ -75,7 +78,7 @@ class PawnMovementUtility : MovementUtility() {
                     }
                 }
             }
-            PieceColor.BLACK -> {
+            BLACK -> {
                 if (opposingPieces.containsKey(Pair(row - 1, col + 1))) {
                     threatedFields.add(Pair(row - 1, col + 1))
                 }

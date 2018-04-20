@@ -2,7 +2,6 @@ package htwdd.chessgame.server.model
 
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import java.io.Serializable
 
 @DatabaseTable(tableName = "Player")
 data class Player(
@@ -11,4 +10,5 @@ data class Player(
         @DatabaseField(canBeNull = false)
         var name: String = "",
         @DatabaseField(canBeNull = false)
-        var password: String = "") : Serializable
+        var password: String = ""
+)

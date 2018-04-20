@@ -1,11 +1,13 @@
 package htwdd.chessgame.server.util
 
 import htwdd.chessgame.server.model.Match
-import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
 
 class KingMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
 
         if (row + 1 != 9 && !currentPieces.containsKey(Pair(row + 1, col))) {
             movementFields.add(Pair(row + 1, col))
@@ -33,29 +35,33 @@ class KingMovementUtility : MovementUtility() {
         }
 
         when (match.currentColor) {
-            PieceColor.WHITE -> {
-                if (match.kingsideCastling[PieceColor.WHITE]!! &&
+            WHITE -> {
+                if (match.kingsideCastling[WHITE]!! &&
                         !currentPieces.containsKey(Pair(row, col + 1)) &&
-                        !currentPieces.containsKey(Pair(row, col + 2))) {
+                        !currentPieces.containsKey(Pair(row, col + 2))
+                ) {
                     movementFields.add(Pair(row, col + 2))
                 }
-                if (match.queensideCastling[PieceColor.WHITE]!! &&
+                if (match.queensideCastling[WHITE]!! &&
                         !currentPieces.containsKey(Pair(row, col - 1)) &&
                         !currentPieces.containsKey(Pair(row, col - 2)) &&
-                        !currentPieces.containsKey(Pair(row, col - 3))) {
+                        !currentPieces.containsKey(Pair(row, col - 3))
+                ) {
                     movementFields.add(Pair(row, col - 2))
                 }
             }
-            PieceColor.BLACK -> {
-                if (match.kingsideCastling[PieceColor.BLACK]!! &&
+            BLACK -> {
+                if (match.kingsideCastling[BLACK]!! &&
                         !currentPieces.containsKey(Pair(row, col + 1)) &&
-                        !currentPieces.containsKey(Pair(row, col + 2))) {
+                        !currentPieces.containsKey(Pair(row, col + 2))
+                ) {
                     movementFields.add(Pair(row, col + 2))
                 }
-                if (match.queensideCastling[PieceColor.BLACK]!! &&
+                if (match.queensideCastling[BLACK]!! &&
                         !currentPieces.containsKey(Pair(row, col - 1)) &&
                         !currentPieces.containsKey(Pair(row, col - 2)) &&
-                        !currentPieces.containsKey(Pair(row, col - 3))) {
+                        !currentPieces.containsKey(Pair(row, col - 3))
+                ) {
                     movementFields.add(Pair(row, col - 2))
                 }
             }
@@ -63,7 +69,8 @@ class KingMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (row + 1 != 9 && !opposingPieces.containsKey(Pair(row + 1, col))) {
             threatedFields.add(Pair(row + 1, col))

@@ -1,7 +1,7 @@
 package htwdd.chessgame.server.util
 
 import htwdd.chessgame.server.model.Match
-import htwdd.chessgame.server.model.PieceType
+import htwdd.chessgame.server.model.PieceType.*
 
 class CheckUtility {
     companion object {
@@ -14,29 +14,31 @@ class CheckUtility {
         private val rook = RookMovementUtility()
 
         fun calcThreatedFields(match: Match): Boolean {
-            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
-            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                    ?: throw NullPointerException()
+            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                    ?: throw NullPointerException()
 
             threatedFields.clear()
 
             opposingPieces.forEach {
                 when (it.value.type) {
-                    PieceType.BISHOP -> {
+                    BISHOP -> {
                         bishop.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.PAWN -> {
+                    PAWN -> {
                         pawn.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.KING -> {
+                    KING -> {
                         king.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.QUEEN -> {
+                    QUEEN -> {
                         queen.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.KNIGHT -> {
+                    KNIGHT -> {
                         knight.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.ROOK -> {
+                    ROOK -> {
                         rook.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
                     }
                 }
@@ -45,7 +47,7 @@ class CheckUtility {
             threatedFields.forEach {
                 if (currentPieces.containsKey(Pair(it.first, it.second))) {
                     val piece = currentPieces[Pair(it.first, it.second)] ?: return@forEach
-                    if (piece.type == PieceType.KING) return true
+                    if (piece.type == KING) return true
                 }
             }
 
@@ -53,28 +55,29 @@ class CheckUtility {
         }
 
         fun checkmate(match: Match): Boolean {
-            val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+            val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                    ?: throw NullPointerException()
             val movementFields = HashSet<Pair<Int, Int>>()
 
             currentPieces.forEach {
                 val tmpMovementFields = HashSet<Pair<Int, Int>>()
                 when (it.value.type) {
-                    PieceType.BISHOP -> {
+                    BISHOP -> {
                         bishop.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.KING -> {
+                    KING -> {
                         king.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.KNIGHT -> {
+                    KNIGHT -> {
                         knight.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.PAWN -> {
+                    PAWN -> {
                         pawn.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.QUEEN -> {
+                    QUEEN -> {
                         queen.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
-                    PieceType.ROOK -> {
+                    ROOK -> {
                         rook.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
                     }
                 }
