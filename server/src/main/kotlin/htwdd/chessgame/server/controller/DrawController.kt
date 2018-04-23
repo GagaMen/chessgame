@@ -63,7 +63,6 @@ class DrawController {
     ): Draw {
         val match = matchDao!!.queryForId(matchId)
                 ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
-        match.setPieceSetsByMatchCode()
 
         val draw = Draw(
                 color = match.currentColor,

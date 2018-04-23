@@ -38,7 +38,6 @@ class MatchController {
         val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
             match.players.forEach { playerDao!!.refresh(it.value) }
-            match.setPieceSetsByMatchCode()
             matchList[match.id] = match
         }
 
@@ -54,7 +53,7 @@ class MatchController {
         val match = matchDao!!.queryForId(id)
                 ?: throw IllegalArgumentException("No match with the id '$id' registered!")
         match.players.forEach { playerDao!!.refresh(it.value) }
-        match.setPieceSetsByMatchCode()
+//        match.setPieceSetsByMatchCode()
         return match
     }
 

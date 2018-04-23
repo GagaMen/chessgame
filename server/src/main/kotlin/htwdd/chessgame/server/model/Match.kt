@@ -20,7 +20,7 @@ data class Match(
         private val playerWhite: Player? = null,
         @DatabaseField(foreign = true, canBeNull = false)
         private val playerBlack: Player? = null,
-//        @JsonIgnore
+        @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
         var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(), BLACK to PieceSet()), //todo make this maybe with extra class for parsing
         @DatabaseField(canBeNull = false)
         var currentColor: PieceColor = WHITE,
