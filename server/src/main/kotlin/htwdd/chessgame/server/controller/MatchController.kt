@@ -18,6 +18,7 @@ class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
     private val drawDao = DatabaseUtility.drawDao
+    private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("match", method = [OPTIONS])
@@ -64,6 +65,13 @@ class MatchController {
             id: Int
     ) {
         if (!matchDao!!.idExists(id)) throw IllegalArgumentException("No match with the id '$id' registered!")
+        val match = matchDao.queryForId(id)
+
+        if (match.enPassantField != null) {
+            if (fieldDao!!.delete(match.enPassantField) != 1) {
+                throw SQLException("Can't delete field from match with the id '$id'")
+            }
+        }
 
         val draws = drawDao!!.query(drawDao.queryBuilder()
                 .where()
@@ -71,6 +79,20 @@ class MatchController {
                 .prepare())
 
         if (draws.size != 0) {
+
+            draws.forEach { draw ->
+                if (draw.startField != null) {
+                    if (fieldDao!!.delete(draw.startField) != 1) {
+                        throw SQLException("Can't delete field from draw with the id '$id'")
+                    }
+                }
+                if (draw.endField != null) {
+                    if (fieldDao!!.delete(draw.endField) != 1) {
+                        throw SQLException("Can't delete field from draw with the id '$id'")
+                    }
+                }
+            }
+
             if (drawDao.delete(draws) == 0) throw SQLException("Can't delete draws from match with the id '$id'")
         }
 
