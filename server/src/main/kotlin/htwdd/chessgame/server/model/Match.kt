@@ -1,9 +1,10 @@
 package htwdd.chessgame.server.model
 
-import com.j256.ormlite.field.DataType.*
+import com.j256.ormlite.field.DataType.SERIALIZABLE
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import htwdd.chessgame.server.model.PieceColor.*
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.PieceType.*
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
 import htwdd.chessgame.server.util.FENUtility
@@ -37,8 +38,8 @@ data class Match(
         @DatabaseField(canBeNull = false)
         var checkmate: Boolean = false,
         @DatabaseField(canBeNull = false)
-        var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-
+        var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+) {
     fun setPieceSetsByMatchCode() {
         val separate = matchCode.split(" ")
         val rows = separate[0].split("/")
@@ -166,66 +167,81 @@ data class Match(
     }
 
     private fun updatePieceSets(draw: Draw) {
-        val activePieces = pieceSets[currentColor]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player $currentColor is null!")
-        val opposingActivePieces = pieceSets[currentColor.getOpposite()]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player ${currentColor.getOpposite()} is null!")
-        val capturedPieces = pieceSets[currentColor]?.capturedPieces ?: throw NullPointerException("The HashSet of captured pieces is null!")
-
         if (draw.kingsideCastling || draw.queensideCastling) {
-            val row = when (currentColor) {
-                WHITE -> 1
-                BLACK -> 8
-            }
-            val column = when {
-                draw.kingsideCastling -> 8
-                draw.queensideCastling -> 1
-                else -> 0 // at no time possible
-            }
-            val king = activePieces[Pair(row, 5)] ?: throw NullPointerException("Castling: Can't get king piece!")
-            val rook = activePieces[Pair(row, column)] ?: throw NullPointerException("Castling: Can't get rook piece!")
-            activePieces.remove(Pair(row, 5))
-            activePieces.remove(Pair(row, column))
-
-            val kingColumn = when {
-                draw.kingsideCastling -> 7
-                draw.queensideCastling -> 3
-                else -> 0 // at no time possible
-            }
-            val rookColumn = when {
-                draw.kingsideCastling -> 6
-                draw.queensideCastling -> 4
-                else -> 0 // at no time possible
-            }
-
-            king.position.row = row
-            king.position.column = kingColumn
-            rook.position.row = row
-            rook.position.column = rookColumn
-
-            activePieces[Pair(row, kingColumn)] = king
-            activePieces[Pair(row, rookColumn)] = rook
+            updatePieceSetsByCastling(draw)
         } else {
-            val piece = activePieces[draw.startField?.asPair()] ?: throw NullPointerException("Can't get piece!")
-            activePieces.remove(draw.startField?.asPair())
+            updatePieceSetsDefault(draw)
+        }
+    }
 
-            piece.position.row = draw.endField?.row!!
-            piece.position.column = draw.endField?.column!!
+    private fun updatePieceSetsByCastling(draw: Draw) {
+        val activePieces = pieceSets[currentColor]?.activePieces
+                ?: throw NullPointerException("The HashMap of active pieces for Player $currentColor is null!")
 
-            activePieces[draw.endField?.asPair()!!] = piece
+        val row = when (currentColor) {
+            WHITE -> 1
+            BLACK -> 8
+        }
+        val column = when {
+            draw.kingsideCastling -> 8
+            draw.queensideCastling -> 1
+            else -> 0 // at no time possible
+        }
+        val king = activePieces[Pair(row, 5)] ?: throw NullPointerException("Castling: Can't get king piece!")
+        val rook = activePieces[Pair(row, column)] ?: throw NullPointerException("Castling: Can't get rook piece!")
+        activePieces.remove(Pair(row, 5))
+        activePieces.remove(Pair(row, column))
 
-            if (draw.throwPiece) {
-                var capturedPiecePosition = draw.endField?.asPair()!!
-                if (draw.throwEnPassant) {
-                    capturedPiecePosition = when (currentColor) {
-                        WHITE -> Pair(5, draw.endField?.column!!)
-                        BLACK -> Pair(4, draw.endField?.column!!)
-                    }
+        val kingColumn = when {
+            draw.kingsideCastling -> 7
+            draw.queensideCastling -> 3
+            else -> 0 // at no time possible
+        }
+        val rookColumn = when {
+            draw.kingsideCastling -> 6
+            draw.queensideCastling -> 4
+            else -> 0 // at no time possible
+        }
+
+        king.position.row = row
+        king.position.column = kingColumn
+        rook.position.row = row
+        rook.position.column = rookColumn
+
+        activePieces[Pair(row, kingColumn)] = king
+        activePieces[Pair(row, rookColumn)] = rook
+    }
+
+    private fun updatePieceSetsDefault(draw: Draw) {
+        val activePieces = pieceSets[currentColor]?.activePieces
+                ?: throw NullPointerException("The HashMap of active pieces for Player $currentColor is null!")
+        val opposingActivePieces = pieceSets[currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException("The HashMap of active pieces for Player ${currentColor.getOpposite()} is null!")
+        val capturedPieces = pieceSets[currentColor]?.capturedPieces
+                ?: throw NullPointerException("The HashSet of captured pieces is null!")
+
+        val piece = activePieces[draw.startField?.asPair()] ?: throw NullPointerException("Can't get piece!")
+        activePieces.remove(draw.startField?.asPair())
+
+        piece.position.row = draw.endField?.row!!
+        piece.position.column = draw.endField?.column!!
+
+        activePieces[draw.endField?.asPair()!!] = piece
+
+        if (draw.throwPiece) {
+            var capturedPiecePosition = draw.endField?.asPair()!!
+            if (draw.throwEnPassant) {
+                capturedPiecePosition = when (currentColor) {
+                    WHITE -> Pair(5, draw.endField?.column!!)
+                    BLACK -> Pair(4, draw.endField?.column!!)
                 }
-
-                val capturedPiece = opposingActivePieces[capturedPiecePosition] ?: throw NullPointerException("Can't get captured piece!")
-                opposingActivePieces.remove(capturedPiecePosition)
-
-                capturedPieces.add(capturedPiece)
             }
+
+            val capturedPiece = opposingActivePieces[capturedPiecePosition]
+                    ?: throw NullPointerException("Can't get captured piece!")
+            opposingActivePieces.remove(capturedPiecePosition)
+
+            capturedPieces.add(capturedPiece)
         }
     }
 }

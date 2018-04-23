@@ -10,7 +10,8 @@ class Field(
         @DatabaseField(canBeNull = false)
         var row: Int = 0,
         @DatabaseField(canBeNull = false)
-        var column: Int = 0) {
+        var column: Int = 0
+) {
     fun asPair(): Pair<Int, Int> {
         return Pair(row, column)
     }

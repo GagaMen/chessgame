@@ -2,6 +2,7 @@ package htwdd.chessgame.server.model
 
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import htwdd.chessgame.server.model.PieceType.*
 
 @DatabaseTable(tableName = "Draw")
 data class Draw(
@@ -32,49 +33,54 @@ data class Draw(
         @DatabaseField
         var checkmate: Boolean = false,
         @DatabaseField(canBeNull = false)
-        var drawCode: String = "") {
-
+        var drawCode: String = ""
+) {
     fun setValuesByDrawCode() {
         val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()
         val matchResult: MatchResult
 
         when {
             drawCode.contains("^O-O-O".toRegex()) -> {
-                pieceType = PieceType.KING
+                pieceType = KING
                 queensideCastling = true
                 return
             }
             drawCode.contains("^O-O".toRegex()) -> {
-                pieceType = PieceType.KING
+                pieceType = KING
                 kingsideCastling = true
                 return
             }
             else -> {
                 matchResult = regex.find(drawCode) ?: throw NullPointerException("Can't parse drawCode with regex!")
                 pieceType = when (matchResult.groups[1]?.value) {
-                    "K" -> PieceType.KING
-                    "Q" -> PieceType.QUEEN
-                    "B" -> PieceType.BISHOP
-                    "N" -> PieceType.KNIGHT
-                    "R" -> PieceType.ROOK
-                    else -> PieceType.PAWN
+                    "K" -> KING
+                    "Q" -> QUEEN
+                    "B" -> BISHOP
+                    "N" -> KNIGHT
+                    "R" -> ROOK
+                    else -> PAWN
                 }
             }
         }
 
         if (matchResult.groups[3] != null) throwPiece = true
 
-        if (matchResult.groups[4] == null || matchResult.groups[5] == null) throw IllegalArgumentException("The draw isn't valid!")
-        val column = matchResult.groups[4]?.value?.toCharArray()?.get(0)?.toInt() ?: throw NullPointerException("Can't convert column of end position from drawCode to Int!")
-        val row = matchResult.groups[5]?.value?.toInt() ?: throw NullPointerException("Can't convert row of end position from drawCode to Int!")
+        if (matchResult.groups[4] == null || matchResult.groups[5] == null) {
+            throw IllegalArgumentException("The draw isn't valid!")
+        }
+
+        val column = matchResult.groups[4]?.value?.toCharArray()?.get(0)?.toInt()
+                ?: throw NullPointerException("Can't convert column of end position from drawCode to Int!")
+        val row = matchResult.groups[5]?.value?.toInt()
+                ?: throw NullPointerException("Can't convert row of end position from drawCode to Int!")
         endField = Field(row = row, column = column % 96)
 
         if (matchResult.groups[6] != null) {
             when (matchResult.groups[6]?.value) {
-                "Q" -> conversion = PieceType.QUEEN
-                "B" -> conversion = PieceType.BISHOP
-                "R" -> conversion = PieceType.ROOK
-                "N" -> conversion = PieceType.KNIGHT
+                "Q" -> conversion = QUEEN
+                "B" -> conversion = BISHOP
+                "R" -> conversion = ROOK
+                "N" -> conversion = KNIGHT
             }
         }
 

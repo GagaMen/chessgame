@@ -11,4 +11,5 @@ data class Player(
         @DatabaseField(canBeNull = false)
         var name: String = "",
         @DatabaseField(canBeNull = false)
-        var password: String = "") : Serializable
+        var password: String = ""
+) : Serializable
