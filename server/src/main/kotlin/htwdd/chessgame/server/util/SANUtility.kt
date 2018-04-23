@@ -1,23 +1,28 @@
 package htwdd.chessgame.server.util
 
-import htwdd.chessgame.server.model.*
+import htwdd.chessgame.server.model.Draw
+import htwdd.chessgame.server.model.Field
+import htwdd.chessgame.server.model.Match
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceType.*
 
 class SANUtility {
     companion object {
         fun validateSAN(draw: Draw, match: Match): Boolean {
             val movementFields = HashSet<Pair<Int, Int>>()
             val movementUtility = when (draw.pieceType) {
-                PieceType.PAWN -> PawnMovementUtility()
-                PieceType.KING -> KingMovementUtility()
-                PieceType.QUEEN -> QueenMovementUtility()
-                PieceType.BISHOP -> BishopMovementUtility()
-                PieceType.KNIGHT -> KnightMovementUtility()
-                PieceType.ROOK -> RookMovementUtility()
+                PAWN -> PawnMovementUtility()
+                KING -> KingMovementUtility()
+                QUEEN -> QueenMovementUtility()
+                BISHOP -> BishopMovementUtility()
+                KNIGHT -> KnightMovementUtility()
+                ROOK -> RookMovementUtility()
                 else -> return false
             }
 
             // validate castling
-            if (draw.pieceType == PieceType.KING && (draw.kingsideCastling || draw.queensideCastling)) {
+            if (draw.pieceType == KING && (draw.kingsideCastling || draw.queensideCastling)) {
                 return validateCastling(draw, match)
             }
 
@@ -42,10 +47,11 @@ class SANUtility {
         }
 
         private fun validateCastling(draw: Draw, match: Match): Boolean {
-            val activePieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException("The HashMap of active pieces for Player ${match.currentColor} is null!")
+            val activePieces = match.pieceSets[match.currentColor]?.activePieces
+                    ?: throw NullPointerException("The HashMap of active pieces for Player ${match.currentColor} is null!")
             val kingPosition = when (match.currentColor) {
-                PieceColor.WHITE -> Pair(1,5)
-                PieceColor.BLACK -> Pair(8,5)
+                WHITE -> Pair(1, 5)
+                BLACK -> Pair(8, 5)
             }
 
             draw.startField = Field(row = kingPosition.first, column = kingPosition.second)
@@ -53,7 +59,7 @@ class SANUtility {
             if (!activePieces.containsKey(kingPosition)) return false
             else {
                 val piece = activePieces[kingPosition] ?: throw NullPointerException("Can't get piece!")
-                if (piece.type != PieceType.KING) return false
+                if (piece.type != KING) return false
             }
 
             val movementFields = HashSet<Pair<Int, Int>>()

@@ -4,8 +4,10 @@ import htwdd.chessgame.server.model.Match
 
 class BishopMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (row != 1) {
             if (col != 1) {
@@ -50,8 +52,10 @@ class BishopMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
-        val currentPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (row != 1) {
             if (col != 1) {

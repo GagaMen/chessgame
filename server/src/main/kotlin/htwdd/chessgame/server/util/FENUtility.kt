@@ -1,6 +1,10 @@
 package htwdd.chessgame.server.util
 
-import htwdd.chessgame.server.model.*
+import htwdd.chessgame.server.model.Match
+import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceType
 
 class FENUtility {
     companion object {
@@ -8,8 +12,8 @@ class FENUtility {
 
         fun calc(match: Match) {
             val sb = StringBuilder()
-            val whitePieceSet = match.pieceSets[PieceColor.WHITE] ?: throw NullPointerException()
-            val blackPieceSet = match.pieceSets[PieceColor.BLACK] ?: throw NullPointerException()
+            val whitePieceSet = match.pieceSets[WHITE] ?: throw NullPointerException()
+            val blackPieceSet = match.pieceSets[BLACK] ?: throw NullPointerException()
 
             // piece position
             for (i in 8 downTo 1) {
@@ -21,11 +25,11 @@ class FENUtility {
                     when {
                         whitePieceSet.activePieces.containsKey(Pair(i, j)) -> {
                             pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: throw NullPointerException()
-                            pieceColor = PieceColor.WHITE
+                            pieceColor = WHITE
                         }
                         blackPieceSet.activePieces.containsKey(Pair(i, j)) -> {
                             pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: throw NullPointerException()
-                            pieceColor = PieceColor.BLACK
+                            pieceColor = BLACK
                         }
                         else -> emptyCol++
                     }
@@ -46,17 +50,17 @@ class FENUtility {
             sb.append(" ${match.currentColor.getCode()}")
 
             // castling right
-            if (!match.kingsideCastling[PieceColor.WHITE]!! &&
-                    !match.queensideCastling[PieceColor.WHITE]!! &&
-                    !match.kingsideCastling[PieceColor.BLACK]!! &&
-                    !match.queensideCastling[PieceColor.BLACK]!!) {
+            if (!match.kingsideCastling[WHITE]!! &&
+                    !match.queensideCastling[WHITE]!! &&
+                    !match.kingsideCastling[BLACK]!! &&
+                    !match.queensideCastling[BLACK]!!) {
                 sb.append(" -")
             } else {
                 sb.append(" ")
-                if (match.kingsideCastling[PieceColor.WHITE]!!) sb.append("K")
-                if (match.queensideCastling[PieceColor.WHITE]!!) sb.append("Q")
-                if (match.kingsideCastling[PieceColor.BLACK]!!) sb.append("k")
-                if (match.queensideCastling[PieceColor.BLACK]!!) sb.append("q")
+                if (match.kingsideCastling[WHITE]!!) sb.append("K")
+                if (match.queensideCastling[WHITE]!!) sb.append("Q")
+                if (match.kingsideCastling[BLACK]!!) sb.append("k")
+                if (match.queensideCastling[BLACK]!!) sb.append("q")
             }
 
             // en passant

@@ -4,7 +4,8 @@ import htwdd.chessgame.server.model.Match
 
 class KnightMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: throw NullPointerException()
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
 
         if (row + 2 < 9 && col + 1 < 9 && !currentPieces.containsKey(Pair(row + 2, col + 1))) {
             movementFields.add(Pair(row + 2, col + 1))
@@ -33,7 +34,8 @@ class KnightMovementUtility : MovementUtility() {
     }
 
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
-        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: throw NullPointerException()
+        val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
+                ?: throw NullPointerException()
 
         if (row + 2 < 9 && col + 1 < 9 && !opposingPieces.containsKey(Pair(row + 2, col + 1))) {
             threatedFields.add(Pair(row + 2, col + 1))
