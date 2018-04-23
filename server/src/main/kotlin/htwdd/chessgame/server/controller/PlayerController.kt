@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse
 class PlayerController {
     private val playerDao = DatabaseUtility.playerDao
     private val matchDao = DatabaseUtility.matchDao
+    private val drawDao = DatabaseUtility.drawDao
+    private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("player", method = [OPTIONS])
@@ -50,18 +52,9 @@ class PlayerController {
             @PathVariable
             id: Int
     ) {
-        val queryBuilder = matchDao!!.queryBuilder()
-        val query = queryBuilder
-                .where()
-                .eq("playerWhite_id", id)
-                .or()
-                .eq("playerBlack_id", id)
-                .prepare()
-
         if (!playerDao!!.idExists(id)) throw IllegalArgumentException("No player with the id '$id' registered!")
 
-        val matches = matchDao.query(query)
-        if (matchDao.delete(matches) != 1) throw SQLException("Can't delete matches from player with the id '$id'")
+        deleteMatchesByPlayer(id)
 
         if (playerDao.deleteById(id) != 1) throw SQLException("Can't delete player with the id '$id'!")
     }
@@ -113,5 +106,49 @@ class PlayerController {
         player.password = password
 
         if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
+    }
+
+    private fun deleteMatchesByPlayer(id: Int) {
+        val matches = matchDao!!.query(matchDao.queryBuilder()
+                .where()
+                .eq("playerWhite_id", id)
+                .or()
+                .eq("playerBlack_id", id)
+                .prepare())
+
+        if (matches.size != 0) {
+
+            matches.forEach { match ->
+                if (match.enPassantField != null) {
+                    if (fieldDao!!.delete(match.enPassantField) != 1) {
+                        throw SQLException("Can't delete field from match with the id '$id'")
+                    }
+                }
+
+                val draws = drawDao!!.query(drawDao.queryBuilder()
+                        .where()
+                        .eq("match_id", match.id)
+                        .prepare())
+
+                if (draws.size != 0) {
+                    draws.forEach { draw ->
+                        if (draw.startField != null) {
+                            if (fieldDao!!.delete(draw.startField) != 1) {
+                                throw SQLException("Can't delete field from draw with the id '$id'")
+                            }
+                        }
+                        if (draw.endField != null) {
+                            if (fieldDao!!.delete(draw.endField) != 1) {
+                                throw SQLException("Can't delete field from draw with the id '$id'")
+                            }
+                        }
+                    }
+
+                    if (drawDao.delete(draws) == 0) throw SQLException("Can't delete draws from match with the id '$id'")
+                }
+            }
+
+            if (matchDao.delete(matches) == 0) throw SQLException("Can't delete matches from player with the id '$id'")
+        }
     }
 }
