@@ -9,16 +9,16 @@ class PawnMovementUtility : MovementUtility() {
 
         when (match.currentColor) {
             PieceColor.WHITE -> {
-                if (!opposingPieces.containsKey(Pair(row + 1, col))) {
+                if (!opposingPieces.containsKey(Pair(row + 1, col).toString())) {
                     movementFields.add(Pair(row + 1, col))
-                    if (row == 2 && !opposingPieces.containsKey(Pair(row + 2, col))) {
+                    if (row == 2 && !opposingPieces.containsKey(Pair(row + 2, col).toString())) {
                         movementFields.add(Pair(row + 2, col))
                     }
                 }
-                if (opposingPieces.containsKey(Pair(row + 1, col + 1))) {
+                if (opposingPieces.containsKey(Pair(row + 1, col + 1).toString())) {
                     movementFields.add(Pair(row + 1, col + 1))
                 }
-                if (opposingPieces.containsKey(Pair(row + 1, col - 1))) {
+                if (opposingPieces.containsKey(Pair(row + 1, col - 1).toString())) {
                     movementFields.add(Pair(row + 1, col - 1))
                 }
                 if (match.enPassantField != null && match.enPassantField?.row == row + 1) {
@@ -31,16 +31,16 @@ class PawnMovementUtility : MovementUtility() {
                 }
             }
             PieceColor.BLACK -> {
-                if (!opposingPieces.containsKey(Pair(row - 1, col))) {
+                if (!opposingPieces.containsKey(Pair(row - 1, col).toString())) {
                     movementFields.add(Pair(row - 1, col))
-                    if (row == 7 && !opposingPieces.containsKey(Pair(row - 2, col))) {
+                    if (row == 7 && !opposingPieces.containsKey(Pair(row - 2, col).toString())) {
                         movementFields.add(Pair(row - 2, col))
                     }
                 }
-                if (opposingPieces.containsKey(Pair(row - 1, col + 1))) {
+                if (opposingPieces.containsKey(Pair(row - 1, col + 1).toString())) {
                     movementFields.add(Pair(row - 1, col + 1))
                 }
-                if (opposingPieces.containsKey(Pair(row - 1, col - 1))) {
+                if (opposingPieces.containsKey(Pair(row - 1, col - 1).toString())) {
                     movementFields.add(Pair(row - 1, col - 1))
                 }
                 if (match.enPassantField != null && match.enPassantField?.row == row - 1) {
@@ -60,10 +60,10 @@ class PawnMovementUtility : MovementUtility() {
 
         when (match.currentColor.getOpposite()) {
             PieceColor.WHITE -> {
-                if (opposingPieces.containsKey(Pair(row + 1, col + 1))) {
+                if (opposingPieces.containsKey(Pair(row + 1, col + 1).toString())) {
                     threatedFields.add(Pair(row + 1, col + 1))
                 }
-                if (opposingPieces.containsKey(Pair(row + 1, col - 1))) {
+                if (opposingPieces.containsKey(Pair(row + 1, col - 1).toString())) {
                     threatedFields.add(Pair(row + 1, col - 1))
                 }
                 if (match.enPassantField != null && match.enPassantField?.row == row + 1) {
@@ -76,10 +76,10 @@ class PawnMovementUtility : MovementUtility() {
                 }
             }
             PieceColor.BLACK -> {
-                if (opposingPieces.containsKey(Pair(row - 1, col + 1))) {
+                if (opposingPieces.containsKey(Pair(row - 1, col + 1).toString())) {
                     threatedFields.add(Pair(row - 1, col + 1))
                 }
-                if (opposingPieces.containsKey(Pair(row - 1, col - 1))) {
+                if (opposingPieces.containsKey(Pair(row - 1, col - 1).toString())) {
                     threatedFields.add(Pair(row - 1, col - 1))
                 }
                 if (match.enPassantField != null && match.enPassantField?.row == row - 1) {

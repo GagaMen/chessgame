@@ -12,18 +12,18 @@ class BishopMovementUtility : MovementUtility() {
                 var tmpCol = col
                 for (i in row - 1 downTo 1) {
                     tmpCol--
-                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     movementFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
             if (col != 8) {
                 var tmpCol = col
                 for (i in row - 1 downTo 1) {
                     tmpCol++
-                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     movementFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
         }
@@ -32,18 +32,18 @@ class BishopMovementUtility : MovementUtility() {
                 var tmpCol = col
                 for (i in row + 1..8) {
                     tmpCol--
-                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     movementFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
             if (col != 8) {
                 var tmpCol = col
                 for (i in row + 1..8) {
                     tmpCol++
-                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     movementFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
         }
@@ -58,18 +58,18 @@ class BishopMovementUtility : MovementUtility() {
                 var tmpCol = col
                 for (i in row - 1 downTo 1) {
                     tmpCol--
-                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     threatedFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
             if (col != 8) {
                 var tmpCol = col
                 for (i in row - 1 downTo 1) {
                     tmpCol++
-                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     threatedFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
         }
@@ -78,18 +78,18 @@ class BishopMovementUtility : MovementUtility() {
                 var tmpCol = col
                 for (i in row + 1..8) {
                     tmpCol--
-                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 0 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     threatedFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
             if (col != 8) {
                 var tmpCol = col
                 for (i in row + 1..8) {
                     tmpCol++
-                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol))) break
+                    if (tmpCol == 9 || currentPieces.containsKey(Pair(i, tmpCol).toString())) break
                     threatedFields.add(Pair(i, tmpCol))
-                    if (opposingPieces.containsKey(Pair(i, tmpCol))) break
+                    if (opposingPieces.containsKey(Pair(i, tmpCol).toString())) break
                 }
             }
         }

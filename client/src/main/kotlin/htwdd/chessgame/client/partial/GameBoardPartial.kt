@@ -73,14 +73,14 @@ class GameBoardPartial(val match: Match) : Partial {
                                 onDropFunction = { event -> DraggableUtility.drop(event, controller, match) }
                                 onDragOverFunction = { event -> DraggableUtility.dragOver(event) }
 
-                                if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j))) {
+                                if (activePiecesWhite != null && activePiecesWhite.contains(Pair(i, j).toString())) {
                                     img(classes = "piece--white") {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { DraggableUtility.dragEnd(match) }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { DraggableUtility.mouseOut() }
                                         id = "$i$j"
-                                        when (activePiecesWhite[Pair(i, j)]?.type) {
+                                        when (activePiecesWhite[Pair(i, j).toString()]?.type) {
                                             PieceType.BISHOP -> {
                                                 src = basePath + "bishop_white.svg"
                                                 attributes["data-type"] = PieceType.BISHOP.toString()
@@ -108,14 +108,14 @@ class GameBoardPartial(val match: Match) : Partial {
                                         }
                                     }
                                 }
-                                if (activePiecesBlack != null && activePiecesBlack.contains(Pair(i, j))) {
+                                if (activePiecesBlack != null && activePiecesBlack.contains(Pair(i, j).toString())) {
                                     img(classes = "piece--black") {
                                         onDragStartFunction = { event -> DraggableUtility.dragStart(event, match) }
                                         onDragEndFunction = { DraggableUtility.dragEnd(match) }
                                         onMouseOverFunction = { event -> DraggableUtility.mouseOver(event, match) }
                                         onMouseOutFunction = { DraggableUtility.mouseOut() }
                                         id = "$i$j"
-                                        when (activePiecesBlack[Pair(i, j)]?.type) {
+                                        when (activePiecesBlack[Pair(i, j).toString()]?.type) {
                                             PieceType.BISHOP -> {
                                                 src = basePath + "bishop_black.svg"
                                                 attributes["data-type"] = PieceType.BISHOP.toString()

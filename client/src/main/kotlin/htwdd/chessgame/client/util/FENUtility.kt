@@ -17,12 +17,12 @@ class FENUtility {
                     var pieceColor: PieceColor? = null
 
                     when {
-                        whitePieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                            pieceType = whitePieceSet.activePieces[Pair(i, j)]?.type ?: return
+                        whitePieceSet.activePieces.containsKey(Pair(i, j).toString()) -> {
+                            pieceType = whitePieceSet.activePieces[Pair(i, j).toString()]?.type ?: return
                             pieceColor = PieceColor.WHITE
                         }
-                        blackPieceSet.activePieces.containsKey(Pair(i, j)) -> {
-                            pieceType = blackPieceSet.activePieces[Pair(i, j)]?.type ?: return
+                        blackPieceSet.activePieces.containsKey(Pair(i, j).toString()) -> {
+                            pieceType = blackPieceSet.activePieces[Pair(i, j).toString()]?.type ?: return
                             pieceColor = PieceColor.BLACK
                         }
                         else -> emptyCol++
@@ -141,7 +141,7 @@ class FENUtility {
 
         private fun setPiece(match: Match, pieceColor: PieceColor, pieceType: PieceType, field: Field) {
             val pieces = match.pieceSets[pieceColor]?.activePieces
-            pieces!![field.asPair()] = Piece(pieceType, field)
+            pieces!![field.asPair().toString()] = Piece(pieceType, field)
         }
     }
 }

@@ -47,11 +47,11 @@ data class Match(var id: Int = 0,
         val endPosition = draw.end.asPair()
         var enPassantPosition: Pair<Int, Int>? = null
         val pieceSet = pieceSets[draw.color] ?: return
-        val piece = pieceSet.activePieces[startPosition] ?: return
+        val piece = pieceSet.activePieces[startPosition.toString()] ?: return
 
         piece.position = draw.end
-        pieceSet.activePieces.remove(startPosition)
-        pieceSet.activePieces[endPosition] = piece
+        pieceSet.activePieces.remove(startPosition.toString())
+        pieceSet.activePieces[endPosition.toString()] = piece
 
         val opposingPieceSet = pieceSets[draw.color.getOpposite()] ?: return
 
@@ -64,16 +64,16 @@ data class Match(var id: Int = 0,
             }
         }
 
-        if (opposingPieceSet.activePieces.containsKey(endPosition)) {
-            val capturedPiece = opposingPieceSet.activePieces[endPosition]
+        if (opposingPieceSet.activePieces.containsKey(endPosition.toString())) {
+            val capturedPiece = opposingPieceSet.activePieces[endPosition.toString()]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-            opposingPieceSet.activePieces.remove(endPosition)
+            opposingPieceSet.activePieces.remove(endPosition.toString())
         }
 
-        if (opposingPieceSet.activePieces.containsKey(enPassantPosition)) {
-            val capturedPiece = opposingPieceSet.activePieces[enPassantPosition]
+        if (opposingPieceSet.activePieces.containsKey(enPassantPosition.toString())) {
+            val capturedPiece = opposingPieceSet.activePieces[enPassantPosition.toString()]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-            opposingPieceSet.activePieces.remove(enPassantPosition)
+            opposingPieceSet.activePieces.remove(enPassantPosition.toString())
             enPassantField = null
         }
     }

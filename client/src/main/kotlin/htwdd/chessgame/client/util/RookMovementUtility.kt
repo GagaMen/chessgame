@@ -9,30 +9,30 @@ class RookMovementUtility : MovementUtility() {
 
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {
-                if (currentPieces.containsKey(Pair(row, i))) break
+                if (currentPieces.containsKey(Pair(row, i).toString())) break
                 movementFields.add(Pair(row, i))
-                if (opposingPieces.containsKey(Pair(row, i))) break
+                if (opposingPieces.containsKey(Pair(row, i).toString())) break
             }
         }
         if (col != 8) {
             for (i in (col + 1..8)) {
-                if (currentPieces.containsKey(Pair(row, i))) break
+                if (currentPieces.containsKey(Pair(row, i).toString())) break
                 movementFields.add(Pair(row, i))
-                if (opposingPieces.containsKey(Pair(row, i))) break
+                if (opposingPieces.containsKey(Pair(row, i).toString())) break
             }
         }
         if (row != 1) {
             for (i in (row - 1 downTo 1)) {
-                if (currentPieces.containsKey(Pair(i, col))) break
+                if (currentPieces.containsKey(Pair(i, col).toString())) break
                 movementFields.add(Pair(i, col))
-                if (opposingPieces.containsKey(Pair(i, col))) break
+                if (opposingPieces.containsKey(Pair(i, col).toString())) break
             }
         }
         if (row != 8) {
             for (i in (row + 1..8)) {
-                if (currentPieces.containsKey(Pair(i, col))) break
+                if (currentPieces.containsKey(Pair(i, col).toString())) break
                 movementFields.add(Pair(i, col))
-                if (opposingPieces.containsKey(Pair(i, col))) break
+                if (opposingPieces.containsKey(Pair(i, col).toString())) break
             }
         }
     }
@@ -43,30 +43,30 @@ class RookMovementUtility : MovementUtility() {
 
         if (col != 1) {
             for (i in (col - 1 downTo 1)) {
-                if (currentPieces.containsKey(Pair(row, i))) break
+                if (currentPieces.containsKey(Pair(row, i).toString())) break
                 threatedFields.add(Pair(row, i))
-                if (opposingPieces.containsKey(Pair(row, i))) break
+                if (opposingPieces.containsKey(Pair(row, i).toString())) break
             }
         }
         if (col != 8) {
             for (i in (col + 1..8)) {
-                if (currentPieces.containsKey(Pair(row, i))) break
+                if (currentPieces.containsKey(Pair(row, i).toString())) break
                 threatedFields.add(Pair(row, i))
-                if (opposingPieces.containsKey(Pair(row, i))) break
+                if (opposingPieces.containsKey(Pair(row, i).toString())) break
             }
         }
         if (row != 1) {
             for (i in (row - 1 downTo 1)) {
-                if (currentPieces.containsKey(Pair(i, col))) break
+                if (currentPieces.containsKey(Pair(i, col).toString())) break
                 threatedFields.add(Pair(i, col))
-                if (opposingPieces.containsKey(Pair(i, col))) break
+                if (opposingPieces.containsKey(Pair(i, col).toString())) break
             }
         }
         if (row != 8) {
             for (i in (row + 1..8)) {
-                if (currentPieces.containsKey(Pair(i, col))) break
+                if (currentPieces.containsKey(Pair(i, col).toString())) break
                 threatedFields.add(Pair(i, col))
-                if (opposingPieces.containsKey(Pair(i, col))) break
+                if (opposingPieces.containsKey(Pair(i, col).toString())) break
             }
         }
     }

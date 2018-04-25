@@ -168,12 +168,12 @@ class GameController(private val client: Client) : Controller {
 
                 val pieceSet = match.pieceSets[pieceColor]?.activePieces ?: return
 
-                if (!pieceSet.containsKey(Pair(row, col))) {
+                if (!pieceSet.containsKey(Pair(row, col).toString())) {
                     // don't contains key
                     return
                 }
 
-                pieceSet[Pair(row, col)]?.type = pieceType
+                pieceSet[Pair(row, col).toString()]?.type = pieceType
 
                 val draw = match.history[match.history.lastIndex]
                 draw.drawCode = "${draw.drawCode}${pieceType.getDrawCode()}"
