@@ -5,11 +5,13 @@ import org.w3c.xhr.XMLHttpRequest
 
 class RequestUtility {
     companion object {
-        fun get(url: String, callback: ((Event) -> dynamic)? = null) {
+        fun get(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
             val request = XMLHttpRequest()
 
             if (callback != null) request.onload = callback
-            request.open("GET", url)
+
+            if (params.isNotEmpty()) request.open("GET", "$url?${parseParams(params)}")
+            else request.open("GET", url)
             request.send()
         }
 
