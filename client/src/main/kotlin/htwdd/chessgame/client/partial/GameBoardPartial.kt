@@ -14,21 +14,22 @@ import kotlin.browser.document
 import kotlin.dom.addClass
 
 class GameBoardPartial(val match: Match) : Partial {
-    private val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
-    private val activePiecesBlack = match.pieceSets[PieceColor.BLACK]?.activePieces
     private val basePath = "image/"
 
     override fun getPartial(controller: Controller): HTMLElement {
+        val activePiecesWhite = match.pieceSets[PieceColor.WHITE]?.activePieces
+        val activePiecesBlack = match.pieceSets[PieceColor.BLACK]?.activePieces
+
         return document.create.div(classes = "board") {
             div(classes = "board--legend-left") {
-                p { span { +"1" } }
-                p { span { +"2" } }
-                p { span { +"3" } }
-                p { span { +"4" } }
-                p { span { +"5" } }
-                p { span { +"6" } }
-                p { span { +"7" } }
                 p { span { +"8" } }
+                p { span { +"7" } }
+                p { span { +"6" } }
+                p { span { +"5" } }
+                p { span { +"4" } }
+                p { span { +"3" } }
+                p { span { +"2" } }
+                p { span { +"1" } }
             }
             div(classes = "board--legend-top") {
                 p { span { +"A" } }
@@ -41,14 +42,14 @@ class GameBoardPartial(val match: Match) : Partial {
                 p { span { +"H" } }
             }
             div(classes = "board--legend-right") {
-                p { span { +"1" } }
-                p { span { +"2" } }
-                p { span { +"3" } }
-                p { span { +"4" } }
-                p { span { +"5" } }
-                p { span { +"6" } }
-                p { span { +"7" } }
                 p { span { +"8" } }
+                p { span { +"7" } }
+                p { span { +"6" } }
+                p { span { +"5" } }
+                p { span { +"4" } }
+                p { span { +"3" } }
+                p { span { +"2" } }
+                p { span { +"1" } }
             }
             div(classes = "board--legend-bottom") {
                 p { span { +"A" } }
@@ -60,7 +61,7 @@ class GameBoardPartial(val match: Match) : Partial {
                 p { span { +"G" } }
                 p { span { +"H" } }
             }
-            for (i in 1..8) {
+            for (i in 8 downTo 1) {
                 div(classes = "board--row") {
                     id = "board--row-$i"
                     for (j in 1..8) {
