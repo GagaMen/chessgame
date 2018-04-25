@@ -106,12 +106,8 @@ class DraggableUtility {
 
                     post("http://127.0.0.1:8080/draw",
                             Pair("matchId", match.id),
-                            Pair("color", pieceColor),
-                            Pair("type", pieceType),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
-                            Pair("endRow", newRow),
-                            Pair("endColumn", newCol),
                             Pair("drawCode", drawCode)) {
                         if (it.target is XMLHttpRequest) {
                             val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
@@ -148,12 +144,8 @@ class DraggableUtility {
 
                     post("http://127.0.0.1:8080/draw",
                             Pair("matchId", match.id),
-                            Pair("color", pieceColor),
-                            Pair("type", pieceType),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
-                            Pair("endRow", newRow),
-                            Pair("endColumn", newCol),
                             Pair("drawCode", drawCode)) {
                         if (it.target is XMLHttpRequest) {
                             val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)

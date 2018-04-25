@@ -2,7 +2,6 @@ package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
-import htwdd.chessgame.client.util.RequestUtility.Companion.patch
 import htwdd.chessgame.client.view.GameView
 import kotlinx.coroutines.experimental.await
 import kotlinx.coroutines.experimental.launch
@@ -35,7 +34,6 @@ class GameController(private val client: Client) : Controller {
             "disableKingSideCastlingAction" -> disableKingSideCastlingAction(arg)
             "disableQueenSideCastlingAction" -> disableQueenSideCastlingAction(arg)
             "convertPieceAction" -> convertPieceAction(arg)
-            "updateMatchAction" -> updateMatchAction(arg)
         }
     }
 
@@ -87,7 +85,6 @@ class GameController(private val client: Client) : Controller {
                 val draw = arg.second as? Draw ?: return
 
                 match.addDraw(draw)
-                updateMatchAction(match)
             }
         }
     }
@@ -180,18 +177,6 @@ class GameController(private val client: Client) : Controller {
 
                 match.history.removeAt(match.history.lastIndex)
                 match.history.add(draw)
-            }
-        }
-    }
-
-    private fun updateMatchAction(arg: Any?) {
-        when (arg) {
-            is Match -> {
-                patch("http://localhost:8080/match/${arg.id}",
-                        Pair("checkWhite", arg.check[PieceColor.WHITE]!!),
-                        Pair("checkBlack", arg.check[PieceColor.BLACK]!!),
-                        Pair("checkmate", arg.checkmate),
-                        Pair("matchCode", arg.matchCode))
             }
         }
     }
