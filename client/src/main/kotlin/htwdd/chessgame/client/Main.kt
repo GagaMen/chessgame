@@ -4,10 +4,9 @@ import htwdd.chessgame.client.controller.MatchController
 import htwdd.chessgame.client.controller.PlayerController
 import htwdd.chessgame.client.controller.StartController
 import htwdd.chessgame.client.model.Client
-import htwdd.chessgame.client.model.DrawList
 import htwdd.chessgame.client.model.MatchHashMap
+import htwdd.chessgame.client.model.PieceSetHashMap
 import htwdd.chessgame.client.model.PlayerHashMap
-import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import kotlinx.serialization.json.JSON
 import org.w3c.xhr.XMLHttpRequest
@@ -34,14 +33,18 @@ private fun loadData(): Client {
             val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
             matchHashMap.matches.forEach { (matchId, match) ->
 
-                FENUtility.setByCode(match)
-
-                get("http://127.0.0.1:8080/match/$matchId/draw") {
+                get("http://127.0.0.1:8080/match/$matchId/pieceSets") {
                     if (it.target is XMLHttpRequest) {
-                        val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
-                        match.history = drawList.draws
+                        val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
+                        match.pieceSets = pieceSetHashMap.pieceSets
                     }
                 }
+//                get("http://127.0.0.1:8080/match/$matchId/draw") {
+//                    if (it.target is XMLHttpRequest) {
+//                        val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+//                        match.history = drawList.draws
+//                    }
+//                }
 
                 client.addMatch(match)
             }
