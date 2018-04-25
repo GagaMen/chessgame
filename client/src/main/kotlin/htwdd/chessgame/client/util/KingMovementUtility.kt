@@ -34,12 +34,12 @@ class KingMovementUtility : MovementUtility() {
 
         when (match.currentColor) {
             PieceColor.WHITE -> {
-                if (match.whiteCastlingKingSide &&
+                if (match.kingsideCastling[PieceColor.WHITE]!! &&
                         !currentPieces.containsKey(Pair(row, col + 1).toString()) &&
                         !currentPieces.containsKey(Pair(row, col + 2).toString())) {
                     movementFields.add(Pair(row, col + 2))
                 }
-                if (match.whiteCastlingQueenSide &&
+                if (match.queensideCastling[PieceColor.WHITE]!! &&
                         !currentPieces.containsKey(Pair(row, col - 1).toString()) &&
                         !currentPieces.containsKey(Pair(row, col - 2).toString()) &&
                         !currentPieces.containsKey(Pair(row, col - 3).toString())) {
@@ -47,12 +47,12 @@ class KingMovementUtility : MovementUtility() {
                 }
             }
             PieceColor.BLACK -> {
-                if (match.blackCastlingKingSide &&
+                if (match.kingsideCastling[PieceColor.BLACK]!! &&
                         !currentPieces.containsKey(Pair(row, col + 1).toString()) &&
                         !currentPieces.containsKey(Pair(row, col + 2).toString())) {
                     movementFields.add(Pair(row, col + 2))
                 }
-                if (match.blackCastlingQueenSide &&
+                if (match.queensideCastling[PieceColor.BLACK]!! &&
                         !currentPieces.containsKey(Pair(row, col - 1).toString()) &&
                         !currentPieces.containsKey(Pair(row, col - 2).toString()) &&
                         !currentPieces.containsKey(Pair(row, col - 3).toString())) {

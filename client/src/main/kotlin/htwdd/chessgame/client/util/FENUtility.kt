@@ -44,17 +44,17 @@ class FENUtility {
             sb.append(" ${match.currentColor.getCode()}")
 
             // castling right
-            if (!match.whiteCastlingKingSide &&
-                    !match.whiteCastlingQueenSide &&
-                    !match.blackCastlingKingSide &&
-                    !match.blackCastlingQueenSide) {
+            if (!match.kingsideCastling[PieceColor.WHITE]!! &&
+                    !match.queensideCastling[PieceColor.WHITE]!! &&
+                    !match.kingsideCastling[PieceColor.BLACK]!! &&
+                    !match.queensideCastling[PieceColor.BLACK]!!) {
                 sb.append(" -")
             } else {
                 sb.append(" ")
-                if (match.whiteCastlingKingSide) sb.append("K")
-                if (match.whiteCastlingQueenSide) sb.append("Q")
-                if (match.blackCastlingKingSide) sb.append("k")
-                if (match.blackCastlingQueenSide) sb.append("q")
+                if (match.kingsideCastling[PieceColor.WHITE]!!) sb.append("K")
+                if (match.queensideCastling[PieceColor.WHITE]!!) sb.append("Q")
+                if (match.kingsideCastling[PieceColor.BLACK]!!) sb.append("k")
+                if (match.queensideCastling[PieceColor.BLACK]!!) sb.append("q")
             }
 
             // en passant

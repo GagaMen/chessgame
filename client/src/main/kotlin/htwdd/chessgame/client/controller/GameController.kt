@@ -127,16 +127,8 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingKingSide = false
-                        match.whiteCastlingQueenSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingKingSide = false
-                        match.blackCastlingQueenSide = false
-                    }
-                }
+                match.kingsideCastling[pieceColor] = false
+                match.queensideCastling[pieceColor] = false
             }
         }
     }
@@ -147,14 +139,7 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingKingSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingKingSide = false
-                    }
-                }
+                match.kingsideCastling[pieceColor] = false
             }
         }
     }
@@ -165,14 +150,7 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingQueenSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingQueenSide = false
-                    }
-                }
+                match.queensideCastling[pieceColor] = false
             }
         }
     }

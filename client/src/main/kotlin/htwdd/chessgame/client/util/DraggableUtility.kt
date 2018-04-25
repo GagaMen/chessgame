@@ -248,11 +248,11 @@ class DraggableUtility {
         private fun dropRook(controller: Controller, match: Match, oldCol: Int, pieceColor: PieceColor) {
             controller.actionPerformed("resetEnPassantFieldAction", match)
 
-            if ((match.whiteCastlingKingSide || match.blackCastlingKingSide) && oldCol == 8) {
+            if ((match.kingsideCastling[PieceColor.WHITE]!! || match.kingsideCastling[PieceColor.BLACK]!!) && oldCol == 8) {
                 controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
             }
 
-            if ((match.whiteCastlingQueenSide || match.blackCastlingQueenSide) && oldCol == 1) {
+            if ((match.queensideCastling[PieceColor.WHITE]!! || match.queensideCastling[PieceColor.BLACK]!!) && oldCol == 1) {
                 controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
             }
         }
