@@ -84,9 +84,8 @@ class MatchController(val client: Client) : Controller {
                 val matchId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
                 delete("http://localhost:8080/match/$matchId") {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.removeMatch(matchId)
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.removeMatch(matchId)
                     }
                 }
             }
