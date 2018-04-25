@@ -89,9 +89,8 @@ class PlayerController(val client: Client) : Controller {
                 if (newPassword == "") return
 
                 patch("http://localhost:8080/player/$playerId", Pair("password", newPassword)) {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.updatePlayer(playerId, newPassword)
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.updatePlayer(playerId, newPassword)
                     }
                 }
             }
@@ -104,9 +103,8 @@ class PlayerController(val client: Client) : Controller {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
                 delete("http://localhost:8080/player/$playerId") {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.removePlayer(playerId)
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.removePlayer(playerId)
                     }
                 }
             }
