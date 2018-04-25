@@ -1,11 +1,16 @@
 package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import htwdd.chessgame.client.util.RequestUtility.Companion.patch
 import htwdd.chessgame.client.view.GameView
+import kotlinx.coroutines.experimental.await
+import kotlinx.coroutines.experimental.launch
 import kotlinx.html.BUTTON
+import kotlinx.serialization.json.JSON
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.get
+import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
 class GameController(private val client: Client) : Controller {
@@ -52,8 +57,25 @@ class GameController(private val client: Client) : Controller {
                 }
 
                 val match = client.matches[matchId]
-                match?.addObserver(gameView)
-                client.changeState(ViewState.GAME, match)
+
+                launch {
+                    get("http://127.0.0.1:8080/match/$matchId/pieceSets") {
+                        if (it.target is XMLHttpRequest) {
+                            val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
+                            match?.pieceSets = pieceSetHashMap.pieceSets
+                        }
+                    }.await()
+
+                    get("http://127.0.0.1:8080/match/$matchId/draw") {
+                        if (it.target is XMLHttpRequest) {
+                            val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+                            match?.history = drawList.draws
+                        }
+                    }.await()
+
+                    match?.addObserver(gameView)
+                    client.changeState(ViewState.GAME, match)
+                }
             }
         }
     }
