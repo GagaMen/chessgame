@@ -152,6 +152,7 @@ data class Match(
         } else if (enPassantField != null) {
             enPassantField!!.row = 0
             enPassantField!!.column = 0
+            if (fieldDao!!.update(enPassantField) != 1) throw SQLException("Can't update en passant field!")
         }
 
         check[currentColor] = draw.check
