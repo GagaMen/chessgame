@@ -45,13 +45,13 @@ data class Match(var id: Int = 0,
     }
 
     private fun updatePieceSet(draw: Draw) {
-        val startPosition = draw.start.asPair()
-        val endPosition = draw.end.asPair()
+        val startPosition = draw.startField.asPair()
+        val endPosition = draw.endField.asPair()
         var enPassantPosition: Pair<Int, Int>? = null
         val pieceSet = pieceSets[draw.color] ?: return
         val piece = pieceSet.activePieces[startPosition.toString()] ?: return
 
-        piece.position = draw.end
+        piece.position = draw.endField
         pieceSet.activePieces.remove(startPosition.toString())
         pieceSet.activePieces[endPosition.toString()] = piece
 
