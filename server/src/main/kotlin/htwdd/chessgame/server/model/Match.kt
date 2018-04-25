@@ -122,8 +122,16 @@ data class Match(
             halfMoves++
         }
 
-        if (draw.kingsideCastling || draw.queensideCastling) {
+        if (draw.kingsideCastling || draw.queensideCastling || draw.pieceType == KING) {
             kingsideCastling[currentColor] = false
+            queensideCastling[currentColor] = false
+        }
+
+        if (kingsideCastling[currentColor]!! && draw.pieceType == ROOK && draw.startField?.column == 8) {
+            kingsideCastling[currentColor] = false
+        }
+
+        if (queensideCastling[currentColor]!! && draw.pieceType == ROOK && draw.startField?.column == 1) {
             queensideCastling[currentColor] = false
         }
 
