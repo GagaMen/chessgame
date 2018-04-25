@@ -34,10 +34,25 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match")
-    fun getMatchList(): MatchHashMap {
+    fun getMatchList(
+            @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
+            includePieceSets: Boolean,
+            @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
+            includeHistory: Boolean
+    ): MatchHashMap {
         val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
             match.players.forEach { playerDao!!.refresh(it.value) }
+
+            if (!includePieceSets) match.pieceSets = HashMap()
+            if (includeHistory) {
+                val draws = drawDao!!.query(drawDao.queryBuilder()
+                        .where()
+                        .eq("match_id", match.id)
+                        .prepare())
+                match.history.addAll(draws)
+            }
+
             matchList[match.id] = match
         }
 
@@ -46,14 +61,28 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping("match/{id}")
+    @ResponseBody
     fun getMatchById(
             @PathVariable
-            id: Int
+            id: Int,
+            @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
+            includePieceSets: Boolean,
+            @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
+            includeHistory: Boolean
     ): Match {
         val match = matchDao!!.queryForId(id)
                 ?: throw IllegalArgumentException("No match with the id '$id' registered!")
         match.players.forEach { playerDao!!.refresh(it.value) }
-//        match.setPieceSetsByMatchCode()
+
+        if (!includePieceSets) match.pieceSets = HashMap()
+        if (includeHistory) {
+            val draws = drawDao!!.query(drawDao.queryBuilder()
+                    .where()
+                    .eq("match_id", match.id)
+                    .prepare())
+            match.history.addAll(draws)
+        }
+
         return match
     }
 
