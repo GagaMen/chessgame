@@ -83,25 +83,6 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PutMapping("player/{id}")
-    fun replacePlayer(
-            @PathVariable
-            id: Int,
-            @RequestParam
-            name: String,
-            @RequestParam
-            password: String
-    ) {
-        val player = playerDao!!.queryForId(id)
-                ?: throw IllegalArgumentException("No player with the id '$id' registered!")
-
-        player.name = name
-        player.password = password
-
-        if (playerDao.update(player) != 1) throw SQLException("Can't replace player with the id '$id'!")
-    }
-
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping("player/{id}")
     fun updatePlayer(
             @PathVariable
