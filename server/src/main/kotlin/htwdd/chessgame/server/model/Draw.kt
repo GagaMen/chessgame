@@ -3,36 +3,56 @@ package htwdd.chessgame.server.model
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import htwdd.chessgame.server.model.PieceType.*
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
 @DatabaseTable(tableName = "Draw")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 data class Draw(
         @DatabaseField(generatedId = true)
+        @XmlElement
         val id: Int = 0,
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var color: PieceColor? = null,
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var pieceType: PieceType? = null,
         @DatabaseField(foreign = true, foreignAutoRefresh = true, unique = true)
+        @XmlElement
         var startField: Field? = null,
         @DatabaseField(foreign = true, foreignAutoRefresh = true, unique = true, canBeNull = false)
+        @XmlElement
         var endField: Field? = null,
         @DatabaseField(foreign = true, canBeNull = false)
+        @XmlElement
         var match: Match? = null,
         @DatabaseField
+        @XmlElement
         var conversion: PieceType? = null,
         @DatabaseField
+        @XmlElement
         var throwPiece: Boolean = false,
         @DatabaseField
+        @XmlElement
         var throwEnPassant: Boolean = false,
         @DatabaseField
+        @XmlElement
         var kingsideCastling: Boolean = false,
         @DatabaseField
+        @XmlElement
         var queensideCastling: Boolean = false,
         @DatabaseField
+        @XmlElement
         var check: Boolean = false,
         @DatabaseField
+        @XmlElement
         var checkmate: Boolean = false,
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var drawCode: String = ""
 ) {
     fun setValuesByDrawCode() {

@@ -9,35 +9,55 @@ import htwdd.chessgame.server.model.PieceType.*
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
 import htwdd.chessgame.server.util.FENUtility
 import java.sql.SQLException
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
 @DatabaseTable(tableName = "Match")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 data class Match(
         @DatabaseField(generatedId = true)
+        @XmlElement
         val id: Int = 0,
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        @XmlElement
         val players: HashMap<PieceColor, Player> = HashMap(),
         @DatabaseField(foreign = true, canBeNull = false)
+        @XmlElement
         private val playerWhite: Player? = null,
         @DatabaseField(foreign = true, canBeNull = false)
+        @XmlElement
         private val playerBlack: Player? = null,
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        @XmlElement
         var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(), BLACK to PieceSet()), //todo make this maybe with extra class for parsing
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var currentColor: PieceColor = WHITE,
+        @XmlElement
         val history: MutableList<Draw> = mutableListOf(),
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        @XmlElement
         var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        @XmlElement
         var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
         @DatabaseField(foreign = true, foreignAutoRefresh = true)
+        @XmlElement
         var enPassantField: Field? = null,
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var halfMoves: Int = 0,
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
+        @XmlElement
         var check: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to false, BLACK to false),
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var checkmate: Boolean = false,
         @DatabaseField(canBeNull = false)
+        @XmlElement
         var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 ) {
     fun setPieceSetsByMatchCode() {
