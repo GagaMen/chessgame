@@ -1,5 +1,6 @@
 package htwdd.chessgame.server.controller
 
+import htwdd.chessgame.server.dto.MatchDTO
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.MatchHashMap
 import htwdd.chessgame.server.model.PieceColor
@@ -8,8 +9,7 @@ import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.http.MediaType.APPLICATION_XML_VALUE
+import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -95,7 +95,10 @@ class MatchController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @DeleteMapping("match/{id}")
+    @DeleteMapping(
+            value = ["match/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun deleteMatchById(
             @PathVariable
             id: Int
@@ -136,7 +139,11 @@ class MatchController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PostMapping("match")
+    @PostMapping(
+            value = ["match"],
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     @ResponseStatus(CREATED)
     fun addMatch(
             @RequestParam
@@ -148,6 +155,33 @@ class MatchController {
                 ?: throw IllegalArgumentException("No player with the id '$playerWhiteId' registered!")
         val playerBlack = playerDao.queryForId(playerBlackId)
                 ?: throw IllegalArgumentException("No player with the id '$playerBlackId' registered!")
+
+        val players = HashMap<PieceColor, Player>()
+        players[WHITE] = playerWhite
+        players[BLACK] = playerBlack
+
+        val match = Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)
+        match.setPieceSetsByMatchCode()
+
+        if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
+        return match
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @PostMapping(
+            value = ["match"],
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addMatchWithJson(
+            @RequestBody
+            matchDTO: MatchDTO
+    ): Match {
+        val playerWhite = playerDao!!.queryForId(matchDTO.playerWhiteId)
+                ?: throw IllegalArgumentException("No player with the id '${matchDTO.playerWhiteId}' registered!")
+        val playerBlack = playerDao.queryForId(matchDTO.playerBlackId)
+                ?: throw IllegalArgumentException("No player with the id '${matchDTO.playerBlackId}' registered!")
 
         val players = HashMap<PieceColor, Player>()
         players[WHITE] = playerWhite
