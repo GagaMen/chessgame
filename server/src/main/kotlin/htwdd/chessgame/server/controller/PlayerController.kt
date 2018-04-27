@@ -1,11 +1,12 @@
 package htwdd.chessgame.server.controller
 
+import htwdd.chessgame.server.dto.PasswordDTO
+import htwdd.chessgame.server.dto.PlayerDTO
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.model.PlayerHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.http.MediaType.APPLICATION_XML_VALUE
+import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -56,7 +57,10 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @DeleteMapping("player/{id}")
+    @DeleteMapping(
+            value = ["player/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun deletePlayerById(
             @PathVariable
             id: Int
@@ -69,7 +73,11 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PostMapping("player")
+    @PostMapping(
+            value = ["player"],
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     @ResponseStatus(CREATED)
     fun addPlayer(
             @RequestParam
@@ -83,7 +91,28 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PatchMapping("player/{id}")
+    @PostMapping(
+            value = ["player"],
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    @ResponseBody
+    fun addPlayerWithJson(
+            @RequestBody
+            playerDTO: PlayerDTO
+    ): Player {
+        val player = Player(name = playerDTO.name, password = playerDTO.password)
+        if (playerDao!!.create(player) != 1) throw SQLException("Can't create player!")
+        return player
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @PatchMapping(
+            value = ["player/{id}"],
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun updatePlayer(
             @PathVariable
             id: Int,
@@ -94,6 +123,26 @@ class PlayerController {
                 ?: throw IllegalArgumentException("No player with the id '$id' registered!")
 
         player.password = password
+
+        if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @PatchMapping(
+            value = ["player/{id}"],
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    fun updatePlayerWithJson(
+            @PathVariable
+            id: Int,
+            @RequestBody
+            passwordDTO: PasswordDTO
+    ) {
+        val player = playerDao!!.queryForId(id)
+                ?: throw IllegalArgumentException("No player with the id '$id' registered!")
+
+        player.password = passwordDTO.password
 
         if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
     }
