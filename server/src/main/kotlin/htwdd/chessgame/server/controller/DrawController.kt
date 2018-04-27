@@ -1,13 +1,13 @@
 package htwdd.chessgame.server.controller
 
+import htwdd.chessgame.server.dto.DrawDTO
 import htwdd.chessgame.server.model.Draw
 import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.util.DatabaseUtility
 import htwdd.chessgame.server.util.SANUtility
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.http.MediaType.APPLICATION_XML_VALUE
+import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -58,7 +58,11 @@ class DrawController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @PostMapping("draw")
+    @PostMapping(
+            value = ["draw"],
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     @ResponseStatus(CREATED)
     fun addDraw(
             @RequestParam
@@ -80,6 +84,48 @@ class DrawController {
         )
 
         if (startRow != null && startColumn != null) draw.startField = Field(row = startRow, column = startColumn)
+        draw.setValuesByDrawCode()
+
+        if (!SANUtility.validateSAN(draw, match)) throw RuntimeException("The draw isn't valid!")
+
+        if (fieldDao!!.create(draw.startField) != 1) throw SQLException("Can't create start field!")
+        if (fieldDao.create(draw.endField) != 1) throw SQLException("Can't create end field!")
+
+        if (drawDao!!.create(draw) != 1) {
+            fieldDao.delete(draw.startField)
+            fieldDao.delete(draw.endField)
+            throw SQLException("Can't create draw!")
+        }
+
+        match.updateByDraw(draw)
+        matchDao.update(match)
+
+        return draw
+    }
+
+    @CrossOrigin(origins = ["http://localhost:63342"])
+    @PostMapping(
+            value = ["draw"],
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addDrawWithJson(
+            @RequestBody
+            drawDTO: DrawDTO
+    ): Draw {
+        val match = matchDao!!.queryForId(drawDTO.matchId)
+                ?: throw IllegalArgumentException("No match with the id '${drawDTO.matchId}' registered!")
+
+        val draw = Draw(
+                color = match.currentColor,
+                match = match,
+                drawCode = drawDTO.drawCode
+        )
+
+        if (drawDTO.startRow != null && drawDTO.startColumn != null) {
+            draw.startField = Field(row = drawDTO.startRow, column = drawDTO.startColumn)
+        }
         draw.setValuesByDrawCode()
 
         if (!SANUtility.validateSAN(draw, match)) throw RuntimeException("The draw isn't valid!")
