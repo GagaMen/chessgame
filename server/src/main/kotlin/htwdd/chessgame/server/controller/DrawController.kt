@@ -1,10 +1,13 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.model.Draw
+import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.util.DatabaseUtility
 import htwdd.chessgame.server.util.SANUtility
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.APPLICATION_XML_VALUE
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -29,18 +32,24 @@ class DrawController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("draw")
-    fun getDrawList(): MutableList<Draw> {
+    @GetMapping(
+            value = ["draw"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    fun getDrawList(): DrawList {
         val drawList: MutableList<Draw> = mutableListOf()
         drawDao!!.queryForAll().forEach {
             it.setValuesByDrawCode()
             drawList.add(it)
         }
-        return drawList
+        return DrawList(drawList)
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("draw/{id}")
+    @GetMapping(
+            value = ["draw/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun getDrawById(
             @PathVariable
             id: Int

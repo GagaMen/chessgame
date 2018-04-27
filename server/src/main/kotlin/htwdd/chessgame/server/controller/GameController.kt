@@ -4,6 +4,8 @@ import htwdd.chessgame.server.model.Draw
 import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.model.PieceSetHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.APPLICATION_XML_VALUE
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import javax.servlet.http.HttpServletResponse
@@ -20,7 +22,10 @@ class GameController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match/{id}/draw")
+    @GetMapping(
+            value = ["match/{id}/draw"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun getDrawsByMatchId(
             @PathVariable
             id: Int
@@ -34,7 +39,10 @@ class GameController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match/{id}/pieceSets")
+    @GetMapping(
+            value = ["match/{id}/pieceSets"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun getPieceSetsByMatchId(
             @PathVariable
             id: Int

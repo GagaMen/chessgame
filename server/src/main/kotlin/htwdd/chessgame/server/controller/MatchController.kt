@@ -8,6 +8,8 @@ import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.APPLICATION_XML_VALUE
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -33,7 +35,10 @@ class MatchController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match")
+    @GetMapping(
+            value = ["match"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun getMatchList(
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
             includePieceSets: Boolean,
@@ -60,7 +65,10 @@ class MatchController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match/{id}")
+    @GetMapping(
+            value = ["match/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     @ResponseBody
     fun getMatchById(
             @PathVariable

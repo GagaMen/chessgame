@@ -4,6 +4,8 @@ import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.model.PlayerHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.APPLICATION_XML_VALUE
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -29,7 +31,10 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("player")
+    @GetMapping(
+            value = ["player"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
     fun getPlayerList(): PlayerHashMap {
         val playerList = HashMap<Int, Player>()
         playerDao!!.queryForAll().forEach { playerList[it.id] = it }
@@ -38,7 +43,11 @@ class PlayerController {
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping(value = ["player/{id}"])
+    @GetMapping(
+            value = ["player/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseBody
     fun getPlayerById(
             @PathVariable
             id: Int
