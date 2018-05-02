@@ -20,19 +20,16 @@ class DrawController {
     private val matchDao = DatabaseUtility.matchDao
     private val fieldDao = DatabaseUtility.fieldDao
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping(method = [OPTIONS])
     fun drawOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("/{id}", method = [OPTIONS])
     fun drawByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getDrawList(): DrawList {
         val drawList: MutableList<Draw> = mutableListOf()
@@ -43,7 +40,6 @@ class DrawController {
         return DrawList(drawList)
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -55,7 +51,6 @@ class DrawController {
         return drawDao!!.queryForId(id) ?: throw IllegalArgumentException("No draw with id '$id' registered!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -100,7 +95,6 @@ class DrawController {
         return draw
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]

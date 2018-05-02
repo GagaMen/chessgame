@@ -20,19 +20,16 @@ class PlayerController {
     private val drawDao = DatabaseUtility.drawDao
     private val fieldDao = DatabaseUtility.fieldDao
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping(method = [OPTIONS])
     fun playerOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("/{id}", method = [OPTIONS])
     fun playerByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,PUT,PATCH,DELETE,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getPlayerList(): PlayerHashMap {
         val playerList = HashMap<Int, Player>()
@@ -41,7 +38,6 @@ class PlayerController {
         return PlayerHashMap(playerList)
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -54,7 +50,6 @@ class PlayerController {
         return playerDao!!.queryForId(id) ?: throw IllegalArgumentException("No player with the id '$id' registered!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -70,7 +65,6 @@ class PlayerController {
         if (playerDao.deleteById(id) != 1) throw SQLException("Can't delete player with the id '$id'!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -87,7 +81,6 @@ class PlayerController {
         return player
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -103,7 +96,6 @@ class PlayerController {
         return player
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping(
             value = ["/{id}"],
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
@@ -123,7 +115,6 @@ class PlayerController {
         if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping(
             value = ["/{id}"],
             consumes = [APPLICATION_JSON_VALUE],

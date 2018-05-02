@@ -23,19 +23,16 @@ class MatchController {
     private val drawDao = DatabaseUtility.drawDao
     private val fieldDao = DatabaseUtility.fieldDao
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping(method = [OPTIONS])
     fun matchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getMatchList(
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
@@ -62,7 +59,6 @@ class MatchController {
         return MatchHashMap(matchList)
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -92,7 +88,6 @@ class MatchController {
         return match
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -136,7 +131,6 @@ class MatchController {
         if (matchDao.deleteById(id) != 1) throw SQLException("Can't delete match with the id '$id'!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -164,7 +158,6 @@ class MatchController {
         return match
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]

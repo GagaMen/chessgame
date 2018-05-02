@@ -6,8 +6,11 @@ import htwdd.chessgame.server.model.PieceSetHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_XML_VALUE
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
+import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -16,7 +19,6 @@ class GameController {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @RequestMapping("/draw", method = [OPTIONS])
     fun drawsByMatchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
@@ -27,7 +29,6 @@ class GameController {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/draw"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -44,7 +45,6 @@ class GameController {
         return DrawList(drawList)
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/pieceSets"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
