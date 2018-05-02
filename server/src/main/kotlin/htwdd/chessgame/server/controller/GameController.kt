@@ -22,6 +22,11 @@ class GameController {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
+    @RequestMapping("/pieceSets", method = [OPTIONS])
+    fun pieceSetsByMatchOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,OPTIONS")
+    }
+
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
             value = ["/draw"],
