@@ -14,28 +14,26 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/draw")
 class DrawController {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao
     private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("draw", method = [OPTIONS])
+    @RequestMapping(method = [OPTIONS])
     fun drawOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("draw/{id}", method = [OPTIONS])
+    @RequestMapping("/{id}", method = [OPTIONS])
     fun drawByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping(
-            value = ["draw"],
-            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
-    )
+    @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getDrawList(): DrawList {
         val drawList: MutableList<Draw> = mutableListOf()
         drawDao!!.queryForAll().forEach {
@@ -47,7 +45,7 @@ class DrawController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
-            value = ["draw/{id}"],
+            value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun getDrawById(
@@ -59,7 +57,6 @@ class DrawController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["draw"],
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
@@ -105,7 +102,6 @@ class DrawController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["draw"],
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )

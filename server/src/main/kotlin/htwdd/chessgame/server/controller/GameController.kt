@@ -11,19 +11,20 @@ import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/match/{id}")
 class GameController {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("match/{id}/draw", method = [OPTIONS])
+    @RequestMapping("/draw", method = [OPTIONS])
     fun drawsByMatchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
-            value = ["match/{id}/draw"],
+            value = ["/draw"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun getDrawsByMatchId(
@@ -40,7 +41,7 @@ class GameController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
-            value = ["match/{id}/pieceSets"],
+            value = ["/pieceSets"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun getPieceSetsByMatchId(

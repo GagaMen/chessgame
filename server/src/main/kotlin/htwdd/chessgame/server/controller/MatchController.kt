@@ -16,6 +16,7 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/match")
 class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
@@ -23,22 +24,19 @@ class MatchController {
     private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("match", method = [OPTIONS])
+    @RequestMapping(method = [OPTIONS])
     fun matchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("match/{id}", method = [OPTIONS])
+    @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping(
-            value = ["match"],
-            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
-    )
+    @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getMatchList(
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
             includePieceSets: Boolean,
@@ -66,7 +64,7 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
-            value = ["match/{id}"],
+            value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     @ResponseBody
@@ -96,7 +94,7 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping(
-            value = ["match/{id}"],
+            value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun deleteMatchById(
@@ -140,7 +138,6 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["match"],
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
@@ -169,7 +166,6 @@ class MatchController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["match"],
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )

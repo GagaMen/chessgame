@@ -13,6 +13,7 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/player")
 class PlayerController {
     private val playerDao = DatabaseUtility.playerDao
     private val matchDao = DatabaseUtility.matchDao
@@ -20,22 +21,19 @@ class PlayerController {
     private val fieldDao = DatabaseUtility.fieldDao
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("player", method = [OPTIONS])
+    @RequestMapping(method = [OPTIONS])
     fun playerOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("player/{id}", method = [OPTIONS])
+    @RequestMapping("/{id}", method = [OPTIONS])
     fun playerByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,PUT,PATCH,DELETE,OPTIONS")
     }
 
     @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping(
-            value = ["player"],
-            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
-    )
+    @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getPlayerList(): PlayerHashMap {
         val playerList = HashMap<Int, Player>()
         playerDao!!.queryForAll().forEach { playerList[it.id] = it }
@@ -45,7 +43,7 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @GetMapping(
-            value = ["player/{id}"],
+            value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     @ResponseBody
@@ -58,7 +56,7 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @DeleteMapping(
-            value = ["player/{id}"],
+            value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun deletePlayerById(
@@ -74,7 +72,6 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["player"],
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
@@ -92,7 +89,6 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PostMapping(
-            value = ["player"],
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
@@ -109,7 +105,7 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping(
-            value = ["player/{id}"],
+            value = ["/{id}"],
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
@@ -129,7 +125,7 @@ class PlayerController {
 
     @CrossOrigin(origins = ["http://localhost:63342"])
     @PatchMapping(
-            value = ["player/{id}"],
+            value = ["/{id}"],
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
