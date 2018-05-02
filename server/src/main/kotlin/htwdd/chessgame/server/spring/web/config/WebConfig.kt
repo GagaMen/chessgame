@@ -6,7 +6,6 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
-//@EnableWebMvc
 class WebConfig : WebMvcConfigurerAdapter() {
 
     override fun configureContentNegotiation(configurer: ContentNegotiationConfigurer?) {
