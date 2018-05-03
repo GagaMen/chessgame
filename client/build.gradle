@@ -60,6 +60,7 @@ jar {
         if (details.path.startsWith("fonts") ||
                 details.path.startsWith("icon") ||
                 details.path.startsWith("image") ||
+                details.path.startsWith("config") ||
                 details.path.startsWith("index.html")
         ) {
             details.path = 'static/' + details.path

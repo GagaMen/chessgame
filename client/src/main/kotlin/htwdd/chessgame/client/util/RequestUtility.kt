@@ -90,6 +90,17 @@ class RequestUtility {
             }
         }
 
+        fun loadJSONConfiguration(callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
+                request.overrideMimeType("application/json")
+                request.open("GET", "config/configuration.json", true)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.send(null)
+            }
+        }
+
         private fun parseParams(params: Array<out Pair<String, Any>>): String {
             var paramsAsJSONString = ""
 

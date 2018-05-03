@@ -1,10 +1,13 @@
 package htwdd.chessgame.client.model
 
+import htwdd.chessgame.client.config.ClientConfig
 import htwdd.chessgame.client.util.Observable
 
 class Client(private var viewState: ViewState = ViewState.START,
              var matches: HashMap<Int, Match> = HashMap(),
              var players: HashMap<Int, Player> = HashMap()) : Observable() {
+
+    var config: ClientConfig = ClientConfig()
 
     init {
         initObservable()
