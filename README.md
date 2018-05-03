@@ -69,34 +69,34 @@ Parameters:
 * password: String
 
 Send parameters via ``application/x-www-form-urlencoded``:
-> ``name=Test&password=123456``
+* ``name=Test&password=123456``
 
 Send parameters via ``application/json``:
-> ``{ "name": "Test", "password": "123456" }``
+* ``{ "name": "Test", "password": "123456" }``
 
 #### PATCH */player/{id}*
 Parameters:
 * password: String
 
 Send parameters via ``application/x-www-form-urlencoded``:
-> ``password=123456``
+* ``password=123456``
 
 Send parameters via ``application/json``:
-> ``{ "password": "123456" }``
+* ``{ "password": "123456" }``
 
 ### GET */match* and */match/{id}*
 Parameters:
 * includePieceSets (optional: default value is true)
-> If true match or matches contains all information about pieceSets
+    > If true match or matches contains all information about pieceSets
 * includeHistory (optional: default value is true)
-> If true match or matches contains all draws
+    > If true match or matches contains all draws
 
 You can request this information later via GET request to URI ``/match/{id}/pieceSets`` and ``/match/{id}/draw``.
 
 Send parameters via URL:
-> ``http://localhost:8080/match?includePieceSets=false``\
-> ``http://localhost:8080/match/555555?includeHistory=false``\
-> ``http://localhost:8080/match?includePieceSets=false&includeHistory=false``
+* ``http://localhost:8080/match?includePieceSets=false``
+* ``http://localhost:8080/match/555555?includeHistory=false``
+* ``http://localhost:8080/match?includePieceSets=false&includeHistory=false``
 
 #### POST */match*
 Parameters:
@@ -104,10 +104,10 @@ Parameters:
 * playerBlackId: Int
 
 Send parameters via ``application/x-www-form-urlencoded``:
-> ``playerWhiteId=1&playerBlackId=2``
+* ``playerWhiteId=1&playerBlackId=2``
 
 Send parameters via ``application/json``:
-> ``{ "playerWhiteId": 1, "playerBlackId": 2 }``
+* ``{ "playerWhiteId": 1, "playerBlackId": 2 }``
 
 #### POST */draw*
 Parameters:
@@ -117,10 +117,10 @@ Parameters:
 * startRow: Int (optional)
 
 Send parameters via ``application/x-www-form-urlencoded``:
-> ``matchId=1&drawCode=a4&startColumn=1&startRow=2``
+* ``matchId=1&drawCode=a4&startColumn=1&startRow=2``
 
 Send parameters via ``application/json``:
-> ``{ "matchId": 1, "drawCode": "a4", "startColumn": 1, "startRow": 2 }``
+* ``{ "matchId": 1, "drawCode": "a4", "startColumn": 1, "startRow": 2 }``
 
 |Column | as Int|
 | :---: | :---: |
@@ -133,19 +133,16 @@ Send parameters via ``application/json``:
 ### Content Negotiation
 The server offers three options to handle content negotiation:
 1.  Suffix Strategy
-    > ``http:localhost:8080/player.json`` 
-    
-    > ``http:localhost:8080/player.xml``
+    * ``http:localhost:8080/player.json`` 
+    * ``http:localhost:8080/player.xml``
     
 2. Parameter Strategy
-    > ``http:localhost:8080/player?mediaType=json``
-    
-    > ``http:localhost:8080/player?mediaType=xml``
+    * ``http:localhost:8080/player?mediaType=json``
+    * ``http:localhost:8080/player?mediaType=xml``
     
 3. Accept Header Strategy
-    > Accept Header: ``application/json``
-    
-    > Accept Header: ``application/xml``
+    * Accept Header: ``application/json``
+    * Accept Header: ``application/xml``
     
 > see also <http://www.baeldung.com/spring-mvc-content-negotiation-json-xml>
 
