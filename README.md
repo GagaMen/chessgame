@@ -3,6 +3,19 @@ RESTful Chessgame
 This project has two modules which are developed with Kotlin that can be build using gradle. 
 The client has JavaScript and the server has JVM as compile target.
 
+Table of Content
+----------------
+* [Requirements](#requirements)
+* [Getting Started](#getting-started)
+* [Server](#server)
+    * [Run Server](#run-server)
+    * [Server Configuration](#server-configuration)
+    * [Entry Points](#entry-points)
+    * [Content Negotiation](#content-negotiation)
+* [Client](#client)
+    * [Run Client](#run-client)
+    * [Client Configuration](#client-configuration)
+
 Requirements
 ---------------
 * Java 8 JRE (to start the project)
