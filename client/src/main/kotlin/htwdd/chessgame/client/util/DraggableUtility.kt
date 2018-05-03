@@ -104,7 +104,7 @@ class DraggableUtility {
                             kingsideCastling,
                             queensideCastling) ?: return
 
-                    post("http://127.0.0.1:8080/draw",
+                    post("${controller.client.config.serverRootUrl}/draw",
                             Pair("matchId", match.id),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
@@ -142,7 +142,7 @@ class DraggableUtility {
                             match,
                             true) ?: return
 
-                    post("http://127.0.0.1:8080/draw",
+                    post("${controller.client.config.serverRootUrl}/draw",
                             Pair("matchId", match.id),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),

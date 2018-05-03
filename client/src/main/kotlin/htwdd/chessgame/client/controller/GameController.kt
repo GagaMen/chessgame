@@ -12,8 +12,7 @@ import org.w3c.dom.get
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
-class GameController(private val client: Client) : Controller {
-
+class GameController(client: Client) : Controller(client) {
     private var gameView = GameView(this)
 
     init {
@@ -57,14 +56,14 @@ class GameController(private val client: Client) : Controller {
                 val match = client.matches[matchId]
 
                 launch {
-                    get("http://127.0.0.1:8080/match/$matchId/pieceSets") {
+                    get("${client.config.serverRootUrl}/match/$matchId/pieceSets") {
                         if (it.target is XMLHttpRequest) {
                             val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
                             match?.pieceSets = pieceSetHashMap.pieceSets
                         }
                     }.await()
 
-                    get("http://127.0.0.1:8080/match/$matchId/draw") {
+                    get("${client.config.serverRootUrl}/match/$matchId/draw") {
                         if (it.target is XMLHttpRequest) {
                             val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
                             match?.history = drawList.draws
