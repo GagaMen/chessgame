@@ -1,7 +1,10 @@
 RESTful Chessgame
 =================
-This project has two modules which are developed with Kotlin that can be build using gradle. 
-The client has JavaScript and the server has JVM as compile target.
+This project was developed as part of my diploma thesis at the Hochschule für Technik und Wirtschaft (<https://www.htw-dresden.de/startseite.html>). 
+The written elaboration can be found under ``doc/diploma`` and was created with the Latex thesis template developed by Matthias Pospiech. (<http://www.matthiaspospiech.de/latex/vorlagen/allgemein/>)
+
+The project can be separated by two modules which are developed with Kotlin. Gradle serves as build tool. 
+As compilation target, the client has JavaScript and the server JVM.
 
 Table of Content
 ----------------
