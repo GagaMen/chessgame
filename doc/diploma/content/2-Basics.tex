@@ -3,3 +3,46 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Grundlagen}
+
+\section{REST-API}
+\gls{REST} ist ein von Roy Fielding entwickelter Architekturstil, welchen er in seiner Dissertation \cite{dissertationFielding} beschrieb. Dabei geht er ebenfalls auf eine Reihe von Leitsätzen und Praktiken ein, welche sich in System auf Basis von Netzwerken bewährt haben.\\
+\\
+Laut \cite[143]{apiDesign} unterstützt der REST Architekturstil eine Reihe von Protokollen, mit welchen solcher umgesetzt werden kann. Der bekannteste bzw. am häufigsten verwendete Vertreter ist dabei das Protokoll \gls{HTTP}. Es wird dabei \gls{REST} im Zusammenhang mit \gls{HTTP} als RESTful \gls{HTTP} bezeichnet. \\
+\\
+Da in dieser Arbeit die Webentwicklung im Vordergrund steht und \gls{HTTP} einer der wichtigsten Standards im Web ist, soll im nachfolgenden Verlauf \gls{REST} immer im Sinne von RESTful \gls{HTTP} verstanden werden.
+
+\subsection{Allgemeine Definition einer \gls{API}}\label{sec:defAPI}
+Laut \cite[7]{apiDesign} definiert Kai Spichale eine \gls{API} mit den Worten von Joshua Bloch wie folgt: \enquote{Eine API spezifiziert die Operationen sowie die Ein- und Ausgaben einer Softwarekomponente. Ihr Hauptzweck besteht darin, eine Menge an Funktionen unabhängig von ihrer Implementierung zu definieren, sodass die Implementierung variieren kann, ohne die Benutzer der Softwarekomponente zu beeinträchtigen}. Des weiteren unterteilt dieser die \glspl{API} in zwei Kategorien ein, in Programmiersprachen- und Remote-\glspl{API}. Des weiteren definiert er die \glspl{API} der Programmiersprachen als abhängig und die Remote als unabhängig gegenüber der Sprache und der Plattform. \cite[7-8]{apiDesign} 
+
+\subsection{Vorteile einer \gls{API}}
+\textbf{Stabilität durch lose Kopplung}\\
+Mithilfe von \glspl{API} soll die Abhängigkeit zum Benutzer minimiert werden, der dadurch nicht mehr stark an die Implementierung gekoppelt ist. Das ermöglicht eine Veränderung der eigentlichen Implementation einer Softwarekomponente, ohne das der Benutzer davon etwas bemerkt. (vgl. \cite[9]{apiDesign})\\
+\\
+\textbf{Portabilität}\\
+Es ist möglich für unterschiedliche Plattformen eine einheitliche Implementierung einer \gls{API} bereitzustellen, obwohl diese im inneren verschieden implementiert sind. Ein bekanntest Beispiel ist dabei die \gls{JRE}, welches diese Funktionalität für Java-Programme bereitstellt. (vgl. \cite[9]{apiDesign})\\
+\\
+\textbf{Komplexitätsreduktion durch Modularisierung}\\
+Der \gls{API}-Benutzer besitzt in erster Linie keine genauen Informationen über die Komplexität der Implementierung. Diese Tatsache folgt dem Geheimprinzip und soll der Beherrschung großer Projekte in Hinsicht ihrer Komplexität dienen. Zusätzlich bringt dieser Aspekt auch einen Wirtschaftlichen Vorteil, denn durch die Modularisierung ist eine bessere Arbeitsteilung möglich, was wiederum Entwicklungskosten sparen kann. (vgl. \cite[10]{apiDesign})\\
+\\
+\textbf{Softwarewiederverwendung und Integration}\\
+Neben dem verbergen von Details zur Implementierung sollten \glspl{API} Funktionen einer Komponente leicht verständlich bereitstellen, um \gls{API}-Nutzern eine einfache Integration bzw. Verwendung zu ermöglichen. Aus diesen sollten \glspl{API} auch dahingehend optimiert werden. (vgl. \cite[10]{apiDesign})\\
+\\
+
+\subsection{Nachteile einer \gls{API}}
+\textbf{Interoperabilität}\\
+Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist die Interoperabilität zu anderen Programmiersprachen. Beispielsweise kann ein Programm, welches in Go geschrieben wurde, nicht auf die Java-\gls{API} zugreifen. Als Problemlösung stehen hierbei aber die Remote-\gls{API} bereit. Diese arbeiten mit Protokollen wie \gls{HTTP} oder \gls{AMQP}, welche sprach- und plattformunabhängig sind\footnote{\hyperref[sec:defAPI]{siehe Kapitel~\ref{sec:defAPI}}}.\cite[10]{apiDesign}\\
+\\
+\textbf{Änderbarkeit}\\
+Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen werden sollten, kann es hinsichtlich der Änderbarkeit zu Problemen kommen. Das ist aber nur der Fall sofern die Benutzer nicht bekannt sind oder nicht kontrolliert werden können. In so einem Fall spricht man von veröffentlichten \glspl{API}. Als Gegenstück dazu können interne \glspl{API} betrachtet werden, denn bei diesen wäre eine Kontrolle der Benutzer möglich.
+
+\subsection{Qualitätsmerkmale von REST}
+
+\subsection{Grundprinzipien von REST}
+
+%\section{Design-Patterns}
+
+\section{Das Build-Tool Gradle}
+
+\section{Schachnotationen FEN und SAN}
+
+\section{Schachregeln}
