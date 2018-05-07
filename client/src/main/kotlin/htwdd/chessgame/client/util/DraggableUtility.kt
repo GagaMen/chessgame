@@ -104,14 +104,10 @@ class DraggableUtility {
                             kingsideCastling,
                             queensideCastling) ?: return
 
-                    post("http://127.0.0.1:8080/draw",
+                    post("${controller.client.config.serverRootUrl}/draw",
                             Pair("matchId", match.id),
-                            Pair("color", pieceColor),
-                            Pair("type", pieceType),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
-                            Pair("endRow", newRow),
-                            Pair("endColumn", newCol),
                             Pair("drawCode", drawCode)) {
                         if (it.target is XMLHttpRequest) {
                             val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
@@ -146,14 +142,10 @@ class DraggableUtility {
                             match,
                             true) ?: return
 
-                    post("http://127.0.0.1:8080/draw",
+                    post("${controller.client.config.serverRootUrl}/draw",
                             Pair("matchId", match.id),
-                            Pair("color", pieceColor),
-                            Pair("type", pieceType),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
-                            Pair("endRow", newRow),
-                            Pair("endColumn", newCol),
                             Pair("drawCode", drawCode)) {
                         if (it.target is XMLHttpRequest) {
                             val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
@@ -248,11 +240,11 @@ class DraggableUtility {
         private fun dropRook(controller: Controller, match: Match, oldCol: Int, pieceColor: PieceColor) {
             controller.actionPerformed("resetEnPassantFieldAction", match)
 
-            if ((match.whiteCastlingKingSide || match.blackCastlingKingSide) && oldCol == 8) {
+            if ((match.kingsideCastling[PieceColor.WHITE]!! || match.kingsideCastling[PieceColor.BLACK]!!) && oldCol == 8) {
                 controller.actionPerformed("disableKingSideCastlingAction", Pair(match, pieceColor))
             }
 
-            if ((match.whiteCastlingQueenSide || match.blackCastlingQueenSide) && oldCol == 1) {
+            if ((match.queensideCastling[PieceColor.WHITE]!! || match.queensideCastling[PieceColor.BLACK]!!) && oldCol == 1) {
                 controller.actionPerformed("disableQueenSideCastlingAction", Pair(match, pieceColor))
             }
         }

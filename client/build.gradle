@@ -7,6 +7,7 @@ buildscript {
     ext.kotlinx_html_version = '0.6.6'
     ext.sass_version = '1.2.2'
     ext.serialization_version = '0.4.2'
+    ext.coroutines_version = '0.22.5'
 
     repositories {
         mavenCentral()
@@ -36,7 +37,55 @@ dependencies {
     compile "org.webjars:requirejs:$requirejs_version"
     compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutines_version"
     compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+}
+
+jar {
+    baseName = 'chessgame-client'
+    version = '1.0.0'
+    configurations.compile.each {File file ->
+        from (zipTree(file.absolutePath))
+        exclude { fileTreeElement ->
+            def path = fileTreeElement.path
+            path.endsWith("_metadata") || path.endsWith(".kjsm") || path.endsWith(".properties") || path.endsWith("pom.xml") || path.endsWith("_module") || path.startsWith("kotlin-test")
+        }
+    }
+    from ("dist/css/") {
+        exclude { fileTreeElement ->
+            fileTreeElement.path.endsWith(".css.map")
+        }
+    }
+    eachFile { details ->
+        if (details.path.startsWith("fonts") ||
+                details.path.startsWith("icon") ||
+                details.path.startsWith("image") ||
+                details.path.startsWith("config") ||
+                details.path.startsWith("index.html")
+        ) {
+            details.path = 'static/' + details.path
+        }
+        if (details.path.endsWith(".css")) {
+            details.path = 'static/css/' + details.path
+        }
+        if (details.path.startsWith("client.")) {
+            details.path = 'static/js/' + details.path
+        }
+        if (!details.path.startsWith("static/js/client.") && (details.path.endsWith(".js") || details.path.endsWith(".js.map"))){
+            if (details.path.startsWith("META-INF")) details.path = details.path.replaceFirst(/.*\//, '')
+            details.path = 'static/js/lib/' + details.path
+        }
+    }
+    includeEmptyDirs = false
+}
+
+jar.dependsOn(compileLibSass)
+jar.dependsOn(compileLibSassProduction)
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
 }
 
 [compileKotlin2Js, compileTestKotlin2Js]*.configure {
@@ -151,6 +200,9 @@ task release(type: Copy) {
 configure(release) {
     group = 'release'
 }
+
+release.dependsOn(compileLibSass)
+release.dependsOn(compileLibSassProduction)
 
 task releaseClean(type: Delete) {
     delete "dist"

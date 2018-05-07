@@ -1,114 +1,185 @@
 package htwdd.chessgame.server.controller
 
+import htwdd.chessgame.server.dto.MatchDTO
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.MatchHashMap
 import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
+import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
+import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/match")
 class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
     private val drawDao = DatabaseUtility.drawDao
     private val fieldDao = DatabaseUtility.fieldDao
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("match", method = [RequestMethod.OPTIONS])
+    @RequestMapping(method = [OPTIONS])
     fun matchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @RequestMapping("match/{id}", method = [RequestMethod.OPTIONS])
+    @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match")
-    fun getMatchList(): MatchHashMap {
+    @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
+    fun getMatchList(
+            @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
+            includePieceSets: Boolean,
+            @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
+            includeHistory: Boolean
+    ): MatchHashMap {
         val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
             match.players.forEach { playerDao!!.refresh(it.value) }
-            match.setValuesByMatchCode()
+
+            if (!includePieceSets) match.pieceSets = HashMap()
+            if (includeHistory) {
+                val draws = drawDao!!.query(drawDao.queryBuilder()
+                        .where()
+                        .eq("match_id", match.id)
+                        .prepare())
+                match.history.addAll(draws)
+            }
+
             matchList[match.id] = match
         }
 
         return MatchHashMap(matchList)
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @GetMapping("match/{id}")
-    fun getMatchById(@PathVariable id: Int): Any {
-        val match = matchDao!!.queryForId(id) ?: return "No match with id \"$id\" registered!"
+    @GetMapping(
+            value = ["/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseBody
+    fun getMatchById(
+            @PathVariable
+            id: Int,
+            @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
+            includePieceSets: Boolean,
+            @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
+            includeHistory: Boolean
+    ): Match {
+        val match = matchDao!!.queryForId(id)
+                ?: throw IllegalArgumentException("No match with the id '$id' registered!")
         match.players.forEach { playerDao!!.refresh(it.value) }
-        match.setValuesByMatchCode()
+
+        if (!includePieceSets) match.pieceSets = HashMap()
+        if (includeHistory) {
+            val draws = drawDao!!.query(drawDao.queryBuilder()
+                    .where()
+                    .eq("match_id", match.id)
+                    .prepare())
+            match.history.addAll(draws)
+        }
+
         return match
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @DeleteMapping("match/{id}")
-    fun deleteMatchById(@PathVariable id: Int): Boolean {
-        if (matchDao!!.deleteById(id) != 1) return false
+    @DeleteMapping(
+            value = ["/{id}"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    fun deleteMatchById(
+            @PathVariable
+            id: Int
+    ) {
+        if (!matchDao!!.idExists(id)) throw IllegalArgumentException("No match with the id '$id' registered!")
+        val match = matchDao.queryForId(id)
+
+        if (match.enPassantField != null) {
+            if (fieldDao!!.delete(match.enPassantField) != 1) {
+                throw SQLException("Can't delete field from match with the id '$id'")
+            }
+        }
 
         val draws = drawDao!!.query(drawDao.queryBuilder()
                 .where()
                 .eq("match_id", id)
                 .prepare())
 
-        val fieldList = mutableListOf<Int>()
-        draws.forEach {
-            fieldList.add(it.start!!.id)
-            fieldList.add(it.end!!.id)
+        if (draws.size != 0) {
+
+            draws.forEach { draw ->
+                if (draw.startField != null) {
+                    if (fieldDao!!.delete(draw.startField) != 1) {
+                        throw SQLException("Can't delete field from draw with the id '$id'")
+                    }
+                }
+                if (draw.endField != null) {
+                    if (fieldDao!!.delete(draw.endField) != 1) {
+                        throw SQLException("Can't delete field from draw with the id '$id'")
+                    }
+                }
+            }
+
+            if (drawDao.delete(draws) == 0) throw SQLException("Can't delete draws from match with the id '$id'")
         }
 
-        fieldDao!!.delete(fieldDao.query(
-                fieldDao.queryBuilder()
-                        .where()
-                        .`in`("id", fieldList)
-                        .prepare()
-        ))
-
-        drawDao.delete(draws)
-
-        return true
+        if (matchDao.deleteById(id) != 1) throw SQLException("Can't delete match with the id '$id'!")
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @PostMapping("match")
-    fun addMatch(@RequestParam playerWhiteId: Int,
-                 @RequestParam playerBlackId: Int): Match? {
-        val playerWhite = playerDao!!.queryForId(playerWhiteId) ?: return null
-        val playerBlack = playerDao.queryForId(playerBlackId) ?: return null
+    @PostMapping(
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addMatch(
+            @RequestParam
+            playerWhiteId: Int,
+            @RequestParam
+            playerBlackId: Int
+    ): Match {
+        val playerWhite = playerDao!!.queryForId(playerWhiteId)
+                ?: throw IllegalArgumentException("No player with the id '$playerWhiteId' registered!")
+        val playerBlack = playerDao.queryForId(playerBlackId)
+                ?: throw IllegalArgumentException("No player with the id '$playerBlackId' registered!")
 
         val players = HashMap<PieceColor, Player>()
-        players[PieceColor.WHITE] = playerWhite
-        players[PieceColor.BLACK] = playerBlack
+        players[WHITE] = playerWhite
+        players[BLACK] = playerBlack
 
         val match = Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)
+        match.setPieceSetsByMatchCode()
 
-        if (matchDao!!.create(match) != 1) return null
+        if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
         return match
     }
 
-    @CrossOrigin(origins = ["http://localhost:63342"])
-    @PatchMapping("match/{id}")
-    fun updateMatch(@PathVariable id: Int,
-                    @RequestParam checkWhite: Boolean,
-                    @RequestParam checkBlack: Boolean,
-                    @RequestParam checkmate: Boolean,
-                    @RequestParam matchCode: String): Boolean {
-        val match = matchDao!!.queryForId(id) ?: return false
+    @PostMapping(
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addMatchWithJson(
+            @RequestBody
+            matchDTO: MatchDTO
+    ): Match {
+        val playerWhite = playerDao!!.queryForId(matchDTO.playerWhiteId)
+                ?: throw IllegalArgumentException("No player with the id '${matchDTO.playerWhiteId}' registered!")
+        val playerBlack = playerDao.queryForId(matchDTO.playerBlackId)
+                ?: throw IllegalArgumentException("No player with the id '${matchDTO.playerBlackId}' registered!")
 
-        match.check[PieceColor.WHITE] = checkWhite
-        match.check[PieceColor.BLACK] = checkBlack
-        match.checkmate = checkmate
-        match.matchCode = matchCode
+        val players = HashMap<PieceColor, Player>()
+        players[WHITE] = playerWhite
+        players[BLACK] = playerBlack
 
-        if (matchDao.update(match) != 1) return false
-        return true
+        val match = Match(players = players, playerWhite = playerWhite, playerBlack = playerBlack)
+        match.setPieceSetsByMatchCode()
+
+        if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
+        return match
     }
 }

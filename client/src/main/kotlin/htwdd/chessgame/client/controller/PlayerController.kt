@@ -14,7 +14,7 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.get
 import org.w3c.xhr.XMLHttpRequest
 
-class PlayerController(val client: Client) : Controller {
+class PlayerController(client: Client) : Controller(client) {
 
     private val playerView = PlayerView(this)
 
@@ -54,7 +54,7 @@ class PlayerController(val client: Client) : Controller {
                 if (name.type != "text" || password.type != "password") return
                 if (name.value == "" || password.value == "") return
 
-                post("http://localhost:8080/player", Pair("name", name.value), Pair("password", password.value)) {
+                post("${client.config.serverRootUrl}/player", Pair("name", name.value), Pair("password", password.value)) {
                     if (it.target is XMLHttpRequest) {
                         val player = JSON.parse<Player>((it.target as XMLHttpRequest).responseText)
                         client.addPlayer(player)
@@ -88,10 +88,9 @@ class PlayerController(val client: Client) : Controller {
 
                 if (newPassword == "") return
 
-                patch("http://localhost:8080/player/$playerId", Pair("password", newPassword)) {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.updatePlayer(playerId, newPassword)
+                patch("${client.config.serverRootUrl}/player/$playerId", Pair("password", newPassword)) {
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.updatePlayer(playerId, newPassword)
                     }
                 }
             }
@@ -103,10 +102,9 @@ class PlayerController(val client: Client) : Controller {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                delete("http://localhost:8080/player/$playerId") {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.removePlayer(playerId)
+                delete("${client.config.serverRootUrl}/player/$playerId") {
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.removePlayer(playerId)
                     }
                 }
             }

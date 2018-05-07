@@ -13,12 +13,12 @@ abstract class MovementUtility : Movement {
         getMovementFields(movementFields, row, col, match)
 
         movementFields.forEach {
-            val piece = currentPieces[field] ?: return@forEach
+            val piece = currentPieces[field.toString()] ?: return@forEach
 
-            currentPieces[it] = piece
-            currentPieces.remove(field)
+            currentPieces[it.toString()] = piece
+            currentPieces.remove(field.toString())
 
-            if (opposingPieces.containsKey(it)) opposingPieces.remove(it)
+            if (opposingPieces.containsKey(it.toString())) opposingPieces.remove(it.toString())
             if (CheckUtility.calcThreatedFields(match)) movementFields.remove(it)
 
             currentPieces.clear()

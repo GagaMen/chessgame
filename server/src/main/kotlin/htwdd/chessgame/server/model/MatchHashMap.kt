@@ -1,3 +1,13 @@
 package htwdd.chessgame.server.model
 
-data class MatchHashMap(val matches: HashMap<Int, Match>)
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+data class MatchHashMap(
+        @XmlElement
+        val matches: HashMap<Int, Match> = HashMap()
+)

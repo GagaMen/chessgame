@@ -2,6 +2,7 @@ package htwdd.chessgame.client.partial
 
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.controller.MatchController
+import htwdd.chessgame.client.model.PieceColor
 import kotlinx.html.*
 import kotlinx.html.dom.create
 import kotlinx.html.js.onClickFunction
@@ -25,10 +26,11 @@ class MatchTablePartial : Partial {
                             td {
                                 +match.value.id.toString()
                             }
-                            match.value.players.forEach { player ->
-                                td {
-                                    +"${player.value?.name}"
-                                }
+                            td {
+                                +"${match.value.players[PieceColor.WHITE]?.name}"
+                            }
+                            td {
+                                +"${match.value.players[PieceColor.BLACK]?.name}"
                             }
                             td {
                                 button(classes = "btn btn--symbol btn--symbol-start") {

@@ -35,7 +35,7 @@ class DatabaseUtility {
 
         private fun connect() {
             if (connection != null) return
-            connection = JdbcConnectionSource("jdbc:sqlite:server/src/main/resources/chessgame.db")
+            connection = JdbcConnectionSource("jdbc:sqlite:chessgame.db")
             createTables()
             createDaos()
         }

@@ -57,7 +57,7 @@ class SANUtility {
                 if (throwEnPassant) sb.append("e.p.")
 
                 if (match.check[match.currentColor]!!) sb.append("+")
-                if (match.checkmate) sb.append("++")
+                if (match.checkmate) sb.append("#")
             }
 
             return sb.toString()

@@ -9,15 +9,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Match(var id: Int = 0,
                  var players: HashMap<PieceColor, Player?> = HashMap(),
-                 @Optional var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
-                 @Optional var currentColor: PieceColor = PieceColor.WHITE,
+                 var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
+                 var currentColor: PieceColor = PieceColor.WHITE,
                  @Optional var history: MutableList<Draw> = mutableListOf(),
-                 @Optional var whiteCastlingKingSide: Boolean = true,
-                 @Optional var whiteCastlingQueenSide: Boolean = true,
-                 @Optional var blackCastlingKingSide: Boolean = true,
-                 @Optional var blackCastlingQueenSide: Boolean = true,
-                 @Optional var enPassantField: Field? = null,
-                 @Optional var halfMoves: Int = 0,
+                 var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to true, PieceColor.BLACK to true),
+                 var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to true, PieceColor.BLACK to true),
+                 var enPassantField: Field? = null,
+                 var halfMoves: Int = 0,
                  var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
                  var checkmate: Boolean = false,
                  var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
@@ -43,15 +41,15 @@ data class Match(var id: Int = 0,
     }
 
     private fun updatePieceSet(draw: Draw) {
-        val startPosition = draw.start.asPair()
-        val endPosition = draw.end.asPair()
+        val startPosition = draw.startField.asPair()
+        val endPosition = draw.endField.asPair()
         var enPassantPosition: Pair<Int, Int>? = null
         val pieceSet = pieceSets[draw.color] ?: return
-        val piece = pieceSet.activePieces[startPosition] ?: return
+        val piece = pieceSet.activePieces[startPosition.toString()] ?: return
 
-        piece.position = draw.end
-        pieceSet.activePieces.remove(startPosition)
-        pieceSet.activePieces[endPosition] = piece
+        piece.position = draw.endField
+        pieceSet.activePieces.remove(startPosition.toString())
+        pieceSet.activePieces[endPosition.toString()] = piece
 
         val opposingPieceSet = pieceSets[draw.color.getOpposite()] ?: return
 
@@ -64,16 +62,16 @@ data class Match(var id: Int = 0,
             }
         }
 
-        if (opposingPieceSet.activePieces.containsKey(endPosition)) {
-            val capturedPiece = opposingPieceSet.activePieces[endPosition]
+        if (opposingPieceSet.activePieces.containsKey(endPosition.toString())) {
+            val capturedPiece = opposingPieceSet.activePieces[endPosition.toString()]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-            opposingPieceSet.activePieces.remove(endPosition)
+            opposingPieceSet.activePieces.remove(endPosition.toString())
         }
 
-        if (opposingPieceSet.activePieces.containsKey(enPassantPosition)) {
-            val capturedPiece = opposingPieceSet.activePieces[enPassantPosition]
+        if (opposingPieceSet.activePieces.containsKey(enPassantPosition.toString())) {
+            val capturedPiece = opposingPieceSet.activePieces[enPassantPosition.toString()]
             if (capturedPiece != null) pieceSet.capturedPieces.add(capturedPiece)
-            opposingPieceSet.activePieces.remove(enPassantPosition)
+            opposingPieceSet.activePieces.remove(enPassantPosition.toString())
             enPassantField = null
         }
     }

@@ -1,15 +1,18 @@
 package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
-import htwdd.chessgame.client.util.RequestUtility.Companion.patch
+import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import htwdd.chessgame.client.view.GameView
+import kotlinx.coroutines.experimental.await
+import kotlinx.coroutines.experimental.launch
 import kotlinx.html.BUTTON
+import kotlinx.serialization.json.JSON
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.get
+import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
-class GameController(private val client: Client) : Controller {
-
+class GameController(client: Client) : Controller(client) {
     private var gameView = GameView(this)
 
     init {
@@ -30,7 +33,6 @@ class GameController(private val client: Client) : Controller {
             "disableKingSideCastlingAction" -> disableKingSideCastlingAction(arg)
             "disableQueenSideCastlingAction" -> disableQueenSideCastlingAction(arg)
             "convertPieceAction" -> convertPieceAction(arg)
-            "updateMatchAction" -> updateMatchAction(arg)
         }
     }
 
@@ -52,8 +54,25 @@ class GameController(private val client: Client) : Controller {
                 }
 
                 val match = client.matches[matchId]
-                match?.addObserver(gameView)
-                client.changeState(ViewState.GAME, match)
+
+                launch {
+                    get("${client.config.serverRootUrl}/match/$matchId/pieceSets") {
+                        if (it.target is XMLHttpRequest) {
+                            val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
+                            match?.pieceSets = pieceSetHashMap.pieceSets
+                        }
+                    }.await()
+
+                    get("${client.config.serverRootUrl}/match/$matchId/draw") {
+                        if (it.target is XMLHttpRequest) {
+                            val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+                            match?.history = drawList.draws
+                        }
+                    }.await()
+
+                    match?.addObserver(gameView)
+                    client.changeState(ViewState.GAME, match)
+                }
             }
         }
     }
@@ -65,7 +84,6 @@ class GameController(private val client: Client) : Controller {
                 val draw = arg.second as? Draw ?: return
 
                 match.addDraw(draw)
-                updateMatchAction(match)
             }
         }
     }
@@ -105,16 +123,8 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingKingSide = false
-                        match.whiteCastlingQueenSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingKingSide = false
-                        match.blackCastlingQueenSide = false
-                    }
-                }
+                match.kingsideCastling[pieceColor] = false
+                match.queensideCastling[pieceColor] = false
             }
         }
     }
@@ -125,14 +135,7 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingKingSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingKingSide = false
-                    }
-                }
+                match.kingsideCastling[pieceColor] = false
             }
         }
     }
@@ -143,14 +146,7 @@ class GameController(private val client: Client) : Controller {
                 val match = arg.first as? Match ?: return
                 val pieceColor = arg.second as? PieceColor ?: return
 
-                when (pieceColor) {
-                    PieceColor.WHITE -> {
-                        match.whiteCastlingQueenSide = false
-                    }
-                    PieceColor.BLACK -> {
-                        match.blackCastlingQueenSide = false
-                    }
-                }
+                match.queensideCastling[pieceColor] = false
             }
         }
     }
@@ -168,30 +164,18 @@ class GameController(private val client: Client) : Controller {
 
                 val pieceSet = match.pieceSets[pieceColor]?.activePieces ?: return
 
-                if (!pieceSet.containsKey(Pair(row, col))) {
+                if (!pieceSet.containsKey(Pair(row, col).toString())) {
                     // don't contains key
                     return
                 }
 
-                pieceSet[Pair(row, col)]?.type = pieceType
+                pieceSet[Pair(row, col).toString()]?.type = pieceType
 
                 val draw = match.history[match.history.lastIndex]
                 draw.drawCode = "${draw.drawCode}${pieceType.getDrawCode()}"
 
                 match.history.removeAt(match.history.lastIndex)
                 match.history.add(draw)
-            }
-        }
-    }
-
-    private fun updateMatchAction(arg: Any?) {
-        when (arg) {
-            is Match -> {
-                patch("http://localhost:8080/match/${arg.id}",
-                        Pair("checkWhite", arg.check[PieceColor.WHITE]!!),
-                        Pair("checkBlack", arg.check[PieceColor.BLACK]!!),
-                        Pair("checkmate", arg.checkmate),
-                        Pair("matchCode", arg.matchCode))
             }
         }
     }

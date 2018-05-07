@@ -15,7 +15,7 @@ import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
 import org.w3c.xhr.XMLHttpRequest
 
-class MatchController(val client: Client) : Controller {
+class MatchController(client: Client) : Controller(client) {
 
     private val matchView = MatchView(this)
     private val gameController = GameController(client)
@@ -63,7 +63,7 @@ class MatchController(val client: Client) : Controller {
 
                 if (!client.players.containsKey(playerWhiteID) || !client.players.containsKey(playerBlackID)) return
 
-                post("http://localhost:8080/match", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
+                post("${client.config.serverRootUrl}/match", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
                     if (it.target is XMLHttpRequest) {
                         val match = JSON.parse<Match>((it.target as XMLHttpRequest).responseText)
                         FENUtility.setByCode(match)
@@ -83,10 +83,9 @@ class MatchController(val client: Client) : Controller {
             is BUTTON -> {
                 val matchId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                delete("http://localhost:8080/match/$matchId") {
-                    if (it.target is XMLHttpRequest) {
-                        val response = kotlin.js.JSON.parse<Boolean>((it.target as XMLHttpRequest).responseText)
-                        if (response) client.removeMatch(matchId)
+                delete("${client.config.serverRootUrl}/match/$matchId") {
+                    if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
+                        client.removeMatch(matchId)
                     }
                 }
             }

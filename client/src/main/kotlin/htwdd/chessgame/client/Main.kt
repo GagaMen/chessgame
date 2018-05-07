@@ -4,49 +4,54 @@ import htwdd.chessgame.client.controller.MatchController
 import htwdd.chessgame.client.controller.PlayerController
 import htwdd.chessgame.client.controller.StartController
 import htwdd.chessgame.client.model.Client
-import htwdd.chessgame.client.model.DrawList
 import htwdd.chessgame.client.model.MatchHashMap
 import htwdd.chessgame.client.model.PlayerHashMap
-import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
+import htwdd.chessgame.client.util.RequestUtility.Companion.loadJSONConfiguration
+import kotlinx.coroutines.experimental.await
+import kotlinx.coroutines.experimental.launch
 import kotlinx.serialization.json.JSON
 import org.w3c.xhr.XMLHttpRequest
+import kotlin.js.Promise
 
 fun main(args: Array<String>) {
-    val client = loadData()
-    StartController(client)
-    PlayerController(client)
-    MatchController(client)
+    launch {
+        val client = loadData().await()
+        StartController(client)
+        PlayerController(client)
+        MatchController(client)
+    }
 }
 
-private fun loadData(): Client {
-    val client = Client()
+private fun loadData(): Promise<Client> {
+    return Promise { resolve, reject ->
+        launch {
+            val client = Client()
 
-    get("http://127.0.0.1:8080/player") {
-        if (it.target is XMLHttpRequest) {
-            val playerHashMap = JSON.parse<PlayerHashMap>((it.target as XMLHttpRequest).responseText)
-            playerHashMap.player.forEach { client.addPlayer(it.value) }
-        }
-    }
-
-    get("http://127.0.0.1:8080/match") {
-        if (it.target is XMLHttpRequest) {
-            val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
-            matchHashMap.matches.forEach { (matchId, match) ->
-
-                FENUtility.setByCode(match)
-
-                get("http://127.0.0.1:8080/match/$matchId/draw") {
-                    if (it.target is XMLHttpRequest) {
-                        val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
-                        match.history = drawList.draws
-                    }
+            loadJSONConfiguration {
+                if (it.target is XMLHttpRequest &&
+                        (it.target as XMLHttpRequest).readyState == 4.toShort() &&
+                        (it.target as XMLHttpRequest).status == 200.toShort()
+                ) {
+                    client.config = JSON.parse((it.target as XMLHttpRequest).responseText)
                 }
+            }.await()
 
-                client.addMatch(match)
-            }
+            get("${client.config.serverRootUrl}/player") {
+                if (it.target is XMLHttpRequest) {
+                    val playerHashMap = JSON.parse<PlayerHashMap>((it.target as XMLHttpRequest).responseText)
+                    playerHashMap.player.forEach { client.addPlayer(it.value) }
+                }
+            }.await()
+
+            get("${client.config.serverRootUrl}/match", Pair("includePieceSets", false), Pair("includeHistory", false)) {
+                if (it.target is XMLHttpRequest) {
+                    val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
+                    matchHashMap.matches.forEach { client.addMatch(it.value) }
+                }
+            }.await()
+
+            resolve(client)
         }
     }
-
-    return client
 }

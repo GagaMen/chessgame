@@ -4,9 +4,8 @@ import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.ViewState
 import htwdd.chessgame.client.view.StartView
 
-class StartController(private val client: Client) : Controller {
+class StartController(client: Client) : Controller(client) {
 
-    //private var client: Client
     private val startView: StartView = StartView(this)
 
     init {

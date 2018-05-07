@@ -2,67 +2,103 @@ package htwdd.chessgame.client.util
 
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
+import kotlin.js.Promise
 
 class RequestUtility {
     companion object {
-        fun get(url: String, callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun get(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("GET", url)
-            request.send()
+                if (params.isNotEmpty()) request.open("GET", "$url?${parseParams(params)}")
+                else request.open("GET", url)
+
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.send()
+            }
+
         }
 
-        fun post(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun post(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("POST", url)
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            request.send(parseParams(params))
+                request.open("POST", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                request.send(parseParams(params))
+            }
         }
 
-        fun put(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun put(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("PUT", url)
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            request.send(parseParams(params))
+                request.open("PUT", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                request.send(parseParams(params))
+            }
         }
 
-        fun patch(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun patch(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("PATCH", url)
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            request.send(parseParams(params))
+                request.open("PATCH", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                request.send(parseParams(params))
+            }
         }
 
-        fun delete(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun delete(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("DELETE", url)
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            request.send(parseParams(params))
+                request.open("DELETE", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                request.send(parseParams(params))
+            }
         }
 
-        fun head(url: String, callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun head(url: String, callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("HEAD", url)
-            request.send()
+                request.open("HEAD", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.send()
+            }
         }
 
-        fun options(url: String, callback: ((Event) -> dynamic)? = null) {
-            val request = XMLHttpRequest()
+        fun options(url: String, callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
 
-            if (callback != null) request.onload = callback
-            request.open("OPTIONS", url)
-            request.send()
+                request.open("OPTIONS", url)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.send()
+            }
+        }
+
+        fun loadJSONConfiguration(callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+            return Promise { resolve, reject ->
+                val request = XMLHttpRequest()
+                request.overrideMimeType("application/json")
+                request.open("GET", "config/configuration.json", true)
+                request.addEventListener("load", callback)
+                request.addEventListener("load", { e -> resolve(request) })
+                request.send(null)
+            }
         }
 
         private fun parseParams(params: Array<out Pair<String, Any>>): String {

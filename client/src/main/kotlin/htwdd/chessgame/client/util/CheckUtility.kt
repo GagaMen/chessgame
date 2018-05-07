@@ -20,31 +20,32 @@ class CheckUtility {
             threatedFields.clear()
 
             opposingPieces.forEach {
+                val key = it.key.toPair() ?: throw NullPointerException()
                 when (it.value.type) {
                     PieceType.BISHOP -> {
-                        bishop.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        bishop.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                     PieceType.PAWN -> {
-                        pawn.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        pawn.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                     PieceType.KING -> {
-                        king.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        king.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                     PieceType.QUEEN -> {
-                        queen.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        queen.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                     PieceType.KNIGHT -> {
-                        knight.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        knight.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                     PieceType.ROOK -> {
-                        rook.getThreadedFields(threatedFields, it.key.first, it.key.second, match)
+                        rook.getThreadedFields(threatedFields, key.first, key.second, match)
                     }
                 }
             }
 
             threatedFields.forEach {
-                if (currentPieces.containsKey(Pair(it.first, it.second))) {
-                    val piece = currentPieces[Pair(it.first, it.second)] ?: return@forEach
+                if (currentPieces.containsKey(Pair(it.first, it.second).toString())) {
+                    val piece = currentPieces[Pair(it.first, it.second).toString()] ?: return@forEach
                     if (piece.type == PieceType.KING) return true
                 }
             }
@@ -57,25 +58,26 @@ class CheckUtility {
             val movementFields = HashSet<Pair<Int, Int>>()
 
             currentPieces.forEach {
+                val key = it.key.toPair() ?: throw NullPointerException()
                 val tmpMovementFields = HashSet<Pair<Int, Int>>()
                 when (it.value.type) {
                     PieceType.BISHOP -> {
-                        bishop.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        bishop.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                     PieceType.KING -> {
-                        king.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        king.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                     PieceType.KNIGHT -> {
-                        knight.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        knight.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                     PieceType.PAWN -> {
-                        pawn.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        pawn.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                     PieceType.QUEEN -> {
-                        queen.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        queen.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                     PieceType.ROOK -> {
-                        rook.getFilteredMovementFields(tmpMovementFields, it.key.first, it.key.second, match)
+                        rook.getFilteredMovementFields(tmpMovementFields, key.first, key.second, match)
                     }
                 }
                 movementFields.addAll(tmpMovementFields)
