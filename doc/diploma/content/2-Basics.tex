@@ -38,6 +38,31 @@ Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen w
 
 \subsection{Qualitätsmerkmale }
 \subsubsection{Benutzbarkeit}
+Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für andere Nutzer. Um diese Anforderung umzusetzen haben sich ein Reihe von allgemeinen Eigenschaften/Zielen etabliert. \cite[13-14]{apiDesign} Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaft, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Für detaillierte Informationen zu die einzelnen Eigenschaft, können diese in \cite[14-23]{apiDesign} nachgeschlagen werden.
+\begin{table}
+	\captionsetup{justification=centering}
+	\caption{Eigenschaften/Ziele des Qualitätsmerkmals \enquote{Benutzbarkeit}\newline (verändert nach \cite[14-23]{apiDesign})}
+	\label{tab:APIUsabilityProperties}
+	\begin{tabu}{|p{0.25\textwidth}|p{0.7\textwidth}|}
+		\hline
+		\rowfont[c]{\bfseries}
+		\taburowcolors 1{tableheadcolor .. tableheadcolor}
+		Eigenschaft/Ziel & Beschreibung \\
+		\hline
+		\taburowcolors 2{tablebodycolor .. tablerowcolor}
+		Konsistent & Gemeint ist damit das Entscheidungen hinsichtlich des Entwurfs einheitlich im Quellcode angewandt werden. Das betrifft beispielsweise die Namensgebung von Variablen oder Funktionen. \\
+		Intuitiv verständlich & Bla \\
+		Dokumentiert & Eine ausführliche Dokumentation mit Beschreibungen zu den einzelnen Klassen, Methoden und Parametern, ist für eine einfache Benutzung dringend erforderlich. Zusätzlich sollten Beispiele die Erläuterungen unterstreichen. \\
+		Einprägsam und leicht zu lernen & Damit eine \gls{API} einfach zu erlernen ist, sind die ersten drei Punkte dieser Tabelle unabdingbar. Wichtig ist die Einstiegshürden gering zu halten, um potenzielle Nutzer nicht abzuschrecken. Prinzipiell ist es von Vorteil wenn mit relativ wenig Code erste Ergebnisse erzielt werden können.\\
+		Lesbaren Code fördern & Eine \gls{API} kann großen Einfluss auf die Lesbarkeit des Client-Codes haben und diesen so signifikant verbessern. Durch eine gute Lesbarkeit können zum Beispiel besser bzw. schneller Fehler entdeckt werden. Um den Client-Code möglichst schmal zu halt sollte die \gls{API} Hilfsmethoden anbieten, wobei gilt das der Client nichts tun müssen sollte was ihm durch die \gls{API} abgenommen werden könnte.\\
+		Schwer falsch zu benutzen & Unerwartetes Verhalten aus Sicht den Nutzers sollte vermieden werden, um unerwartete Fehler zu vermeiden und um die \gls{API} intuitiv zu halten.\\
+		Minimal & Prinzipiell gilt es eine \gls{API} so klein wie möglich zu halten und Funktionen welche nicht unbedingt benötigt werden im zweifel weg zu lassen. Denn nachträglich können solche Elemente nicht mehr trivial entfernt werden. Außerdem lässt sich sagen das je größer die \gls{API} desto größer die Komplexität. \\
+		Stabil & bla \\
+		Einfach erweiterbar & bla \\
+		\hline
+	\end{tabu}
+\end{table}
+
 \subsubsection{Effizienz}
 Unter dem Qualitätsmerkmal Effizienz kann zum Beispiel der geringe Verbrauch von Akku oder dem Datenvolumen bei Mobilen Geräten verstanden werden. Oder aber die Skalierbarkeit einer \gls{API}, welches bei einem großen Zuwachs von Aufrufen durchaus entscheidend sein kann. \cite[13]{apiDesign}
 
