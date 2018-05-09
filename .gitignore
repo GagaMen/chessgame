@@ -21,5 +21,7 @@ Diploma.run.xml
 Diploma.synctex.gz
 Diploma.toc
 Diploma.acn
+Diploma.acr
+Diploma.alg
 doc/diploma/**/*.log
 doc/diploma/**/*.aux
