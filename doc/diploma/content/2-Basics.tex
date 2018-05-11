@@ -51,14 +51,14 @@ Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte
 		\hline
 		\taburowcolors 2{tablebodycolor .. tablerowcolor}
 		Konsistent & Gemeint ist damit das Entscheidungen hinsichtlich des Entwurfs einheitlich im Quellcode angewandt werden. Das betrifft beispielsweise die Namensgebung von Variablen oder Funktionen. \\
-		Intuitiv verständlich & Bla \\
+		Intuitiv verständlich & Für diese Ziel ist eine Konsistente \gls{API} unter Verwendung von Namenskonventionen unabdingbar. Grundlegend kann dabei gesagt werden das gleiche Dinge einheitliche Namen, aber auch ungleiche Dinge unterschiedliche Namen haben sollten. So können bereits durch bekannte Funktionen Rückschlüsse auf andere unbekannte gezogen werden. Ein konkretes Beispiel dafür sind die \textit{getter}- und \textit{setter}-Methoden in der Java-Welt.\\
 		Dokumentiert & Eine ausführliche Dokumentation mit Beschreibungen zu den einzelnen Klassen, Methoden und Parametern, ist für eine einfache Benutzung dringend erforderlich. Zusätzlich sollten Beispiele die Erläuterungen unterstreichen. \\
 		Einprägsam und leicht zu lernen & Damit eine \gls{API} einfach zu erlernen ist, sind die ersten drei Punkte dieser Tabelle unabdingbar. Wichtig ist die Einstiegshürden gering zu halten, um potenzielle Nutzer nicht abzuschrecken. Prinzipiell ist es von Vorteil wenn mit relativ wenig Code erste Ergebnisse erzielt werden können.\\
 		Lesbaren Code fördern & Eine \gls{API} kann großen Einfluss auf die Lesbarkeit des Client-Codes haben und diesen so signifikant verbessern. Durch eine gute Lesbarkeit können zum Beispiel besser bzw. schneller Fehler entdeckt werden. Um den Client-Code möglichst schmal zu halt sollte die \gls{API} Hilfsmethoden anbieten, wobei gilt das der Client nichts tun müssen sollte was ihm durch die \gls{API} abgenommen werden könnte.\\
 		Schwer falsch zu benutzen & Unerwartetes Verhalten aus Sicht den Nutzers sollte vermieden werden, um unerwartete Fehler zu vermeiden und um die \gls{API} intuitiv zu halten.\\
 		Minimal & Prinzipiell gilt es eine \gls{API} so klein wie möglich zu halten und Funktionen welche nicht unbedingt benötigt werden im zweifel weg zu lassen. Denn nachträglich können solche Elemente nicht mehr trivial entfernt werden. Außerdem lässt sich sagen das je größer die \gls{API} desto größer die Komplexität. \\
-		Stabil & bla \\
-		Einfach erweiterbar & bla \\
+		Stabil & Durch Stabilität wird sicher gestellt das Änderungen keine Auswirkung auf alte Benutzer hat. Wenn auftretende negative Auswirkungen unvermeidbar sind, sollten diese entweder ausführlich kommuniziert oder eine neue Version benutzt werden. \\
+		Einfach erweiterbar & Für die Erweiterbarkeit einer \gls{API} ist der Aufwand von Änderungen von Clients zu beachten. Wenn der Client nach einer Erweiterung nicht angepasst werden muss, ist dabei der Idealfall. Durch Vererbung kann beispielsweise so ein Verhalten erreicht werden. \\
 		\hline
 	\end{tabu}
 \end{table}
