@@ -36,7 +36,7 @@ Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist d
 \subsubsection{Änderbarkeit}
 Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen werden sollten, kann es hinsichtlich der Änderbarkeit zu Problemen kommen. Das ist aber nur der Fall sofern die Benutzer nicht bekannt sind oder nicht kontrolliert werden können. In so einem Fall spricht man von veröffentlichten \glspl{API}. Als Gegenstück dazu können interne \glspl{API} betrachtet werden, denn bei diesen wäre eine Kontrolle der Benutzer möglich.
 
-\subsection{Qualitätsmerkmale }
+\subsection{Qualitätsmerkmale}\label{sec:qualityFeatures}
 \subsubsection{Benutzbarkeit}
 Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für andere Nutzer. Um diese Anforderung umzusetzen haben sich ein Reihe von allgemeinen Eigenschaften/Zielen etabliert. \cite[13-14]{apiDesign} Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaft, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Für detaillierte Informationen zu die einzelnen Eigenschaft, können diese in \cite[14-23]{apiDesign} nachgeschlagen werden.
 \begin{table}
@@ -70,6 +70,26 @@ Unter dem Qualitätsmerkmal Effizienz kann zum Beispiel der geringe Verbrauch vo
 Unter der Zuverlässigkeit einer \gls{API} kann die Fehleranfälligkeit verstanden werden bzw. wie gut diese auf Fehler reagieren kann. Ein wichtiger Aspekt der dabei auf jeden Fall beachtet werden sollte ist die Rückgabe von standardisierten HTTP-Statuscodes. Dies ermöglicht dem Benutzer ein ordentliches Feedback, welches noch durch konkretisierte Fehlermeldungen verdeutlicht werden sollte. \cite[13,189]{apiDesign}
 
 \subsection{Grundprinzipien von REST}
+\subsubsection{Eindeutige Identifikation von Ressourcen}
+Für jede Ressourcen muss eine eindeutige Identifikation definiert werden. Im Web stehen dabei \glspl{URI} für diesen Zweck bereit. Die Wichtigkeit dieses Prinzips liegt nahe. Wenn beispielsweise Produkte von einem Online-Shop nicht eindeutig identifiziert werden könnten, dann wäre das zum Beispiel für Werbezweck mehr als unpraktisch. E-Mails mit personalisierter Werbung für Produkte wäre ohne eine eindeutige Identifikation dieser nicht bzw. sehr umständlich möglich.\\
+\\
+Wichtig ist zu beachten das mit \glspl{URI} nicht nur einzelne Ressourcen identifiziert, sondern auch Ressourcenlisten werden können. Um bei dem Beispiel von oben zu bleiben, könnte es eine \gls{URI} geben mit welcher ein einzelnes Produkt und eine mit welcher eine Liste von Produkten identifiziert wird. Dies ist kein Widerspruch gegen das Prinzip, welches besagt das jede Ressource eindeutig identifiziert werden muss, sondern in diesem Fall gilt eine Liste als selbstständige Ressource.
+
+\subsubsection{Verwendung von Hypermedia}
+Hypermedia als Begriff ist Zusammensetzung aus den Begriffen \textit{Hypertest} und \textit{Multimedia}. Dabei kann \textit{Hypermedia} als Oberbegriff von \textit{Hypertext} betrachtet werden, denn \textit{Hypermedia} unterstützt nicht nur Texte, sondern auch andere Multimediale Inhalte wie zum Beispiel Dokumente, Bilder, Videos oder Links. Letzteres kann für das Ausführen von Funktionen oder zum Navigieren innerhalb des Browsers verwendet werden und ist ein bekanntes Element in der \gls{HTML}. Daher kann \gls{HTML} auch als klassischer Vertreter von Hypermediaformaten betrachtet werden. Damit ein Client weiß welche Aktionen bzw. welchen Pfaden folgen kann, werden ihm diese vom Server mithilfe von Hypermedia zur Verfügung gestellt.
+
+\subsubsection{Verwendung von HTTP-Standardmethoden}
+Um die vom Server bereit gestellten Links ordnungsgemäß auszuführen, müssen neben den \glspl{URI} auch einheitliche Schnittstellen bekannt sein. Das setzt voraus, dass alle Clients über Verwendung und Semantik der Schnittstellen Bescheid wissen. An dieser Stelle kommen die \gls{HTTP}-Standardmethoden zum Einsatz. Die Schnittstellen von \gls{HTTP} bestehen dabei im wesentlichen aus den Funktionen \textit{GET}, \textit{HEAD}, \textit{POST}, \textit{PUT} und \textit{DELETE}, welche alle in der \gls{HTTP}-Spezifikation\footnote{siehe \cite{httpSpecification}} definiert sind. Die Methoden \textit{PATCH} oder auch \textit{LINK} waren dabei nicht von Anfang in der Spezifikation enthalten, sonder wurden erst in nachträglich hinzugefügt.\\
+\\
+Ein Client kann mithilfe der Methode \textit{GET}, ohne genaues Wissen der Ressource, eine Repräsentation dieser abfragen, denn diese allgemeinen Schnittstellen werden für jede Ressource verwendet. Durch diese mögliche Vorhersagbarkeit sind die Qualitätsmerkmale aus den \hyperref[sec:qualityFeatures]{Kapiteln~\ref{sec:qualityFeatures}} erfüllt. Zusätzlich ist noch anzumerken das durch Benutzung der Methode \textit{GET} keine unerwünschten Effekte befürchtet werden müssen, denn diese ist idempotent. Einfach ausgedrückt kann ein lesender Zugriff auf eine Ressource keine Änderung des Zustands hervorrufen.
+
+\subsubsection{Unterschiedliche Repräsentationen von Ressourcen}
+Um mit den Daten, welcher eine \gls{API} zurückgibt, umzugehen muss der Client wissen in welchem Format er die Daten zurückbekommen möchte. Dazu muss er das gewünschte Format mithilfe von \gls{HTTP} Content Negotiation von der \gls{API} abzufragen. Dabei besteht die Möglichkeit mehrere gewünschte Formate, mit unterschiedlicher Priorität, anzugeben. Der Server gibt anschließend das Format zurück, welches Kompatibel und die Höchste Priorität besitzt. Die gängigste Methode ist dabei die gewünschten Formate im \textit{Accept-Header} des Requestes mitzusenden.
+
+\subsubsection{Statuslose Kommunikation}
+Das letzte Grundprinzip besagt das es keinen Sitzungsstatus, welcher auf dem Server über mehrere Anfragen gehalten wird, geben darf. Der Kommunikationsstatus muss demzufolge in der Ressource selber oder im Client gespeichert werden. Durch die Statuslose Kommunikation wird die Kopplung zwischen Server und Client verringert. Das wiederum bringt den Vorteil das beispielsweise ein Neustart des Servers den Client nicht stören oder sogar zum Absturz bringen kann, denn dieser würde es gar nicht erst mitbekommen. Ein weiterer nicht unerheblicher Vorteil welcher daraus resultiert ist die Möglichkeit der Lastenverteilung auf unterschiedliche Serverinstanzen.
+
+\subsection{HATEOAS}
 
 %\section{Design-Patterns}
 
