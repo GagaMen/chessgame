@@ -131,6 +131,31 @@ Mithilfe dieses Features ist es möglich das Projekt zu bauen obwohl keine Insta
 \subsubsection{Plugins}
 Mithilfe von Plugins bzw. Erweiterungen können die Funktionalitäten von Gradle beliebig erweitert oder angepasst werden. Dabei dienen die sie als Kappselung von Build- oder Task-Logik und können bequem verteilt bzw. in anderen Projekten wieder verwendet werden. Somit ist beispielsweise eine Unterstützung einer zusätzlichen Programmiersprache ohne weitere möglich.
 
+\subsection{Verwaltung von Projekten und Tasks}
+Innerhalb von Gradle  wird zwischen zwei grundlegenden Build Bereichen unterschieden, den Projekten und den Tasks. Gradle kann dabei für ein oder mehrere Projekte verwendet werden, wobei jedes Projekt wiederum ein oder mehrere Tasks beinhaltet.
+
+\subsubsection{Projekte}
+Standardmäßig wird innerhalb des Projektverzeichnisses nach der Datei \textit{build.gradle} gesucht, welche ein Projekt identifizieren und in welcher die benötigten Tasks definiert werden. Es ist dabei möglich die \textit{build.gradle} Datei umzubenennen, dadurch muss aber bei einem Aufruf dieser explizit mit angegeben werden.\\
+\\
+Zusätzlich neben den Tasks können weitere Informationen, wie zum Beispiel die Abhängigkeiten oder die Repositorys, aus welchen Gradle die Abhängigkeiten beziehen soll, definiert werden. Auch die Angabe des Namens, einer Version, einer Beschreibung oder eines Elternprojektes ist möglich.
+
+\subsubsection{Tasks}
+Die Tasks sind das Kernstück eines jeden Projektes, mithilfe dieser lässt sich der geschriebene Quellcode kompilieren, Tests starten oder fertig zusammengebaute Applikation auf einen Server veröffentlichen.\\
+\\
+Jeder Task verfügt dabei über eine Funktion \textit{doFirst} und eine Funktion \textit{doLast} um Funktionalitäten vor oder nach einem Task auszuführen. Diese können beispielsweise auch in, durch Plugins bereitgestellte, Tasks verwendet werden, um in den Prozess einzugreifen ohne die eigentliche Logik zu verändern. Mithilfe der Funktion \textit{dependsOn} können Abhängigkeiten zu anderen Tasks definiert werden, welche zuvor ausgeführt werden sollen. Des weiteren besteht die Möglichkeit bestimmte Typen für Tasks anzugeben. So können diese standardmäßig als \textit{Zip}, \textins{Copy}, \textit{Exec} oder \textit{Delete} definiert werden. \textit{Copy} erlaubt dabei zum Beispiel das Kopieren von Dateien oder \textit{Exec} das Ausführen von Kommandozeilen-Befehle.\\
+\\
+In dem \hyperref[lst:gradleTask]{Listing~\ref{lst:gradleTask}} wird ein Beispiel für ein kopierenden Task gezeigt. Dieser kopiert alle Dateien mit den Endungen \textit{.js} und \textit{.js.map}, aus dem Build-Verzeichnis der Source-Dateien, in ein Unterverzeichnis \textit{js} des \textit{dist}-Verzeichnisses. Dabei ist außerdem eine Abhängigkeit zum Build-Task definiert, wodurch dieser immer zuvor ausgeführt wird.
+\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Gradle-Task}, label=lst:gradleTask, float, floatplacement=T]
+task copyCompiledFilesIntoDist(type: Copy) {
+	from "$buildDir/classes/kotlin/main/"
+	into "${projectDir}/dist/js/"
+	include '*.js'
+	include '*.js.map'
+}
+
+copyCompiledFilesIntoDist.dependsOn(build)
+\end{lstlisting}
+
 \section{Schachnotationen FEN und SAN}
 
 \section{Schachregeln}
