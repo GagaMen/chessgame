@@ -108,12 +108,13 @@ Durch das Konzept HATEOAS wird ein dynamischer Workflow erzeugt, wodurch die Res
 %\section{Design-Patterns}
 
 \section{Das Build-Tool Gradle}
-Gradle ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie Ant und Maven und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von ein paar großen bekannten Projekten, wie zum Beispiel Android oder dem Spring Framework.\\
+Gradle ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie Ant und Maven und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von einigen großen und bekannten Projekten, wie zum Beispiel Android oder dem Spring Framework.\\
 \\
 Die in diesem Kapitel behandelten Fakten und Erklärungen entstammen aus dem Buch \enquote{Introducing Gradle} von Balaji Varanasi und Sudha Belida. (vgl. \cite{introducingGradle})
+
 \subsection{Eigenschaften von Gradle}
 \subsubsection{Declarative Dependency Management}
-Gradle biete eine komfortable Möglichkeit mit Abhängigkeiten umzugehen. Denn viele Projekte verwenden andere Bibliotheken oder Frameworks, welche gegebenenfalls eigenen Abhängigkeiten aufweisen. Dadurch kann es sehr mühselig werden die ganze Abhängigkeitsstruktur mit alle Versionen zu verwalten. Es müssen nur die Abhängigkeiten definiert werden und Gradle kümmert sich um den Download dieser, mit allen Unterabhängigkeiten. Es ist wichtig zu wissen das Gradle nur das \textit{Was} aber nicht das \textit{Wie} gesagt werden muss.
+Gradle biete eine komfortable Möglichkeit mit Abhängigkeiten umzugehen. Denn viele Projekte verwenden andere Bibliotheken oder Frameworks, welche gegebenenfalls eigenen Abhängigkeiten aufweisen. Dadurch kann es sehr mühselig werden die ganze Abhängigkeitsstruktur mit alle Versionen zu verwalten. Es müssen nur die benötigten Abhängigkeiten definiert werden und Gradle kümmert sich um den Download dieser, inklusive aller Unterabhängigkeiten. Es ist wichtig zu wissen das Gradle nur das \textit{Was} aber nicht das \textit{Wie} gesagt werden muss.
 
 \subsubsection{Declarative Builds}
 Damit Skripte für den Build-Prozess einfach und verständlich sind, verwendet Gradle dafür eine \gls{DSL} auf Basis der Programmiersprache Groovy. Dadurch werden eine Reihe von Sprach-Elementen bereitgestellt, welche einfach zusammengestellt werden können und ihre Absicht klar zum Ausdruck bringen.
@@ -122,13 +123,13 @@ Damit Skripte für den Build-Prozess einfach und verständlich sind, verwendet G
 Um den Konfigurationsaufwand von Projekten zu minimieren bietet Gradle eine Reihe von Standardwerten und Konventionen an. Durch die Einhaltung dieser werden Build-Skripte sehr prägnant, sie sind aber dennoch nicht daran gebunden. Da die Skripte auf Groovy basieren können die Konventionen leicht, durch schreiben von Groovy-Code, umgangen werden.
 
 \subsubsection{Incremental Builds}
-In größeren Projekten kommt es oft zu sehr langsame Build-Zeiten, weil andere Tools im Gegensatz zu Gradle versuchen den Code immer zu säubern und neu aufzubauen. Durch die inkrementellen Builds, welche Gradle bereitstellt, kann dieses Problem umgangen werden. Aufgaben die der Build-Prozess ausführt, werden sofern keine Änderungen festgestellt wurden übersprungen. Dafür wird überprüft ob sich die Ein- oder Ausgänge geändert haben.
+In größeren Projekten kommt es oft zu sehr langsame Build-Zeiten, weil andere Tools im Gegensatz zu Gradle versuchen den Code immer zu säubern und neu aufzubauen. Durch die inkrementellen Builds, welche Gradle bereitstellt, kann dieses Problem umgangen werden. Tasks die der Build-Prozess ausführt, werden sofern keine Änderungen festgestellt wurden übersprungen. Dafür wird überprüft ob sich die Ein- oder Ausgänge geändert haben.
 
 \subsubsection{Gradle Wrapper}
 Mithilfe dieses Features ist es möglich das Projekt zu bauen obwohl keine Installation von Gradle vorhanden ist. Der Gradle Wrapper stellt dafür eine Batch-Datei für Windows- und ein Shell-Skript für Linux- bzw. Mac-Umgebungen bereit. Ein weiterer Vorteil ist die Erstellung neuer \gls{CI} Server, welche die Build-Prozesse somit ohne zusätzliche Konfiguration ausführen können.
 
 \subsubsection{Plugins}
-Mithilfe von Plugins bzw. Erweiterungen können die Funktionalitäten von Gradle beliebig erweitert oder angepasst werden. Dabei dienen die sie als Kappselung von Build- oder Aufgaben-Logik und können bequem verteilt bzw. in anderen Projekten wieder verwendet werden. Somit ist beispielsweise eine Unterstützung einer zusätzlichen Programmiersprache ohne weitere möglich.
+Mithilfe von Plugins bzw. Erweiterungen können die Funktionalitäten von Gradle beliebig erweitert oder angepasst werden. Dabei dienen die sie als Kappselung von Build- oder Task-Logik und können bequem verteilt bzw. in anderen Projekten wieder verwendet werden. Somit ist beispielsweise eine Unterstützung einer zusätzlichen Programmiersprache ohne weitere möglich.
 
 \section{Schachnotationen FEN und SAN}
 
