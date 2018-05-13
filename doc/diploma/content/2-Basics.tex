@@ -90,6 +90,20 @@ Um mit den Daten, welcher eine \gls{API} zurückgibt, umzugehen muss der Client 
 Das letzte Grundprinzip besagt das es keinen Sitzungsstatus, welcher auf dem Server über mehrere Anfragen gehalten wird, geben darf. Der Kommunikationsstatus muss demzufolge in der Ressource selber oder im Client gespeichert werden. Durch die Statuslose Kommunikation wird die Kopplung zwischen Server und Client verringert. Das wiederum bringt den Vorteil das beispielsweise ein Neustart des Servers den Client nicht stören oder sogar zum Absturz bringen kann, denn dieser würde es gar nicht erst mitbekommen. Ein weiterer nicht unerheblicher Vorteil welcher daraus resultiert ist die Möglichkeit der Lastenverteilung auf unterschiedliche Serverinstanzen.
 
 \subsection{HATEOAS}
+\enquote{Hypermedia As The Engine Of Application State} oder kurz HATEOAS ist ein Design-Konzept, welches von vielen \glspl{API} die sich selber als \gls{REST}ful bezeichnen missachtet wird. Diesen Begriff bzw. diese Aussage kann nach Kai Spichale mit nachfolgenden Bedeutungen beschrieben werden \cite[156]{apiDesign}:
+\begin{itemize}
+	\item \enquote{»Hypermedia« ist eine Verallgemeinerung des Hypertexts mit multimedialen Anteilen. Beziehungen zwischen Objekten werden durch
+		Hypermedia Controls abgebildet.}
+	\item \enquote{Mit »Engine« ist ein Zustandsautomat gemeint. Die Zustände und
+		Zustandsübergänge der »Engine« beschreiben das Verhalten der
+		»Application«.}
+	\item \enquote{Im Kontext von REST kann man »Application« mit Ressource
+		gleichsetzen.}
+	\item \enquote{Mit »State« ist der Zustand der Ressource gemeint, deren Zustandsübergänge durch die »Engine« definiert werden.}
+\end{itemize}
+Grundgedanke hinter diesen Konzept ist die Selbstbeschreibung einer \gls{API}. Das Ziel soll dabei sein, dass Clients nicht genau über die \gls{API} Bescheid wissen müssen, sondern die Ressource dem Client zeigt wie er durch die \gls{API} navigieren kann. Als Resultat des ganzen benötigt der Client nur das Wissen über die \gls{URL} des Einstiegs, alles weitere bekommt er vom Server in Form von Links mitgeteilt. \\
+\\
+Durch das Konzept HATEOAS wird ein dynamischer Workflow erzeugt, wodurch die Ressource volle Kontrolle über die \gls{API} bekommt. Damit ist es beispielsweise möglich anhand von Clients unterschiedliche Links bzw. Navigationspunkte auszuliefern oder Links auszutauschen ohne das der Client davon etwas bemerkt. Um diese Vorteile zu nutzen ist es natürlich notwendig die bereitgestellten Links zu verwenden.
 
 %\section{Design-Patterns}
 
