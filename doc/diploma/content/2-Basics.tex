@@ -157,5 +157,49 @@ copyCompiledFilesIntoDist.dependsOn(build)
 \end{lstlisting}
 
 \section{Schachnotationen FEN und SAN}
+\gls{FEN} und \gls{SAN} sind Notationen welche für die elektronische Verarbeitung von Schachspielen entwickelt wurden. Beide Notationen werden als Text dargestellt und ermöglichen so eine Statuslose Kommunikation. Die \gls{FEN} dient dabei zur Repräsentation eines ganzen Schachbrettes und die \gls{SAN} zur Darstellung eines Zuges.\\
+\\
+Die \gls{FEN} setzt sich dabei aus mehreren Teilen zusammen, welche aus der Figurenstellung, dem aktuellem Spieler, der Möglichkeit zur Rochade, dem Feld zum schlagen \enquote{en passant}, den Halbzügen und der aktuellem Zugnummer bestehen. Einzelne Teile werden dabei durch Leerzeichen getrennt. Die \hyperref[fig:fen]{Abbildung~\ref{fig:fen}} zeigt dabei die \gls{FEN} einer Startposition.\\
+
+\begin{figure}[H]
+	\caption{Startposition eines Schachspiels in der FEN}
+%	$\underbrace{rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR}_{\text{Figurenstellung}} \underbrace{w}_{\text{Aktueller Spieler}} \underbrace{KQkq}_{\text{Rochade}} \underbrace{-}_{\text{En passant}} \underbrace{0}_{\text{Halbzüge}} \underbrace{1}_{\text{Zugnummer}}$
+	rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+	\label{fig:fen}
+\end{figure}\noindent
+Die \gls{SAN} besteht im allgemeinen aus dem Buchstaben der bewegenden Spielfigur und dem Zielfeld. Für eine Bauernfigur wird kein Buchstabe angegeben. Die \hyperref[fig:sanPawn]{Abbildung~\ref{fig:sanPawn}} zeigt dabei den Zug eines Bauern vom Feld \textit{a2} nach \textit{a4} und die \hyperref[fig:ig:sanKnight]{Abbildung~\ref{fig:sanKnight}} den eines Springers von b1 nach c3.\\
+
+\begin{figure}[H]
+	\IfDefined{RawFloats}{\RawFloats}
+	\begin{minipage}[b]{.5\linewidth}
+		\centering
+		a4
+		\captionsetup{justification=centering}
+		\caption{Beispiel SAN: Bauer zieht von a2 nach a4}\label{fig:sanPawn}
+	\end{minipage}%
+	\begin{minipage}[b]{.5\linewidth}
+		\centering
+		Nc3
+		\captionsetup{justification=centering}
+		\caption{Beispiel SAN: Spring zieht von b1 nach c3}\label{fig:sanKnight}
+	\end{minipage}
+\end{figure}\noindent
+Die Buchstabencodes der einzelnen Figuren sind in der \hyperref[tab:pieces]{Tabelle~\ref{tab:pieces}} aufgelistet. Dabei ist zu beachten das die Codes kleingeschrieben für die Farbe Schwarz und groß für die Farbe Weiß stehen. In der \gls{SAN} werden sie aber immer groß geschrieben. Genauere Informationen zur \gls{FEN} und zur \gls{SAN} können in der Bachelorarbeit \cite[9-10]{kretzschmar} von Christoph Kretzschmar nachgelesen werden.
+
+\begin{table}[H]
+	\captionsetup{justification=centering}
+	\caption{Figurenbedeutung in der FEN und SAN (Quelle: \cite[Tabelle~2.1]{kretzschmar})}
+	\label{tab:pieces}
+	\begin{tabu}{|r|c|c|c|c|c|c|}
+		\rowfont[c]{\bfseries}
+		\taburowcolors 1{tableheadcolor .. tableheadcolor}
+		\hline
+		& R & N & B & Q & K & P \\
+		\hline
+		\taburowcolors 2{tablebodycolor .. tablerowcolor}
+		Bedeutung & Rook & Knight & Bishop & Queen & King & Pawn \\\hline
+		Figur & Turm & Springer & Läufer & Königin & König & Bauer \\\hline
+	\end{tabu}
+\end{table}
 
 \section{Schachregeln}
