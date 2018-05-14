@@ -1,5 +1,6 @@
 \IfDefined{colorlet}{
-   \colorlet{colorlstNumber}{white!50!black!100}
+   \colorlet{colorlstNumber}{white!25!black!100}
+   \colorlet{colorlstBackground}{white!95!black!100}
 }
 
 \makeatletter
@@ -77,13 +78,14 @@
    ,breakautoindent=true % apply intendation
    ,columns=flexible     %
    ,keepspaces=true      %
+   ,backgroundcolor=\color{colorlstBackground}
 }
 
 \lstset{style=lstStyleBase}
 
 \lstdefinestyle{lstStyleFramed}{%
 %%% Frames
-   ,frame=single         % none, leftline, topline, bottomline, lines
+   ,frame=lines         % none, leftline, topline, bottomline, lines
                          % single, shadowbox
    ,framesep=3pt 
    ,rulesep=2pt          % control the space between frame and listing 
@@ -127,5 +129,8 @@
    %,XML
    %,HTML
 }
+
+\input{preamble/listings-kotlin.tex}
+\input{preamble/listings-groovy.tex}
 
 }% End of \IfPackageLoaded

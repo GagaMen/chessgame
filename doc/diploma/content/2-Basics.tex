@@ -145,12 +145,12 @@ Die Tasks sind das Kernstück eines jeden Projektes, mithilfe dieser lässt sich
 Jeder Task verfügt dabei über eine Funktion \textit{doFirst} und eine Funktion \textit{doLast} um Funktionalitäten vor oder nach einem Task auszuführen. Diese können beispielsweise auch in, durch Plugins bereitgestellte, Tasks verwendet werden, um in den Prozess einzugreifen ohne die eigentliche Logik zu verändern. Mithilfe der Funktion \textit{dependsOn} können Abhängigkeiten zu anderen Tasks definiert werden, welche zuvor ausgeführt werden sollen. Des weiteren besteht die Möglichkeit bestimmte Typen für Tasks anzugeben. So können diese standardmäßig als \textit{Zip}, \textins{Copy}, \textit{Exec} oder \textit{Delete} definiert werden. \textit{Copy} erlaubt dabei zum Beispiel das Kopieren von Dateien oder \textit{Exec} das Ausführen von Kommandozeilen-Befehle.\\
 \\
 In dem \hyperref[lst:gradleTask]{Listing~\ref{lst:gradleTask}} wird ein Beispiel für ein kopierenden Task gezeigt. Dieser kopiert alle Dateien mit den Endungen \textit{.js} und \textit{.js.map}, aus dem Build-Verzeichnis der Source-Dateien, in ein Unterverzeichnis \textit{js} des \textit{dist}-Verzeichnisses. Dabei ist außerdem eine Abhängigkeit zum Build-Task definiert, wodurch dieser immer zuvor ausgeführt wird.
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Gradle-Task}, label=lst:gradleTask, float, floatplacement=T]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Beispiel: Gradle-Task}, label=lst:gradleTask, float, floatplacement=T]
 task copyCompiledFilesIntoDist(type: Copy) {
 	from "$buildDir/classes/kotlin/main/"
 	into "${projectDir}/dist/js/"
-	include '*.js'
-	include '*.js.map'
+	include "*.js"
+	include "*.js.map"
 }
 
 copyCompiledFilesIntoDist.dependsOn(build)
