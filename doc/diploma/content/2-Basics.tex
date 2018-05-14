@@ -11,34 +11,36 @@ Laut \cite[143]{apiDesign} unterstützt der REST Architekturstil eine Reihe von 
 \\
 Da in dieser Arbeit die Webentwicklung im Vordergrund steht und \gls{HTTP} einer der wichtigsten Standards im Web ist, soll im nachfolgenden Verlauf \gls{REST} immer im Sinne von RESTful \gls{HTTP} verstanden werden.\\
 \\
-In den nachfolgenden Abschnitte soll die allgemeine Definition, die Vor- und Nachteile und die Qualitätsmerkmale einer \gls{API} näher beleuchtet werden. Anschließend wird auf die Grundprinzipien von \gls{REST} detaillierter eingegangen.
+In den nachfolgenden Abschnitten sollen die allgemeine Definition, die Vor- und Nachteile und die Qualitätsmerkmale einer \gls{API} näher beleuchtet werden. Anschließend wird auf die Grundprinzipien von \gls{REST} detaillierter eingegangen. Als letztes wird das Konzept HATEOAS, welches laut Roy Fielding ein Muss\footnote{siehe \cite{restMustBeHypertextDriven}} für jede RESTful \gls{API} ist, genauer erläutert.\\
+\\
+Die nachfolgenden Unterkapitel basieren auf dem Buch \enquote{API-Design} \cite[7-10, 13-14, 144-148, 189]{apiDesign} von Kai Spichale.
 
 \subsection{Allgemeine Definition einer \gls{API}}\label{sec:defAPI}
-Laut \cite[7]{apiDesign} definiert Kai Spichale eine \gls{API} mit den Worten von Joshua Bloch wie folgt: \enquote{Eine API spezifiziert die Operationen sowie die Ein- und Ausgaben einer Softwarekomponente. Ihr Hauptzweck besteht darin, eine Menge an Funktionen unabhängig von ihrer Implementierung zu definieren, sodass die Implementierung variieren kann, ohne die Benutzer der Softwarekomponente zu beeinträchtigen}. Des weiteren unterteilt dieser die \glspl{API} in zwei Kategorien ein, in Programmiersprachen- und Remote-\glspl{API}. Des weiteren definiert er die \glspl{API} der Programmiersprachen als abhängig und die Remote als unabhängig gegenüber der Sprache und der Plattform. \cite[7-8]{apiDesign} 
+Laut \cite[7]{apiDesign} definiert Kai Spichale eine \gls{API} mit den Worten von Joshua Bloch wie folgt: \enquote{Eine API spezifiziert die Operationen sowie die Ein- und Ausgaben einer Softwarekomponente. Ihr Hauptzweck besteht darin, eine Menge an Funktionen unabhängig von ihrer Implementierung zu definieren, sodass die Implementierung variieren kann, ohne die Benutzer der Softwarekomponente zu beeinträchtigen}. Des weiteren unterteilt dieser die \glspl{API} in zwei Kategorien ein, in Programmiersprachen- und Remote-\glspl{API}. Des weiteren definiert er die \glspl{API} der Programmiersprachen als abhängig und die Remote als unabhängig gegenüber der Sprache und der Plattform.
 
 \subsection{Vorteile einer \gls{API}}
 \subsubsection{Stabilität durch lose Kopplung}
-Mithilfe von \glspl{API} soll die Abhängigkeit zum Benutzer minimiert werden, der dadurch nicht mehr stark an die Implementierung gekoppelt ist. Das ermöglicht eine Veränderung der eigentlichen Implementation einer Softwarekomponente, ohne das der Benutzer davon etwas bemerkt. (vgl. \cite[9]{apiDesign})
+Mithilfe von \glspl{API} soll die Abhängigkeit zum Benutzer minimiert werden, der dadurch nicht mehr stark an die Implementierung gekoppelt ist. Das ermöglicht eine Veränderung der eigentlichen Implementation einer Softwarekomponente, ohne das der Benutzer davon etwas bemerkt.
 
 \subsubsection{Portabilität}
-Es ist möglich für unterschiedliche Plattformen eine einheitliche Implementierung einer \gls{API} bereitzustellen, obwohl diese im inneren verschieden implementiert sind. Ein bekanntest Beispiel ist dabei die \gls{JRE}, welches diese Funktionalität für Java-Programme bereitstellt. (vgl. \cite[9]{apiDesign})
+Es ist möglich für unterschiedliche Plattformen eine einheitliche Implementierung einer \gls{API} bereitzustellen, obwohl diese im inneren verschieden implementiert sind. Ein bekanntest Beispiel ist dabei die \gls{JRE}, welches diese Funktionalität für Java-Programme bereitstellt.
 
 \subsubsection{Komplexitätsreduktion durch Modularisierung}
-Der \gls{API}-Benutzer besitzt in erster Linie keine genauen Informationen über die Komplexität der Implementierung. Diese Tatsache folgt dem Geheimprinzip und soll der Beherrschung großer Projekte in Hinsicht ihrer Komplexität dienen. Zusätzlich bringt dieser Aspekt auch einen Wirtschaftlichen Vorteil, denn durch die Modularisierung ist eine bessere Arbeitsteilung möglich, was wiederum Entwicklungskosten sparen kann. (vgl. \cite[10]{apiDesign})
+Der \gls{API}-Benutzer besitzt in erster Linie keine genauen Informationen über die Komplexität der Implementierung. Diese Tatsache folgt dem Geheimprinzip und soll der Beherrschung großer Projekte in Hinsicht ihrer Komplexität dienen. Zusätzlich bringt dieser Aspekt auch einen Wirtschaftlichen Vorteil, denn durch die Modularisierung ist eine bessere Arbeitsteilung möglich, was wiederum Entwicklungskosten sparen kann.
 
 \subsubsection{Softwarewiederverwendung und Integration}
-Neben dem verbergen von Details zur Implementierung sollten \glspl{API} Funktionen einer Komponente leicht verständlich bereitstellen, um \gls{API}-Nutzern eine einfache Integration bzw. Verwendung zu ermöglichen. Aus diesen sollten \glspl{API} auch dahingehend optimiert werden. (vgl. \cite[10]{apiDesign})
+Neben dem verbergen von Details zur Implementierung sollten \glspl{API} Funktionen einer Komponente leicht verständlich bereitstellen, um \gls{API}-Nutzern eine einfache Integration bzw. Verwendung zu ermöglichen. Aus diesen sollten \glspl{API} auch dahingehend optimiert werden.
 
 \subsection{Nachteile einer \gls{API}}
 \subsubsection{Interoperabilität}
-Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist die Interoperabilität zu anderen Programmiersprachen. Beispielsweise kann ein Programm, welches in Go geschrieben wurde, nicht auf die Java-\gls{API} zugreifen. Als Problemlösung stehen hierbei aber die Remote-\gls{API} bereit. Diese arbeiten mit Protokollen wie \gls{HTTP} oder \gls{AMQP}, welche sprach- und plattformunabhängig sind\footnote{\hyperref[sec:defAPI]{siehe Kapitel~\ref{sec:defAPI}}}.\cite[10]{apiDesign}
+Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist die Interoperabilität zu anderen Programmiersprachen. Beispielsweise kann ein Programm, welches in Go geschrieben wurde, nicht auf die Java-\gls{API} zugreifen. Als Problemlösung stehen hierbei aber die Remote-\gls{API} bereit. Diese arbeiten mit Protokollen wie \gls{HTTP} oder \gls{AMQP}, welche sprach- und plattformunabhängig sind\footnote{\hyperref[sec:defAPI]{siehe Kapitel~\ref{sec:defAPI}}}.
 
 \subsubsection{Änderbarkeit}
 Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen werden sollten, kann es hinsichtlich der Änderbarkeit zu Problemen kommen. Das ist aber nur der Fall sofern die Benutzer nicht bekannt sind oder nicht kontrolliert werden können. In so einem Fall spricht man von veröffentlichten \glspl{API}. Als Gegenstück dazu können interne \glspl{API} betrachtet werden, denn bei diesen wäre eine Kontrolle der Benutzer möglich.
 
 \subsection{Qualitätsmerkmale}\label{sec:qualityFeatures}
 \subsubsection{Benutzbarkeit}
-Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für andere Nutzer. Um diese Anforderung umzusetzen haben sich ein Reihe von allgemeinen Eigenschaften/Zielen etabliert. \cite[13-14]{apiDesign} Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaft, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Für detaillierte Informationen zu die einzelnen Eigenschaft, können diese in \cite[14-23]{apiDesign} nachgeschlagen werden.
+Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für andere Nutzer. Um diese Anforderung umzusetzen haben sich ein Reihe von allgemeinen Eigenschaften/Zielen etabliert. Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaft, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Für detaillierte Informationen zu die einzelnen Eigenschaft, können diese in \cite[14-23]{apiDesign} nachgeschlagen werden.
 \begin{table}
 	\captionsetup{justification=centering}
 	\caption{Eigenschaften/Ziele des Qualitätsmerkmals \enquote{Benutzbarkeit}\newline (verändert nach \cite[14-23]{apiDesign})}
@@ -64,10 +66,10 @@ Als Zentrale Anforderung an einem guten Design für \gls{API} stehen die leichte
 \end{table}
 
 \subsubsection{Effizienz}
-Unter dem Qualitätsmerkmal Effizienz kann zum Beispiel der geringe Verbrauch von Akku oder dem Datenvolumen bei Mobilen Geräten verstanden werden. Oder aber die Skalierbarkeit einer \gls{API}, welches bei einem großen Zuwachs von Aufrufen durchaus entscheidend sein kann. \cite[13]{apiDesign}
+Unter dem Qualitätsmerkmal Effizienz kann zum Beispiel der geringe Verbrauch von Akku oder dem Datenvolumen bei Mobilen Geräten verstanden werden. Oder aber die Skalierbarkeit einer \gls{API}, welches bei einem großen Zuwachs von Aufrufen durchaus entscheidend sein kann.
 
 \subsubsection{Zuverlässigkeit}
-Unter der Zuverlässigkeit einer \gls{API} kann die Fehleranfälligkeit verstanden werden bzw. wie gut diese auf Fehler reagieren kann. Ein wichtiger Aspekt der dabei auf jeden Fall beachtet werden sollte ist die Rückgabe von standardisierten HTTP-Statuscodes. Dies ermöglicht dem Benutzer ein ordentliches Feedback, welches noch durch konkretisierte Fehlermeldungen verdeutlicht werden sollte. \cite[13,189]{apiDesign}
+Unter der Zuverlässigkeit einer \gls{API} kann die Fehleranfälligkeit verstanden werden bzw. wie gut diese auf Fehler reagieren kann. Ein wichtiger Aspekt der dabei auf jeden Fall beachtet werden sollte ist die Rückgabe von standardisierten HTTP-Statuscodes. Dies ermöglicht dem Benutzer ein ordentliches Feedback, welches noch durch konkretisierte Fehlermeldungen verdeutlicht werden sollte.
 
 \subsection{Grundprinzipien von REST}
 \subsubsection{Eindeutige Identifikation von Ressourcen}
@@ -104,8 +106,6 @@ Das letzte Grundprinzip besagt das es keinen Sitzungsstatus, welcher auf dem Ser
 Grundgedanke hinter diesen Konzept ist die Selbstbeschreibung einer \gls{API}. Das Ziel soll dabei sein, dass Clients nicht genau über die \gls{API} Bescheid wissen müssen, sondern die Ressource dem Client zeigt wie er durch die \gls{API} navigieren kann. Als Resultat des ganzen benötigt der Client nur das Wissen über die \gls{URL} des Einstiegs, alles weitere bekommt er vom Server in Form von Links mitgeteilt. \\
 \\
 Durch das Konzept HATEOAS wird ein dynamischer Workflow erzeugt, wodurch die Ressource volle Kontrolle über die \gls{API} bekommt. Damit ist es beispielsweise möglich anhand von Clients unterschiedliche Links bzw. Navigationspunkte auszuliefern oder Links auszutauschen ohne das der Client davon etwas bemerkt. Um diese Vorteile zu nutzen ist es natürlich notwendig die bereitgestellten Links zu verwenden.
-
-%\section{Design-Patterns}
 
 \section{Das Build-Tool Gradle}
 Gradle ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie Ant und Maven und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von einigen großen und bekannten Projekten, wie zum Beispiel Android oder dem Spring Framework.\\
