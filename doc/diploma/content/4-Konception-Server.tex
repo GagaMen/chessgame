@@ -43,7 +43,11 @@ Dabei soll die erste \gls{URI} ebenso wie beim \enquote{Player Controller} Zurve
 Der zweite Einstiegspunkt soll in diesem Controller ausschließlich dazu verwendet werden, um einzelne Matches mithilfe eines GET-Request anzufordern. Um eine unrechtmäßige Manipulation der Matchdaten durch einen Nutzer zu verhindern soll keine Möglichkeit bereitstehen ein Match zu aktualisieren. Die Aktualisierung eines Matches soll ausschließlich durch das hinzufügen von Draws erfolgen.\footnote{siehe \hyperref[sec:drawController]{Kapitel~\ref{sec:drawController}}}
 
 \subsection{Draw Controller}\label{sec:drawController}
-
+Auch der Draw Controller stellt wieder zwei Einstiegspunkte an den \glspl{URI} \code{/draw/} und \code{/draw/\{id\}} bereit. \\
+\\
+Am ersten Einstiegspunkt soll wieder das bereitstellen einer Liste mittels GET- und das hinzufügen mittels POST-Request von Draws zur Verfügung gestellt werden. Für das hinzufügen eines neuen Draws ist die ID des Matches und der Draw-Code in der \gls{SAN} als Parameter von nöten. Zusätzlich soll die Möglichkeit bestehen die Zeilen- und die Spaltennummer der Startposition mitzugeben. Wenn diese Informationen nicht mitgegeben werden, so soll der Controller die Startposition kalkulieren. Spalten sollen dabei als Nummern und nicht als Buchstaben mitgegeben werden\footnote{A $\rightarrow$ 8; ...; H $\rightarrow$ 8}. Nach erfolgreicher Validierung des Draw-Codes soll der Draw dem zugehörigen Match hinzugefügt und die Match-Daten aktualisiert werden.\\
+\\
+Über den zweiten Einstiegspunkt soll wieder die Abfrage nach einem einzelnen Draw möglich sein. Eine Möglichkeit zum Löschen oder Aktualisieren des Draws soll nicht bestehen, da sonst der Nutzer wieder eine Möglichkeit hätte das Match zu manipulieren. Das Löschen von Draws soll über die Löschung des dazugehörigen Matches erfolgen\footnote{siehe \hyperref[sec:matchController]{Kapitel~\ref{sec:matchController}}}.
 
 \subsection{Game Controller}\label{sec:gameController}
 Der Game Controller soll dazu dienen große Match bezogene Daten separat zu ermitteln. Dabei soll mittels GET-Request an der \gls{URI} \code{/match/{id}/draw} eine Liste aller Draws und über die \gls{URI} \code{/match/{id}/pieceSets} eine Map mit allen Figuren der beiden Spielteilnehmer breitgestellt werden. Neben den aktuell auf dem Spielfeld stehenden Figuren sollen dabei auch die geschmissen mitgeschickt werden.
