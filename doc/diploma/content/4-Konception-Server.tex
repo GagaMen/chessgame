@@ -33,7 +33,7 @@ Der Player Controller soll zwei Einstiegspunkt an den \glspl{URI} \code{/player/
 \\
 Am ersten Einstiegspunkt soll eine Liste aller Spieler über einen GET-Request bereitgestellt werden können. Des weiteren soll an diesem die Möglichkeit bestehen einen neuen Player mithilfe eines POST-Requests zu erzeugen. Dabei muss als Parameter der Name und das Passwort des Players mitgegeben werden. Die SQLite-Datenbank soll die ID dabei automatisch mittels Autoincrement erzeugen. Bei erfolgreicher Erstellung des Players soll dieser zurückgegeben werden, ansonsten \code{NULL}.\\
 \\
-Am zweiten Einstiegspunkt soll ein einzelner existierender Player über einen GET-Request bereitgestellt, über einen DELETE-Request gelöscht und über einen PATCH-Request aktualisiert werden können. Nur das Passwort darf dabei laut Anforderungen\footnote{siehe \ref{sec:anforderungen}} aktualisiert werden, wobei dieses zusätzlich als Parameter an den Request mit angehangen werden muss.
+Am zweiten Einstiegspunkt soll ein einzelner existierender Player über einen GET-Request bereitgestellt, über einen DELETE-Request gelöscht und über einen PATCH-Request aktualisiert werden können. Nur das Passwort darf dabei laut Anforderungen\footnote{siehe \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}}} aktualisiert werden, wobei dieses zusätzlich als Parameter an den Request mit angehangen werden muss.
 
 \subsection{Match Controller}\label{sec:matchController}
 Die \glspl{URI} \code{/match/} und \code{/match/\{id\}} sollen durch den Match Controller bereitgestellt werden. \\
