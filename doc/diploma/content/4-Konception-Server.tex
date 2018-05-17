@@ -10,7 +10,14 @@ Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Be
 \\
 Um ein Schachspiel abzubilden bedarf es dabei der Ressourcen Player (Spieler), Match (Partie) und Draw (Zug), welche in den nachfolgenden \hyperref[sec:resplayer, sec:resdraw]{Unterabschnitten~\ref{sec:resplayer} bis \ref{sec:resdraw}} näher betrachtet werden.\\
 \\
-Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei der Server als Grundlage dienen soll.
+Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei der Server als Grundlage dienen soll.\\
+\\
+Zur Unterstützung der Erläuterungen in den \hyperref[sec:resplayer, sec:resdraw]{Kapiteln~\ref{sec:resplayer} bis \ref{sec:resdraw}} bietet die \hyperref[fig:classdiagram]{Abbildung~\ref{fig:classdiagram}}, in Form eines \gls{UML} Klassendiagramms, eine Veranschaulichung.
+\begin{sidewaysfigure}
+	\includegraphics[width=0.9\textwidth]{images/classdiagram.png}
+	\caption{Klassendiagramm: Modelle des Servers}
+	\label{fig:classdiagram}
+\end{sidewaysfigure}
 
 \subsection{Ressource: Player (Spieler)}\label{sec:resplayer}
 Neben der ID, welche schon im Abschnitt \ref{sec:anforderungen} erwähnt und durch die SQLite Datenbank generiert werden soll, besitzt der Player noch Informationen über seinen Name und sein Passwort.\\
