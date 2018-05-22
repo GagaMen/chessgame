@@ -1,12 +1,9 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.dto.MatchDTO
-import htwdd.chessgame.server.model.Match
-import htwdd.chessgame.server.model.MatchHashMap
-import htwdd.chessgame.server.model.PieceColor
+import htwdd.chessgame.server.model.*
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
-import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.util.DatabaseUtility
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.*
@@ -31,6 +28,16 @@ class MatchController {
     @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
+    }
+
+    @RequestMapping("/{id}/draw", method = [OPTIONS])
+    fun drawsByMatchOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,OPTIONS")
+    }
+
+    @RequestMapping("/{id}/pieceSets", method = [OPTIONS])
+    fun pieceSetsByMatchOptions(response: HttpServletResponse) {
+        response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
@@ -181,5 +188,34 @@ class MatchController {
 
         if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
         return match
+    }
+
+    @GetMapping(
+            value = ["/{id}/draw"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    fun getDrawsByMatchId(
+            @PathVariable
+            id: Int
+    ): DrawList {
+        val drawList = mutableListOf<Draw>()
+        drawDao!!.queryForEq("match_id", id).forEach {
+            it.setValuesByDrawCode()
+            drawList.add(it)
+        }
+        return DrawList(drawList)
+    }
+
+    @GetMapping(
+            value = ["/{id}/pieceSets"],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    fun getPieceSetsByMatchId(
+            @PathVariable
+            id: Int
+    ): PieceSetHashMap {
+        if (!matchDao!!.idExists(id)) throw IllegalArgumentException("No match with the id '$id' registered!")
+        val match = matchDao.queryForId(id)
+        return PieceSetHashMap(match.pieceSets)
     }
 }
