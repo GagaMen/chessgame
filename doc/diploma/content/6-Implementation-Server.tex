@@ -3,6 +3,8 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Implementation des Servers}
+
+
 \section{Verwendete Bibliotheken/Frameworks}
 Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibfasterxml]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibfasterxml}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
 
@@ -259,4 +261,15 @@ override fun toString(): String {
 \end{lstlisting}
 
 \section{Analyse/Ermittlung der FEN bzw. SAN}
-
+Nach den Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} wurde definiert, das Änderungen an einem Match ausschließlich über das hinzufügen eines Draws erfolgen sollen. Trotzdem muss eine Validierung des übermittelten Draw-Code durchgeführt werden, um zu überprüfen das dieser auch möglich ist. Dafür wurde der regulärer Ausdruck aus der \hyperref[fig:regexSAN]{Abbildung~\ref{fig:regexSAN}} entwickelt, welcher in acht Teile bzw. Gruppen unterteilt werden kann.\\
+\\
+\begin{figure}
+	$\underbrace{([KQBNR])?}_{1}\underbrace{([a-h]|[1-8])?}_{2}\underbrace{(x)?}_{3}\underbrace{([a-h])}_{4}\underbrace{([1-8])}_{5}\underbrace{([QBRN])?}_{6}\underbrace{(e\textbackslash.p\textbackslash.)?}_{7}\underbrace{(\textbackslash+\{1,2\}|\#)?}_{8}$
+\caption{Regulärer Ausdruck zur Validierung eines Strings in der SAN}
+\label{fig:regexSAN}
+\end{figure}
+Der erste Part ermittelt dabei die Art der Spielfigur. Anhand des Fragezeichen-Symbols ist zu sehen  das dieser Teil optional ist, was dran liegt das kein Buchstabe angegeben wird wenn eine Bauernfigur gezogen wurde. Der zweite Teil zeigt an von welcher Spalten oder Reihe die Figur gestartet ist. Diese Information is notwendig wenn zwei Figuren der selben Art auf das Zielfeld gelangen können. Part drei gibt an ob eine Figur geschmissen wurde. In den Abschnitten vier und fünf wird das Zielfeld ermitteln, wobei der vierte Part die Spalte und der fünfte die Reihe darstellt. Teil sechs gibt die Art der Spielfigur an in welche sich ein Bauer umwandelt, wenn er die hinterste Reihe erreicht hat. Der vorletzte Part zeigt qn ob ein \enquote{Schlagen im Vorbeigehen} bzw. ein \enquote{Schlagen en passant} durchgeführt wurde. Im letzten Abschnitt ermittelt ob der Draw zu einem Schach oder einem Schachmatt führt. Dabei werden zwei Schreibweise für ein Schachmatt akzeptiert, einmal \enquote{++} und zum anderen \enquote{\#}. Zu beachten ist das mithilfe des regulären Ausdrucks nicht ermittelt werden kann, ob eine Rochade durchgeführt wurde. Dies muss zuvor separat geprüft werden.\\
+\\
+Mithilfe des regulären Ausdrucks kann anschließend anhand der Figurenstellung, welche im Match gespeichert sind, überprüft werden ob der Draw valide ist. Dafür wird als erstes das Startfelder ermittelt, sofern dieses nicht als Request-Parameter mit übergeben wurde. Wichtig hierbei ist das immer nur ein einziges Startfeld ermittelt werden darf, hierfür müssen ggf. die Informationen aus dem zweiten Teil des regulären Ausdrucks heran gezogen werden. Anschließend werden alle möglichen Felder ermittelt, zu welchen sich die Figur bewegen kann. Ist das übermittelte Zielfeld nicht enthalten, dann ist der Draw invalide. Wenn hingegen das Zielfeld enthalten ist, dann wird zusätzlich überprüft ob eine Figur geschlagen wird. Das gleiche gilt für Schlagen \enquote{en passant}, Schach und Schachmatt. Ist einer dieser Werte nicht oder falsch angegeben, dann ist der Draw invalide.\\
+\\
+Ist der Draw valide wird dieser schließlich in der Datenbank gespeichert und das dazugehörige Match wird angepasst. Dafür wird die Position der bewegten Figur, ggf. die geschlagene Figur, Informationen zu Schach oder Schachmatt, die Möglichkeit zur Rochade und die Halbzüge aktualisiert. Anhand der neuen Informationen kann anschließend der neue Wert der FEN ermittelt werden. Nach erfolgreicher Aktualisierung wird das Match in der Datenbank angepasst.
