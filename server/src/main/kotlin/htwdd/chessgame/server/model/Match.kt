@@ -32,7 +32,7 @@ data class Match(
         private val playerBlack: Player? = null,
         @DatabaseField(dataType = SERIALIZABLE, canBeNull = false)
         @XmlElement
-        var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(), BLACK to PieceSet()), //todo make this maybe with extra class for parsing
+        var pieceSets: HashMap<PieceColor, PieceSet> = hashMapOf(WHITE to PieceSet(), BLACK to PieceSet()),
         @DatabaseField(canBeNull = false)
         @XmlElement
         var currentColor: PieceColor = WHITE,
