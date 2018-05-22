@@ -2,15 +2,14 @@ group 'htwdd/chessgame'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.30'
-    ext.spring_boot_version = '1.5.4.RELEASE'
+    ext.kotlin_version = '1.2.41'
+    ext.spring_boot_version = '1.5.13.RELEASE'
     ext.sqlite_driver_version = '3.21.0.1'
     ext.ormlite_version = '5.1'
     ext.fasterxml_jackson_version = '2.9.5'
 
     repositories {
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -43,9 +42,6 @@ war {
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
-    jcenter()
-    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 dependencies {
