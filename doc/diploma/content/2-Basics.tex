@@ -11,7 +11,7 @@ Laut \cite[143]{apiDesign} unterstützt der REST Architekturstil eine Reihe von 
 \\
 Da in dieser Arbeit die Webentwicklung im Vordergrund steht und \gls{HTTP} einer der wichtigsten Standards im Web ist, soll im nachfolgenden Verlauf \gls{REST} immer im Sinne von RESTful \gls{HTTP} verstanden werden.\\
 \\
-In den nachfolgenden Abschnitten sollen die allgemeine Definition, die Vor- und Nachteile und die Qualitätsmerkmale einer \gls{API} näher beleuchtet werden. Anschließend wird auf die Grundprinzipien von \gls{REST} detaillierter eingegangen. Als letztes wird das Konzept HATEOAS, welches laut Roy Fielding ein Muss\footnote{siehe \cite{restMustBeHypertextDriven}} für jede RESTful \gls{API} ist, genauer erläutert.\\
+In den nachfolgenden Abschnitten sollen die allgemeine Definition, die Vor- und Nachteile und die Qualitätsmerkmale einer \gls{API} näher beleuchtet werden. Anschließend wird auf die Grundprinzipien von \gls{REST} detaillierter eingegangen. Als letztes wird das Konzept HATEOAS, welches laut Roy Fielding \cite{restMustBeHypertextDriven} ein Muss für jede RESTful \gls{API} ist, genauer erläutert.\\
 \\
 Die nachfolgenden Unterkapitel basieren auf dem Buch \enquote{API-Design} \cite[7-10, 13-14, 144-148, 189]{apiDesign} von Kai Spichale.
 
@@ -33,7 +33,7 @@ Neben dem verbergen von Details zur Implementierung sollten \glspl{API} Funktion
 
 \subsection{Nachteile einer \gls{API}}
 \subsubsection{Interoperabilität}
-Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist die Interoperabilität zu anderen Programmiersprachen. Beispielsweise kann ein Programm, welches in Go geschrieben wurde, nicht auf die Java-\gls{API} zugreifen. Als Problemlösung stehen hierbei aber die Remote-\gls{API} bereit. Diese arbeiten mit Protokollen wie \gls{HTTP} oder \gls{AMQP}, welche sprach- und plattformunabhängig sind\footnote{\hyperref[sec:defAPI]{siehe Kapitel~\ref{sec:defAPI}}}.
+Ein Nachteil, der allerdings nur Programmiersprachen-\glspl{API} betrifft, ist die Interoperabilität zu anderen Programmiersprachen. Beispielsweise kann ein Programm, welches in Go geschrieben wurde, nicht auf die Java-\gls{API} zugreifen. Als Problemlösung stehen hierbei aber die Remote-\gls{API} bereit. Diese arbeiten mit Protokollen wie \gls{HTTP} oder \gls{AMQP}, welche sprach- und plattformunabhängig sind\footnote{siehe \hyperref[sec:defAPI]{Kapitel~\ref{sec:defAPI}}}.
 
 \subsubsection{Änderbarkeit}
 Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen werden sollten, kann es hinsichtlich der Änderbarkeit zu Problemen kommen. Das ist aber nur der Fall sofern die Benutzer nicht bekannt sind oder nicht kontrolliert werden können. In so einem Fall spricht man von veröffentlichten \glspl{API}. Als Gegenstück dazu können interne \glspl{API} betrachtet werden, denn bei diesen wäre eine Kontrolle der Benutzer möglich.
@@ -81,7 +81,7 @@ Wichtig ist zu beachten das mit \glspl{URI} nicht nur einzelne Ressourcen identi
 Hypermedia als Begriff ist Zusammensetzung aus den Begriffen \textit{Hypertest} und \textit{Multimedia}. Dabei kann \textit{Hypermedia} als Oberbegriff von \textit{Hypertext} betrachtet werden, denn \textit{Hypermedia} unterstützt nicht nur Texte, sondern auch andere Multimediale Inhalte wie zum Beispiel Dokumente, Bilder, Videos oder Links. Letzteres kann für das Ausführen von Funktionen oder zum Navigieren innerhalb des Browsers verwendet werden und ist ein bekanntes Element in der \gls{HTML}. Daher kann \gls{HTML} auch als klassischer Vertreter von Hypermediaformaten betrachtet werden. Damit ein Client weiß welche Aktionen bzw. welchen Pfaden folgen kann, werden ihm diese vom Server mithilfe von Hypermedia zur Verfügung gestellt.
 
 \subsubsection{Verwendung von HTTP-Standardmethoden}
-Um die vom Server bereit gestellten Links ordnungsgemäß auszuführen, müssen neben den \glspl{URI} auch einheitliche Schnittstellen bekannt sein. Das setzt voraus, dass alle Clients über Verwendung und Semantik der Schnittstellen Bescheid wissen. An dieser Stelle kommen die \gls{HTTP}-Standardmethoden zum Einsatz. Die Schnittstellen von \gls{HTTP} bestehen dabei im wesentlichen aus den Funktionen \textit{GET}, \textit{HEAD}, \textit{POST}, \textit{PUT} und \textit{DELETE}, welche alle in der \gls{HTTP}-Spezifikation\footnote{siehe \cite{httpSpecification}} definiert sind. Die Methoden \textit{PATCH} oder auch \textit{LINK} waren dabei nicht von Anfang in der Spezifikation enthalten, sonder wurden erst in nachträglich hinzugefügt.\\
+Um die vom Server bereit gestellten Links ordnungsgemäß auszuführen, müssen neben den \glspl{URI} auch einheitliche Schnittstellen bekannt sein. Das setzt voraus, dass alle Clients über Verwendung und Semantik der Schnittstellen Bescheid wissen. An dieser Stelle kommen die \gls{HTTP}-Standardmethoden zum Einsatz. Die Schnittstellen von \gls{HTTP} bestehen dabei im wesentlichen aus den Funktionen \textit{GET}, \textit{HEAD}, \textit{POST}, \textit{PUT} und \textit{DELETE}, welche alle in der \gls{HTTP}-Spezifikation \cite{httpSpecification} definiert sind. Die Methoden \textit{PATCH} oder auch \textit{LINK} waren dabei nicht von Anfang in der Spezifikation enthalten, sonder wurden erst in nachträglich hinzugefügt.\\
 \\
 Ein Client kann mithilfe der Methode \textit{GET}, ohne genaues Wissen der Ressource, eine Repräsentation dieser abfragen, denn diese allgemeinen Schnittstellen werden für jede Ressource verwendet. Durch diese mögliche Vorhersagbarkeit sind die Qualitätsmerkmale aus den \hyperref[sec:qualityFeatures]{Kapiteln~\ref{sec:qualityFeatures}} erfüllt. Zusätzlich ist noch anzumerken das durch Benutzung der Methode \textit{GET} keine unerwünschten Effekte befürchtet werden müssen, denn diese ist idempotent. Einfach ausgedrückt kann ein lesender Zugriff auf eine Ressource keine Änderung des Zustands hervorrufen.
 
@@ -156,7 +156,7 @@ task copyCompiledFilesIntoDist(type: Copy) {
 copyCompiledFilesIntoDist.dependsOn(build)
 \end{lstlisting}
 
-\section{Schachnotationen FEN und SAN}
+\section{Schachnotationen FEN und SAN}\label{sec:chessNotation}
 \gls{FEN} und \gls{SAN} sind Notationen welche für die elektronische Verarbeitung von Schachspielen entwickelt wurden. Beide Notationen werden als Text dargestellt und ermöglichen so eine Statuslose Kommunikation. Die \gls{FEN} dient dabei zur Repräsentation eines ganzen Schachbrettes und die \gls{SAN} zur Darstellung eines Zuges.\\
 \\
 Die \gls{FEN} setzt sich dabei aus mehreren Teilen zusammen, welche aus der Figurenstellung, dem aktuellem Spieler, der Möglichkeit zur Rochade, dem Feld zum schlagen \enquote{en passant}, den Halbzügen und der aktuellem Zugnummer bestehen. Einzelne Teile werden dabei durch Leerzeichen getrennt. Die \hyperref[fig:fen]{Abbildung~\ref{fig:fen}} zeigt dabei die \gls{FEN} einer Startposition.\\
