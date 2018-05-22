@@ -42,9 +42,13 @@ war {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 dependencies {
+    compile project(":client")
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
@@ -65,5 +69,4 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-compileKotlin.dependsOn(':client:build')
 compileKotlin.dependsOn(processResources)
