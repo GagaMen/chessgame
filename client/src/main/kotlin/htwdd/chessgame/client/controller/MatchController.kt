@@ -63,7 +63,7 @@ class MatchController(client: Client) : Controller(client) {
 
                 if (!client.players.containsKey(playerWhiteID) || !client.players.containsKey(playerBlackID)) return
 
-                post("${client.config.serverRootUrl}/match", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
+                post("${client.config.serverRootUrl}/matches", Pair("playerWhiteId", playerWhiteID), Pair("playerBlackId", playerBlackID)) {
                     if (it.target is XMLHttpRequest) {
                         val match = JSON.parse<Match>((it.target as XMLHttpRequest).responseText)
                         FENUtility.setByCode(match)
@@ -83,7 +83,7 @@ class MatchController(client: Client) : Controller(client) {
             is BUTTON -> {
                 val matchId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                delete("${client.config.serverRootUrl}/match/$matchId") {
+                delete("${client.config.serverRootUrl}/matches/$matchId") {
                     if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
                         client.removeMatch(matchId)
                     }

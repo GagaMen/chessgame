@@ -13,7 +13,7 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/match")
+@RequestMapping("/matches")
 class MatchController {
     private val matchDao = DatabaseUtility.matchDao
     private val playerDao = DatabaseUtility.playerDao
@@ -30,7 +30,7 @@ class MatchController {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
-    @RequestMapping("/{id}/draw", method = [OPTIONS])
+    @RequestMapping("/{id}/draws", method = [OPTIONS])
     fun drawsByMatchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
@@ -191,7 +191,7 @@ class MatchController {
     }
 
     @GetMapping(
-            value = ["/{id}/draw"],
+            value = ["/{id}/draws"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
     )
     fun getDrawsByMatchId(

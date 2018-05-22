@@ -61,25 +61,25 @@ You have to rebuild the project if you overwrites the configuration.
 ### Entry Points
 > ***``{id}`` is a placeholder for a number!***
 
-|URI                   | Methode | Usage 
-|----------------------|---------|--------------------------------------------------------------------------------|
-|/                     | GET     | Get static resources (client module). This only works if you run the .war file.|
-|/player               | GET     | Get a list of all registered players                                           |
-|/player               | POST    | Create a player                                                                |
-|/player/{id}          | GET     | Get a single player                                                            |
-|/player/{id}          | DELETE  | Delete a single player                                                         |
-|/player/{id}          | PATCH   | Update a single player                                                         |
-|/match                | GET     | Get a list of all registered matches                                           |
-|/match                | POST    | Create a match                                                                 |
-|/match/{id}           | GET     | Get a single match                                                             |
-|/match/{id}           | DELETE  | Delete a single match                                                          |
-|/draw                 | GET     | Get a list of all registered draws                                             |
-|/draw                 | POST    | Create a draw                                                                  |
-|/draw/{id}            | GET     | Get a single draw                                                              |
-|/match/{id}/draw      | GET     | Get a list of draws from a match                                               |
-|/match/{id}/pieceSets | GET     | Get the pieceSets from a match                                                 |
+|URI                     | Methode | Usage 
+|------------------------|---------|--------------------------------------------------------------------------------|
+|/                       | GET     | Get static resources (client module). This only works if you run the .war file.|
+|/players                | GET     | Get a list of all registered players                                           |
+|/players                | POST    | Create a player                                                                |
+|/players/{id}           | GET     | Get a single player                                                            |
+|/players/{id}           | DELETE  | Delete a single player                                                         |
+|/players/{id}           | PATCH   | Update a single player                                                         |
+|/matches                | GET     | Get a list of all registered matches                                           |
+|/matches                | POST    | Create a match                                                                 |
+|/matches/{id}           | GET     | Get a single match                                                             |
+|/matches/{id}           | DELETE  | Delete a single match                                                          |
+|/matches/{id}/draws     | GET     | Get a list of draws from a match                                               |
+|/matches/{id}/pieceSets | GET     | Get the pieceSets from a match                                                 |
+|/draws                  | GET     | Get a list of all registered draws                                             |
+|/draws                  | POST    | Create a draw                                                                  |
+|/draws/{id}             | GET     | Get a single draw                                                              |
 
-#### POST */player*
+#### POST */players*
 Parameters:
 * name: String
 * password: String
@@ -90,7 +90,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "name": "Test", "password": "123456" }``
 
-#### PATCH */player/{id}*
+#### PATCH */players/{id}*
 Parameters:
 * password: String
 
@@ -100,21 +100,21 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "password": "123456" }``
 
-### GET */match* and */match/{id}*
+### GET */matches* and */matches/{id}*
 Parameters:
 * includePieceSets (optional: default value is true)
     > If true match or matches contains all information about pieceSets
 * includeHistory (optional: default value is true)
     > If true match or matches contains all draws
 
-You can request this information later via GET request to URI ``/match/{id}/pieceSets`` and ``/match/{id}/draw``.
+You can request this information later via GET request to URI ``/matches/{id}/pieceSets`` and ``/matches/{id}/draws``.
 
 Send parameters via URL:
-* ``http://localhost:8080/match?includePieceSets=false``
-* ``http://localhost:8080/match/555555?includeHistory=false``
-* ``http://localhost:8080/match?includePieceSets=false&includeHistory=false``
+* ``http://localhost:8080/matches?includePieceSets=false``
+* ``http://localhost:8080/matches/555555?includeHistory=false``
+* ``http://localhost:8080/matches?includePieceSets=false&includeHistory=false``
 
-#### POST */match*
+#### POST */matches*
 Parameters:
 * playerWhiteId: Int
 * playerBlackId: Int
@@ -125,7 +125,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "playerWhiteId": 1, "playerBlackId": 2 }``
 
-#### POST */draw*
+#### POST */draws*
 Parameters:
 * matchId: Int
 * drawCode: String (SAN -> <https://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29>)
@@ -149,12 +149,12 @@ Send parameters via ``application/json``:
 ### Content Negotiation
 The server offers three options to handle content negotiation:
 1.  Suffix Strategy
-    * ``http:localhost:8080/player.json`` 
-    * ``http:localhost:8080/player.xml``
+    * ``http:localhost:8080/players.json`` 
+    * ``http:localhost:8080/players.xml``
     
 2. Parameter Strategy
-    * ``http:localhost:8080/player?mediaType=json``
-    * ``http:localhost:8080/player?mediaType=xml``
+    * ``http:localhost:8080/players?mediaType=json``
+    * ``http:localhost:8080/players?mediaType=xml``
     
 3. Accept Header Strategy
     * Accept Header: ``application/json``

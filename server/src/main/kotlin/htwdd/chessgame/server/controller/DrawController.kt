@@ -14,7 +14,7 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/draw")
+@RequestMapping("/draws")
 class DrawController {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao

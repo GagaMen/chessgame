@@ -56,14 +56,14 @@ class GameController(client: Client) : Controller(client) {
                 val match = client.matches[matchId]
 
                 launch {
-                    get("${client.config.serverRootUrl}/match/$matchId/pieceSets") {
+                    get("${client.config.serverRootUrl}/matches/$matchId/pieceSets") {
                         if (it.target is XMLHttpRequest) {
                             val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
                             match?.pieceSets = pieceSetHashMap.pieceSets
                         }
                     }.await()
 
-                    get("${client.config.serverRootUrl}/match/$matchId/draw") {
+                    get("${client.config.serverRootUrl}/matches/$matchId/draws") {
                         if (it.target is XMLHttpRequest) {
                             val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
                             match?.history = drawList.draws

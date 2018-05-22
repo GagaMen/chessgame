@@ -13,7 +13,7 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/player")
+@RequestMapping("/players")
 class PlayerController {
     private val playerDao = DatabaseUtility.playerDao
     private val matchDao = DatabaseUtility.matchDao

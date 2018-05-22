@@ -104,7 +104,7 @@ class DraggableUtility {
                             kingsideCastling,
                             queensideCastling) ?: return
 
-                    post("${controller.client.config.serverRootUrl}/draw",
+                    post("${controller.client.config.serverRootUrl}/draws",
                             Pair("matchId", match.id),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
@@ -142,7 +142,7 @@ class DraggableUtility {
                             match,
                             true) ?: return
 
-                    post("${controller.client.config.serverRootUrl}/draw",
+                    post("${controller.client.config.serverRootUrl}/draws",
                             Pair("matchId", match.id),
                             Pair("startRow", oldRow),
                             Pair("startColumn", oldCol),
