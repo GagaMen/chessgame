@@ -7,6 +7,16 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
+/**
+ * Object to represent a clearly and user comprehensible error message
+ *
+ * @property timestamp Timestamp of the thrown error
+ * @property statusCode HTTP status code
+ * @property error HTTP error
+ * @property exception Name of thrown exception
+ * @property message Error message
+ * @property path URI at which the error was thrown
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 class ErrorResponseObject(
@@ -24,6 +34,10 @@ class ErrorResponseObject(
         val path: String = ""
 ) {
 
+    /**
+     * Cast the error response object to String (JSON)
+     * Necessary to return the error as JSON if the client has requested
+     */
     override fun toString(): String {
         return "ErrorResponseObject{" +
                 "timestamp=" + timestamp +
