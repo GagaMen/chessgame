@@ -12,6 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Controller to manage the match resource
+ *
+ * @property matchDao Object to interact with the database to manage match objects
+ * @property playerDao Object to interact with the database to manage player objects
+ * @property drawDao Object to interact with the database to manage draw objects
+ * @property fieldDao Object to interact with the database to manage field objects
+ *
+ * @since 1.0.0
+ */
 @RestController
 @RequestMapping("/matches")
 class MatchController {
@@ -20,26 +30,76 @@ class MatchController {
     private val drawDao = DatabaseUtility.drawDao
     private val fieldDao = DatabaseUtility.fieldDao
 
+    /**
+     * Handles the OPTIONS request for the URI /matches
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - POST
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping(method = [OPTIONS])
     fun matchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
+    /**
+     * Handles the OPTIONS request for the URI /matches/{id}
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - DELETE
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
     }
 
+    /**
+     * Handles the OPTIONS request for the URI /matches/{id}/draws
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping("/{id}/draws", method = [OPTIONS])
     fun drawsByMatchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
+    /**
+     * Handles the OPTIONS request for the URI /matches/{id}/pieceSets
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping("/{id}/pieceSets", method = [OPTIONS])
     fun pieceSetsByMatchOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
+    /**
+     * Handles the GET request for the URI /matches
+     *
+     * @param includePieceSets Returned match contains the pieceSets
+     * @param includeHistory Returned match contains the history (list of draws)
+     *
+     * @return Hash map of matches
+     */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getMatchList(
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
@@ -66,6 +126,15 @@ class MatchController {
         return MatchHashMap(matchList)
     }
 
+    /**
+     * Handles the GET request for the URI /matches/{id}
+     *
+     * @param id Identifier for a single match
+     * @param includePieceSets Returned match contains the pieceSets
+     * @param includeHistory Returned match contains the history (list of draws)
+     *
+     * @return Single match by an id
+     */
     @GetMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -95,6 +164,11 @@ class MatchController {
         return match
     }
 
+    /**
+     * Handles the DELETE request for the URI /matches/{id}
+     *
+     * @param id Identifier of the match to be deleted
+     */
     @DeleteMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -138,6 +212,15 @@ class MatchController {
         if (matchDao.deleteById(id) != 1) throw SQLException("Can't delete match with the id '$id'!")
     }
 
+    /**
+     * Handles the POST request for the URI /matches
+     * Params encoded as application/x-www-form-urlencode
+     *
+     * @param playerWhiteId Player reference for the color white
+     * @param playerBlackId Player reference for the color black
+     *
+     * @return Created draw
+     */
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -165,6 +248,17 @@ class MatchController {
         return match
     }
 
+    /**
+     * Handles the POST request for the URI /draws
+     * Params encoded as application/json
+     *
+     * @param matchDTO Contains params as data transfer object
+     *
+     * @see addMatch
+     * @see MatchDTO
+     *
+     * @return Created draw
+     */
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -190,6 +284,13 @@ class MatchController {
         return match
     }
 
+    /**
+     * Handles the GET request for the URI /matches/{id}/draws
+     *
+     * @param id Identifier for a single match
+     *
+     * @return List of draws of a match
+     */
     @GetMapping(
             value = ["/{id}/draws"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -206,6 +307,13 @@ class MatchController {
         return DrawList(drawList)
     }
 
+    /**
+     * Handles the GET request for the URI /matches/{id}/pieceSets
+     *
+     * @param id Identifier for a single match
+     *
+     * @return Hash map of pieceSets of the two players
+     */
     @GetMapping(
             value = ["/{id}/pieceSets"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]

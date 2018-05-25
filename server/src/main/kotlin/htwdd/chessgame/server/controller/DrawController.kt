@@ -13,6 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Controller to manage the draw resource
+ *
+ * @property drawDao Object to interact with the database to manage draw objects
+ * @property matchDao Object to interact with the database to manage match objects
+ * @property fieldDao Object to interact with the database to manage field objects
+ *
+ * @since 1.0.0
+ */
 @RestController
 @RequestMapping("/draws")
 class DrawController {
@@ -20,16 +29,42 @@ class DrawController {
     private val matchDao = DatabaseUtility.matchDao
     private val fieldDao = DatabaseUtility.fieldDao
 
+    /**
+     * Handles the OPTIONS request for the URI /draws
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - POST
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping(method = [OPTIONS])
     fun drawOptions(response: HttpServletResponse) {
         response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
     }
 
+    /**
+     * Handles the OPTIONS request for the URI /draws/{id}
+     *
+     * Possible request methods:
+     * - HEAD
+     * - GET
+     * - OPTIONS
+     *
+     * @param response Object that contains the response for the http request
+     */
     @RequestMapping("/{id}", method = [OPTIONS])
     fun drawByIdOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
+        response.setHeader("Allow", "HEAD,GET,OPTIONS")
     }
 
+    /**
+     * Handles the GET request for the URI /draws
+     *
+     * @return List of draws
+     */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getDrawList(): DrawList {
         val drawList: MutableList<Draw> = mutableListOf()
@@ -40,6 +75,13 @@ class DrawController {
         return DrawList(drawList)
     }
 
+    /**
+     * Handle the GET request for URI /draws/{id}
+     *
+     * @param id Identifier for a single draw
+     *
+     * @return Single draw by an id
+     */
     @GetMapping(
             value = ["/{id}"],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -51,6 +93,17 @@ class DrawController {
         return drawDao!!.queryForId(id) ?: throw IllegalArgumentException("No draw with id '$id' registered!")
     }
 
+    /**
+     * Handles the POST request for the URI /draws
+     * Params encoded as application/x-www-form-urlencode
+     *
+     * @param matchId Match reference
+     * @param drawCode SAN code to indicate draw properties
+     * @param startColumn Value to indicate the column of start field
+     * @param startRow Value to indicate the row of start field
+     *
+     * @return Created draw
+     */
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
@@ -95,6 +148,17 @@ class DrawController {
         return draw
     }
 
+    /**
+     * Handles the POST request for the URI /draws
+     * Params encoded as application/json
+     *
+     * @param drawDTO Contains params as data transfer object
+     *
+     * @see addDraw
+     * @see DrawDTO
+     *
+     * @return Created draw
+     */
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
