@@ -5,6 +5,15 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
+/**
+ * Data wrapper for a hash map of pieceSets. Necessary for JSON serialization/deserialization.
+ *
+ * @author Felix Dimmel
+ *
+ * @property matches Hash map of pieceSets
+ *
+ * @since 1.0.0
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 data class PieceSetHashMap(

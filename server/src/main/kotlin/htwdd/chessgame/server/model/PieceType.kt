@@ -1,5 +1,17 @@
 package htwdd.chessgame.server.model
 
+/**
+ * @author Felix Dimmel
+ *
+ * @property PAWN Type Pawn
+ * @property KING Type King
+ * @property QUEEN Type Queen
+ * @property BISHOP Type Bishop
+ * @property KNIGHT Type Knight
+ * @property ROOK Type Rook
+ *
+ * @since 1.0.0
+ */
 enum class PieceType {
     PAWN {
         override fun getMatchCode(pieceColor: PieceColor): String {
@@ -62,6 +74,19 @@ enum class PieceType {
         override fun getDrawCode(): String = "R"
     };
 
+    /**
+     * @param pieceColor Color for choosing uppercase or lowercase letter
+     *
+     * @return Type of piece as code for FEN (WHITE: uppercase, BLACK: lowercase)
+     *
+     * @since 1.0.0
+     */
     abstract fun getMatchCode(pieceColor: PieceColor): String
+
+    /**
+     * @return Type of piece as code for SAN
+     *
+     * @since 1.0.0
+     */
     abstract fun getDrawCode(): String
 }
