@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.support.SpringBootServletInitializer
 
+/**
+ * Spring application class
+ */
 @SpringBootApplication
 class Application : SpringBootServletInitializer() {
     override fun configure(builder: SpringApplicationBuilder?): SpringApplicationBuilder {
@@ -12,6 +15,9 @@ class Application : SpringBootServletInitializer() {
     }
 }
 
+/**
+ * Starts the spring application
+ */
 fun main(args: Array<String>) {
     SpringApplication.run(Application::class.java, *args)
 }
