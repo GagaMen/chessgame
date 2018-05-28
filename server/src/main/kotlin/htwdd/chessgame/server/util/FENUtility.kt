@@ -5,11 +5,22 @@ import htwdd.chessgame.server.model.PieceColor
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.PieceType
+import htwdd.chessgame.server.util.FENUtility.Companion.drawDao
 
+/**
+ * Utility class to handle a String as Forsyth-Edwards-Notation (FEN)
+ *
+ * @property drawDao Database access object for draws
+ */
 class FENUtility {
     companion object {
         private val drawDao = DatabaseUtility.drawDao
 
+        /**
+         * Calculate the FEN String based on the match properties
+         *
+         * @param match Match for which the FEN should be calculated
+         */
         fun calc(match: Match) {
             val sb = StringBuilder()
             val whitePieceSet = match.pieceSets[WHITE] ?: throw NullPointerException()

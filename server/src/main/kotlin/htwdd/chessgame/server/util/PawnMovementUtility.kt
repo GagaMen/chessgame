@@ -4,7 +4,18 @@ import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
 
+/**
+ * Movement utility class for the pawn piece
+ */
 class PawnMovementUtility : MovementUtility() {
+    /**
+     * Calculate all possible movement fields for a pawn piece
+     *
+     * @param movementFields Hash set which was filled with movement fields
+     * @param row Row value of piece which should be moved
+     * @param col Column value of piece which should be moved
+     * @param match Match which contains the piece
+     */
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
                 ?: throw NullPointerException()
@@ -57,6 +68,14 @@ class PawnMovementUtility : MovementUtility() {
         }
     }
 
+    /**
+     * Calculate all possible threated fields for a pawn piece
+     *
+     * @param threatedFields Hash set which was filled with threated fields
+     * @param row Row value of piece from which the threat emanate
+     * @param col Column value of piece from which the threat emanate
+     * @param match Match which contains the piece
+     */
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val opposingPieces = match.pieceSets[match.currentColor]?.activePieces
                 ?: throw NullPointerException()

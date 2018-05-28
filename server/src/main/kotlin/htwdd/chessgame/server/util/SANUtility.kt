@@ -7,8 +7,19 @@ import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.PieceType.*
 
+/**
+ * Utility class to handle a String as standard algebraic notation (SAN)
+ */
 class SANUtility {
     companion object {
+        /**
+         * Validate a given draw based on his SAN code
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return True if the draw is valid otherwise false
+         */
         fun validateSAN(draw: Draw, match: Match): Boolean {
             val movementFields = HashSet<Pair<Int, Int>>()
             val movementUtility = when (draw.pieceType) {
@@ -46,6 +57,14 @@ class SANUtility {
             return false
         }
 
+        /**
+         * Validate a given draw based on his SAN code if the draw is a castling
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return True if the castling is valid otherwise false
+         */
         private fun validateCastling(draw: Draw, match: Match): Boolean {
             val activePieces = match.pieceSets[match.currentColor]?.activePieces
                     ?: throw NullPointerException("The HashMap of active pieces for Player ${match.currentColor} is null!")
@@ -76,6 +95,15 @@ class SANUtility {
             return true
         }
 
+        /**
+         * Calculate all possible start field based on the given piece type
+         * Necessary if no start field was handed
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return A hashset of all possible start fields
+         */
         private fun calcPossibleStartFields(draw: Draw, match: Match): HashSet<Pair<Int, Int>> {
             var possibleStartFields = HashSet<Pair<Int, Int>>()
             val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()

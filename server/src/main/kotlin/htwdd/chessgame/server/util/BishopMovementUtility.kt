@@ -2,7 +2,18 @@ package htwdd.chessgame.server.util
 
 import htwdd.chessgame.server.model.Match
 
+/**
+ * Movement utility class for the bishop piece
+ */
 class BishopMovementUtility : MovementUtility() {
+    /**
+     * Calculate all possible movement fields for a bishop piece
+     *
+     * @param movementFields Hash set which was filled with movement fields
+     * @param row Row value of piece which should be moved
+     * @param col Column value of piece which should be moved
+     * @param match Match which contains the piece
+     */
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val currentPieces = match.pieceSets[match.currentColor]?.activePieces
                 ?: throw NullPointerException()
@@ -51,6 +62,14 @@ class BishopMovementUtility : MovementUtility() {
         }
     }
 
+    /**
+     * Calculate all possible threated fields for a bishop piece
+     *
+     * @param threatedFields Hash set which was filled with threated fields
+     * @param row Row value of piece from which the threat emanate
+     * @param col Column value of piece from which the threat emanate
+     * @param match Match which contains the piece
+     */
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val opposingPieces = match.pieceSets[match.currentColor]?.activePieces
                 ?: throw NullPointerException()
