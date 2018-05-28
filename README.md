@@ -162,6 +162,11 @@ The server offers three options to handle content negotiation:
     
 > see also <http://www.baeldung.com/spring-mvc-content-negotiation-json-xml>
 
+### Documentation
+Visit the document page <https://gagamen.github.io/chessgame/>
+
+Alternative you can build the javadoc with the following task: ``./gradlew :server:dokka``.
+The files are generated in the ``doc/javadoc`` folder. 
 
 Client
 ------
