@@ -7,6 +7,10 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
 
 /**
  * Spring application class
+ *
+ * @author Felix Dimmel
+ *
+ * @since 1.0.0
  */
 @SpringBootApplication
 class Application : SpringBootServletInitializer() {
@@ -17,6 +21,10 @@ class Application : SpringBootServletInitializer() {
 
 /**
  * Starts the spring application
+ *
+ * @author Felix Dimmel
+ *
+ * @since 1.0.0
  */
 fun main(args: Array<String>) {
     SpringApplication.run(Application::class.java, *args)

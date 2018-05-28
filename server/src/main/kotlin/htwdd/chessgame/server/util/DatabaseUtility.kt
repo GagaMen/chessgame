@@ -17,11 +17,15 @@ import htwdd.chessgame.server.util.DatabaseUtility.Companion.playerDao
 /**
  * Utility class to handle database interactions
  *
+ * @author Felix Dimmel
+ *
  * @property connection Holds the connection to the database
  * @property playerDao Database access object for players
  * @property matchDao Database access object for matches
  * @property drawDao Database access object for draws
  * @property fieldDao Database access object for fields
+ *
+ * @since 1.0.0
  */
 class DatabaseUtility {
     companion object {
@@ -49,6 +53,10 @@ class DatabaseUtility {
 
         /**
          * Initialize the database connection
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
          */
         private fun connect() {
             if (connection != null) return
@@ -59,6 +67,10 @@ class DatabaseUtility {
 
         /**
          * Creates all necessary table if these are not exist
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
          */
         private fun createTables() {
             TableUtils.createTableIfNotExists(connection, Player::class.java)
@@ -69,6 +81,10 @@ class DatabaseUtility {
 
         /**
          * Initialize all necessary database access objects
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
          */
         private fun createDaos() {
             playerDao = DaoManager.createDao<Dao<Player, Int>, Player>(connection, Player::class.java)

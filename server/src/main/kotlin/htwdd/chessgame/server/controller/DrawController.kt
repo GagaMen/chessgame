@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Controller to manage the draw resource
  *
+ * @author Felix Dimmel
+ *
  * @property drawDao Object to interact with the database to manage draw objects
  * @property matchDao Object to interact with the database to manage match objects
  * @property fieldDao Object to interact with the database to manage field objects
@@ -38,7 +40,11 @@ class DrawController {
      * - POST
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
     fun drawOptions(response: HttpServletResponse) {
@@ -53,7 +59,11 @@ class DrawController {
      * - GET
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
     fun drawByIdOptions(response: HttpServletResponse) {
@@ -63,7 +73,11 @@ class DrawController {
     /**
      * Handles the GET request for the URI /draws
      *
+     * @author Felix Dimmel
+     *
      * @return List of draws
+     *
+     * @since 1.0.0
      */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getDrawList(): DrawList {
@@ -78,9 +92,13 @@ class DrawController {
     /**
      * Handle the GET request for URI /draws/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single draw
      *
      * @return Single draw by an id
+     *
+     * @since 1.0.0
      */
     @GetMapping(
             value = ["/{id}"],
@@ -97,12 +115,16 @@ class DrawController {
      * Handles the POST request for the URI /draws
      * Params encoded as application/x-www-form-urlencode
      *
+     * @author Felix Dimmel
+     *
      * @param matchId Match reference
      * @param drawCode SAN code to indicate draw properties
      * @param startColumn Value to indicate the column of start field
      * @param startRow Value to indicate the row of start field
      *
      * @return Created draw
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
@@ -152,12 +174,16 @@ class DrawController {
      * Handles the POST request for the URI /draws
      * Params encoded as application/json
      *
+     * @author Felix Dimmel
+     *
      * @param drawDTO Contains params as data transfer object
      *
      * @see addDraw
      * @see DrawDTO
      *
      * @return Created draw
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],

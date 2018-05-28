@@ -82,6 +82,8 @@ data class Match(
     /**
      * Sets all match properties by match code (FEN)
      *
+     * @author Felix Dimmel
+     *
      * @see https://en.wikipedia.org/wiki/Forsyth-Edwards_Notation
      *
      * @since 1.0.0
@@ -157,6 +159,8 @@ data class Match(
     /**
      * Add piece to pieceSet of given color
      *
+     * @author Felix Dimmel
+     *
      * @param pieceColor Color to choose the right pieceSet
      * @param pieceType Type of piece
      * @param field Position of piece
@@ -170,6 +174,8 @@ data class Match(
 
     /**
      * Update match properties by given draw
+     *
+     * @author Felix Dimmel
      *
      * @param draw Draw to change the match properties
      *
@@ -236,6 +242,8 @@ data class Match(
     /**
      * Change the current color to the opposite
      *
+     * @author Felix Dimmel
+     *
      * @since 1.0.0
      */
     private fun switchColor() {
@@ -244,6 +252,8 @@ data class Match(
 
     /**
      * Update pieceSets after add an draw
+     *
+     * @author Felix Dimmel
      *
      * @param draw Draw to update the pieceSets
      *
@@ -259,6 +269,8 @@ data class Match(
 
     /**
      * Update pieceSet of current color if the draw is a castling
+     *
+     * @author Felix Dimmel
      *
      * @param draw Draw to update the pieceSet
      *
@@ -304,6 +316,8 @@ data class Match(
 
     /**
      * Update pieceSet of current color if the draw isn't a castling
+     *
+     * @author Felix Dimmel
      *
      * @param draw Draw to update the pieceSet
      *

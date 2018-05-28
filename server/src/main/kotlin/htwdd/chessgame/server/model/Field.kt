@@ -23,6 +23,8 @@ class Field(
         var column: Int = 0
 ) : Serializable {
     /**
+     * @author Felix Dimmel
+     *
      * @return the field as generic type pair
      *
      * @since 1.0.0

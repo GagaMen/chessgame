@@ -4,15 +4,23 @@ import htwdd.chessgame.server.model.Match
 
 /**
  * Movement utility class for the rook piece
+ *
+ * @author Felix Dimmel
+ *
+ * @since 1.0.0
  */
 class RookMovementUtility : MovementUtility() {
     /**
      * Calculate all possible movement fields for a rook piece
      *
+     * @author Felix Dimmel
+     *
      * @param movementFields Hash set which was filled with movement fields
      * @param row Row value of piece which should be moved
      * @param col Column value of piece which should be moved
      * @param match Match which contains the piece
+     *
+     * @since 1.0.0
      */
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val currentPieces = match.pieceSets[match.currentColor]?.activePieces
@@ -53,10 +61,14 @@ class RookMovementUtility : MovementUtility() {
     /**
      * Calculate all possible threated fields for a rook piece
      *
+     * @author Felix Dimmel
+     *
      * @param threatedFields Hash set which was filled with threated fields
      * @param row Row value of piece from which the threat emanate
      * @param col Column value of piece from which the threat emanate
      * @param match Match which contains the piece
+     *
+     * @since 1.0.0
      */
     override fun getThreadedFields(threatedFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
         val opposingPieces = match.pieceSets[match.currentColor]?.activePieces

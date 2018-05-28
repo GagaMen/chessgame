@@ -20,6 +20,8 @@ enum class PieceColor {
     };
 
     /**
+     * @author Felix Dimmel
+     *
      * @return the color as code for FEN oder SAN
      *
      * @since 1.0.0
@@ -27,6 +29,8 @@ enum class PieceColor {
     abstract fun getCode(): String
 
     /**
+     * @author Felix Dimmel
+     *
      * @return the opposite color
      *
      * @since 1.0.0

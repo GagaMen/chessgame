@@ -9,16 +9,24 @@ import htwdd.chessgame.server.model.PieceType.*
 
 /**
  * Utility class to handle a String as standard algebraic notation (SAN)
+ *
+ * @author Felix Dimmel
+ *
+ * @since 1.0.0
  */
 class SANUtility {
     companion object {
         /**
          * Validate a given draw based on his SAN code
          *
+         * @author Felix Dimmel
+         *
          * @param draw The draw to be added
          * @param match The match reference of the draw
          *
          * @return True if the draw is valid otherwise false
+         *
+         * @since 1.0.0
          */
         fun validateSAN(draw: Draw, match: Match): Boolean {
             val movementFields = HashSet<Pair<Int, Int>>()
@@ -60,10 +68,14 @@ class SANUtility {
         /**
          * Validate a given draw based on his SAN code if the draw is a castling
          *
+         * @author Felix Dimmel
+         *
          * @param draw The draw to be added
          * @param match The match reference of the draw
          *
          * @return True if the castling is valid otherwise false
+         *
+         * @since 1.0.0
          */
         private fun validateCastling(draw: Draw, match: Match): Boolean {
             val activePieces = match.pieceSets[match.currentColor]?.activePieces
@@ -99,10 +111,14 @@ class SANUtility {
          * Calculate all possible start field based on the given piece type
          * Necessary if no start field was handed
          *
+         * @author Felix Dimmel
+         *
          * @param draw The draw to be added
          * @param match The match reference of the draw
          *
          * @return A hashset of all possible start fields
+         *
+         * @since 1.0.0
          */
         private fun calcPossibleStartFields(draw: Draw, match: Match): HashSet<Pair<Int, Int>> {
             var possibleStartFields = HashSet<Pair<Int, Int>>()

@@ -10,7 +10,11 @@ import htwdd.chessgame.server.util.FENUtility.Companion.drawDao
 /**
  * Utility class to handle a String as Forsyth-Edwards-Notation (FEN)
  *
+ * @author Felix Dimmel
+ *
  * @property drawDao Database access object for draws
+ *
+ * @since 1.0.0
  */
 class FENUtility {
     companion object {
@@ -19,7 +23,11 @@ class FENUtility {
         /**
          * Calculate the FEN String based on the match properties
          *
+         * @author Felix Dimmel
+         *
          * @param match Match for which the FEN should be calculated
+         *
+         * @since 1.0.0
          */
         fun calc(match: Match) {
             val sb = StringBuilder()

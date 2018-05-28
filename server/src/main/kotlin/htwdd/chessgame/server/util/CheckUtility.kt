@@ -13,6 +13,8 @@ import htwdd.chessgame.server.util.CheckUtility.Companion.threatedFields
 /**
  * Utility class handle threated field based on the piece type
  *
+ * @author Felix Dimmel
+ *
  * @property threatedFields Container for all threated field of a color
  * @property bishop utility object to get movement and threated field of a bishop piece
  * @property king utility object to get movement and threated field of a king piece
@@ -20,6 +22,8 @@ import htwdd.chessgame.server.util.CheckUtility.Companion.threatedFields
  * @property pawn utility object to get movement and threated field of a pawn piece
  * @property queen utility object to get movement and threated field of a queen piece
  * @property rook utility object to get movement and threated field of a rook piece
+ *
+ * @since 1.0.0
  */
 class CheckUtility {
     companion object {
@@ -34,9 +38,13 @@ class CheckUtility {
         /**
          * Calculate threated fields based on the piece type
          *
+         * @author Felix Dimmel
+         *
          * @param match Match reference
          *
          * @return True if the opponent is in check otherwise false
+         *
+         * @since 1.0.0
          */
         fun calcThreatedFields(match: Match): Boolean {
             val currentPieces = match.pieceSets[match.currentColor]?.activePieces
@@ -82,9 +90,13 @@ class CheckUtility {
         /**
          * Calcualte possible movement fields based on the piece type
          *
+         * @author Felix Dimmel
+         *
          * @param match Match reference
          *
          * @return True if no movement field was found otherwise false
+         *
+         * @since 1.0.0
          */
         fun checkmate(match: Match): Boolean {
             val currentPieces = match.pieceSets[match.currentColor]?.activePieces

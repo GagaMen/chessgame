@@ -39,7 +39,11 @@ class PlayerController {
      * - POST
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
     fun playerOptions(response: HttpServletResponse) {
@@ -56,7 +60,11 @@ class PlayerController {
      * - DELETE
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
     fun playerByIdOptions(response: HttpServletResponse) {
@@ -66,7 +74,11 @@ class PlayerController {
     /**
      * Handles the GET request for the URI /players
      *
+     * @author Felix Dimmel
+     *
      * @return Hash map of players
+     *
+     * @since 1.0.0
      */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getPlayerList(): PlayerHashMap {
@@ -79,9 +91,13 @@ class PlayerController {
     /**
      * Handle the GET request for URI /matches/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single match
      *
      * @return Single match by an id
+     *
+     * @since 1.0.0
      */
     @GetMapping(
             value = ["/{id}"],
@@ -98,7 +114,11 @@ class PlayerController {
     /**
      * Handles the DELETE request for the URI /players/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier of the player to be deleted
+     *
+     * @since 1.0.0
      */
     @DeleteMapping(
             value = ["/{id}"],
@@ -119,10 +139,14 @@ class PlayerController {
      * Handles the POST request for the URI /players
      * Params encoded as application/x-www-form-urlencode
      *
+     * @author Felix Dimmel
+     *
      * @param name The name of the player
      * @param password The password of the player
      *
      * @return Created match
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
@@ -144,12 +168,16 @@ class PlayerController {
      * Handles the POST request for the URI /players
      * Params encoded as application/json
      *
+     * @author Felix Dimmel
+     *
      * @param playerDTO Contains params as data transfer object
      *
      * @see addPlayer
      * @see PlayerDTO
      *
      * @return Created draw
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
@@ -170,8 +198,12 @@ class PlayerController {
      * Handles the PATCH request for the URI /players/{id}
      * Params encoded as application/x-www-form-urlencode
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single player
      * @param password The updated password of the player
+     *
+     * @since 1.0.0
      */
     @PatchMapping(
             value = ["/{id}"],
@@ -195,11 +227,15 @@ class PlayerController {
     /**
      * Handles the PATCH request for the URI /players/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single player
      * @param passwordDTO Contains params as data transfer object
      *
      * @see updatePlayer
      * @see PasswordDTO
+     *
+     * @since 1.0.0
      */
     @PatchMapping(
             value = ["/{id}"],
@@ -223,7 +259,11 @@ class PlayerController {
     /**
      * Handles the DELETE request for the URI /players/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier of the player to be deleted
+     *
+     * @since 1.0.0
      */
     private fun deleteMatchesByPlayer(id: Int) {
         val matches = matchDao!!.query(matchDao.queryBuilder()

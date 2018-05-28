@@ -75,6 +75,8 @@ enum class PieceType {
     };
 
     /**
+     * @author Felix Dimmel
+     *
      * @param pieceColor Color for choosing uppercase or lowercase letter
      *
      * @return Type of piece as code for FEN (WHITE: uppercase, BLACK: lowercase)
@@ -84,6 +86,8 @@ enum class PieceType {
     abstract fun getMatchCode(pieceColor: PieceColor): String
 
     /**
+     * @author Felix Dimmel
+     *
      * @return Type of piece as code for SAN
      *
      * @since 1.0.0

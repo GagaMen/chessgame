@@ -78,6 +78,8 @@ data class Draw(
     /**
      * Sets all draw properties by draw code (SAN)
      *
+     * @author Felix Dimmel
+     *
      * @see https://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29
      *
      * @since 1.0.0

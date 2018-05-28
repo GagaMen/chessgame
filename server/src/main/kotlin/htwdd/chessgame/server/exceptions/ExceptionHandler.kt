@@ -17,10 +17,14 @@ class ExceptionHandler {
     /**
      * Handles BadRequestException
      *
+     * @author Felix Dimmel
+     *
      * @param ex BadRequestException
      * @param request Http request object
      *
      * @return ErrorResponseObject
+     *
+     * @since 1.0.0
      */
     @ExceptionHandler(value = [BadRequestException::class])
     @ResponseStatus(BAD_REQUEST)
@@ -31,10 +35,14 @@ class ExceptionHandler {
     /**
      * Handles IllegalArgumentException
      *
+     * @author Felix Dimmel
+     *
      * @param ex IllegalArgumentException
      * @param request Http request object
      *
      * @return ErrorResponseObject
+     *
+     * @since 1.0.0
      */
     @ExceptionHandler(value = [IllegalArgumentException::class])
     @ResponseStatus(NOT_FOUND)
@@ -45,10 +53,14 @@ class ExceptionHandler {
     /**
      * Handles RuntimeException
      *
+     * @author Felix Dimmel
+     *
      * @param ex RuntimeException
      * @param request Http request object
      *
      * @return ErrorResponseObject
+     *
+     * @since 1.0.0
      */
     @ExceptionHandler(value = [RuntimeException::class])
     @ResponseStatus(CONFLICT)
@@ -59,10 +71,14 @@ class ExceptionHandler {
     /**
      * Handles all unforeseen exception
      *
+     * @author Felix Dimmel
+     *
      * @param ex InternalServerError
      * @param request Http request object
      *
      * @return ErrorResponseObject
+     *
+     * @since 1.0.0
      */
     @ExceptionHandler(value = [Exception::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
@@ -73,11 +89,15 @@ class ExceptionHandler {
     /**
      * Creates an ErrorResponseObject  by given exception, request and HTTP status
      *
+     * @author Felix Dimmel
+     *
      * @param ex thrown exception
      * @param request Http request object
      * @param statusCode Http status code
      *
      * @return created error response object
+     *
+     * @since 1.0.0
      */
     private fun generateErrorResponseObject(
             ex: Exception,

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Controller to manage the match resource
  *
+ * @author Felix Dimmel
+ *
  * @property matchDao Object to interact with the database to manage match objects
  * @property playerDao Object to interact with the database to manage player objects
  * @property drawDao Object to interact with the database to manage draw objects
@@ -39,7 +41,11 @@ class MatchController {
      * - POST
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
     fun matchOptions(response: HttpServletResponse) {
@@ -55,7 +61,11 @@ class MatchController {
      * - DELETE
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
     fun matchByIdOptions(response: HttpServletResponse) {
@@ -70,7 +80,11 @@ class MatchController {
      * - GET
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping("/{id}/draws", method = [OPTIONS])
     fun drawsByMatchOptions(response: HttpServletResponse) {
@@ -85,7 +99,11 @@ class MatchController {
      * - GET
      * - OPTIONS
      *
+     * @author Felix Dimmel
+     *
      * @param response Object that contains the response for the http request
+     *
+     * @since 1.0.0
      */
     @RequestMapping("/{id}/pieceSets", method = [OPTIONS])
     fun pieceSetsByMatchOptions(response: HttpServletResponse) {
@@ -95,10 +113,14 @@ class MatchController {
     /**
      * Handles the GET request for the URI /matches
      *
+     * @author Felix Dimmel
+     *
      * @param includePieceSets Returned match contains the pieceSets
      * @param includeHistory Returned match contains the history (list of draws)
      *
      * @return Hash map of matches
+     *
+     * @since 1.0.0
      */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
     fun getMatchList(
@@ -129,11 +151,15 @@ class MatchController {
     /**
      * Handles the GET request for the URI /matches/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single match
      * @param includePieceSets Returned match contains the pieceSets
      * @param includeHistory Returned match contains the history (list of draws)
      *
      * @return Single match by an id
+     *
+     * @since 1.0.0
      */
     @GetMapping(
             value = ["/{id}"],
@@ -167,7 +193,11 @@ class MatchController {
     /**
      * Handles the DELETE request for the URI /matches/{id}
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier of the match to be deleted
+     *
+     * @since 1.0.0
      */
     @DeleteMapping(
             value = ["/{id}"],
@@ -216,10 +246,14 @@ class MatchController {
      * Handles the POST request for the URI /matches
      * Params encoded as application/x-www-form-urlencode
      *
+     * @author Felix Dimmel
+     *
      * @param playerWhiteId Player reference for the color white
      * @param playerBlackId Player reference for the color black
      *
      * @return Created draw
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_FORM_URLENCODED_VALUE],
@@ -252,12 +286,16 @@ class MatchController {
      * Handles the POST request for the URI /draws
      * Params encoded as application/json
      *
+     * @author Felix Dimmel
+     *
      * @param matchDTO Contains params as data transfer object
      *
      * @see addMatch
      * @see MatchDTO
      *
      * @return Created draw
+     *
+     * @since 1.0.0
      */
     @PostMapping(
             consumes = [APPLICATION_JSON_VALUE],
@@ -287,9 +325,13 @@ class MatchController {
     /**
      * Handles the GET request for the URI /matches/{id}/draws
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single match
      *
      * @return List of draws of a match
+     *
+     * @since 1.0.0
      */
     @GetMapping(
             value = ["/{id}/draws"],
@@ -310,9 +352,13 @@ class MatchController {
     /**
      * Handles the GET request for the URI /matches/{id}/pieceSets
      *
+     * @author Felix Dimmel
+     *
      * @param id Identifier for a single match
      *
      * @return Hash map of pieceSets of the two players
+     *
+     * @since 1.0.0
      */
     @GetMapping(
             value = ["/{id}/pieceSets"],
