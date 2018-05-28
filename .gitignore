@@ -25,3 +25,4 @@ Diploma.acr
 Diploma.alg
 doc/diploma/**/*.log
 doc/diploma/**/*.aux
+doc/server/javadoc
