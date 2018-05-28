@@ -7,14 +7,17 @@ buildscript {
     ext.sqlite_driver_version = '3.21.0.1'
     ext.ormlite_version = '5.1'
     ext.fasterxml_jackson_version = '2.9.5'
+    ext.dokka_version = '0.9.16'
 
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
     }
 }
 
@@ -24,8 +27,19 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'application'
 apply plugin: 'war'
+apply plugin: 'org.jetbrains.dokka'
 
 mainClassName = "htwdd.chessgame.server.ApplicationKt"
+
+dokka {
+    outputFormat = 'javadoc'
+    outputDirectory = "${rootProject.projectDir}/doc/server/javadoc"
+}
+
+task dokkaJekyll(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'jekyll'
+    outputDirectory = "${rootProject.projectDir}/doc/server/jekyll"
+}
 
 jar {
     baseName = 'chessgame-server'
