@@ -14,6 +14,9 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
  */
 @SpringBootApplication
 class Application : SpringBootServletInitializer() {
+    /**
+     * Overrides the configure function of the spring framework
+     */
     override fun configure(builder: SpringApplicationBuilder?): SpringApplicationBuilder {
         return builder!!.sources(Application::class.java)
     }

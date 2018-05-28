@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
 /**
+ * Represent a set of chess pieces
+ *
  * @author Felix Dimmel
  *
  * @property activePieces Contains all active pieces. Key: Position of Piece as Pair; Value: Piece

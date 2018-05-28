@@ -3,6 +3,8 @@ package htwdd.chessgame.server.model
 import java.io.Serializable
 
 /**
+ * Represent a chess piece
+ *
  * @author Felix Dimmel
  *
  * @property type Type of piece

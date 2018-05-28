@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement
  *
  * @author Felix Dimmel
  *
- * @property matches Hash map of pieceSets
+ * @property pieceSets Hash map of pieceSets
  *
  * @since 1.0.0
  */

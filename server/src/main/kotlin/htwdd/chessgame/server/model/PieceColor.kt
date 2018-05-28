@@ -1,6 +1,8 @@
 package htwdd.chessgame.server.model
 
 /**
+ * Represent a color of piece or player
+ *
  * @author Felix Dimmel
  *
  * @property WHITE White color
@@ -9,11 +11,17 @@ package htwdd.chessgame.server.model
  * @since 1.0.0
  */
 enum class PieceColor {
+    /**
+     * Color white
+     */
     WHITE {
 
         override fun getCode(): String = "w"
         override fun getOpposite(): PieceColor = BLACK
     },
+    /**
+     * Color black
+     */
     BLACK {
         override fun getCode(): String = "b"
         override fun getOpposite(): PieceColor = WHITE

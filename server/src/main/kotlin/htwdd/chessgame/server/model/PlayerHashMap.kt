@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement
  *
  * @author Felix Dimmel
  *
- * @property matches Hash map of matches
+ * @property player Hash map of matches
  *
  * @since 1.0.0
  */

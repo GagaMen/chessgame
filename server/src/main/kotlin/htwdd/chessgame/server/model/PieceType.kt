@@ -1,6 +1,8 @@
 package htwdd.chessgame.server.model
 
 /**
+ * Represent a type of a chess piece
+ *
  * @author Felix Dimmel
  *
  * @property PAWN Type Pawn
@@ -13,6 +15,9 @@ package htwdd.chessgame.server.model
  * @since 1.0.0
  */
 enum class PieceType {
+    /**
+     * Piece type pawn
+     */
     PAWN {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
@@ -23,6 +28,9 @@ enum class PieceType {
 
         override fun getDrawCode(): String = ""
     },
+    /**
+     * Piece type king
+     */
     KING {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
@@ -33,6 +41,9 @@ enum class PieceType {
 
         override fun getDrawCode(): String = "K"
     },
+    /**
+     * Piece type queen
+     */
     QUEEN {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
@@ -43,6 +54,9 @@ enum class PieceType {
 
         override fun getDrawCode(): String = "Q"
     },
+    /**
+     * Piece type bishop
+     */
     BISHOP {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
@@ -53,6 +67,9 @@ enum class PieceType {
 
         override fun getDrawCode(): String = "B"
     },
+    /**
+     * Piece type knight
+     */
     KNIGHT {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
@@ -63,6 +80,9 @@ enum class PieceType {
 
         override fun getDrawCode(): String = "N"
     },
+    /**
+     * Piece type rook
+     */
     ROOK {
         override fun getMatchCode(pieceColor: PieceColor): String {
             return when (pieceColor) {
