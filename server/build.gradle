@@ -38,7 +38,7 @@ dokka {
 
 task dokkaJekyll(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'jekyll'
-    outputDirectory = "${rootProject.projectDir}/doc/server/jekyll"
+    outputDirectory = "${rootProject.projectDir}/docs/"
 }
 
 jar {
