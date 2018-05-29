@@ -177,7 +177,9 @@ Build Client:
 All what you have to do is to copy the ``dist`` folder, which is created after run the build task, to your web server.
 
 ### Client Configuration
+* ``{ "useWindowLocation": true, "serverRootUrl": "" }``
+
 The client config ``configuration.json`` is located under ``src/main/resources/config``. Here you can overwrite
-the default server domain, if you want to implement your own for example or if you want to use another server.
-The default server domain is ``http://localhost:8080``, which is the same url than the server. If you chance the server 
-port don't forgot to adjust the ``serverRootUrl`` in the client config.
+the server domain, if you want to implement your own for example or if you want to use another server.
+By default the server use the window location to set the server root url. If you want to override the server root url 
+set the value ``useWindowLocation`` to ``false`` and the ``serverRootUrl`` to your own url.
