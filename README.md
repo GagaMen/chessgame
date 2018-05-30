@@ -202,6 +202,13 @@ After setup the ai server you have to change the ``app.aiServerRootUrl`` config 
 which is located under ``src/main/resources`` and rebuild the project.
 > The default value of this config entry is ``http://chess-ai:5000`` which is intended for the docker setup
 
+### Run Ai Server with Docker
+* ``docker build -t chess-ai -f dockerfile-chess-ai .``
+* ``docker run --name chess-ai -d -p 5000:5000 chess-ai``
+
+After that you can request your default docker ip with ``docker-machine ip default`` and open that with the port ``5000``
+in your browser. You can call ``docker stop chess-ai`` to stop and ``docker start chess-ai`` to restart the container.
+
 Client
 ------
 Build Client:
