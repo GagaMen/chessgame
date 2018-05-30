@@ -15,6 +15,7 @@ Table of Content
     * [Server Configuration](#server-configuration)
     * [Entry Points](#entry-points)
     * [Content Negotiation](#content-negotiation)
+* [AI Server](#ai-server)
 * [Client](#client)
     * [Run Client](#run-client)
     * [Client Configuration](#client-configuration)
@@ -43,6 +44,10 @@ Start server with client as static resources:
 
 ``java -jar server/build/libs/chessgame-server-1.0.0.war``
 
+Or use docker compose:
+* ``docker-compose build``
+* ``docker-compose up -d``
+
 Server
 ------
 Build Server:
@@ -53,10 +58,20 @@ Build Server:
 * with jar: ``java -jar server/build/libs/chessgame-server-1.0.0.jar`` (without static resources)
 * with war: ``java -jar server/build/libs/chessgame-server-1.0.0.war`` (with static resources -> client module)
 
+#### with Docker
+* ``docker-compose build`` (only the first time and after updates necessary)
+* ``docker-compose up -d`` (use your docker ip with port ``8080`` by default)
+  * If you want to start the server without the client you have to change the ``service.chess-server.build.dockerfile``
+  config entry to ``dockerfile-chess-server``
+* ``docker-compose down`` (shutdown the containers)
+
 ### Server Configuration
 The Server starts on port ``8080`` by default. If you want to change the port override the ``server.port`` config entry 
 in the ``application.yml`` file, which is located under ``src/main/resources``. 
 You have to rebuild the project if you overwrites the configuration.
+> If you are using docker and you change the default spring port, you have to change also the ``services.chess-server.ports`` 
+config entry in the ``docker-compose.yml`` file. For example if the new port is ``8000`` the ``services.chess-server.ports``
+entry have to be ``8000:8080``.
 
 ### Entry Points
 > ***``{id}`` is a placeholder for a number!***
@@ -77,6 +92,7 @@ You have to rebuild the project if you overwrites the configuration.
 |/matches/{id}/pieceSets | GET     | Get the pieceSets from a match                                                 |
 |/draws                  | GET     | Get a list of all registered draws                                             |
 |/draws                  | POST    | Create a draw                                                                  |
+|/draws/ai               | POST    | Create a draw from ai server                                                   |
 |/draws/{id}             | GET     | Get a single draw                                                              |
 
 #### POST */players*
@@ -100,7 +116,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "password": "123456" }``
 
-### GET */matches* and */matches/{id}*
+#### GET */matches* and */matches/{id}*
 Parameters:
 * includePieceSets (optional: default value is true)
     > If true match or matches contains all information about pieceSets
@@ -146,6 +162,16 @@ Send parameters via ``application/json``:
 |g      | 7     |
 |h      | 8     |
 
+#### POST */draws/ai*
+Parameters:
+* matchId Int
+
+Send parameters via ``application/x-www-form-urlencoded``:
+* ``matchId=1``
+
+Send parameters via ``application/json``:
+* ``{ "matchId": 1 }``
+
 ### Content Negotiation
 The server offers three options to handle content negotiation:
 1.  Suffix Strategy
@@ -168,6 +194,14 @@ Visit the document page <https://gagamen.github.io/chessgame/>
 Alternative you can build the javadoc with the following task: ``./gradlew :server:dokka``.
 The files are generated in the ``doc/javadoc`` folder. 
 
+AI Server
+---------
+If you want to start the AI server without docker on an different server for example, then clone the git project from
+<https://github.com/ncksllvn/chess-api> and follow the instruction of this repository.
+After setup the ai server you have to change the ``app.aiServerRootUrl`` config entry in the ``application.yml`` file, 
+which is located under ``src/main/resources`` and rebuild the project.
+> The default value of this config entry is ``http://chess-ai:5000`` which is intended for the docker setup
+
 Client
 ------
 Build Client:
@@ -175,6 +209,18 @@ Build Client:
 
 ### Run Client
 All what you have to do is to copy the ``dist`` folder, which is created after run the build task, to your web server.
+
+#### with Docker
+* ``docker build -t chess-client -f dockerfile-chess-client .``
+* ``docker run --name chess-client -d -p 8080:80 chess-client``
+
+After that you can request your default docker ip with ``docker-machine ip default`` and open that with the port ``8080``
+in your browser. You can call ``docker stop chess-client`` to stop and ``docker start chess-client`` to restart the container.
+
+> Don't forget to change the ``serverRootUrl`` if you ara using the client separately. (see [Client Configuration](#client-configuration))
+
+If you pull updates you have to remove first the existing container with the ``docker rm chess-client`` command and then you 
+have to repeat the first two commands above.
 
 ### Client Configuration
 * ``{ "useWindowLocation": true, "serverRootUrl": "" }``
