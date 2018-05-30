@@ -1,0 +1,4 @@
+FROM nginx
+MAINTAINER Felix Dimmel
+
+COPY client/dist /usr/share/nginx/html
