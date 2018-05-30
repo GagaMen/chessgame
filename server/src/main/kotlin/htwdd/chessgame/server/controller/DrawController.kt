@@ -1,12 +1,11 @@
 package htwdd.chessgame.server.controller
 
 import htwdd.chessgame.server.dto.DrawDTO
+import htwdd.chessgame.server.dto.MatchIdDTO
 import htwdd.chessgame.server.model.Draw
 import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.model.Match
-import htwdd.chessgame.server.model.PieceColor.BLACK
-import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.spring.web.config.AppProperties
 import htwdd.chessgame.server.util.DatabaseUtility
 import htwdd.chessgame.server.util.FENUtility.Companion.prepareFENForURLParam
@@ -178,7 +177,7 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
         match.updateByDraw(draw)
         matchDao.update(match)
 
-        if (match.players[WHITE]?.id == 1 || match.players[BLACK]?.id == 1) {
+        if (match.players[match.currentColor]?.id == 1) {
             // launch calls the function addDrawByAi asynchronous
             launch {
                 addDrawByAi(match)
@@ -240,13 +239,76 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
         match.updateByDraw(draw)
         matchDao.update(match)
 
-        if (match.players[WHITE]?.id == 1 || match.players[BLACK]?.id == 1) {
+        if (match.players[match.currentColor]?.id == 1) {
             launch {
                 addDrawByAi(match)
             }
         }
 
         return draw
+    }
+
+    /**
+     * Handles the POST request for the URI /draws/ai
+     * Params encoded as application/x-www-form-urlencode
+     *
+     * @author Felix Dimmel
+     *
+     * @param matchId Match reference
+     *
+     * @return Created draw from ai server
+     *
+     * @since 1.0.0
+     */
+    @PostMapping(
+            value = ["/ai"],
+            consumes = [APPLICATION_FORM_URLENCODED_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addDrawByAi(
+            @RequestParam
+            matchId: Int
+    ): Draw {
+        val match = matchDao!!.queryForId(matchId)
+                ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
+
+        if (match.players[match.currentColor]?.id != 1) throw RuntimeException("It's not the turn of the ai player!")
+
+        return addDrawByAi(match)
+    }
+
+    /**
+     * Handles the POST request for the URI /draws/ai
+     * Params encoded as application/json
+     *
+     * @author Felix Dimmel
+     *
+     * @param matchIdDTO Contains params as data transfer object
+     *
+     * @see addDrawByAi
+     * @see MatchIdDTO
+     *
+     * @return Created draw from ai server
+     *
+     * @since 1.0.0
+     */
+    @PostMapping(
+            value = ["/ai"],
+            consumes = [APPLICATION_JSON_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
+    )
+    @ResponseStatus(CREATED)
+    fun addDrawByAiWithJson(
+            @RequestBody
+            matchIdDTO: MatchIdDTO
+    ): Draw {
+        val match = matchDao!!.queryForId(matchIdDTO.matchId)
+                ?: throw IllegalArgumentException("No match with the id '${matchIdDTO.matchId}' registered!")
+
+        if (match.players[match.currentColor]?.id != 1) throw RuntimeException("It's not the turn of the ai player!")
+
+        return addDrawByAi(match)
     }
 
     /**
@@ -258,7 +320,7 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
      *
      * @since 1.0.0
      */
-    private fun addDrawByAi(match: Match) {
+    private fun addDrawByAi(match: Match): Draw {
         val urlNextAiDraw = URL("${appProperties.aiServerRootUrl}/game?fen=${prepareFENForURLParam(match.matchCode)}")
         val nextDraw = readFromAIRequest(urlNextAiDraw)
 
@@ -299,6 +361,8 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
 
         match.updateByDraw(draw)
         matchDao!!.update(match)
+
+        return draw
     }
 
     /**
