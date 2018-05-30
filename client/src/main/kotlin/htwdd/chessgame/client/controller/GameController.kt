@@ -2,6 +2,7 @@ package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
+import htwdd.chessgame.client.util.RequestUtility.Companion.post
 import htwdd.chessgame.client.view.GameView
 import kotlinx.coroutines.experimental.await
 import kotlinx.coroutines.experimental.launch
@@ -63,14 +64,28 @@ class GameController(client: Client) : Controller(client) {
                         }
                     }.await()
 
+                    // necessary if the ai player is white and it is a fresh match
+                    if (
+                            match!!.matchCode == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" &&
+                            match.players[match.currentColor]?.id == 1
+                    ) {
+                        post("${client.config.serverRootUrl}/draws/ai", Pair("matchId", match.id)) {
+                            if (it.target is XMLHttpRequest) {
+                                val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                                increaseHalfMovesAction(match)
+                                addDrawAction(Pair(match, draw))
+                            }
+                        }.await()
+                    }
+
                     get("${client.config.serverRootUrl}/matches/$matchId/draws") {
                         if (it.target is XMLHttpRequest) {
                             val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
-                            match?.history = drawList.draws
+                            match.history = drawList.draws
                         }
                     }.await()
 
-                    match?.addObserver(gameView)
+                    match.addObserver(gameView)
                     client.changeState(ViewState.GAME, match)
                 }
             }

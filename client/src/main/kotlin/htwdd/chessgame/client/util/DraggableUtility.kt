@@ -25,7 +25,8 @@ class DraggableUtility {
         private val rook = RookMovementUtility()
 
         fun dragStart(event: Event, match: Match) {
-            if (match.checkmate) return
+            // don't show possible field if on player is checkmate or the ai player has the next turn
+            if (match.checkmate && match.players[match.currentColor]?.id == 1) return
 
             val target = event.target as? Element ?: return
             if (event !is DragEvent) return
@@ -158,6 +159,9 @@ class DraggableUtility {
         }
 
         fun mouseOver(event: Event, match: Match) {
+            // don't show possible field if the ai player has the next turn
+            if (match.players[match.currentColor]?.id == 1) return
+
             val target = (event.target ?: return) as? Element ?: return
 
             calculateValidDropFields(target, match)
