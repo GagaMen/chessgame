@@ -1,0 +1,9 @@
+FROM python:3
+MAINTAINER Felix Dimmel
+
+WORKDIR /usr/src/app
+
+RUN git clone https://github.com/ncksllvn/chess-api.git .
+RUN pip install -r requirements.txt
+
+CMD ["python3", "./main.py"]

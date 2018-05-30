@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  chess-ai:
+    build:
+      context: .
+      dockerfile: dockerfile-chess-ai
+    ports:
+      - "5000:5000"
+    restart: always
+
+  chess-server:
+    build:
+      context: .
+      dockerfile: dockerfile-chess-server
+    depends_on:
+      - chess-ai
+    ports:
+      - "8080:8080"
+    restart: always
