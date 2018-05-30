@@ -98,5 +98,24 @@ class FENUtility {
 
             match.matchCode = sb.toString()
         }
+
+        /**
+         * Prepares a FEN String as URL parameter
+         *
+         * Replace:
+         * - "/" -> "%2F"
+         * - " " -> "+"
+         *
+         * @author Felix Dimmel
+         *
+         * @param fen String  in the FEN
+         *
+         * @return Prepared FEN string as URL parameter with replaced characters
+         *
+         * @since 1.0.0
+         */
+        fun prepareFENForURLParam(fen: String): String {
+            return fen.replace("/", "%2F").replace(" ", "+")
+        }
     }
 }

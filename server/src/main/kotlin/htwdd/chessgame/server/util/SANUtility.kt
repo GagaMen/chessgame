@@ -5,6 +5,7 @@ import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceType
 import htwdd.chessgame.server.model.PieceType.*
 
 /**
@@ -142,11 +143,85 @@ class SANUtility {
                 val column = startInfo.toCharArray()[0].toInt() % 96
                 possibleStartFields.filter { it.second == column }.toHashSet()
             } else {
-                val row = startInfo.toInt()
+                val row = startInfo.toCharArray()[0].toInt()
                 possibleStartFields.filter { it.first == row }.toHashSet()
             }
 
             return possibleStartFields
+        }
+
+        fun calcSANFromAIMove(
+                startField: Field,
+                endField: Field,
+                checkmate: Boolean,
+                check: Boolean,
+                match: Match
+        ): String {
+            val sb = StringBuilder()
+            val activePieces = match.pieceSets[match.currentColor]?.activePieces!!
+            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces!!
+            val movedPiece = activePieces[startField.asPair()]
+                    ?: throw Exception("Can't find the piece that has been moved!")
+            var throwPiece = opposingPieces.containsKey(endField.asPair())
+            var throwEnPassant = false
+
+            if (match.kingsideCastling[match.currentColor]!! &&
+                    movedPiece.type == KING &&
+                    (endField.column - startField.column) == 2) {
+                return sb.append("O-O").toString()
+            }
+
+            if (match.kingsideCastling[match.currentColor]!! &&
+                    movedPiece.type == KING &&
+                    (startField.column - endField.column) == 2) {
+                return sb.append("O-O-O").toString()
+            }
+
+
+            if (movedPiece.type == PAWN && match.enPassantField?.asPair() == endField.asPair()) {
+                throwEnPassant = true
+                throwPiece = true
+            }
+
+            if (movedPiece.type != PAWN) sb.append(movedPiece.type.getDrawCode())
+
+            opposingPieces.forEach piece@{ piece ->
+                if (movedPiece.type == PieceType.PAWN || piece.value.type != movedPiece.type) return@piece
+                if (piece.value.position.row == endField.row && piece.value.position.column == endField.column) return@piece
+
+                val movementUtility = when (movedPiece.type) {
+                    PieceType.BISHOP -> BishopMovementUtility()
+                    PieceType.KING -> KingMovementUtility()
+                    PieceType.KNIGHT -> KnightMovementUtility()
+                    PieceType.PAWN -> PawnMovementUtility()
+                    PieceType.QUEEN -> QueenMovementUtility()
+                    PieceType.ROOK -> RookMovementUtility()
+                }
+
+                val movementFields = HashSet<Pair<Int, Int>>()
+                movementUtility.getFilteredMovementFields(movementFields, piece.value.position.row, piece.value.position.column, match)
+
+                movementFields.forEach field@{ field ->
+                    if (field.first != endField.row || field.second != endField.column) return@field
+                    if (startField.column == piece.value.position.column) sb.append("${startField.row}")
+                    else sb.append("${startField.column.plus(96).toChar()}")
+                }
+            }
+
+            if (movedPiece.type == PAWN && throwPiece) {
+                sb.append("${startField.column.plus(96).toChar()}")
+            }
+
+            if (throwPiece) sb.append("x")
+
+            sb.append("${endField.column.plus(96).toChar()}${endField.row}")
+
+            if (throwEnPassant) sb.append("e.p.")
+
+            if (checkmate) sb.append("#")
+            else if (check) sb.append("+")
+
+            return sb.toString()
         }
     }
 }

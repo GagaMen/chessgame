@@ -4,12 +4,23 @@ import htwdd.chessgame.server.dto.DrawDTO
 import htwdd.chessgame.server.model.Draw
 import htwdd.chessgame.server.model.DrawList
 import htwdd.chessgame.server.model.Field
+import htwdd.chessgame.server.model.Match
+import htwdd.chessgame.server.model.PieceColor.BLACK
+import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.spring.web.config.AppProperties
 import htwdd.chessgame.server.util.DatabaseUtility
+import htwdd.chessgame.server.util.FENUtility.Companion.prepareFENForURLParam
 import htwdd.chessgame.server.util.SANUtility
+import htwdd.chessgame.server.util.SANUtility.Companion.calcSANFromAIMove
+import kotlinx.coroutines.experimental.launch
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
@@ -26,7 +37,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @RestController
 @RequestMapping("/draws")
-class DrawController {
+class DrawController @Autowired constructor(private var appProperties: AppProperties) {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao
     private val fieldDao = DatabaseUtility.fieldDao
@@ -167,6 +178,13 @@ class DrawController {
         match.updateByDraw(draw)
         matchDao.update(match)
 
+        if (match.players[WHITE]?.id == 1 || match.players[BLACK]?.id == 1) {
+            // launch calls the function addDrawByAi asynchronous
+            launch {
+                addDrawByAi(match)
+            }
+        }
+
         return draw
     }
 
@@ -222,6 +240,90 @@ class DrawController {
         match.updateByDraw(draw)
         matchDao.update(match)
 
+        if (match.players[WHITE]?.id == 1 || match.players[BLACK]?.id == 1) {
+            launch {
+                addDrawByAi(match)
+            }
+        }
+
         return draw
+    }
+
+    /**
+     * Adds a draw from ai (stockfish) engine by given match
+     *
+     * @author Felix Dimmel
+     *
+     * @param match Match to which the draw is to be added
+     *
+     * @since 1.0.0
+     */
+    private fun addDrawByAi(match: Match) {
+        val urlNextAiDraw = URL("${appProperties.aiServerRootUrl}/game?fen=${prepareFENForURLParam(match.matchCode)}")
+        val nextDraw = readFromAIRequest(urlNextAiDraw)
+
+        val regexBestMove = "\"bestMove\": \"([a-h][1-8][a-h][1-8])\"".toRegex()
+        val matchResultsBestMove = regexBestMove.find(nextDraw)
+                ?: throw Exception("Can't find best move from ai result!")
+        val bestMove = matchResultsBestMove.groups[1]?.value ?: throw Exception("Best move was empty!")
+
+        val urlDrawResult = URL("${appProperties.aiServerRootUrl}/game?fen=${prepareFENForURLParam(match.matchCode)}&move=$bestMove")
+        val drawResult = readFromAIRequest(urlDrawResult)
+        val checkmate = drawResult.contains("\"isCheckmate\": true".toRegex())
+        val check = drawResult.contains("\"isInCheck\": true".toRegex())
+
+        val fieldInfo = bestMove.split("")
+        val startField = Field(column = fieldInfo[1].toCharArray()[0].toInt() % 96, row = fieldInfo[2].toInt())
+        val endField = Field(column = fieldInfo[3].toCharArray()[0].toInt() % 96, row = fieldInfo[4].toInt())
+
+        val san = calcSANFromAIMove(startField, endField, checkmate, check, match)
+
+        val draw = Draw(
+                color = match.currentColor,
+                match = match,
+                drawCode = san,
+                startField = startField
+        )
+        draw.setValuesByDrawCode()
+
+        if (!SANUtility.validateSAN(draw, match)) throw Exception("The ai draw isn't valid!")
+
+        if (fieldDao!!.create(draw.startField) != 1) throw SQLException("Can't create start field!")
+        if (fieldDao.create(draw.endField) != 1) throw SQLException("Can't create end field!")
+
+        if (drawDao!!.create(draw) != 1) {
+            fieldDao.delete(draw.startField)
+            fieldDao.delete(draw.endField)
+            throw SQLException("Can't create draw!")
+        }
+
+        match.updateByDraw(draw)
+        matchDao!!.update(match)
+    }
+
+    /**
+     * Reads and returns the ai response body
+     *
+     * @author Felix Dimmel
+     *
+     * @param url Request url for ai engine
+     *
+     * @return Response as string
+     */
+    private fun readFromAIRequest(url: URL): String {
+        val connection = url.openConnection()
+        val bufferedReader = BufferedReader(
+                InputStreamReader(
+                        connection.getInputStream()))
+        var inputLine = bufferedReader.readLine()
+        var aiDrawAsJSON = ""
+
+        while (inputLine != null) {
+            aiDrawAsJSON += inputLine
+            inputLine = bufferedReader.readLine()
+        }
+        bufferedReader.close()
+
+        return aiDrawAsJSON
     }
 }

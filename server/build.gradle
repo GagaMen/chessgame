@@ -8,6 +8,7 @@ buildscript {
     ext.ormlite_version = '5.1'
     ext.fasterxml_jackson_version = '2.9.5'
     ext.dokka_version = '0.9.16'
+    ext.coroutines_version = '0.22.5'
 
     repositories {
         mavenCentral()
@@ -73,8 +74,15 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$fasterxml_jackson_version"
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$fasterxml_jackson_version"
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$fasterxml_jackson_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testCompile("org.springframework.boot:spring-boot-starter-test:$spring_boot_version")
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
 }
 
 compileKotlin {
