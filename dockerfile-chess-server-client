@@ -5,4 +5,4 @@ WORKDIR /usr/src/chessgame/server
 
 COPY /server/build/libs/ .
 
-CMD ["java","-jar","chessgame-server-1.0.0.jar"]
+CMD ["java","-jar","chessgame-server-1.0.0.war"]
