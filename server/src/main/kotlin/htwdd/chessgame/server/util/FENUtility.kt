@@ -17,6 +17,9 @@ import htwdd.chessgame.server.util.FENUtility.Companion.drawDao
  * @since 1.0.0
  */
 class FENUtility {
+    /**
+     * Static FENUtility object
+     */
     companion object {
         private val drawDao = DatabaseUtility.drawDao
 

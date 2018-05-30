@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse
  *
  * @author Felix Dimmel
  *
+ * @property appProperties Custom spring configurations
  * @property drawDao Object to interact with the database to manage draw objects
  * @property matchDao Object to interact with the database to manage match objects
  * @property fieldDao Object to interact with the database to manage field objects

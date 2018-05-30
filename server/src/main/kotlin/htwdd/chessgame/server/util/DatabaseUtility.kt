@@ -28,6 +28,9 @@ import htwdd.chessgame.server.util.DatabaseUtility.Companion.playerDao
  * @since 1.0.0
  */
 class DatabaseUtility {
+    /**
+     * Static DatabaseUtility object
+     */
     companion object {
         private var connection: JdbcConnectionSource? = null
         var playerDao: Dao<Player, Int>? = null

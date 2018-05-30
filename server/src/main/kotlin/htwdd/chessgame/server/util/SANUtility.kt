@@ -16,6 +16,9 @@ import htwdd.chessgame.server.model.PieceType.*
  * @since 1.0.0
  */
 class SANUtility {
+    /**
+     * Static SANUtility object
+     */
     companion object {
         /**
          * Validate a given draw based on his SAN code
@@ -150,6 +153,19 @@ class SANUtility {
             return possibleStartFields
         }
 
+        /**
+         * Calculate SAN string with given information from ai move
+         *
+         * @author Felix Dimmel
+         *
+         * @param startField Start position of moved piece
+         * @param endField End position of moved piece
+         * @param checkmate True if one player is checkmate otherwise false
+         * @param check True if one player is in check otherwise false
+         * @param match The match reference of the draw
+         *
+         * @since 1.0.0
+         */
         fun calcSANFromAIMove(
                 startField: Field,
                 endField: Field,

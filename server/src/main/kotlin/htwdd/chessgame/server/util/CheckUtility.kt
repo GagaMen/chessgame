@@ -26,6 +26,9 @@ import htwdd.chessgame.server.util.CheckUtility.Companion.threatedFields
  * @since 1.0.0
  */
 class CheckUtility {
+    /**
+     * Static CheckUtility object
+     */
     companion object {
         private var threatedFields = HashSet<Pair<Int, Int>>()
         private val bishop = BishopMovementUtility()
