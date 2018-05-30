@@ -4,3 +4,5 @@ spring:
   mvc:
     dispatch-options-request: true
     throw-exception-if-no-handler-found: true
+app:
+  aiServerRootUrl: http://chess-ai:5000

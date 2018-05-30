@@ -1,5 +1,6 @@
 package htwdd.chessgame.server.spring.web.config
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @since 1.0.0
  */
 @Configuration
+@EnableConfigurationProperties(AppProperties::class)
 class WebConfig : WebMvcConfigurerAdapter() {
     /**
      * Configuration for content negotiation (3 strategies)
