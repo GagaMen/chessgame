@@ -30,6 +30,13 @@ class PlayerController {
     private val drawDao = DatabaseUtility.drawDao
     private val fieldDao = DatabaseUtility.fieldDao
 
+    init {
+        if (!playerDao!!.idExists(1)) {
+            val aiPlayer = Player(name = "AI (Stockfish)", password = "an§AS373%()asd8%.,>")
+            playerDao.create(aiPlayer)
+        }
+    }
+
     /**
      * Handles the OPTIONS request for the URI /players
      *
