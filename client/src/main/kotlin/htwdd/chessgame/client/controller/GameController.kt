@@ -1,6 +1,7 @@
 package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.util.PollingUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import htwdd.chessgame.client.util.RequestUtility.Companion.post
 import htwdd.chessgame.client.view.GameView
@@ -15,6 +16,7 @@ import kotlin.browser.document
 
 class GameController(client: Client) : Controller(client) {
     private var gameView = GameView(this)
+    private val pollingUtility = PollingUtility()
 
     init {
         client.addObserver(gameView)
@@ -38,10 +40,12 @@ class GameController(client: Client) : Controller(client) {
     }
 
     private fun showStartAction() {
+        pollingUtility.stop()
         client.changeState(ViewState.START)
     }
 
     private fun showMatchAction() {
+        pollingUtility.stop()
         client.changeState(ViewState.MATCH)
     }
 
@@ -87,6 +91,21 @@ class GameController(client: Client) : Controller(client) {
 
                     match.addObserver(gameView)
                     client.changeState(ViewState.GAME, match)
+                    pollingUtility.start {
+                        get("${client.config.serverRootUrl}/matches/$matchId/draws") {
+                            if (it.target is XMLHttpRequest) {
+                                val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+                                if (match.history.size != drawList.draws.size) {
+                                    match.history.forEach { draw ->
+                                        drawList.draws.removeAll { it.id == draw.id }
+                                    }
+                                    drawList.draws.forEach { draw ->
+                                        match.addDraw(draw, true)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

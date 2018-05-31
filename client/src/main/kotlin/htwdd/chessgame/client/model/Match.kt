@@ -26,14 +26,15 @@ data class Match(var id: Int = 0,
         pieceSets[PieceColor.BLACK] = PieceSet()
     }
 
-    fun addDraw(draw: Draw) {
+    fun addDraw(draw: Draw, updateGameBoard: Boolean = false) {
         history.add(draw)
         updatePieceSet(draw)
         switchColor()
         FENUtility.calc(this)
         updateCheck()
         setChanged()
-        notifyObservers("updateGameProperties")
+        if (updateGameBoard) notifyObservers("updateGameBoardAndProperties")
+        else notifyObservers("updateGameProperties")
     }
 
     private fun switchColor() {

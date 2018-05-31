@@ -3,6 +3,7 @@ package htwdd.chessgame.client.view
 import htwdd.chessgame.client.controller.Controller
 import htwdd.chessgame.client.model.Client
 import htwdd.chessgame.client.model.Match
+import htwdd.chessgame.client.partial.GameBoardPartial
 import htwdd.chessgame.client.partial.GamePartial
 import htwdd.chessgame.client.partial.GamePropertiesPartial
 import htwdd.chessgame.client.util.Observable
@@ -37,6 +38,12 @@ class GameView(private val controller: Controller) : View {
             is Match -> {
                 when (arg) {
                     "updateGameProperties" -> {
+                        val properties = main.getElementsByClassName("properties")[0]
+                        properties?.replaceWith(GamePropertiesPartial(o).getPartial(controller))
+                    }
+                    "updateGameBoardAndProperties" -> {
+                        val board = main.getElementsByClassName("board")[0]
+                        board?.replaceWith(GameBoardPartial(o).getPartial(controller))
                         val properties = main.getElementsByClassName("properties")[0]
                         properties?.replaceWith(GamePropertiesPartial(o).getPartial(controller))
                     }
