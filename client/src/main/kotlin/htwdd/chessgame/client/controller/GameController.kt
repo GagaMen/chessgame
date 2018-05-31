@@ -91,7 +91,7 @@ class GameController(client: Client) : Controller(client) {
 
                     match.addObserver(gameView)
                     client.changeState(ViewState.GAME, match)
-                    pollingUtility.start {
+                    pollingUtility.start(client.config.pollingDelayTime) {
                         get("${client.config.serverRootUrl}/matches/$matchId/draws") {
                             if (it.target is XMLHttpRequest) {
                                 val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)

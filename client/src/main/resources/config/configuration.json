@@ -1,4 +1,5 @@
 {
   "useWindowLocation": true,
-  "serverRootUrl": ""
+  "serverRootUrl": "",
+  "pollingDelayTime": 5000
 }

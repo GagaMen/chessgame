@@ -6,21 +6,21 @@ import kotlinx.coroutines.experimental.launch
 class PollingUtility {
     private var stopPolling = true
 
-    fun start(pollingTask: () -> Unit) {
+    fun start(delayTime: Int, pollingTask: () -> Unit) {
         stopPolling = false
-        sendPollingRequest(pollingTask)
+        sendPollingRequest(delayTime, pollingTask)
     }
 
     fun stop() {
         stopPolling = true
     }
 
-    private fun sendPollingRequest(pollingTask: () -> Unit) {
+    private fun sendPollingRequest(delayTime: Int, pollingTask: () -> Unit) {
         if (stopPolling) return
         launch {
             pollingTask()
-            delay(5000)
-            sendPollingRequest(pollingTask)
+            delay(delayTime)
+            sendPollingRequest(delayTime, pollingTask)
         }
     }
 }

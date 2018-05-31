@@ -231,9 +231,11 @@ If you pull updates you have to remove first the existing container with the ``d
 have to repeat the first two commands above.
 
 ### Client Configuration
-* ``{ "useWindowLocation": true, "serverRootUrl": "" }``
+* ``{ "useWindowLocation": true, "serverRootUrl": "", pollingDelayTime: 5000 }``
 
 The client config ``configuration.json`` is located under ``src/main/resources/config``. Here you can overwrite
 the server domain, if you want to implement your own for example or if you want to use another server.
 By default the server use the window location to set the server root url. If you want to override the server root url 
-set the value ``useWindowLocation`` to ``false`` and the ``serverRootUrl`` to your own url.
+set the value ``useWindowLocation`` to ``false`` and the ``serverRootUrl`` to your own url. The ``pollingDelayTime`` 
+config entry defines the delay of the polling task, which automatically starts if a match is started. This task listen for 
+updates and re-render the view if any exists.
