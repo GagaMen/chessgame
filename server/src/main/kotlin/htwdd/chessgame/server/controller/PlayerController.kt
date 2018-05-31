@@ -5,8 +5,14 @@ import htwdd.chessgame.server.dto.PlayerDTO
 import htwdd.chessgame.server.model.Player
 import htwdd.chessgame.server.model.PlayerHashMap
 import htwdd.chessgame.server.util.DatabaseUtility
+import htwdd.chessgame.server.util.HateoasUtility
+import org.springframework.hateoas.Link
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType.*
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -88,11 +94,18 @@ class PlayerController {
      * @since 1.0.0
      */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
-    fun getPlayerList(): PlayerHashMap {
+    fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> {
         val playerList = HashMap<Int, Player>()
         playerDao!!.queryForAll().forEach { playerList[it.id] = it }
 
-        return PlayerHashMap(playerList)
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response)).withSelfRel()
+        links.add(Pair(selfLink, "HEAD,GET,POST,OPTIONS"))
+        val newLink = linkTo(methodOn(PlayerController::class.java).addPlayer("valueOfName", "valueOfPassword", response)).withRel("new")
+        links.add(Pair(newLink, "POST"))
+
+        return ResponseEntity(PlayerHashMap(playerList), HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -113,9 +126,24 @@ class PlayerController {
     @ResponseBody
     fun getPlayerById(
             @PathVariable
-            id: Int
-    ): Player {
-        return playerDao!!.queryForId(id) ?: throw IllegalArgumentException("No player with the id '$id' registered!")
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Player> {
+        val player = playerDao!!.queryForId(id)
+                ?: throw IllegalArgumentException("No player with the id '$id' registered!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val patchLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, "valueOfPassword", response)).withRel("update")
+        links.add(Pair(patchLink, "PATCH"))
+        val deleteLink = linkTo(methodOn(PlayerController::class.java).deletePlayerById(id, response)).withRel("delete")
+        links.add(Pair(deleteLink, "DELETE"))
+        val prevLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        return ResponseEntity(player, HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -133,13 +161,23 @@ class PlayerController {
     )
     fun deletePlayerById(
             @PathVariable
-            id: Int
-    ) {
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
         if (!playerDao!!.idExists(id)) throw IllegalArgumentException("No player with the id '$id' registered!")
 
         deleteMatchesByPlayer(id)
 
         if (playerDao.deleteById(id) != 1) throw SQLException("Can't delete player with the id '$id'!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).deletePlayerById(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "DELETE"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -164,11 +202,20 @@ class PlayerController {
             @RequestParam
             name: String,
             @RequestParam
-            password: String
-    ): Player {
+            password: String,
+            response: HttpServletResponse
+    ): ResponseEntity<Player> {
         val player = Player(name = name, password = password)
         if (playerDao!!.create(player) != 1) throw SQLException("Can't create player!")
-        return player
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).addPlayer(name, password, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(player, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -194,11 +241,20 @@ class PlayerController {
     @ResponseBody
     fun addPlayerWithJson(
             @RequestBody
-            playerDTO: PlayerDTO
-    ): Player {
+            playerDTO: PlayerDTO,
+            response: HttpServletResponse
+    ): ResponseEntity<Player> {
         val player = Player(name = playerDTO.name, password = playerDTO.password)
         if (playerDao!!.create(player) != 1) throw SQLException("Can't create player!")
-        return player
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).addPlayer(playerDTO.name, playerDTO.password, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(player, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -221,14 +277,24 @@ class PlayerController {
             @PathVariable
             id: Int,
             @RequestParam
-            password: String
-    ) {
+            password: String,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
         val player = playerDao!!.queryForId(id)
                 ?: throw IllegalArgumentException("No player with the id '$id' registered!")
 
         player.password = password
 
         if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, password, response)).withSelfRel()
+        links.add(Pair(selfLink, "PATCH"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -253,14 +319,24 @@ class PlayerController {
             @PathVariable
             id: Int,
             @RequestBody
-            passwordDTO: PasswordDTO
-    ) {
+            passwordDTO: PasswordDTO,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
         val player = playerDao!!.queryForId(id)
                 ?: throw IllegalArgumentException("No player with the id '$id' registered!")
 
         player.password = passwordDTO.password
 
         if (playerDao.update(player) != 1) throw SQLException("Can't update player with the id '$id'!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, passwordDTO.password, response)).withSelfRel()
+        links.add(Pair(selfLink, "PATCH"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
