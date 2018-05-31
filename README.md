@@ -57,7 +57,8 @@ Build Server:
 * with gradle: ``./gradlew :server:bootRun``
 * with jar: ``java -jar server/build/libs/chessgame-server-1.0.0.jar`` (without static resources)
 * with war: ``java -jar server/build/libs/chessgame-server-1.0.0.war`` (with static resources -> client module)
-
+> You have to configure the chess ai server root url and run it separately, because the chess ai server isn't included
+in the .jar or .war file. (see [AI Server](#ai-server)) 
 #### with Docker
 * ``docker-compose build`` (only the first time and after updates necessary)
 * ``docker-compose up -d`` (use your docker ip with port ``8080`` by default)
