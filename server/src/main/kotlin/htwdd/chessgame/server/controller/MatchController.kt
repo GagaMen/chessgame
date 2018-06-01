@@ -5,8 +5,14 @@ import htwdd.chessgame.server.model.*
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.util.DatabaseUtility
+import htwdd.chessgame.server.util.HateoasUtility
+import org.springframework.hateoas.Link
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType.*
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.sql.SQLException
@@ -48,8 +54,18 @@ class MatchController {
      * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
-    fun matchOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
+    fun matchOptions(response: HttpServletResponse): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).matchOptions(response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(MatchController::class.java).getMatchList(true, true, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,POST,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -68,8 +84,22 @@ class MatchController {
      * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
-    fun matchByIdOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,DELETE,OPTIONS")
+    fun matchByIdOptions(
+            @PathVariable
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).matchByIdOptions(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(MatchController::class.java).getMatchById(id, true, true, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,DELETE,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -87,8 +117,22 @@ class MatchController {
      * @since 1.0.0
      */
     @RequestMapping("/{id}/draws", method = [OPTIONS])
-    fun drawsByMatchOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,OPTIONS")
+    fun drawsByMatchOptions(
+            @PathVariable
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).drawsByMatchOptions(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(MatchController::class.java).getMatchById(id, true, true, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -106,8 +150,22 @@ class MatchController {
      * @since 1.0.0
      */
     @RequestMapping("/{id}/pieceSets", method = [OPTIONS])
-    fun pieceSetsByMatchOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,OPTIONS")
+    fun pieceSetsByMatchOptions(
+            @PathVariable
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).drawsByMatchOptions(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(MatchController::class.java).getMatchById(id, true, true, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -127,8 +185,9 @@ class MatchController {
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
             includePieceSets: Boolean,
             @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
-            includeHistory: Boolean
-    ): MatchHashMap {
+            includeHistory: Boolean,
+            response: HttpServletResponse
+    ): ResponseEntity<MatchHashMap> {
         val matchList = HashMap<Int, Match>()
         matchDao!!.queryForAll().forEach { match ->
             match.players.forEach { playerDao!!.refresh(it.value) }
@@ -145,7 +204,21 @@ class MatchController {
             matchList[match.id] = match
         }
 
-        return MatchHashMap(matchList)
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).getMatchList(includePieceSets, includeHistory, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).matchOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val newLink = linkTo(methodOn(MatchController::class.java).addMatch(0, 0, response)).withRel("new")
+        links.add(Pair(newLink, "POST"))
+
+        matchList.forEach { (matchId, _) ->
+            val matchLink = linkTo(methodOn(MatchController::class.java).getMatchById(matchId, includePieceSets, includeHistory, response)).withRel("next")
+            links.add(Pair(matchLink, "GET"))
+        }
+
+        return ResponseEntity(MatchHashMap(matchList), HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -172,8 +245,9 @@ class MatchController {
             @RequestParam(required = false, value = "includePieceSets", defaultValue = "true")
             includePieceSets: Boolean,
             @RequestParam(required = false, value = "includeHistory", defaultValue = "true")
-            includeHistory: Boolean
-    ): Match {
+            includeHistory: Boolean,
+            response: HttpServletResponse
+    ): ResponseEntity<Match> {
         val match = matchDao!!.queryForId(id)
                 ?: throw IllegalArgumentException("No match with the id '$id' registered!")
         match.players.forEach { playerDao!!.refresh(it.value) }
@@ -187,7 +261,22 @@ class MatchController {
             match.history.addAll(draws)
         }
 
-        return match
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).getMatchById(id, includePieceSets, includeHistory, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).matchByIdOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val deleteLink = linkTo(methodOn(MatchController::class.java).deleteMatchById(id, response)).withRel("delete")
+        links.add(Pair(deleteLink, "DELETE"))
+        val prevLink = linkTo(methodOn(MatchController::class.java).getMatchList(includePieceSets, includeHistory, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+        val nextLinkPieceSets = linkTo(methodOn(MatchController::class.java).getPieceSetsByMatchId(id, response)).withRel("next")
+        links.add(Pair(nextLinkPieceSets, "GET"))
+        val nextLinkHistory = linkTo(methodOn(MatchController::class.java).getDrawsByMatchId(id, response)).withRel("next")
+        links.add(Pair(nextLinkHistory, "GET"))
+
+        return ResponseEntity(match, HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -205,8 +294,9 @@ class MatchController {
     )
     fun deleteMatchById(
             @PathVariable
-            id: Int
-    ) {
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
         if (!matchDao!!.idExists(id)) throw IllegalArgumentException("No match with the id '$id' registered!")
         val match = matchDao.queryForId(id)
 
@@ -240,6 +330,15 @@ class MatchController {
         }
 
         if (matchDao.deleteById(id) != 1) throw SQLException("Can't delete match with the id '$id'!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).deleteMatchById(id, response)).withRel("delete")
+        links.add(Pair(selfLink, "DELETE"))
+        val nextLink = linkTo(methodOn(MatchController::class.java).getMatchList(true, true, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -264,8 +363,9 @@ class MatchController {
             @RequestParam
             playerWhiteId: Int,
             @RequestParam
-            playerBlackId: Int
-    ): Match {
+            playerBlackId: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Match> {
         val playerWhite = playerDao!!.queryForId(playerWhiteId)
                 ?: throw IllegalArgumentException("No player with the id '$playerWhiteId' registered!")
         val playerBlack = playerDao.queryForId(playerBlackId)
@@ -279,7 +379,17 @@ class MatchController {
         match.setPieceSetsByMatchCode()
 
         if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
-        return match
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).addMatch(playerWhiteId, playerBlackId, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).matchOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(MatchController::class.java).getMatchById(match.id, true, true, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(match, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -304,8 +414,9 @@ class MatchController {
     @ResponseStatus(CREATED)
     fun addMatchWithJson(
             @RequestBody
-            matchDTO: MatchDTO
-    ): Match {
+            matchDTO: MatchDTO,
+            response: HttpServletResponse
+    ): ResponseEntity<Match> {
         val playerWhite = playerDao!!.queryForId(matchDTO.playerWhiteId)
                 ?: throw IllegalArgumentException("No player with the id '${matchDTO.playerWhiteId}' registered!")
         val playerBlack = playerDao.queryForId(matchDTO.playerBlackId)
@@ -319,7 +430,17 @@ class MatchController {
         match.setPieceSetsByMatchCode()
 
         if (matchDao!!.create(match) != 1) throw SQLException("Can't create match!")
-        return match
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).addMatch(matchDTO.playerWhiteId, matchDTO.playerBlackId, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).matchOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(MatchController::class.java).getMatchById(match.id, true, true, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(match, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -339,14 +460,25 @@ class MatchController {
     )
     fun getDrawsByMatchId(
             @PathVariable
-            id: Int
-    ): DrawList {
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<DrawList> {
         val drawList = mutableListOf<Draw>()
         drawDao!!.queryForEq("match_id", id).forEach {
             it.setValuesByDrawCode()
             drawList.add(it)
         }
-        return DrawList(drawList)
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).getDrawsByMatchId(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).drawsByMatchOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val prevLinks = linkTo(methodOn(MatchController::class.java).getMatchById(id, true, true, response)).withRel("prev")
+        links.add(Pair(prevLinks, "GET"))
+
+        return ResponseEntity(DrawList(drawList), HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -366,10 +498,21 @@ class MatchController {
     )
     fun getPieceSetsByMatchId(
             @PathVariable
-            id: Int
-    ): PieceSetHashMap {
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<PieceSetHashMap> {
         if (!matchDao!!.idExists(id)) throw IllegalArgumentException("No match with the id '$id' registered!")
         val match = matchDao.queryForId(id)
-        return PieceSetHashMap(match.pieceSets)
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(MatchController::class.java).getPieceSetsByMatchId(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(MatchController::class.java).pieceSetsByMatchOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val prevLinks = linkTo(methodOn(MatchController::class.java).getMatchById(id, true, true, response)).withRel("prev")
+        links.add(Pair(prevLinks, "GET"))
+
+        return ResponseEntity(PieceSetHashMap(match.pieceSets), HateoasUtility.createLinkHeader(links), OK)
     }
 }
