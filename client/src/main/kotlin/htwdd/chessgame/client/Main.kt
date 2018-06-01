@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
 }
 
 private fun loadData(): Promise<Client> {
-    return Promise { resolve, reject ->
+    return Promise { resolve, _ ->
         launch {
             val client = Client()
 
