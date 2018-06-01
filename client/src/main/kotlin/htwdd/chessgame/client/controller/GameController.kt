@@ -15,7 +15,6 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.get
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
-import kotlin.browser.window
 
 class GameController(client: Client) : Controller(client) {
     private var gameView = GameView(this)
@@ -39,6 +38,7 @@ class GameController(client: Client) : Controller(client) {
             "disableKingSideCastlingAction" -> disableKingSideCastlingAction(arg)
             "disableQueenSideCastlingAction" -> disableQueenSideCastlingAction(arg)
             "convertPieceAction" -> convertPieceAction(arg)
+            "stopPolling" -> stopPolling()
         }
     }
 
@@ -95,26 +95,24 @@ class GameController(client: Client) : Controller(client) {
                     match.addObserver(gameView)
                     client.changeState(ViewState.GAME, match)
 
-                    if (match.checkmate) {
-                        println("${match.currentColor} checkmate!")
-                        window.alert("${match.currentColor} checkmate!")
-                    }
-
-                    pollingUtility.start(client.config.pollingDelayTime) {
-                        get("${client.config.serverRootUrl}/matches/$matchId/draws") {
-                            if (it.target is XMLHttpRequest) {
-                                val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
-                                if (match.history.size != drawList.draws.size) {
-                                    match.history.forEach { draw ->
-                                        drawList.draws.removeAll { it.id == draw.id }
-                                    }
-                                    drawList.draws.forEach { draw ->
-                                        match.addDraw(draw, true)
+                    if (!match.checkmate) {
+                        pollingUtility.start(client.config.pollingDelayTime) {
+                            get("${client.config.serverRootUrl}/matches/$matchId/draws") {
+                                if (it.target is XMLHttpRequest) {
+                                    val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+                                    if (match.history.size != drawList.draws.size) {
+                                        match.history.forEach { draw ->
+                                            drawList.draws.removeAll { it.id == draw.id }
+                                        }
+                                        drawList.draws.forEach { draw ->
+                                            match.addDraw(draw, true)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
                 }
             }
         }
@@ -226,5 +224,9 @@ class GameController(client: Client) : Controller(client) {
                 }
             }
         }
+    }
+
+    private fun stopPolling() {
+        pollingUtility.stop()
     }
 }

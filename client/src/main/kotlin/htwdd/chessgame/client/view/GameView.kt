@@ -13,6 +13,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import kotlin.browser.document
+import kotlin.browser.window
 import kotlin.dom.clear
 
 class GameView(private val controller: Controller) : View {
@@ -32,6 +33,11 @@ class GameView(private val controller: Controller) : View {
                         main.clear()
                         main.appendChild(GamePartial(arg).getPartial(controller))
                         render()
+
+                        if (arg.checkmate) {
+                            println("${arg.currentColor} checkmate!")
+                            window.alert("${arg.currentColor} checkmate!")
+                        }
                     }
                 }
             }
@@ -40,12 +46,24 @@ class GameView(private val controller: Controller) : View {
                     "updateGameProperties" -> {
                         val properties = main.getElementsByClassName("properties")[0]
                         properties?.replaceWith(GamePropertiesPartial(o).getPartial(controller))
+
+                        if (o.checkmate) {
+                            println("${o.currentColor} checkmate!")
+                            window.alert("${o.currentColor} checkmate!")
+                            controller.actionPerformed("stopPolling")
+                        }
                     }
                     "updateGameBoardAndProperties" -> {
                         val board = main.getElementsByClassName("board")[0]
                         board?.replaceWith(GameBoardPartial(o).getPartial(controller))
                         val properties = main.getElementsByClassName("properties")[0]
                         properties?.replaceWith(GamePropertiesPartial(o).getPartial(controller))
+
+                        if (o.checkmate) {
+                            println("${o.currentColor} checkmate!")
+                            window.alert("${o.currentColor} checkmate!")
+                            controller.actionPerformed("stopPolling")
+                        }
                     }
                 }
             }
