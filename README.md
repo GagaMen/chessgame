@@ -66,6 +66,12 @@ in the .jar or .war file. (see [AI Server](#ai-server))
   config entry to ``dockerfile-chess-server``
 * ``docker-compose down`` (shutdown the containers)
 
+#### Or Server only (without ai server)
+* ``docker build -t chess-server -f dockerfile-chess-server .`` (without static resources)
+* ``docker build -t chess-server -f dockerfile-chess-server-client .`` (with static resources)
+* ``docker run --name chess-server -d -p 8080:8080 chess-server``
+> Don't forgot to configure the ai server root url otherwise it isn't possible to play against the ai player.
+
 ### Server Configuration
 The Server starts on port ``8080`` by default. If you want to change the port override the ``server.port`` config entry 
 in the ``application.yml`` file, which is located under ``src/main/resources``. 
