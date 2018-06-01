@@ -339,6 +339,8 @@ data class Match(
         piece.position.row = draw.endField?.row!!
         piece.position.column = draw.endField?.column!!
 
+        if (draw.conversion != null) piece.type = draw.conversion ?: throw  Exception("Can't convert pawn!")
+
         activePieces[draw.endField?.asPair()!!] = piece
 
         if (draw.throwPiece) {
