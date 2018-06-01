@@ -146,7 +146,7 @@ class SANUtility {
                 val column = startInfo.toCharArray()[0].toInt() % 96
                 possibleStartFields.filter { it.second == column }.toHashSet()
             } else {
-                val row = startInfo.toCharArray()[0].toInt()
+                val row = startInfo.toInt()
                 possibleStartFields.filter { it.first == row }.toHashSet()
             }
 
