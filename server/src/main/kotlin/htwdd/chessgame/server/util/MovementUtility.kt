@@ -24,28 +24,41 @@ abstract class MovementUtility : Movement {
      * @since 1.0.0
      */
     fun getFilteredMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
+        val unfilteredMovementFields = HashSet<Pair<Int, Int>>()
+        getMovementFields(unfilteredMovementFields, row, col, match)
+        movementFields.addAll(unfilteredMovementFields.filter { filterMovementFields(Pair(row, col), it, match) })
+    }
+
+    /**
+     * Filter method for collection of movement fields
+     *
+     * @param position Position of moved piece
+     * @param field Movement field of the given piece
+     * @param match Match reference
+     *
+     * @return True if the field don't produce a check otherwise false
+     */
+    private fun filterMovementFields(position: Pair<Int, Int>, field: Pair<Int, Int>, match: Match): Boolean {
         val currentPieces = match.pieceSets[match.currentColor]?.activePieces
                 ?: throw NullPointerException()
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
                 ?: throw NullPointerException()
         val copyOfCurrentPieces = HashMap(currentPieces)
         val copyOfOpposingPieces = HashMap(opposingPieces)
-        val field = Pair(row, col)
+        val piece = currentPieces[position] ?: throw Exception("Can't find a piece at this position!")
+        var result = true
 
-        getMovementFields(movementFields, row, col, match)
+        currentPieces[field] = piece
+        currentPieces.remove(position)
 
-        movementFields.forEach {
-            val piece = currentPieces[field] ?: return@forEach
+        if (opposingPieces.containsKey(field)) opposingPieces.remove(field)
+        if (CheckUtility.calcThreatedFields(match)) result = false
 
-            currentPieces[it] = piece
-            currentPieces.remove(field)
+        currentPieces.clear()
+        currentPieces.putAll(copyOfCurrentPieces)
+        opposingPieces.clear()
+        opposingPieces.putAll(copyOfOpposingPieces)
 
-            if (opposingPieces.containsKey(it)) opposingPieces.remove(it)
-            if (CheckUtility.calcThreatedFields(match)) movementFields.remove(it)
-
-            currentPieces.clear()
-            currentPieces.putAll(copyOfCurrentPieces)
-            opposingPieces.putAll(copyOfOpposingPieces)
-        }
+        return result
     }
 }
