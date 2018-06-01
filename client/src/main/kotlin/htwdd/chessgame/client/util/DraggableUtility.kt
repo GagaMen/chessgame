@@ -23,6 +23,7 @@ class DraggableUtility {
         private val pawn = PawnMovementUtility()
         private val queen = QueenMovementUtility()
         private val rook = RookMovementUtility()
+        private var sendPostRequestToCreateDraw = true
 
         fun dragStart(event: Event, match: Match) {
             // don't show possible field if on player is checkmate or the ai player has the next turn
@@ -96,24 +97,26 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
-                            Field(oldRow, oldCol),
-                            Field(newRow, newCol),
-                            match,
-                            throwEnPassant,
-                            throwEnPassant,
-                            kingsideCastling,
-                            queensideCastling) ?: return
+                    if (sendPostRequestToCreateDraw) {
+                        val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
+                                Field(oldRow, oldCol),
+                                Field(newRow, newCol),
+                                match,
+                                throwEnPassant,
+                                throwEnPassant,
+                                kingsideCastling,
+                                queensideCastling) ?: return
 
-                    post("${controller.client.config.serverRootUrl}/draws",
-                            Pair("matchId", match.id),
-                            Pair("startRow", oldRow),
-                            Pair("startColumn", oldCol),
-                            Pair("drawCode", drawCode)) {
-                        if (it.target is XMLHttpRequest) {
-                            val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
-                            controller.actionPerformed("increaseHalfMovesAction", match)
-                            controller.actionPerformed("addDrawAction", Pair(match, draw))
+                        post("${controller.client.config.serverRootUrl}/draws",
+                                Pair("matchId", match.id),
+                                Pair("startRow", oldRow),
+                                Pair("startColumn", oldCol),
+                                Pair("drawCode", drawCode)) {
+                            if (it.target is XMLHttpRequest) {
+                                val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                                controller.actionPerformed("increaseHalfMovesAction", match)
+                                controller.actionPerformed("addDrawAction", Pair(match, draw))
+                            }
                         }
                     }
                 }
@@ -137,25 +140,28 @@ class DraggableUtility {
                         else -> controller.actionPerformed("resetEnPassantFieldAction", match)
                     }
 
-                    val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
-                            Field(oldRow, oldCol),
-                            Field(newRow, newCol),
-                            match,
-                            true) ?: return
+                    if (sendPostRequestToCreateDraw) {
+                        val drawCode = SANUtility.calc(PieceType.valueOf(pieceType),
+                                Field(oldRow, oldCol),
+                                Field(newRow, newCol),
+                                match,
+                                true) ?: return
 
-                    post("${controller.client.config.serverRootUrl}/draws",
-                            Pair("matchId", match.id),
-                            Pair("startRow", oldRow),
-                            Pair("startColumn", oldCol),
-                            Pair("drawCode", drawCode)) {
-                        if (it.target is XMLHttpRequest) {
-                            val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
-                            controller.actionPerformed("increaseHalfMovesAction", match)
-                            controller.actionPerformed("addDrawAction", Pair(match, draw))
+                        post("${controller.client.config.serverRootUrl}/draws",
+                                Pair("matchId", match.id),
+                                Pair("startRow", oldRow),
+                                Pair("startColumn", oldCol),
+                                Pair("drawCode", drawCode)) {
+                            if (it.target is XMLHttpRequest) {
+                                val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                                controller.actionPerformed("increaseHalfMovesAction", match)
+                                controller.actionPerformed("addDrawAction", Pair(match, draw))
+                            }
                         }
                     }
                 }
             }
+            sendPostRequestToCreateDraw = true
         }
 
         fun mouseOver(event: Event, match: Match) {
@@ -231,9 +237,16 @@ class DraggableUtility {
 
             if (newRow == 1 || newRow == 8) {
                 val popup = document.getElementsByClassName("board--popup")[0] ?: return false
-                popup.setAttribute("data-row", newRow.toString())
-                popup.setAttribute("data-col", newCol.toString())
+                val throwPiece = match.pieceSets[match.currentColor]?.activePieces?.containsKey(Pair(newRow, newCol).toString())
+                        ?: false
+
+                popup.setAttribute("data-new-row", newRow.toString())
+                popup.setAttribute("data-new-col", newCol.toString())
+                popup.setAttribute("data-old-row", oldRow.toString())
+                popup.setAttribute("data-old-col", oldCol.toString())
+                popup.setAttribute("data-throw-piece", throwPiece.toString())
                 popup.removeClass("hidden")
+                sendPostRequestToCreateDraw = false
                 return false
             }
 

@@ -1,9 +1,11 @@
 package htwdd.chessgame.client.controller
 
 import htwdd.chessgame.client.model.*
+import htwdd.chessgame.client.model.PieceType.PAWN
 import htwdd.chessgame.client.util.PollingUtility
 import htwdd.chessgame.client.util.RequestUtility.Companion.get
 import htwdd.chessgame.client.util.RequestUtility.Companion.post
+import htwdd.chessgame.client.util.SANUtility
 import htwdd.chessgame.client.view.GameView
 import kotlinx.coroutines.experimental.await
 import kotlinx.coroutines.experimental.launch
@@ -191,25 +193,30 @@ class GameController(client: Client) : Controller(client) {
                 val match = arg.first as? Match ?: return
                 val pieceType = arg.second as? PieceType ?: return
                 val popup = document.getElementsByClassName("board--popup")[0] as? HTMLDivElement ?: return
-                val row = popup.attributes["data-row"]?.nodeValue?.toIntOrNull() ?: return
-                val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull() ?: return
+                val newRow = popup.attributes["data-new-row"]?.nodeValue?.toIntOrNull() ?: return
+                val newCol = popup.attributes["data-new-col"]?.nodeValue?.toIntOrNull() ?: return
+                val oldRow = popup.attributes["data-old-row"]?.nodeValue?.toIntOrNull() ?: return
+                val oldCol = popup.attributes["data-old-col"]?.nodeValue?.toIntOrNull() ?: return
+                val throwPiece = popup.attributes["data-throw-piece"]?.nodeValue?.toBoolean() ?: return
 
-                val pieceColor = match.currentColor.getOpposite()
+                val drawCode = SANUtility.calc(PAWN,
+                        Field(oldRow, oldCol),
+                        Field(newRow, newCol),
+                        match,
+                        throwPiece,
+                        conversion = pieceType) ?: return
 
-                val pieceSet = match.pieceSets[pieceColor]?.activePieces ?: return
-
-                if (!pieceSet.containsKey(Pair(row, col).toString())) {
-                    // don't contains key
-                    return
+                post("${client.config.serverRootUrl}/draws",
+                        Pair("matchId", match.id),
+                        Pair("startRow", oldRow),
+                        Pair("startColumn", oldCol),
+                        Pair("drawCode", drawCode)) {
+                    if (it.target is XMLHttpRequest) {
+                        val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
+                        increaseHalfMovesAction(match)
+                        addDrawAction(Pair(match, draw))
+                    }
                 }
-
-                pieceSet[Pair(row, col).toString()]?.type = pieceType
-
-                val draw = match.history[match.history.lastIndex]
-                draw.drawCode = "${draw.drawCode}${pieceType.getDrawCode()}"
-
-                match.history.removeAt(match.history.lastIndex)
-                match.history.add(draw)
             }
         }
     }

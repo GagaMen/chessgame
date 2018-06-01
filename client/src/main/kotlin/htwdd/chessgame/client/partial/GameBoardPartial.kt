@@ -191,12 +191,12 @@ class GameBoardPartial(val match: Match) : Partial {
 
     private fun convertPiece(pieceType: PieceType) {
         val popup = document.getElementsByClassName("board--popup")[0]
-        val row = popup!!.attributes["data-row"]?.nodeValue?.toIntOrNull()
-        val col = popup.attributes["data-col"]?.nodeValue?.toIntOrNull()
+        val row = popup!!.attributes["data-new-row"]?.nodeValue?.toIntOrNull()
+        val col = popup.attributes["data-new-col"]?.nodeValue?.toIntOrNull()
 
         if (row != null && col != null) {
             val image = document.getElementById("board--field-$row-$col")?.firstElementChild
-            val pieceColor = match.currentColor.getOpposite()
+            val pieceColor = match.currentColor
             when (pieceType) {
                 PieceType.QUEEN -> {
                     image!!.attributes["data-type"]?.nodeValue = PieceType.QUEEN.toString()

@@ -13,7 +13,8 @@ class SANUtility {
                  throwPiece: Boolean = false,
                  throwEnPassant: Boolean = false,
                  kingsideCastling: Boolean = false,
-                 queensideCastling: Boolean = false): String? {
+                 queensideCastling: Boolean = false,
+                 conversion: PieceType? = null): String? {
             val sb = StringBuilder()
 
             if (kingsideCastling) sb.append("O-O")
@@ -53,6 +54,8 @@ class SANUtility {
                 if (throwPiece) sb.append("x")
 
                 sb.append("${end.column.plus(96).toChar()}${end.row}")
+
+                if (conversion != null) sb.append(conversion.getDrawCode())
 
                 if (throwEnPassant) sb.append("e.p.")
 
