@@ -5,6 +5,7 @@ import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.Observable
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import kotlin.browser.window
 
 @Serializable
 data class Match(var id: Int = 0,
@@ -82,6 +83,7 @@ data class Match(var id: Int = 0,
             if (CheckUtility.checkmate(this)) {
                 checkmate = true
                 println("$currentColor checkmate!")
+                window.alert("$currentColor checkmate!")
             } else {
                 check[currentColor] = true
             }

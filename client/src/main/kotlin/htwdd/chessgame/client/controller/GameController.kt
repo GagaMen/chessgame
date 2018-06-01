@@ -15,6 +15,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.get
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
+import kotlin.browser.window
 
 class GameController(client: Client) : Controller(client) {
     private var gameView = GameView(this)
@@ -93,6 +94,12 @@ class GameController(client: Client) : Controller(client) {
 
                     match.addObserver(gameView)
                     client.changeState(ViewState.GAME, match)
+
+                    if (match.checkmate) {
+                        println("${match.currentColor} checkmate!")
+                        window.alert("${match.currentColor} checkmate!")
+                    }
+
                     pollingUtility.start(client.config.pollingDelayTime) {
                         get("${client.config.serverRootUrl}/matches/$matchId/draws") {
                             if (it.target is XMLHttpRequest) {
