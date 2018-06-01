@@ -59,8 +59,18 @@ class PlayerController {
      * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
-    fun playerOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
+    fun playerOptions(response: HttpServletResponse): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,POST,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -80,8 +90,22 @@ class PlayerController {
      * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
-    fun playerByIdOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,PATCH,DELETE,OPTIONS")
+    fun playerByIdOptions(
+            @PathVariable
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(PlayerController::class.java).playerByIdOptions(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(id, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,PATCH,DELETE,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -101,9 +125,16 @@ class PlayerController {
         val links = HashSet<Pair<Link, String>>()
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response)).withSelfRel()
-        links.add(Pair(selfLink, "HEAD,GET,POST,OPTIONS"))
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
         val newLink = linkTo(methodOn(PlayerController::class.java).addPlayer("valueOfName", "valueOfPassword", response)).withRel("new")
         links.add(Pair(newLink, "POST"))
+
+        playerList.forEach { (playerId, _) ->
+            val playerLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(playerId, response)).withRel("next")
+            links.add(Pair(playerLink, "GET"))
+        }
 
         return ResponseEntity(PlayerHashMap(playerList), HateoasUtility.createLinkHeader(links), OK)
     }
@@ -136,6 +167,8 @@ class PlayerController {
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(id, response)).withSelfRel()
         links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerByIdOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
         val patchLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, "valueOfPassword", response)).withRel("update")
         links.add(Pair(patchLink, "PATCH"))
         val deleteLink = linkTo(methodOn(PlayerController::class.java).deletePlayerById(id, response)).withRel("delete")
@@ -212,6 +245,8 @@ class PlayerController {
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).addPlayer(name, password, response)).withSelfRel()
         links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
         val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
         links.add(Pair(nextLink, "GET"))
 
@@ -251,6 +286,8 @@ class PlayerController {
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).addPlayer(playerDTO.name, playerDTO.password, response)).withSelfRel()
         links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
         val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
         links.add(Pair(nextLink, "GET"))
 
@@ -291,7 +328,9 @@ class PlayerController {
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, password, response)).withSelfRel()
         links.add(Pair(selfLink, "PATCH"))
-        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerByIdOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(id, response)).withRel("next")
         links.add(Pair(nextLink, "GET"))
 
         return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
@@ -333,7 +372,9 @@ class PlayerController {
 
         val selfLink = linkTo(methodOn(PlayerController::class.java).updatePlayer(id, passwordDTO.password, response)).withSelfRel()
         links.add(Pair(selfLink, "PATCH"))
-        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(player.id, response)).withRel("next")
+        val optionsLink = linkTo(methodOn(PlayerController::class.java).playerByIdOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(id, response)).withRel("next")
         links.add(Pair(nextLink, "GET"))
 
         return ResponseEntity(HateoasUtility.createLinkHeader(links), OK)
