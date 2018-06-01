@@ -9,12 +9,18 @@ import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.spring.web.config.AppProperties
 import htwdd.chessgame.server.util.DatabaseUtility
 import htwdd.chessgame.server.util.FENUtility.Companion.prepareFENForURLParam
+import htwdd.chessgame.server.util.HateoasUtility
 import htwdd.chessgame.server.util.SANUtility
 import htwdd.chessgame.server.util.SANUtility.Companion.calcSANFromAIMove
 import kotlinx.coroutines.experimental.launch
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.hateoas.Link
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType.*
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.OPTIONS
 import java.io.BufferedReader
@@ -58,8 +64,18 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
      * @since 1.0.0
      */
     @RequestMapping(method = [OPTIONS])
-    fun drawOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,POST,OPTIONS")
+    fun drawOptions(response: HttpServletResponse): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).drawOptions(response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(DrawController::class.java).getDrawList(response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,POST,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -77,8 +93,51 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
      * @since 1.0.0
      */
     @RequestMapping("/{id}", method = [OPTIONS])
-    fun drawByIdOptions(response: HttpServletResponse) {
-        response.setHeader("Allow", "HEAD,GET,OPTIONS")
+    fun drawByIdOptions(
+            @PathVariable
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).drawByIdOptions(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(DrawController::class.java).getDrawById(id, response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,GET,OPTIONS")
+
+        return ResponseEntity(headers, OK)
+    }
+
+    /**
+     * Handles the OPTIONS request for the URI /draws/ai
+     *
+     * Possible request methodes:
+     * - HEAD
+     * - GET
+     * - OPTIONS
+     *
+     * @author Felix Dimmel
+     *
+     * @param response Object that contains the response for http request
+     *
+     * @since 1.0.0
+     */
+    @RequestMapping("/ai", method = [OPTIONS])
+    fun drawAiOptions(response: HttpServletResponse): ResponseEntity<Unit> {
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).drawAiOptions(response)).withSelfRel()
+        links.add(Pair(selfLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(DrawController::class.java).getDrawList(response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        val headers = HateoasUtility.createLinkHeader(links)
+        headers.set("Allow", "HEAD,POST,OPTIONS")
+
+        return ResponseEntity(headers, OK)
     }
 
     /**
@@ -91,13 +150,32 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
      * @since 1.0.0
      */
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
-    fun getDrawList(): DrawList {
+    fun getDrawList(
+            response: HttpServletResponse
+    ): ResponseEntity<DrawList> {
         val drawList: MutableList<Draw> = mutableListOf()
         drawDao!!.queryForAll().forEach {
             it.setValuesByDrawCode()
             drawList.add(it)
         }
-        return DrawList(drawList)
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).getDrawList(response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val newLink = linkTo(methodOn(DrawController::class.java).addDraw(0, "valueOfDrawCode", 0, 0, response)).withRel("new")
+        links.add(Pair(newLink, "POST"))
+        val newLinkAi = linkTo(methodOn(DrawController::class.java).addDrawByAi(0, response)).withRel("new")
+        links.add(Pair(newLinkAi, "POST"))
+
+        drawList.forEach { draw ->
+            val drawLink = linkTo(methodOn(DrawController::class.java).getDrawById(draw.id, response)).withRel("next")
+            links.add(Pair(drawLink, "GET"))
+        }
+
+        return ResponseEntity(DrawList(drawList), HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -117,9 +195,21 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
     )
     fun getDrawById(
             @PathVariable
-            id: Int
-    ): Draw {
-        return drawDao!!.queryForId(id) ?: throw IllegalArgumentException("No draw with id '$id' registered!")
+            id: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Draw> {
+        val draw = drawDao!!.queryForId(id) ?: throw IllegalArgumentException("No draw with id '$id' registered!")
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).getDrawById(id, response)).withSelfRel()
+        links.add(Pair(selfLink, "GET"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawByIdOptions(id, response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val prevLink = linkTo(methodOn(DrawController::class.java).getDrawList(response)).withRel("prev")
+        links.add(Pair(prevLink, "GET"))
+
+        return ResponseEntity(draw, HateoasUtility.createLinkHeader(links), OK)
     }
 
     /**
@@ -150,8 +240,9 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
             @RequestParam(required = false)
             startColumn: Int? = null,
             @RequestParam(required = false)
-            startRow: Int? = null
-    ): Draw {
+            startRow: Int? = null,
+            response: HttpServletResponse
+    ): ResponseEntity<Draw> {
         val match = matchDao!!.queryForId(matchId)
                 ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
 
@@ -185,7 +276,16 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
             }
         }
 
-        return draw
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).addDraw(matchId, drawCode, startColumn, startRow, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(DrawController::class.java).getDrawById(draw.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(draw, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -210,8 +310,9 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
     @ResponseStatus(CREATED)
     fun addDrawWithJson(
             @RequestBody
-            drawDTO: DrawDTO
-    ): Draw {
+            drawDTO: DrawDTO,
+            response: HttpServletResponse
+    ): ResponseEntity<Draw> {
         val match = matchDao!!.queryForId(drawDTO.matchId)
                 ?: throw IllegalArgumentException("No match with the id '${drawDTO.matchId}' registered!")
 
@@ -246,7 +347,16 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
             }
         }
 
-        return draw
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).addDraw(drawDTO.matchId, drawDTO.drawCode, drawDTO.startColumn, drawDTO.startRow, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(DrawController::class.java).getDrawById(draw.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(draw, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -269,14 +379,26 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
     @ResponseStatus(CREATED)
     fun addDrawByAi(
             @RequestParam
-            matchId: Int
-    ): Draw {
+            matchId: Int,
+            response: HttpServletResponse
+    ): ResponseEntity<Draw> {
         val match = matchDao!!.queryForId(matchId)
                 ?: throw IllegalArgumentException("No match with the id '$matchId' registered!")
 
         if (match.players[match.currentColor]?.id != 1) throw RuntimeException("It's not the turn of the ai player!")
 
-        return addDrawByAi(match)
+        val draw = addDrawByAi(match)
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).addDrawByAi(matchId, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawAiOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(DrawController::class.java).getDrawById(draw.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(draw, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
@@ -302,14 +424,26 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
     @ResponseStatus(CREATED)
     fun addDrawByAiWithJson(
             @RequestBody
-            matchIdDTO: MatchIdDTO
-    ): Draw {
+            matchIdDTO: MatchIdDTO,
+            response: HttpServletResponse
+    ): ResponseEntity<Draw> {
         val match = matchDao!!.queryForId(matchIdDTO.matchId)
                 ?: throw IllegalArgumentException("No match with the id '${matchIdDTO.matchId}' registered!")
 
         if (match.players[match.currentColor]?.id != 1) throw RuntimeException("It's not the turn of the ai player!")
 
-        return addDrawByAi(match)
+        val draw = addDrawByAi(match)
+
+        val links = HashSet<Pair<Link, String>>()
+
+        val selfLink = linkTo(methodOn(DrawController::class.java).addDrawByAi(matchIdDTO.matchId, response)).withSelfRel()
+        links.add(Pair(selfLink, "POST"))
+        val optionsLink = linkTo(methodOn(DrawController::class.java).drawAiOptions(response)).withRel("options")
+        links.add(Pair(optionsLink, "OPTIONS"))
+        val nextLink = linkTo(methodOn(DrawController::class.java).getDrawById(draw.id, response)).withRel("next")
+        links.add(Pair(nextLink, "GET"))
+
+        return ResponseEntity(draw, HateoasUtility.createLinkHeader(links), CREATED)
     }
 
     /**
