@@ -233,7 +233,7 @@ data class Match(
             if (fieldDao!!.update(enPassantField) != 1) throw SQLException("Can't update en passant field!")
         }
 
-        check[currentColor] = draw.check
+        check[currentColor.getOpposite()] = draw.check
         checkmate = draw.checkmate
 
         switchColor()
