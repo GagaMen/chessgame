@@ -1,8 +1,11 @@
 package htwdd.chessgame.client.model
 
+import htwdd.chessgame.client.model.PieceColor.BLACK
+import htwdd.chessgame.client.model.PieceColor.WHITE
 import htwdd.chessgame.client.util.CheckUtility
 import htwdd.chessgame.client.util.FENUtility
 import htwdd.chessgame.client.util.Observable
+import htwdd.chessgame.client.util.copy
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
@@ -10,21 +13,54 @@ import kotlinx.serialization.Serializable
 data class Match(var id: Int = 0,
                  var players: HashMap<PieceColor, Player?> = HashMap(),
                  var pieceSets: HashMap<PieceColor, PieceSet> = HashMap(),
-                 var currentColor: PieceColor = PieceColor.WHITE,
+                 var currentColor: PieceColor = WHITE,
                  @Optional var history: MutableList<Draw> = mutableListOf(),
-                 var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to true, PieceColor.BLACK to true),
-                 var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to true, PieceColor.BLACK to true),
+                 var kingsideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
+                 var queensideCastling: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to true, BLACK to true),
                  var enPassantField: Field? = null,
                  var halfMoves: Int = 0,
-                 var check: HashMap<PieceColor, Boolean> = hashMapOf(PieceColor.WHITE to false, PieceColor.BLACK to false),
+                 var check: HashMap<PieceColor, Boolean> = hashMapOf(WHITE to false, BLACK to false),
                  var checkmate: Boolean = false,
                  var matchCode: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") : Observable() {
 
     init {
         initObservable()
-        pieceSets[PieceColor.WHITE] = PieceSet()
-        pieceSets[PieceColor.BLACK] = PieceSet()
+        pieceSets[WHITE] = PieceSet()
+        pieceSets[BLACK] = PieceSet()
     }
+
+    fun deepCopy(
+            id: Int = this.id,
+            players: HashMap<PieceColor, Player?> = this.players.copy()!!,
+            pieceSets: HashMap<PieceColor, PieceSet> = this.pieceSets.copy()!!,
+            currentColor: PieceColor = this.currentColor,
+            history: MutableList<Draw> = this.history.toMutableList(),
+            kingsideCastling: HashMap<PieceColor, Boolean> = HashMap(this.kingsideCastling),
+            queensideCastling: HashMap<PieceColor, Boolean> = HashMap(this.queensideCastling),
+            enPassantField: Field? = this.enPassantField,
+            halfMoves: Int = this.halfMoves,
+            check: HashMap<PieceColor, Boolean> = HashMap(this.check),
+            checkmate: Boolean = this.checkmate,
+            matchCode: String = this.matchCode
+    ): Match {
+        val match = Match(
+                id = id,
+                players = players,
+//                pieceSets = pieceSets,
+                currentColor = currentColor,
+                history = history,
+                kingsideCastling = kingsideCastling,
+                queensideCastling = queensideCastling,
+                enPassantField = enPassantField,
+                halfMoves = halfMoves,
+                check = check,
+                checkmate = checkmate,
+                matchCode = matchCode
+        )
+        match.pieceSets.putAll(pieceSets)
+        return match
+    }
+
 
     fun addDraw(draw: Draw, updateGameBoard: Boolean = false) {
         history.add(draw)
@@ -58,8 +94,8 @@ data class Match(var id: Int = 0,
                 enPassantField?.row == endPosition.first &&
                 enPassantField?.column == endPosition.second) {
             enPassantPosition = when (currentColor) {
-                PieceColor.WHITE -> Pair(5, endPosition.second)
-                PieceColor.BLACK -> Pair(4, endPosition.second)
+                WHITE -> Pair(5, endPosition.second)
+                BLACK -> Pair(4, endPosition.second)
             }
         }
 
