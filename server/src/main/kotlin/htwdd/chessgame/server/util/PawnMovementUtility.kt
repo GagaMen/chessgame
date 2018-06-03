@@ -25,14 +25,23 @@ class PawnMovementUtility : MovementUtility() {
      * @since 1.0.0
      */
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces
+                ?: throw NullPointerException()
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces
                 ?: throw NullPointerException()
 
         when (match.currentColor) {
             WHITE -> {
-                if (!opposingPieces.containsKey(Pair(row + 1, col))) {
+                if (
+                        !currentPieces.containsKey(Pair(row + 1, col)) &&
+                        !opposingPieces.containsKey(Pair(row + 1, col))
+                ) {
                     movementFields.add(Pair(row + 1, col))
-                    if (row == 2 && !opposingPieces.containsKey(Pair(row + 2, col))) {
+                    if (
+                            row == 2 &&
+                            !currentPieces.containsKey(Pair(row + 2, col)) &&
+                            !opposingPieces.containsKey(Pair(row + 2, col))
+                    ) {
                         movementFields.add(Pair(row + 2, col))
                     }
                 }
@@ -52,9 +61,16 @@ class PawnMovementUtility : MovementUtility() {
                 }
             }
             BLACK -> {
-                if (!opposingPieces.containsKey(Pair(row - 1, col))) {
+                if (
+                        !currentPieces.containsKey(Pair(row - 1, col)) &&
+                        !opposingPieces.containsKey(Pair(row - 1, col))
+                ) {
                     movementFields.add(Pair(row - 1, col))
-                    if (row == 7 && !opposingPieces.containsKey(Pair(row - 2, col))) {
+                    if (
+                            row == 7 &&
+                            !currentPieces.containsKey(Pair(row - 2, col)) &&
+                            !opposingPieces.containsKey(Pair(row - 2, col))
+                    ) {
                         movementFields.add(Pair(row - 2, col))
                     }
                 }

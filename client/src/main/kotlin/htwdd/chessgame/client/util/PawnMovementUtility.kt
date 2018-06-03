@@ -5,13 +5,21 @@ import htwdd.chessgame.client.model.PieceColor
 
 class PawnMovementUtility : MovementUtility() {
     override fun getMovementFields(movementFields: HashSet<Pair<Int, Int>>, row: Int, col: Int, match: Match) {
+        val currentPieces = match.pieceSets[match.currentColor]?.activePieces ?: return
         val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces ?: return
 
         when (match.currentColor) {
             PieceColor.WHITE -> {
-                if (!opposingPieces.containsKey(Pair(row + 1, col).toString())) {
+                if (
+                        !currentPieces.containsKey(Pair(row + 1, col).toString()) &&
+                        !opposingPieces.containsKey(Pair(row + 1, col).toString())
+                ) {
                     movementFields.add(Pair(row + 1, col))
-                    if (row == 2 && !opposingPieces.containsKey(Pair(row + 2, col).toString())) {
+                    if (
+                            row == 2 &&
+                            !currentPieces.containsKey(Pair(row + 2, col).toString()) &&
+                            !opposingPieces.containsKey(Pair(row + 2, col).toString())
+                    ) {
                         movementFields.add(Pair(row + 2, col))
                     }
                 }
@@ -31,9 +39,16 @@ class PawnMovementUtility : MovementUtility() {
                 }
             }
             PieceColor.BLACK -> {
-                if (!opposingPieces.containsKey(Pair(row - 1, col).toString())) {
+                if (
+                        !currentPieces.containsKey(Pair(row - 1, col).toString()) &&
+                        !opposingPieces.containsKey(Pair(row - 1, col).toString())
+                ) {
                     movementFields.add(Pair(row - 1, col))
-                    if (row == 7 && !opposingPieces.containsKey(Pair(row - 2, col).toString())) {
+                    if (
+                            row == 7 &&
+                            !currentPieces.containsKey(Pair(row - 2, col).toString()) &&
+                            !opposingPieces.containsKey(Pair(row - 2, col).toString())
+                    ) {
                         movementFields.add(Pair(row - 2, col))
                     }
                 }
