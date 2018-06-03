@@ -109,6 +109,9 @@ class RequestUtility {
                 paramsAsJSONString += "$key=$value"
             }
 
+            // %2B is the '+' character. If using the '+' character it will parse into a space character
+            paramsAsJSONString = paramsAsJSONString.replace("+", "%2B")
+
             return paramsAsJSONString
         }
     }
