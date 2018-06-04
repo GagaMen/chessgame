@@ -104,9 +104,9 @@ Das letzte Grundprinzip besagt das es keinen Sitzungsstatus, welcher auf dem Ser
 		gleichsetzen.}
 	\item \enquote{Mit »State« ist der Zustand der Ressource gemeint, deren Zustandsübergänge durch die »Engine« definiert werden.}
 \end{itemize}
-Grundgedanke hinter diesen Konzept ist die Selbstbeschreibung einer \gls{API}. Das Ziel soll dabei sein, dass Clients nicht genau über die \gls{API} Bescheid wissen müssen, sondern die Ressource dem Client zeigt wie er durch die \gls{API} navigieren kann. Als Resultat des ganzen benötigt der Client nur das Wissen über die \gls{URL} des Einstiegs, alles weitere bekommt er vom Server in Form von Links mitgeteilt. \\
+Grundgedanke hinter diesen Konzept ist die Selbstbeschreibung einer \gls{API}. Das Ziel soll dabei sein, dass Clients nicht genau über die \gls{API} Bescheid wissen müssen, sondern der Server dem Client zeigt wie er durch die \gls{API} navigieren kann. Als Resultat des ganzen benötigt der Client nur das Wissen über die \gls{URL} des Einstiegs, alles weitere bekommt er vom Server in Form von Links mitgeteilt. \\
 \\
-Durch das Konzept HATEOAS wird ein dynamischer Workflow erzeugt, wodurch die Ressource volle Kontrolle über die \gls{API} bekommt. Damit ist es beispielsweise möglich anhand von Clients unterschiedliche Links bzw. Navigationspunkte auszuliefern oder Links auszutauschen ohne das der Client davon etwas bemerkt. Um diese Vorteile zu nutzen ist es natürlich notwendig die bereitgestellten Links zu verwenden.
+Durch das Konzept HATEOAS wird ein dynamischer Workflow erzeugt, wodurch der Server die volle Kontrolle über die \gls{API} behält. Damit ist es beispielsweise möglich anhand von Clients unterschiedliche Links bzw. Navigationspunkte auszuliefern oder Links auszutauschen ohne das der Client davon etwas bemerkt. Um diese Vorteile zu nutzen ist es natürlich notwendig die bereitgestellten Links zu verwenden.
 
 \section{Das Build-Tool Gradle}
 Gradle ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie Ant und Maven und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von einigen großen und bekannten Projekten, wie zum Beispiel Android oder dem Spring Framework.\\
