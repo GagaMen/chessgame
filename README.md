@@ -88,26 +88,27 @@ entry have to be ``8000:8080``.
 ### Entry Points
 > ***``{id}`` is a placeholder for a number!***
 
-|URI                     | Methode | Usage 
-|------------------------|---------|--------------------------------------------------------------------------------|
-|/                       | GET     | Get static resources (client module). This only works if you run the .war file.|
-|/players                | GET     | Get a list of all registered players                                           |
-|/players                | POST    | Create a player                                                                |
-|/players/{id}           | GET     | Get a single player                                                            |
-|/players/{id}           | DELETE  | Delete a single player                                                         |
-|/players/{id}           | PATCH   | Update a single player                                                         |
-|/matches                | GET     | Get a list of all registered matches                                           |
-|/matches                | POST    | Create a match                                                                 |
-|/matches/{id}           | GET     | Get a single match                                                             |
-|/matches/{id}           | DELETE  | Delete a single match                                                          |
-|/matches/{id}/draws     | GET     | Get a list of draws from a match                                               |
-|/matches/{id}/pieceSets | GET     | Get the pieceSets from a match                                                 |
-|/draws                  | GET     | Get a list of all registered draws                                             |
-|/draws                  | POST    | Create a draw                                                                  |
-|/draws/ai               | POST    | Create a draw from ai server                                                   |
-|/draws/{id}             | GET     | Get a single draw                                                              |
+|URI                         | Methode | Usage 
+|----------------------------|---------|--------------------------------------------------------------------------------|
+|/                           | GET     | Get static resources (client module). This only works if you run the .war file.|
+|/api                        | GET     | Root entry point of the RESTApi                                                |
+|/api/players                | GET     | Get a list of all registered players                                           |
+|/api/players                | POST    | Create a player                                                                |
+|/api/players/{id}           | GET     | Get a single player                                                            |
+|/api/players/{id}           | DELETE  | Delete a single player                                                         |
+|/api/players/{id}           | PATCH   | Update a single player                                                         |
+|/api/matches                | GET     | Get a list of all registered matches                                           |
+|/api/matches                | POST    | Create a match                                                                 |
+|/api/matches/{id}           | GET     | Get a single match                                                             |
+|/api/matches/{id}           | DELETE  | Delete a single match                                                          |
+|/api/matches/{id}/draws     | GET     | Get a list of draws from a match                                               |
+|/api/matches/{id}/pieceSets | GET     | Get the pieceSets from a match                                                 |
+|/api/draws                  | GET     | Get a list of all registered draws                                             |
+|/api/draws                  | POST    | Create a draw                                                                  |
+|/api/draws/ai               | POST    | Create a draw from ai server                                                   |
+|/api/draws/{id}             | GET     | Get a single draw                                                              |
 
-#### POST */players*
+#### POST */api/players*
 Parameters:
 * name: String
 * password: String
@@ -118,7 +119,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "name": "Test", "password": "123456" }``
 
-#### PATCH */players/{id}*
+#### PATCH */api/players/{id}*
 Parameters:
 * password: String
 
@@ -128,7 +129,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "password": "123456" }``
 
-#### GET */matches* and */matches/{id}*
+#### GET */api/matches* and */api/matches/{id}*
 Parameters:
 * includePieceSets (optional: default value is true)
     > If true match or matches contains all information about pieceSets
@@ -142,7 +143,7 @@ Send parameters via URL:
 * ``http://localhost:8080/matches/555555?includeHistory=false``
 * ``http://localhost:8080/matches?includePieceSets=false&includeHistory=false``
 
-#### POST */matches*
+#### POST */api/matches*
 Parameters:
 * playerWhiteId: Int
 * playerBlackId: Int
@@ -153,7 +154,7 @@ Send parameters via ``application/x-www-form-urlencoded``:
 Send parameters via ``application/json``:
 * ``{ "playerWhiteId": 1, "playerBlackId": 2 }``
 
-#### POST */draws*
+#### POST */api/draws*
 Parameters:
 * matchId: Int
 * drawCode: String (SAN -> <https://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29>)
@@ -174,7 +175,7 @@ Send parameters via ``application/json``:
 |g      | 7     |
 |h      | 8     |
 
-#### POST */draws/ai*
+#### POST */api/draws/ai*
 Parameters:
 * matchId Int
 

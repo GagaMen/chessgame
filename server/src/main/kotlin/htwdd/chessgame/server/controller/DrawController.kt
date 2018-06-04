@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/draws")
+@RequestMapping("/api/draws")
 class DrawController @Autowired constructor(private var appProperties: AppProperties) {
     private val drawDao = DatabaseUtility.drawDao
     private val matchDao = DatabaseUtility.matchDao

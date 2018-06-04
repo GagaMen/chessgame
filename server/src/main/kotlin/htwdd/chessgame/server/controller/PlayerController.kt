@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/players")
 class PlayerController {
     private val playerDao = DatabaseUtility.playerDao
     private val matchDao = DatabaseUtility.matchDao
