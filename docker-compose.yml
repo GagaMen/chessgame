@@ -14,6 +14,10 @@ services:
 #      dockerfile: dockerfile-chess-server
     depends_on:
       - chess-ai
+    volumes:
+      - chess_data:/usr/src/chessgame/server/
     ports:
       - "8080:8080"
     restart: always
+volumes:
+  chess_data:

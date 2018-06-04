@@ -3,6 +3,7 @@ MAINTAINER Felix Dimmel
 
 WORKDIR /usr/src/chessgame/server
 
-COPY /server/build/libs/ .
+RUN touch chessgame.db
+COPY /server/build/libs/chessgame-server-1.0.0.jar .
 
 CMD ["java","-jar","chessgame-server-1.0.0.jar"]

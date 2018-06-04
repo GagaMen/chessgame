@@ -61,10 +61,15 @@ Build Server:
 in the .jar or .war file. (see [AI Server](#ai-server)) 
 #### with Docker
 * ``docker-compose build`` (only the first time and after updates necessary)
+  * If new updates only affected the chess server you can also rebuild with the following command: 
+  ``docker-compose build chess-server`` for more performance.
 * ``docker-compose up -d`` (use your docker ip with port ``8080`` by default)
   * If you want to start the server without the client you have to change the ``service.chess-server.build.dockerfile``
   config entry to ``dockerfile-chess-server``
 * ``docker-compose down`` (shutdown the containers)
+* ``docker-compose down -v`` (shutdown the containers and removing volumes)
+> Note: The database will be persist by default over multiple starts of the server using docker. If you use 
+``docker-compose down -v`` the database will be reseted.
 
 #### Or Server only (without ai server)
 * ``docker build -t chess-server -f dockerfile-chess-server .`` (without static resources)
