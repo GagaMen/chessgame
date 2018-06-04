@@ -64,7 +64,7 @@ class GameController(client: Client) : Controller(client) {
                 val match = client.matches[matchId]
 
                 launch {
-                    get("${client.config.serverRootUrl}/matches/$matchId/pieceSets") {
+                    get("${client.config.serverRootUrl}matches/$matchId/pieceSets") {
                         if (it.target is XMLHttpRequest) {
                             val pieceSetHashMap = JSON.parse<PieceSetHashMap>((it.target as XMLHttpRequest).responseText)
                             match?.pieceSets = pieceSetHashMap.pieceSets
@@ -76,7 +76,7 @@ class GameController(client: Client) : Controller(client) {
                             match!!.matchCode == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" &&
                             match.players[match.currentColor]?.id == 1
                     ) {
-                        post("${client.config.serverRootUrl}/draws/ai", Pair("matchId", match.id)) {
+                        post("${client.config.serverRootUrl}draws/ai", Pair("matchId", match.id)) {
                             if (it.target is XMLHttpRequest) {
                                 val draw = JSON.parse<Draw>((it.target as XMLHttpRequest).responseText)
                                 increaseHalfMovesAction(match)
@@ -85,7 +85,7 @@ class GameController(client: Client) : Controller(client) {
                         }.await()
                     }
 
-                    get("${client.config.serverRootUrl}/matches/$matchId/draws") {
+                    get("${client.config.serverRootUrl}matches/$matchId/draws") {
                         if (it.target is XMLHttpRequest) {
                             val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
                             match.history = drawList.draws
@@ -97,7 +97,7 @@ class GameController(client: Client) : Controller(client) {
 
                     if (!match.checkmate) {
                         pollingUtility.start(client.config.pollingDelayTime) {
-                            get("${client.config.serverRootUrl}/matches/$matchId/draws") {
+                            get("${client.config.serverRootUrl}matches/$matchId/draws") {
                                 if (it.target is XMLHttpRequest) {
                                     val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
                                     if (match.history.size != drawList.draws.size) {
@@ -211,7 +211,7 @@ class GameController(client: Client) : Controller(client) {
                         throwPiece,
                         conversion = pieceType) ?: return
 
-                post("${client.config.serverRootUrl}/draws",
+                post("${client.config.serverRootUrl}draws",
                         Pair("matchId", match.id),
                         Pair("startRow", oldRow),
                         Pair("startColumn", oldCol),

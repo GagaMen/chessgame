@@ -37,14 +37,14 @@ private fun loadData(): Promise<Client> {
                 }
             }.await()
 
-            get("${client.config.serverRootUrl}/players") {
+            get("${client.config.serverRootUrl}players") {
                 if (it.target is XMLHttpRequest) {
                     val playerHashMap = JSON.parse<PlayerHashMap>((it.target as XMLHttpRequest).responseText)
                     playerHashMap.player.forEach { client.addPlayer(it.value) }
                 }
             }.await()
 
-            get("${client.config.serverRootUrl}/matches", Pair("includePieceSets", false), Pair("includeHistory", false)) {
+            get("${client.config.serverRootUrl}matches", Pair("includePieceSets", false), Pair("includeHistory", false)) {
                 if (it.target is XMLHttpRequest) {
                     val matchHashMap = JSON.parse<MatchHashMap>((it.target as XMLHttpRequest).responseText)
                     matchHashMap.matches.forEach { client.addMatch(it.value) }

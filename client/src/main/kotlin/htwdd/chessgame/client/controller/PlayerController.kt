@@ -54,7 +54,7 @@ class PlayerController(client: Client) : Controller(client) {
                 if (name.type != "text" || password.type != "password") return
                 if (name.value == "" || password.value == "") return
 
-                post("${client.config.serverRootUrl}/players", Pair("name", name.value), Pair("password", password.value)) {
+                post("${client.config.serverRootUrl}players", Pair("name", name.value), Pair("password", password.value)) {
                     if (it.target is XMLHttpRequest) {
                         val player = JSON.parse<Player>((it.target as XMLHttpRequest).responseText)
                         client.addPlayer(player)
@@ -88,7 +88,7 @@ class PlayerController(client: Client) : Controller(client) {
 
                 if (newPassword == "") return
 
-                patch("${client.config.serverRootUrl}/players/$playerId", Pair("password", newPassword)) {
+                patch("${client.config.serverRootUrl}players/$playerId", Pair("password", newPassword)) {
                     if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
                         client.updatePlayer(playerId, newPassword)
                     }
@@ -102,7 +102,7 @@ class PlayerController(client: Client) : Controller(client) {
             is BUTTON -> {
                 val playerId = arg.attributes["data-id"]?.toIntOrNull() ?: return
 
-                delete("${client.config.serverRootUrl}/players/$playerId") {
+                delete("${client.config.serverRootUrl}players/$playerId") {
                     if (it.target is XMLHttpRequest && (it.target as XMLHttpRequest).status == 200.toShort()) {
                         client.removePlayer(playerId)
                     }
