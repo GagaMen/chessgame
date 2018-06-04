@@ -1,5 +1,6 @@
 {
   "useWindowLocation": true,
   "serverRootUrl": "",
+  "apiRootEntryPoint": "api/",
   "pollingDelayTime": 5000
 }
