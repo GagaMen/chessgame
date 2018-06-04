@@ -6,7 +6,7 @@ title: MatchController.drawsByMatchOptions -
 
 # drawsByMatchOptions
 
-`@RequestMapping([RequestMethod.OPTIONS], ["/{id}/draws"]) fun drawsByMatchOptions(response: HttpServletResponse): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@RequestMapping([RequestMethod.OPTIONS], ["/{id}/draws"]) fun drawsByMatchOptions(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the OPTIONS request for the URI /matches/{id}/draws
 

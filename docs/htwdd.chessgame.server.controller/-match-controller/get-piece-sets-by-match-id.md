@@ -6,7 +6,7 @@ title: MatchController.getPieceSetsByMatchId -
 
 # getPieceSetsByMatchId
 
-`@GetMapping(["application/json", "application/xml"], ["/{id}/pieceSets"]) fun getPieceSetsByMatchId(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`PieceSetHashMap`](../../htwdd.chessgame.server.model/-piece-set-hash-map/index.html)
+`@GetMapping(["application/json", "application/xml"], ["/{id}/pieceSets"]) fun getPieceSetsByMatchId(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`PieceSetHashMap`](../../htwdd.chessgame.server.model/-piece-set-hash-map/index.html)`>`
 
 Handles the GET request for the URI /matches/{id}/pieceSets
 

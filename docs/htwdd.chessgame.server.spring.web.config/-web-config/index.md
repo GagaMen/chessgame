@@ -6,7 +6,7 @@ title: WebConfig -
 
 # WebConfig
 
-`@Configuration class WebConfig : WebMvcConfigurerAdapter`
+`@Configuration @EnableConfigurationProperties([AppProperties]) class WebConfig : WebMvcConfigurerAdapter`
 
 Spring web configuration object
 

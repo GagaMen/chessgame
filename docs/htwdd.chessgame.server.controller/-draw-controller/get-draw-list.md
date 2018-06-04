@@ -6,7 +6,7 @@ title: DrawController.getDrawList -
 
 # getDrawList
 
-`@GetMapping(["application/json", "application/xml"]) fun getDrawList(): `[`DrawList`](../../htwdd.chessgame.server.model/-draw-list/index.html)
+`@GetMapping(["application/json", "application/xml"]) fun getDrawList(response: HttpServletResponse): ResponseEntity<`[`DrawList`](../../htwdd.chessgame.server.model/-draw-list/index.html)`>`
 
 Handles the GET request for the URI /draws
 

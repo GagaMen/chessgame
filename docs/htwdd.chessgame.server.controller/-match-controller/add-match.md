@@ -6,7 +6,7 @@ title: MatchController.addMatch -
 
 # addMatch
 
-`@PostMapping(["application/x-www-form-urlencoded"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addMatch(@RequestParam playerWhiteId: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, @RequestParam playerBlackId: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`Match`](../../htwdd.chessgame.server.model/-match/index.html)
+`@PostMapping(["application/x-www-form-urlencoded"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addMatch(@RequestParam playerWhiteId: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, @RequestParam playerBlackId: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Match`](../../htwdd.chessgame.server.model/-match/index.html)`>`
 
 Handles the POST request for the URI /matches
 Params encoded as application/x-www-form-urlencode

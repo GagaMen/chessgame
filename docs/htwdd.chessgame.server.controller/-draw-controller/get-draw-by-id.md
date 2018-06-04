@@ -6,7 +6,7 @@ title: DrawController.getDrawById -
 
 # getDrawById
 
-`@GetMapping(["application/json", "application/xml"], ["/{id}"]) fun getDrawById(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`Draw`](../../htwdd.chessgame.server.model/-draw/index.html)
+`@GetMapping(["application/json", "application/xml"], ["/{id}"]) fun getDrawById(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Draw`](../../htwdd.chessgame.server.model/-draw/index.html)`>`
 
 Handle the GET request for URI /draws/{id}
 

@@ -6,7 +6,7 @@ title: DrawController.drawByIdOptions -
 
 # drawByIdOptions
 
-`@RequestMapping([RequestMethod.OPTIONS], ["/{id}"]) fun drawByIdOptions(response: HttpServletResponse): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@RequestMapping([RequestMethod.OPTIONS], ["/{id}"]) fun drawByIdOptions(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the OPTIONS request for the URI /draws/{id}
 

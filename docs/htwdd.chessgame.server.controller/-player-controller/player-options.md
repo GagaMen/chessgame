@@ -6,7 +6,7 @@ title: PlayerController.playerOptions -
 
 # playerOptions
 
-`@RequestMapping([RequestMethod.OPTIONS]) fun playerOptions(response: HttpServletResponse): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@RequestMapping([RequestMethod.OPTIONS]) fun playerOptions(response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the OPTIONS request for the URI /players
 

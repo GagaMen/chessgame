@@ -6,7 +6,7 @@ title: MatchController.getDrawsByMatchId -
 
 # getDrawsByMatchId
 
-`@GetMapping(["application/json", "application/xml"], ["/{id}/draws"]) fun getDrawsByMatchId(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`DrawList`](../../htwdd.chessgame.server.model/-draw-list/index.html)
+`@GetMapping(["application/json", "application/xml"], ["/{id}/draws"]) fun getDrawsByMatchId(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`DrawList`](../../htwdd.chessgame.server.model/-draw-list/index.html)`>`
 
 Handles the GET request for the URI /matches/{id}/draws
 

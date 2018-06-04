@@ -6,7 +6,7 @@ title: MatchController.matchOptions -
 
 # matchOptions
 
-`@RequestMapping([RequestMethod.OPTIONS]) fun matchOptions(response: HttpServletResponse): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@RequestMapping([RequestMethod.OPTIONS]) fun matchOptions(response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the OPTIONS request for the URI /matches
 

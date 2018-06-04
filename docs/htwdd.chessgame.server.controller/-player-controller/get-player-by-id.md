@@ -6,7 +6,7 @@ title: PlayerController.getPlayerById -
 
 # getPlayerById
 
-`@GetMapping(["application/json", "application/xml"], ["/{id}"]) @ResponseBody fun getPlayerById(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`Player`](../../htwdd.chessgame.server.model/-player/index.html)
+`@GetMapping(["application/json", "application/xml"], ["/{id}"]) @ResponseBody fun getPlayerById(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Player`](../../htwdd.chessgame.server.model/-player/index.html)`>`
 
 Handle the GET request for URI /matches/{id}
 

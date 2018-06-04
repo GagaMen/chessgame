@@ -6,7 +6,7 @@ title: DrawController.<init> -
 
 # &lt;init&gt;
 
-`DrawController()`
+`DrawController(appProperties: `[`AppProperties`](../../htwdd.chessgame.server.spring.web.config/-app-properties/index.html)`)`
 
 Controller to manage the draw resource
 

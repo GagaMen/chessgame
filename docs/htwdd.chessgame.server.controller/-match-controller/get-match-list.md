@@ -6,7 +6,7 @@ title: MatchController.getMatchList -
 
 # getMatchList
 
-`@GetMapping(["application/json", "application/xml"]) fun getMatchList(@RequestParam(false, "includePieceSets", "true") includePieceSets: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`, @RequestParam(false, "includeHistory", "true") includeHistory: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`): `[`MatchHashMap`](../../htwdd.chessgame.server.model/-match-hash-map/index.html)
+`@GetMapping(["application/json", "application/xml"]) fun getMatchList(@RequestParam(false, "includePieceSets", "true") includePieceSets: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`, @RequestParam(false, "includeHistory", "true") includeHistory: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`, response: HttpServletResponse): ResponseEntity<`[`MatchHashMap`](../../htwdd.chessgame.server.model/-match-hash-map/index.html)`>`
 
 Handles the GET request for the URI /matches
 

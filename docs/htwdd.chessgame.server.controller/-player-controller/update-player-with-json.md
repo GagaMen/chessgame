@@ -6,7 +6,7 @@ title: PlayerController.updatePlayerWithJson -
 
 # updatePlayerWithJson
 
-`@PatchMapping(["application/json"], ["application/json", "application/xml"], ["/{id}"]) fun updatePlayerWithJson(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, @RequestBody passwordDTO: `[`PasswordDTO`](../../htwdd.chessgame.server.dto/-password-d-t-o/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@PatchMapping(["application/json"], ["application/json", "application/xml"], ["/{id}"]) fun updatePlayerWithJson(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, @RequestBody passwordDTO: `[`PasswordDTO`](../../htwdd.chessgame.server.dto/-password-d-t-o/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the PATCH request for the URI /players/{id}
 

@@ -6,7 +6,7 @@ title: DrawController.addDrawWithJson -
 
 # addDrawWithJson
 
-`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addDrawWithJson(@RequestBody drawDTO: `[`DrawDTO`](../../htwdd.chessgame.server.dto/-draw-d-t-o/index.html)`): `[`Draw`](../../htwdd.chessgame.server.model/-draw/index.html)
+`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addDrawWithJson(@RequestBody drawDTO: `[`DrawDTO`](../../htwdd.chessgame.server.dto/-draw-d-t-o/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Draw`](../../htwdd.chessgame.server.model/-draw/index.html)`>`
 
 Handles the POST request for the URI /draws
 Params encoded as application/json

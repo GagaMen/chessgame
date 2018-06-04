@@ -6,7 +6,7 @@ title: MatchController.addMatchWithJson -
 
 # addMatchWithJson
 
-`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addMatchWithJson(@RequestBody matchDTO: `[`MatchDTO`](../../htwdd.chessgame.server.dto/-match-d-t-o/index.html)`): `[`Match`](../../htwdd.chessgame.server.model/-match/index.html)
+`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addMatchWithJson(@RequestBody matchDTO: `[`MatchDTO`](../../htwdd.chessgame.server.dto/-match-d-t-o/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Match`](../../htwdd.chessgame.server.model/-match/index.html)`>`
 
 Handles the POST request for the URI /draws
 Params encoded as application/json

@@ -7,3 +7,9 @@ title: Match.players -
 # players
 
 `val players: `[`HashMap`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-map/index.html)`<`[`PieceColor`](../-piece-color/index.html)`, `[`Player`](../-player/index.html)`>`
+
+Hash map of the players. Key: Color of player; Value: Player
+
+### Property
+
+`players` - Hash map of the players. Key: Color of player; Value: Player

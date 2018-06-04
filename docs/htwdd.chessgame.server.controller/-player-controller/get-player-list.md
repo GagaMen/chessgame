@@ -6,7 +6,7 @@ title: PlayerController.getPlayerList -
 
 # getPlayerList
 
-`@GetMapping(["application/json", "application/xml"]) fun getPlayerList(): `[`PlayerHashMap`](../../htwdd.chessgame.server.model/-player-hash-map/index.html)
+`@GetMapping(["application/json", "application/xml"]) fun getPlayerList(response: HttpServletResponse): ResponseEntity<`[`PlayerHashMap`](../../htwdd.chessgame.server.model/-player-hash-map/index.html)`>`
 
 Handles the GET request for the URI /players
 

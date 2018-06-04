@@ -10,6 +10,7 @@ title: htwdd.chessgame.server.dto -
 
 | [DrawDTO](-draw-d-t-o/index.html) | `data class DrawDTO : `[`Serializable`](http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html)<br>Data transfer object for a draw |
 | [MatchDTO](-match-d-t-o/index.html) | `data class MatchDTO : `[`Serializable`](http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html)<br>Data transfer object for a match |
+| [MatchIdDTO](-match-id-d-t-o/index.html) | `class MatchIdDTO : `[`Serializable`](http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html)<br>Data transfer object for a matchId |
 | [PasswordDTO](-password-d-t-o/index.html) | `data class PasswordDTO : `[`Serializable`](http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html)<br>Data transfer object for a player password |
 | [PlayerDTO](-player-d-t-o/index.html) | `data class PlayerDTO : `[`Serializable`](http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html)<br>Data transfer object for a player |
 

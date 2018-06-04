@@ -6,7 +6,7 @@ title: PlayerController.addPlayerWithJson -
 
 # addPlayerWithJson
 
-`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) @ResponseBody fun addPlayerWithJson(@RequestBody playerDTO: `[`PlayerDTO`](../../htwdd.chessgame.server.dto/-player-d-t-o/index.html)`): `[`Player`](../../htwdd.chessgame.server.model/-player/index.html)
+`@PostMapping(["application/json"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) @ResponseBody fun addPlayerWithJson(@RequestBody playerDTO: `[`PlayerDTO`](../../htwdd.chessgame.server.dto/-player-d-t-o/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Player`](../../htwdd.chessgame.server.model/-player/index.html)`>`
 
 Handles the POST request for the URI /players
 Params encoded as application/json

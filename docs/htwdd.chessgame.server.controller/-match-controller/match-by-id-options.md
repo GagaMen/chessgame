@@ -6,7 +6,7 @@ title: MatchController.matchByIdOptions -
 
 # matchByIdOptions
 
-`@RequestMapping([RequestMethod.OPTIONS], ["/{id}"]) fun matchByIdOptions(response: HttpServletResponse): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`@RequestMapping([RequestMethod.OPTIONS], ["/{id}"]) fun matchByIdOptions(@PathVariable id: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`>`
 
 Handles the OPTIONS request for the URI /matches/{id}
 

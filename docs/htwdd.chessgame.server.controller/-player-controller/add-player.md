@@ -6,7 +6,7 @@ title: PlayerController.addPlayer -
 
 # addPlayer
 
-`@PostMapping(["application/x-www-form-urlencoded"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addPlayer(@RequestParam name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, @RequestParam password: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Player`](../../htwdd.chessgame.server.model/-player/index.html)
+`@PostMapping(["application/x-www-form-urlencoded"], ["application/json", "application/xml"]) @ResponseStatus(HttpStatus.CREATED) fun addPlayer(@RequestParam name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, @RequestParam password: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, response: HttpServletResponse): ResponseEntity<`[`Player`](../../htwdd.chessgame.server.model/-player/index.html)`>`
 
 Handles the POST request for the URI /players
 Params encoded as application/x-www-form-urlencode

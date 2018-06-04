@@ -4,6 +4,7 @@ title: alltypes -
 
 ### All Types
 
+| [htwdd.chessgame.server.spring.web.config.AppProperties](../htwdd.chessgame.server.spring.web.config/-app-properties/index.html) | Custom spring configuration object |
 | [htwdd.chessgame.server.Application](../htwdd.chessgame.server/-application/index.html) | Spring application class |
 | [htwdd.chessgame.server.exceptions.BadRequestException](../htwdd.chessgame.server.exceptions/-bad-request-exception/index.html) | Exception class for bad requests Thrown when requesting an undefined entry point |
 | [htwdd.chessgame.server.util.BishopMovementUtility](../htwdd.chessgame.server.util/-bishop-movement-utility/index.html) | Movement utility class for the bishop piece |
@@ -13,16 +14,19 @@ title: alltypes -
 | [htwdd.chessgame.server.controller.DrawController](../htwdd.chessgame.server.controller/-draw-controller/index.html) | Controller to manage the draw resource |
 | [htwdd.chessgame.server.dto.DrawDTO](../htwdd.chessgame.server.dto/-draw-d-t-o/index.html) | Data transfer object for a draw |
 | [htwdd.chessgame.server.model.DrawList](../htwdd.chessgame.server.model/-draw-list/index.html) | Data wrapper for a list of draws. Necessary for JSON serialization/deserialization. |
+| [htwdd.chessgame.server.controller.ErrorController](../htwdd.chessgame.server.controller/-error-controller/index.html) | Controller to handle all undefined entry points |
 | [htwdd.chessgame.server.exceptions.ErrorResponseObject](../htwdd.chessgame.server.exceptions/-error-response-object/index.html) | Object to represent a clearly and user comprehensible error message |
 | [htwdd.chessgame.server.exceptions.ExceptionHandler](../htwdd.chessgame.server.exceptions/-exception-handler/index.html) | Handler object to manage exceptions |
 | [htwdd.chessgame.server.util.FENUtility](../htwdd.chessgame.server.util/-f-e-n-utility/index.html) | Utility class to handle a String as Forsyth-Edwards-Notation (FEN) |
 | [htwdd.chessgame.server.model.Field](../htwdd.chessgame.server.model/-field/index.html) | Represent a chess field |
+| [htwdd.chessgame.server.util.HateoasUtility](../htwdd.chessgame.server.util/-hateoas-utility/index.html) | Utility class to handle creation of link header for HATEOAS support |
 | [htwdd.chessgame.server.util.KingMovementUtility](../htwdd.chessgame.server.util/-king-movement-utility/index.html) | Movement utility class for the king piece |
 | [htwdd.chessgame.server.util.KnightMovementUtility](../htwdd.chessgame.server.util/-knight-movement-utility/index.html) | Movement utility class for the knight piece |
 | [htwdd.chessgame.server.model.Match](../htwdd.chessgame.server.model/-match/index.html) | Represent a chess match |
 | [htwdd.chessgame.server.controller.MatchController](../htwdd.chessgame.server.controller/-match-controller/index.html) | Controller to manage the match resource |
 | [htwdd.chessgame.server.dto.MatchDTO](../htwdd.chessgame.server.dto/-match-d-t-o/index.html) | Data transfer object for a match |
 | [htwdd.chessgame.server.model.MatchHashMap](../htwdd.chessgame.server.model/-match-hash-map/index.html) | Data wrapper for a hash map of matches. Necessary for JSON serialization/deserialization. |
+| [htwdd.chessgame.server.dto.MatchIdDTO](../htwdd.chessgame.server.dto/-match-id-d-t-o/index.html) | Data transfer object for a matchId |
 | [htwdd.chessgame.server.util.Movement](../htwdd.chessgame.server.util/-movement/index.html) | Interface for piece movement |
 | [htwdd.chessgame.server.util.MovementUtility](../htwdd.chessgame.server.util/-movement-utility/index.html) | Abstract class for piece movement |
 | [htwdd.chessgame.server.dto.PasswordDTO](../htwdd.chessgame.server.dto/-password-d-t-o/index.html) | Data transfer object for a player password |
@@ -38,6 +42,7 @@ title: alltypes -
 | [htwdd.chessgame.server.model.PlayerHashMap](../htwdd.chessgame.server.model/-player-hash-map/index.html) | Data wrapper for a hash map of players. Necessary for JSON serialization/deserialization. |
 | [htwdd.chessgame.server.util.QueenMovementUtility](../htwdd.chessgame.server.util/-queen-movement-utility/index.html) | Movement utility class for the queen piece Combined the rules of bishop and rook |
 | [htwdd.chessgame.server.util.RookMovementUtility](../htwdd.chessgame.server.util/-rook-movement-utility/index.html) | Movement utility class for the rook piece |
+| [htwdd.chessgame.server.controller.RootController](../htwdd.chessgame.server.controller/-root-controller/index.html) | Controller to handels the root resource |
 | [htwdd.chessgame.server.util.SANUtility](../htwdd.chessgame.server.util/-s-a-n-utility/index.html) | Utility class to handle a String as standard algebraic notation (SAN) |
 | [htwdd.chessgame.server.spring.web.config.WebConfig](../htwdd.chessgame.server.spring.web.config/-web-config/index.html) | Spring web configuration object |
 
