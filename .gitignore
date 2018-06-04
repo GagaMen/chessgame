@@ -23,6 +23,7 @@ Diploma.toc
 Diploma.acn
 Diploma.acr
 Diploma.alg
+Diploma.pdf
 doc/diploma/**/*.log
 doc/diploma/**/*.aux
 doc/server/javadoc
