@@ -209,11 +209,17 @@ Die Internetseite \cite{springContentNegotiation} bietet für dieses Thema eine 
 \section{Exceptionhandling}
 Laut den Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} soll der Server so wenig wie möglich anfällig für Fehler sein. Dafür ist der richtige Umgang und auch eine verständliche, für den Endnutzer lesbare, Fehlermeldung unerlässlich. Die Fehler können dabei in einzelnen Fehlerarten unterteilt werden.\\
 \\
-Wenn ein Nutzer eine Ressource an der \gls{URI} \code{/player/15} anfordert, aber kein Player mit der ID 15 existiert, dann wird ein Fehler mit dem \gls{HTTP}-Statuscode 400 zurückgegeben. Schon der Statuscode alleine signalisiert dem Nutzer das die angeforderte Ressource nicht gefunden wurde. Sollte ein Benutzer der \gls{API} einen Draw hinzufügen möchte aber der mitgeschickte Draw-Code in der \gls{SAN} nicht valide ist, so wird ein Fehler mit dem \gls{HTTP}-Statuscode 409 zurückgegeben. Dieser zeigt dem Nutzer das ein Konflikt, welchen er verursacht hat, aufgetreten ist. Für alle weiteren Fehler welche nicht durch den Nutzer verursacht wurden, wird dieser mit dem \gls{HTTP}-Statuscode 500 zurückgeben. Da so ein Fehler nur zurückgegeben wird, sofern ein unerwarteter Server-Fehler aufgetreten ist, sollte dieser gar nicht bzw. nur selten auftreten. Ein Beispiel könnte ein Verbindungsabbruch zur Datenbank sein, worauf der eigentliche Nutzer keinen Einfluss hat. Das \hyperref[lst:springExceptionHandling]{Listing~\ref{lst:springExceptionHandling}} zeigt dabei die Konfiguration der Spring-Applikation, für den Umgang mit Fehlern.\\
+Wenn ein Nutzer eine Ressource an der \gls{URI} \code{/player/15} anfordert, aber kein Player mit der ID 15 existiert, dann wird ein Fehler mit dem \gls{HTTP}-Statuscode 400 zurückgegeben. Schon der Statuscode alleine signalisiert dem Nutzer das die angeforderte Ressource nicht gefunden wurde. Sollte ein Benutzer der \gls{API} einen Draw hinzufügen wollen aber der mitgeschickte Draw-Code in der \gls{SAN} nicht valide ist, so wird ein Fehler mit dem \gls{HTTP}-Statuscode 409 zurückgegeben. Dieser zeigt dem Nutzer das ein Konflikt, welchen er verursacht hat, aufgetreten ist. Wenn ein Nutzer den \gls{HTTP}-Statuscode 400 vom Server zurück erhält, so hat dieser einen \gls{URI} angefragt, welcher durch die \gls{REST}-\gls{API} nicht definiert wurde. Für alle weiteren Fehler welche nicht durch den Nutzer verursacht wurden, wird dieser mit dem \gls{HTTP}-Statuscode 500 zurückgeben. Da so ein Fehler nur zurückgegeben wird sofern ein unerwarteter Server-Fehler aufgetreten ist, sollte dieser gar nicht bzw. nur selten auftreten. Ein Beispiel könnte ein Verbindungsabbruch zur Datenbank sein, worauf der eigentliche Nutzer keinen Einfluss hat. Das \hyperref[lst:springExceptionHandling]{Listing~\ref{lst:springExceptionHandling}} zeigt dabei die Konfiguration der Spring-Applikation, für den Umgang mit Fehlern.\\
 \\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration des Exceptionhandling}, label=lst:springExceptionHandling, float]
 @RestControllerAdvice
 class ExceptionHandler {
+	@ExceptionHandler(value = [BadRequestException::class])
+	@ResponseStatus(BAD_REQUEST)
+	fun handleBadRequestException(ex: Exception, request: WebRequest): ErrorResponseObject {
+		return generateErrorResponseObject(ex, request, BAD_REQUEST)
+	}
+
 	@ExceptionHandler(value = [IllegalArgumentException::class])
 	@ResponseStatus(NOT_FOUND)
 	fun handleIllegalArgumentException(ex: Exception, request: WebRequest): ErrorResponseObject {
@@ -237,7 +243,7 @@ class ExceptionHandler {
 	}
 }
 \end{lstlisting}
-Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, wird zusätzlich im Nachrichtenrumpf der Antwort ein Fehlerobjekt, in Form der Klasse \code{ErrorResponseObject}\footnote{siehe \hyperref[lst:errorResponseObject]{Listing~\ref{lst:errorResponseObject}}}, mitgeschickt. Dieses hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception des Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchen der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei in dem angeforderten Format zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
+Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, wird zusätzlich im Nachrichtenrumpf der Antwort ein Fehlerobjekt, in Form der Klasse \code{ErrorResponseObject} aus dem \hyperref[lst:errorResponseObject]{Listing~\ref{lst:errorResponseObject}}, mitgeschickt. Dieses hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception den Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchen der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei in dem angeforderten Format zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration des Exceptionhandling}, label=lst:errorResponseObject, float]
 class ErrorResponseObject(
 	val timestamp: Date = Date(),
