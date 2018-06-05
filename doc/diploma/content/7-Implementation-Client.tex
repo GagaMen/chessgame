@@ -42,9 +42,10 @@ val myDiv = document.create.div {
 
 
 \section{Implementierung der Request-Funktionalität}
-Um die Kommunikation mit dem \gls{REST}ful Server, welche in den Anforderungen im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definiert wurden, zu gewährleisten, bedarf es einer Reihe von Funktionen zum senden eines Requestes. Für jeden Request-Typ wird dabei eine eigene statische Methode definiert. Um anschließend diese Funktionen nutzen zu können, müssen diese gegebenenfalls eine Parameterlist und eine Antwortfunktion verarbeiten können. Als Rückgabe wird das JavaScript \code{Promise} Objekt genutzt, mit wessen Hilfe und der Bibliothek \enquote{kotlinx.coroutines}\footcite{siehe \hyperref[sec:kotlinxCoroutines]{Kapitel~\ref{sec:kotlinxCoroutines}}} die Möglichkeit besteht auf den Abschluss eines Requestes zu warten. Dies ist teilweise notwendig, da JavaScript grundlegend Asynchron arbeitet.\\
+Um die Kommunikation mit dem \gls{REST}ful Server, welche in den Anforderungen im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definiert wurden, zu gewährleisten, bedarf es einer Reihe von Funktionen zum senden eines Requestes. Für jeden Request-Typ wird dabei eine eigene statische Methode definiert. Um anschließend diese Funktionen nutzen zu können, müssen diese gegebenenfalls eine Parameterlist und eine Antwortfunktion verarbeiten können. Als Rückgabe wird das JavaScript \code{Promise} Objekt genutzt, mit wessen Hilfe und der Bibliothek \enquote{kotlinx.coroutines}\footnote{siehe \hyperref[sec:kotlinxCoroutines]{Kapitel~\ref{sec:kotlinxCoroutines}}} die Möglichkeit besteht auf den Abschluss eines Requestes zu warten. Dies ist teilweise notwendig, da JavaScript grundlegend Asynchron arbeitet.\\
 \\
-Das \hyperref[lst:requestUtility]{Listing~\ref{lst:requestUtility}} zeigt die Implementierung der statischen Methoden für die Request-Typen \code{GET} und \code{POST}. Alle weiteren Request-Typen sind ebenfalls definiert, werden aber in dieser Veranschaulichung vernachlässigt. Die Funktion \code{parseParams} verarbeitet dabei die übergebene Parameterliste, welche aus Key-Value-Paaren bestehen muss. Dabei dient der Key in Form eines Strings als Parameterindikator und der Value als Wert des Parameters. Der Funktionsparameter \code{callback} kann in Form eines Lambda-Ausdrucks, bei Funktionsaufruf definiert werden und wird anschließen nach Erhalt des \gls{HTTP}-Response ausgeführt. 
+Das \hyperref[lst:requestUtility]{Listing~\ref{lst:requestUtility}} zeigt die Implementierung der statischen Methoden für die Request-Typen \code{GET} und \code{POST}. Alle weiteren Request-Typen sind ebenfalls definiert, werden aber in dieser Veranschaulichung vernachlässigt. Die Funktion \code{parseParams} verarbeitet dabei die übergebene Parameterliste, welche aus Key-Value-Paaren bestehen muss. Dabei dient der Key in Form eines Strings als Parameterindikator und der Value als Wert des Parameters. Der Funktionsparameter \code{callback} kann in Form eines Lambda-Ausdrucks, bei Funktionsaufruf definiert werden und wird anschließen nach Erhalt des \gls{HTTP}-Response ausgeführt.\\
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung der Request-Methoden \code{GET} und \code{POST}, inklusiver der Parameterverarbeitung}, label=lst:requestUtility, float]
 class RequestUtility {
 	companion object {
@@ -95,5 +96,16 @@ class RequestUtility {
 			return paramsAsString
 		}
 	}
+}
+\end{lstlisting}
+Wie anschließend ein Request gesendet werden kann, zeigt das \hyperref[lst:requestPlayerList]{Listing~\ref{lst:requestPlayerList}}. In diesem wird das Anfordern der Playerliste mittel \code{GET}-Request gezeigt. Dabei wird es in einer \code{launch}-Umgebung ausgeführt, welche das Warten auf die Antwort ermöglicht. Hinter dem Funktionsaufruf wird der Lambda-Ausdruck definiert, welcher die Antwort parst und anschließend alle Player dem Client-Objekt hinzufügt.
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Funktionsaufruf eines \code{GET}-Requestes am Beispiel der Playerliste}, label=lst:requestPlayerList, float]
+launch {
+	get("${client.config.serverRootUrl}players") {
+		if (it.target is XMLHttpRequest) {
+			val playerHashMap = JSON.parse<PlayerHashMap>((it.target as XMLHttpRequest).responseText)
+			playerHashMap.player.forEach { client.addPlayer(it.value) }
+		}
+	}.await()
 }
 \end{lstlisting}
