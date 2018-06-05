@@ -3,7 +3,10 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Implementation des Clients}
+Diese Kapitel beschäftigt sich mit der Umsetzung des Konzeptes aus \hyperref[sec:conceptServer]{Kapitel~\ref{sec:conceptServer}}. Im ersten Abschnitt werden dabei die Bibliotheken bzw. Frameworks, welche bei der Umsetzung zum Einsatz kamen, näher beleuchtet. Der nachfolgende Abschnitt dient als Beschreibung der Implementation der Kommunikation zwischen Client und Server in Form von Requests. Im letzten Abschnitt wird die Implementierung der verwendeten Polling-Funktionalität genauer betrachtet.
+
 \section{Verwendete Bibliotheken/Frameworks}
+Die in diesem Kapitel vorgestellten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} unterstützen. Dabei werden diese in den nachfolgenden \hyperref[sec:requireJs, sec:kotlinxCoroutines]{Unterabschnitten~\ref{sec:requireJs} bis \ref{sec:kotlinxCoroutines}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet.
 
 \subsection{RequireJS}\label{sec:requireJs}
 RequireJS ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\cite{requirejs}\\
