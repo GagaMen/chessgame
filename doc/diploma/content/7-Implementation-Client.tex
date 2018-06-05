@@ -19,7 +19,7 @@ define(['jquery'] , function ($) {
 \end{lstlisting}
 
 \subsection{kotlinx.html}\label{sec:kotlinxHtml}
-Die Kotlinx.html ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
+Die Bibliothek Kotlinx.html ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
 \\
 Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
 \begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kontlinx.html \cite{kotlinxExample}}, label=lst:kotlinxHtmlExample]
@@ -39,7 +39,22 @@ val myDiv = document.create.div {
 \end{lstlisting}
 
 \subsection{kotlinx.serialization}\label{sec:kotlinxSerialization}
+Ebenso wie Kotlinx.html ist Kotlinx.serialization ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und Protobuf von Haus aus. \cite{kotlinxSerialization}\\
+\\
+Um Daten in der \gls{JSON} zu können, müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Properties mithilfe der \code{Optional}-Annotation als Optional zu definieren.\\
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Model-Erweiterung für Unterstützung der Kotlinx.serialization Bibliothek (verändert nach \cite{kotlinxSerialization})}, label=lst:kotlinxSerializePrepare, float]
+import kotlinx.serialization.*
 
+@Serializable
+data class Data(val a: Int, @Optional val b: String = "42")
+\end{lstlisting}
+Für die Serialisierung der Klasse \code{Data} aus dem
+\hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} kann die erste Zeile und für die Deserialisierung die zweite Zeile aus dem \hyperref[lst:kotlinxSerializeUsage]{Listing~\ref{lst:kotlinxSerializeUsage}} verwendet werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Serializierung und Deserialisierung der \code{Data} Klasse (verändert nach \cite{kotlinxSerialization})}, label=lst:kotlinxSerializeUsage, float]
+JSON.stringify(Data(42))   		   // {"a": 42, "b": "42"}
+JSON.parse<Data>("""{"a":42}""") // Data(a=42, b="42")
+\end{lstlisting}
 
 \subsection{kotlinx.coroutines}\label{sec:kotlinxCoroutines}
 
