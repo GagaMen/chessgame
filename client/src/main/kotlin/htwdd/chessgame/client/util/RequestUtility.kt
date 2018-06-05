@@ -6,7 +6,11 @@ import kotlin.js.Promise
 
 class RequestUtility {
     companion object {
-        fun get(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun get(
+                url: String,
+                vararg params: Pair<String, Any> = arrayOf(),
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -20,7 +24,11 @@ class RequestUtility {
 
         }
 
-        fun post(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun post(
+                url: String,
+                vararg params: Pair<String, Any> = arrayOf(),
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -32,7 +40,11 @@ class RequestUtility {
             }
         }
 
-        fun put(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun put(
+                url: String,
+                vararg params: Pair<String, Any> = arrayOf(),
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -44,7 +56,11 @@ class RequestUtility {
             }
         }
 
-        fun patch(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun patch(
+                url: String,
+                vararg params: Pair<String, Any> = arrayOf(),
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -56,7 +72,11 @@ class RequestUtility {
             }
         }
 
-        fun delete(url: String, vararg params: Pair<String, Any> = arrayOf(), callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun delete(
+                url: String,
+                vararg params: Pair<String, Any> = arrayOf(),
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -68,7 +88,10 @@ class RequestUtility {
             }
         }
 
-        fun head(url: String, callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun head(
+                url: String,
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -79,7 +102,10 @@ class RequestUtility {
             }
         }
 
-        fun options(url: String, callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun options(
+                url: String,
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
 
@@ -90,7 +116,9 @@ class RequestUtility {
             }
         }
 
-        fun loadJSONConfiguration(callback: ((Event) -> dynamic)? = null): Promise<XMLHttpRequest> {
+        fun loadJSONConfiguration(
+                callback: ((Event) -> dynamic)? = null
+        ): Promise<XMLHttpRequest> {
             return Promise { resolve, _ ->
                 val request = XMLHttpRequest()
                 request.overrideMimeType("application/json")
@@ -102,17 +130,17 @@ class RequestUtility {
         }
 
         private fun parseParams(params: Array<out Pair<String, Any>>): String {
-            var paramsAsJSONString = ""
+            var paramsAsString = ""
 
             params.forEach { (key, value) ->
-                if (paramsAsJSONString != "") paramsAsJSONString += "&"
-                paramsAsJSONString += "$key=$value"
+                if (paramsAsString != "") paramsAsString += "&"
+                paramsAsString += "$key=$value"
             }
 
             // %2B is the '+' character. If using the '+' character it will parse into a space character
-            paramsAsJSONString = paramsAsJSONString.replace("+", "%2B")
+            paramsAsString = paramsAsString.replace("+", "%2B")
 
-            return paramsAsJSONString
+            return paramsAsString
         }
     }
 }
