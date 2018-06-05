@@ -109,3 +109,52 @@ launch {
 	}.await()
 }
 \end{lstlisting}
+
+\section{Implementierung des Polling-Verfahrens}
+Für die Umsetzung des Polling-Verfahrens, welches in den Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}}, verlagt wurde, muss mehreres gewährleistet werden. Zu aller erst muss das Polling gestartet und gestoppt werden können. Des weiteren muss die Möglichkeit bestehen eine Aufgabe zu definieren, welche nach dem Start des Pollings rekursiv ausgeführt wird. Zwischen den rekursiven Aufrufen der Aufgabe soll eine Zeit-Wert definiert werden können, welchen der Prozess wartet bevor er sich erneut selber aufruft. Sobald der Polling-Prozess angehalten wurde, muss der rekursive Aufruf unterbrochen werden.\\
+\\
+In dem \hyperref[lst:pollingUtility]{Listing~\ref{lst:pollingUtility}} wurden diese Anforderungen an das Polling-Verfahren implementiert. Die Property \code{stopPolling} gibt dabei an, ob der rekursive Prozess unterbrochen werden soll. Mithilfe der Wartezeit und der auszuführende Aufgabe als Parameter der \code{start}-Funktion, kann das Polling eingeleitet werden. Dafür wird die Property \code{stopPolling} auf \code{false} gesetzt und anschließend die Rekursion gestartet. Die \code{stop}-Funktion setzt die Property \code{stopPolling} auf \code{true}, was wiederum in der rekursiven Funktion \code{sendPollingRequest} zu einer Unterbrechung führt.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung des Polling-Verfahrens}, label=lst:pollingUtility, float]
+class PollingUtility {
+	private var stopPolling = true
+	
+	fun start(delayTime: Int, pollingTask: () -> Unit) {
+		stopPolling = false
+		sendPollingRequest(delayTime, pollingTask)
+	}
+	
+	fun stop() {
+		stopPolling = true
+	}
+	
+	private fun sendPollingRequest(delayTime: Int, pollingTask: () -> Unit) {
+		if (stopPolling) return
+		launch {
+			pollingTask()
+			delay(delayTime)
+			sendPollingRequest(delayTime, pollingTask)
+		}
+	}
+}
+\end{lstlisting}
+\\
+Um anschließend die Klasse \code{PollingUtility} zu nutzen, muss ausschließlich eine Variable von dieser angelegt und die \code{start}-Funktion gerufen werden. Dabei wird, wie im \hyperref[lst:pollingUsage]{Listing~\ref{lst:pollingUsage}} zu sehen, die Wartezeit in Millisekunden und die Aufgabe übergeben. Als Integer muss dabei die Wartezeit und als Lambda-Ausdruck die Aufgabe übergeben werden. Innerhalb der Polling-Aufgabe werden in dem Beispiel alle Draws eines Matches angefordert, anschließend wird überprüft ob neue Draws existieren und wenn ja werden die neuen zum Match hinzugefügt.
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Einbindung bzw. Nutzung der \code{PollingUtility} Klasse}, label=lst:pollingUsage, float]
+val pollingDraw = PollingUtility()
+
+pollingDraw.start(client.config.pollingDelayTime) {
+	get("${client.config.serverRootUrl}matches/$matchId/draws") {
+		if (it.target is XMLHttpRequest) {
+			val drawList = JSON.parse<DrawList>((it.target as XMLHttpRequest).responseText)
+			if (match.history.size != drawList.draws.size) {
+				match.history.forEach { draw ->
+					drawList.draws.removeAll { it.id == draw.id }
+				}
+				drawList.draws.forEach { draw ->
+					match.addDraw(draw, true)
+				}
+			}
+		}
+	}
+}
+\end{lstlisting}
