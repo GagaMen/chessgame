@@ -206,6 +206,52 @@ class WebConfig : WebMvcConfigurerAdapter() {
 \end{lstlisting}
 Die Internetseite \cite{springContentNegotiation} bietet für dieses Thema eine ausführlichere Erläuterung der einzelnen Strategien, wie diese angewendet und eingerichtet werden.
 
+\section{Implementation des HATEOAS-Konzeptes}
+Für die Implementation des Konzeptes aus dem \hyperref[sec:konceptHATEOAS]{Kapitel~\ref{sec:konzeptHATEOAS}} kommt das Projekt \enquote{Spring HATEOAS} zum Einsatz. Mithilfe des \code{ControllerLinkBuilder} Objektes, welches durch die Bibliothek bereitgestellt wird, können anhand der Controllern und deren Funktionen Links generiert werden. Durch eine Starke Kopplung an die Implementierung wird dabei eine redundante Pflege der Links verhindert. Das \hyperref[lst:springHATEOAS]{Listing~\ref{lst:springHATEOAS}} zeigt am Beispiel des \code{PlayerController} und der Funktion \code{getPlayerList} wie solche Links generiert werden können.\\
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Linkaufbau mithilfe des Projektes \enquote{Spring HATEOAS}}, label=lst:springHATEOAS, float]
+@GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
+fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> {
+	val playerList = HashMap<Int, Player>()
+	playerDao!!.queryForAll().forEach { playerList[it.id] = it }
+	
+	val links = HashSet<Pair<Link, String>>()
+	
+	val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response))
+			.withSelfRel()
+	links.add(Pair(selfLink, "GET"))
+	val optionsLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response))
+			.withRel("options")
+	links.add(Pair(optionsLink, "OPTIONS"))
+	val newLink = linkTo(methodOn(PlayerController::class.java)
+			.addPlayer("valueOfName", "valueOfPassword", response))
+			.withRel("new")
+	links.add(Pair(newLink, "POST"))
+	
+	playerList.forEach { (playerId, _) ->
+		val playerLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(playerId, response))
+				.withRel("next")
+		links.add(Pair(playerLink, "GET"))
+	}
+
+	return ResponseEntity(PlayerHashMap(playerList), HateoasUtility.createLinkHeader(links), OK)
+}
+\end{lstlisting}
+Die ersten beiden Zeilen der Funktion dienen dabei dazu alle Player aus der Datenbank zu holen und alle nachfolgenden zum Linkaufbau. Alle erzeugten Links werden in ein \code{HashSet} gespeichert und anschließend mittels der statischen Methode \code{createLinkHeader} aus dem Objekt \code{HateoasUtility} in einem String geparst, welcher anschließend dem Link-Header zugewiesen wird. Das \hyperref[lst:createLinkHeader]{Listing~\ref{lst:createLinkHeader}} zeigt dabei die Implementierung der statischen Methode \code{createLinkHeader}.
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Linkaufbau mithilfe des Projektes \enquote{Spring HATEOAS}}, label=lst:createLinkHeader, float]
+fun createLinkHeader(linkList: HashSet<Pair<Link, String>>): HttpHeaders {
+	val headers = HttpHeaders()
+	val sb = StringBuilder()
+	
+	linkList.forEach { (link, verb) ->
+		sb.append("<${link.href}>;rel=${link.rel};verb='$verb'")
+	}
+	
+	headers.set("Link", sb.toString())
+	return headers
+}
+\end{lstlisting}
+
 \section{Exceptionhandling}
 Laut den Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} soll der Server so wenig wie möglich anfällig für Fehler sein. Dafür ist der richtige Umgang und auch eine verständliche, für den Endnutzer lesbare, Fehlermeldung unerlässlich. Die Fehler können dabei in einzelnen Fehlerarten unterteilt werden.\\
 \\
