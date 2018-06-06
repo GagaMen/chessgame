@@ -9,7 +9,7 @@ Diese Kapitel beschäftigt sich mit der Umsetzung des Konzeptes aus \hyperref[se
 Die in diesem Kapitel vorgestellten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} unterstützen. Dabei werden diese in den nachfolgenden \hyperref[sec:requireJs, sec:kotlinxCoroutines]{Unterabschnitten~\ref{sec:requireJs} bis \ref{sec:kotlinxCoroutines}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet.
 
 \subsection{RequireJS}\label{sec:requireJs}
-RequireJS ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\cite{requirejs}\\
+RequireJS \cite{requirejs} ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\\
 \\
 Für die Modulbeschreibung innerhalb von JavaScript stehen mehrere Formate bereit. RequireJS setzt dabei auf das Format \gls{AMD}. Das \hyperref[lst:amdExample]{Listing~\ref{lst:amdExample}} stellt ein einfaches Beispiel für die Definition eines \gls{AMD}-Moduls bereit. In dem Zeitschriftartikel \cite{jsModuleDefinitions} können zu den einzelnen Modul-Formaten und deren Einsatzmöglichkeiten nähere Informationen nachgelesen werden.
 \begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Moduldefinition mittels \acrfull{AMD} \cite{requirejsExample}}, label=lst:amdExample]
@@ -19,7 +19,7 @@ define(['jquery'] , function ($) {
 \end{lstlisting}
 
 \subsection{kotlinx.html}\label{sec:kotlinxHtml}
-Die Bibliothek Kotlinx.html ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
+Die Bibliothek kotlinx.html \cite{kotlinxHtml} ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
 \\
 Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
 \begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kontlinx.html \cite{kotlinxExample}}, label=lst:kotlinxHtmlExample]
@@ -39,11 +39,11 @@ val myDiv = document.create.div {
 \end{lstlisting}
 
 \subsection{kotlinx.serialization}\label{sec:kotlinxSerialization}
-Ebenso wie Kotlinx.html ist Kotlinx.serialization ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und Protobuf von Haus aus. \cite{kotlinxSerialization}\\
+Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und Protobuf von Haus aus.\\
 \\
 Um Daten in der \gls{JSON} zu können, müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Properties mithilfe der \code{Optional}-Annotation als Optional zu definieren.\\
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Model-Erweiterung für Unterstützung der Kotlinx.serialization Bibliothek (verändert nach \cite{kotlinxSerialization})}, label=lst:kotlinxSerializePrepare, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Model-Erweiterung für Unterstützung der Kotlinx.serialization Bibliothek (verändert nach \cite{kotlinxSerializationExample})}, label=lst:kotlinxSerializePrepare, float]
 import kotlinx.serialization.*
 
 @Serializable
@@ -51,15 +51,19 @@ data class Data(val a: Int, @Optional val b: String = "42")
 \end{lstlisting}
 Für die Serialisierung der Klasse \code{Data} aus dem
 \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} kann die erste Zeile und für die Deserialisierung die zweite Zeile aus dem \hyperref[lst:kotlinxSerializeUsage]{Listing~\ref{lst:kotlinxSerializeUsage}} verwendet werden.
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Serializierung und Deserialisierung der \code{Data} Klasse (verändert nach \cite{kotlinxSerialization})}, label=lst:kotlinxSerializeUsage, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Serializierung und Deserialisierung der \code{Data} Klasse (verändert nach \cite{kotlinxSerializationExample})}, label=lst:kotlinxSerializeUsage, float]
 JSON.stringify(Data(42))   		   // {"a": 42, "b": "42"}
 JSON.parse<Data>("""{"a":42}""") // Data(a=42, b="42")
 \end{lstlisting}
 
 \subsection{kotlinx.coroutines}\label{sec:kotlinxCoroutines}
+Die Bibliothek kotlinx.coroutines \cite{kotlinxCoroutines} ist eine weiteres Projekt aus der kotlinx Serie von JetBrains, welche eine Reihe von high-level Coroutinen bereit stellt. Im Falle des Clients soll die Bibliothek dazu genutzt werden auf Funktionen warten zu können. Deshalb beschränkt sich die Erläuterung dieser Bibliothek auf diese Funktionalität. Für weitere Instruktionen bzw. andere Anwendungsfälle können diese in der Dokumentation unter \cite{kotlinxCoroutinesDocu} nachgelesen werden.\\
+\\
+Mithilfe der Funktion \code{launch} welche als letzten Parameter einen Lambda-Ausdruck entgegen nimmt, kann innerhalb Beispielsweise auf ein \code{Promise} Objekt gewartet werden. Ein Anwendungsbeispiel für diesen Fall wird im \hyperref[sec:requestFunctionality]{Kapitel~\ref{sec:requestFunctionality}} genauer getrachtet und deshalb an dieser Stelle nicht näher erläutert.\\
+\\
+Im \hyperref[sec:polling]{Kapitel~\ref{sec:polling}} wird mithilfe der Funktion \code{launch} ein weiterer Anwendungsfall betrachtet. Denn es ist außerdem möglich eine gewisse Zeit innerhalb des Lambda-Ausdrucks, mit der Funktion \code{delay}, zu warten und dabei die Anwendung nicht zu blockieren.
 
-
-\section{Implementierung der Request-Funktionalität}
+\section{Implementierung der Request-Funktionalität}\label{sec:requestFunctionality}
 Um die Kommunikation mit dem \gls{REST}ful Server, welche in den Anforderungen im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definiert wurden, zu gewährleisten, bedarf es einer Reihe von Funktionen zum senden eines Requestes. Für jeden Request-Typ wird dabei eine eigene statische Methode definiert. Um anschließend diese Funktionen nutzen zu können, müssen diese gegebenenfalls eine Parameterlist und eine Antwortfunktion verarbeiten können. Als Rückgabe wird das JavaScript \code{Promise} Objekt genutzt, mit wessen Hilfe und der Bibliothek \enquote{kotlinx.coroutines}\footnote{siehe \hyperref[sec:kotlinxCoroutines]{Kapitel~\ref{sec:kotlinxCoroutines}}} die Möglichkeit besteht auf den Abschluss eines Requestes zu warten. Dies ist teilweise notwendig, da JavaScript grundlegend Asynchron arbeitet.\\
 \\
 Das \hyperref[lst:requestUtility]{Listing~\ref{lst:requestUtility}} zeigt die Implementierung der statischen Methoden für die Request-Typen \code{GET} und \code{POST}. Alle weiteren Request-Typen sind ebenfalls definiert, werden aber in dieser Veranschaulichung vernachlässigt. Die Funktion \code{parseParams} verarbeitet dabei die übergebene Parameterliste, welche aus Key-Value-Paaren bestehen muss. Dabei dient der Key in Form eines Strings als Parameterindikator und der Value als Wert des Parameters. Der Funktionsparameter \code{callback} kann in Form eines Lambda-Ausdrucks, bei Funktionsaufruf definiert werden und wird anschließen nach Erhalt des \gls{HTTP}-Response ausgeführt.\\
@@ -128,7 +132,7 @@ launch {
 }
 \end{lstlisting}
 
-\section{Implementierung des Polling-Verfahrens}
+\section{Implementierung des Polling-Verfahrens}\label{sec:polling}
 Für die Umsetzung des Polling-Verfahrens, welches in den Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}}, verlagt wurde, muss mehreres gewährleistet werden. Zu aller erst muss das Polling gestartet und gestoppt werden können. Des weiteren muss die Möglichkeit bestehen eine Aufgabe zu definieren, welche nach dem Start des Pollings rekursiv ausgeführt wird. Zwischen den rekursiven Aufrufen der Aufgabe soll eine Zeit-Wert definiert werden können, welchen der Prozess wartet bevor er sich erneut selber aufruft. Sobald der Polling-Prozess angehalten wurde, muss der rekursive Aufruf unterbrochen werden.\\
 \\
 In dem \hyperref[lst:pollingUtility]{Listing~\ref{lst:pollingUtility}} wurden diese Anforderungen an das Polling-Verfahren implementiert. Die Property \code{stopPolling} gibt dabei an, ob der rekursive Prozess unterbrochen werden soll. Mithilfe der Wartezeit und der auszuführende Aufgabe als Parameter der \code{start}-Funktion, kann das Polling eingeleitet werden. Dafür wird die Property \code{stopPolling} auf \code{false} gesetzt und anschließend die Rekursion gestartet. Die \code{stop}-Funktion setzt die Property \code{stopPolling} auf \code{true}, was wiederum in der rekursiven Funktion \code{sendPollingRequest} zu einer Unterbrechung führt.\\
