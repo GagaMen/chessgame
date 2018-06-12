@@ -200,45 +200,100 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 \subsection{Funktionale Kriterien (Functional)}
 \subsubsection{JavaScript-Kompilierung}
 \begin{description}
-	\item[Kotlin] Als Ziel der Kompilierung dient der JavaScript-Standard ECMAScript 5. Es existiert aber bereits Pläne für die Umsetzung des ECMAScript 2015 Standards. \cite{kotlinJavaScript} Für ein Modul-System kann zwischen \gls{AMD}, CommonJS und \gls{UMD} gewählt werden. \cite{kotlinJsModules} 
-	\item[GWT(Java)] Der Standard ECMAScript 5 dient an dieser stelle ebenfalls als Kompilierungsziel. Auch hier ist bereits eine Planung für den ECMAScript 2015 Support bekannt, welcher mit der Version 3.0 veröffentlicht werden soll. \cite{gwtRoadmap} Mittels \gls{GWT} ist es nicht möglich ein JavaScript Modul-System zu verwenden.
+	\item[Kotlin] Als Ziel der Kompilierung dient der JavaScript-Standard ECMAScript 5. Es existiert aber bereits Pläne für die Umsetzung des ECMAScript 2015 Standards. Für ein Modul-System kann zwischen \gls{AMD}, CommonJS und \gls{UMD} gewählt werden. \cite{kotlinJavaScript, kotlinJsModules} 
+	\item[GWT(Java)] Der Standard ECMAScript 5 dient an dieser stelle ebenfalls als Kompilierungsziel. Auch hier ist bereits eine Planung für den ECMAScript 2015 Support bekannt, welcher mit der Version 3.0 veröffentlicht werden soll. Mittels \gls{GWT} ist es nicht möglich ein JavaScript Modul-System zu verwenden. \cite{gwtRoadmap}
 \end{description}
 
 \subsubsection{Build-Tools}
+\begin{description}
+	\item[Kotlin] Es werden gleich eine ganze Reihe an Build-Tools unterstützt. Vertreten sind dabei Gradle, Maven und Ant, wobei die Nutzung von Gradle für die Kompilierung nach JavaScript offiziell empfohlen wird. \cite{kotlinBuildTools, kotlinToJavaScript}
+	\item[GWT(Java)] Nur Ant wird unterstützt, aber auch andere Build-Tools wie zum Beispiel Maven oder Gradle lassen sich über Drittanbieter-Software verwenden. \cite{gwtGettingStarted}
+\end{description}
 
 \subsubsection{Bibliotheken}
+\begin{description}
+	\item[Kotlin] Es besteht die Möglichkeit bereits erstellte JavaScript-Bibliotheken, mittels \gls{JsInterop} zu integrieren. Dafür muss die \gls{API} der Bibliothek nachgebaut werden. Da das für große Projekte sehr mühselig sein kann, biete Kotlin dafür das Tool \enquote{ts2kt}\footnote{siehe \url{https://github.com/Kotlin/ts2kt}} an, welches diese Aufgabe übernimmt. Voraussetzung dafür ist nur die Existenz der zugehörigen TypeScript Definitionsdateien. Eine Integration von Java-Bibliotheken ist nicht möglich. \cite{kotlinJsInteop, kotlinJsJavaToJs}
+	\item[GWT(Java)] Ebenso wie in Kotlin besteht die Möglichkeit der Einbindung bereits bestehender JavaScript-Bibliotheken, mithilfe von \gls{JsInterop} oder \gls{JSNI}. Aber es wird jedoch nicht mehr empfohlen  \gls{JSNI} zu benutzen, weil diese Technologie veraltet ist und mit der Version 3.0 entfernt wird. Im Gegensatz zu Kotlin können in \gls{GWT} auch Java-Bibliotheken eingebunden, was daher geschuldet ist das generell Java-Code in JavaScript-Code kompiliert wird. \cite{gwtJsInterop, gwtJSNI}
+\end{description}
 
 \subsubsection{Programmierung}
-
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsection{Qualitative Kriterien (Quality)}
 \subsubsection{Kommunikationsstandards}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Browser-Support}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Lernkurve}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 
 \subsection{Anwenderkriterien (Vendor)}
 \subsubsection{Dokumentation}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Support}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Community}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 
 \subsection{Kosten- und Nutzenorientierte Kriterien (Cost and benefit)}
 \subsubsection{Lizenz}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Benutzungskosten}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 
 \subsection{Kriterien an die öffentliche Meinung (Opinion)}
 \subsubsection{Beliebtheit}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Veröffentlichung}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 \subsubsection{Indizies}
+\begin{description}
+	\item[Kotlin] 
+	\item[GWT(Java)] 
+\end{description}
 
 
 %\begin{longtabu} to \textwidth {X[L]X[L]X[L]}
