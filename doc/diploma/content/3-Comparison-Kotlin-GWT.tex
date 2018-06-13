@@ -225,20 +225,20 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 \subsection{Qualitative Kriterien (Quality)}
 \subsubsection{Kommunikationsstandards}
 \begin{description}
-	\item[Kotlin] 
-	\item[GWT(Java)] 
+	\item[Kotlin] Mithilfe der Bibliothek \enquote{kotlinx.serialization} können die Formate \gls{JSON}, \gls{CBOR} und Protobuf verarbeitet und auch direkt in Objekte geparst werden. Dabei besteht auch die Möglichkeit die Bibliothek für weitere Formate zu erweitern. Das Format \gls{XML} kann auch mit Standard JavaScript Methoden verarbeitet, aber nicht direkt in Objekte geparst werden. \cite{kotlinxSerialization}
+	\item[GWT(Java)] Auch \gls{GWT} bietet die Möglichkeit \gls{JSON} in Objekte zu parsen, aber genau wie bei Kotlin gilt das nicht für das Format \gls{XML}. Hierfür werden zwar benötigte Funktionen und Methoden durch \gls{GWT} bereitgestellt, aber ein Objekt-Parsing ist dennoch nicht möglich. Andere Formate werden nicht offiziell unterstützt. \cite{gwtJSON, gwtXML}
 \end{description}
 
 \subsubsection{Browser-Support}
 \begin{description}
-	\item[Kotlin] 
-	\item[GWT(Java)] 
+	\item[Kotlin] Offiziell gibt es keine Information welche Browser unterstützt werden.
+	\item[GWT(Java)] Die Browser Internet Explorer in den Versionen acht, neun, zehn und elf, Safari in den Versionen fünf und sechs, Firefox, Chrome und Opera werden offiziell unterstützt. \cite{gwtGettingStarted}
 \end{description}
 
 \subsubsection{Lernkurve}
 \begin{description}
-	\item[Kotlin] 
-	\item[GWT(Java)] 
+	\item[Kotlin] Es wird eine kompakte Einführung bereitgestellt, welche auf ein schnelles erfolgreiches Ergebnis abzielt. Des weiteren gibt es eine ganze Reihe an Tutorials, welche sehr ausführlich erläutert und immer mit reichlich Beispielen bestückt sind. Zu dem wird außerdem noch eine Online-Plattform\footnote{siehe \url{https://try.kotlinlang.org/}} angeboten, wo weitere Beispiele direkt ausgeführt und auch eigener Code getestet werden kann. \cite{kotlinReference}
+	\item[GWT(Java)] Auch für die Bibliothek \gls{GWT} wird eine Kompakte Einführung mit schnellem Ergebnis bereit gestellt. Ergänzend dazu gibt es eine ganze Reihe an Tutorials, wo auch etwas größere und komplexere Beispiele vertreten sind. Leider gibt es für \gls{GWT} keine Online-Plattform, um ohne eine Installation diese zu testen, aber für Java\footnote{\url{https://www.jdoodle.com/online-java-compiler}} gibt es solche. \cite{gwtGettingStarted}
 \end{description}
 
 
