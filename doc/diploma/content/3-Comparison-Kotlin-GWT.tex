@@ -3,9 +3,11 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Vergleich zwischen Kotlin und dem Google Web Toolkit}
-Ziel dieses Kapitels soll der Vergleich von Kotlin und dem \gls{GWT}. Beide können dazu genutzt werden um JavaScript-Code zu generieren. Dabei ist Kotlin eine Programmiersprache und \gls{GWT} ein Framework, welches in und für die Programmiersprache Java implementiert wurde. Um einen sinnvollen Vergleich zu ermöglichen wird im Nachfolgenden \gls{GWT} in Zusammenhang mit Java bzw. als Erweiterung dieser betrachtet.\\
+Ziel dieses Kapitels soll der Vergleich von Kotlin und dem \gls{GWT}. Beide können dazu genutzt werden um JavaScript-Code zu generieren. Dabei ist Kotlin eine Programmiersprache und \gls{GWT} ein Framework, welches in und für die Programmiersprache Java implementiert wurde. Um einen sinnvollen Vergleich zu ermöglichen wird im Nachfolgenden \gls{GWT} in Zusammenhang mit Java bzw. als Erweiterung betrachtet.\\
 \\
-\todo{Auf nachfolgende Kapitel eingehen}
+In dem ersten \hyperref[sec:comparisonCriteria]{Unterabschnitt~\ref{sec:comparisonCriteria}} werden dafür zu aller erst die Vergleichskriterien ermittelt, welche für den Vergleich benötigt werden. Anschließend dient der \hyperref[sec:comparisonResults]{Unterabschnitt~\ref{sec:comparisonResults}} zur Präsentation des Vergleichsergebnisses.\\
+\\
+Da für diese Arbeit die Benutzung der Programmiersprache Kotlin vorgegeben ist, wird auf eine Bewertung der Vergleichsteilnehmer verzichtet.
 
 \section{Vergleichskriterien}\label{sec:comparisonCriteria}
 Für die Ermittlung der Vergleichskriterien wurde das Paper \cite{frameworkEvaluation} von Jadhav und Sonar verwendet. In diesem werden zwar Bewertungsmethodiken für Software-Produkte ermittelt und näher erläutert, aber viele dieser Kriterien lassen sich auch auf Programmiersprachen anwenden. \\
@@ -17,11 +19,12 @@ Jadhav und Sonar haben dafür, neben der Vorgehensweise eines Vergleichs, die si
 	\label{fig:comparisionCriteria}
 \end{figure}
 \\
-Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprachen anwenden, weshalb für diesen konkreten Fall die Kriterien \enquote{Technical} und \enquote{Output} entfallen. Denn mit \enquote{Technical} sind Hardware- und mit \enquote{Output} Ausgabe-Kriterien gemeint, welche in diesem Vergleich keine Anwendung finden.\\
- \\
+Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprachen anwenden, weshalb für diesen konkreten Fall die Hauptkriterien \enquote{Technical} und \enquote{Output} entfallen. Denn mit \enquote{Technical} sind Hardware- und mit \enquote{Output} Ausgabe-Kriterien gemeint, welche in diesem Vergleich keine Anwendung finden.\\
+\\
+In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unterabschnitten~\ref{sec:functionalCriteria} bis \ref{sec:opinionCriteria}} wurden dafür den Hauptkriterien einzelne Unterkriterien zugeordnet und mit Leitfragen detaillierter beschrieben. Dabei beziehen sich diese auf den konkreten Anwendungsfall des Vergleich zwischen Kotlin und \gls{GWT}, wobei die Kompilierung nach JavaScript im Vordergrund steht.
 %Auf Basis des Papers von Jadhav und Sonar wurden die Kriterien, aus der  \hyperref[tab:comparisonCriteria]{Tabelle~\ref{tab:comparisonCriteria}}, für diesen Anwendungsfall ausgearbeitet bzw. angepasst.
  
-\subsection{Funktionale Kriterien (Functional)}
+\subsection{Funktionale Kriterien (Functional)}\label{sec:functionalCriteria}
 \subsubsection{JavaScript-Kompilierung}
 \begin{itemize}
 	\item In welche JavaScript-Versionen kann kompiliert werden?
@@ -48,7 +51,7 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 %	\item Wie gut ist die Handhabung Funktionaler Aspekte sofern diese existieren?
 \end{itemize}
 
-\subsection{Qualitative Kriterien (Quality)}
+\subsection{Qualitative Kriterien (Quality)}\label{sec:qualityCriteria}
 \subsubsection{Kommunikationsstandards}
 \begin{itemize}
 	\item Welche gängigen Formate können standardmäßig verarbeitet werden?
@@ -66,7 +69,7 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 	\item Gibt es Online-Plattformen um die Programmiersprache auszuprobieren?
 \end{itemize}
  
-\subsection{Anwenderkriterien (Vendor)}
+\subsection{Anwenderkriterien (Vendor)}\label{sec:vendorCriteria}
 \subsubsection{Dokumentation}
 \begin{itemize}
 	\item Gibt es eine ausführliche Dokumentation?
@@ -86,7 +89,7 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 	\item Gibt es Unternehmen welche die Entwicklung unterstützen?
 \end{itemize}
 
-\subsection{Kosten- und Nutzenorientierte Kriterien (Cost and benefit)}
+\subsection{Kosten- und Nutzenorientierte Kriterien (Cost and benefit)}\label{sec:costCriteria}
 \subsubsection{Lizenz}
 \begin{itemize}
 	\item Wurde die Programmiersprache unter einer freie Lizenz veröffentlicht?
@@ -98,7 +101,7 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 	\item Sind kostenpflichtige Programme für die Benutzung notwendig?
 \end{itemize}
 
-\subsection{Kriterien an die öffentliche Meinung (Opinion)}
+\subsection{Kriterien an die öffentliche Meinung (Opinion)}\label{sec:opinionCriteria}
 \subsubsection{Beliebtheit}
 \begin{itemize}
 	\item Wie viele Repositories gibt es auf Github, welche mit der Programmiersprache entwickelt wurden?
@@ -238,7 +241,7 @@ Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprac
 \subsubsection{Lernkurve}
 \begin{description}
 	\item[Kotlin] Es wird eine kompakte Einführung bereitgestellt, welche auf ein schnelles erfolgreiches Ergebnis abzielt. Des weiteren gibt es eine ganze Reihe an Tutorials, welche sehr ausführlich erläutert und immer mit reichlich Beispielen bestückt sind. Zu dem wird außerdem noch eine Online-Plattform\footnote{siehe \url{https://try.kotlinlang.org/}} angeboten, wo weitere Beispiele direkt ausgeführt und auch eigener Code getestet werden kann. \cite{kotlinReference}
-	\item[GWT(Java)] Auch für die Bibliothek \gls{GWT} wird eine Kompakte Einführung mit schnellem Ergebnis bereit gestellt. Ergänzend dazu gibt es eine ganze Reihe an Tutorials, wo auch etwas größere und komplexere Beispiele vertreten sind. Leider gibt es für \gls{GWT} keine Online-Plattform, um ohne eine Installation diese zu testen, aber für Java\footnote{\url{https://www.jdoodle.com/online-java-compiler}} gibt es solche. \cite{gwtGettingStarted}
+	\item[GWT(Java)] Auch für die Bibliothek \gls{GWT} wird eine Kompakte Einführung mit schnellem Ergebnis bereit gestellt. Ergänzend dazu gibt es eine ganze Reihe an Tutorials, wo auch etwas größere und komplexere Beispiele vertreten sind. Leider gibt es für \gls{GWT} keine Online-Plattform, um ohne eine Installation diese zu testen, aber für Java\footnote{siehe \url{https://www.jdoodle.com/online-java-compiler}} gibt es solche. \cite{gwtGettingStarted}
 \end{description}
 
 
