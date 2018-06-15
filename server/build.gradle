@@ -57,7 +57,6 @@ war {
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
@@ -69,12 +68,12 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version"
-    compile group: 'org.xerial', name: 'sqlite-jdbc', version: "$sqlite_driver_version"
+    compile "org.xerial:sqlite-jdbc:$sqlite_driver_version"
     compile "com.j256.ormlite:ormlite-core:$ormlite_version"
     compile "com.j256.ormlite:ormlite-jdbc:$ormlite_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$fasterxml_jackson_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$fasterxml_jackson_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-core:$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$fasterxml_jackson_version"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testCompile("org.springframework.boot:spring-boot-starter-test:$spring_boot_version")

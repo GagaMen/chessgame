@@ -11,6 +11,16 @@ Die in diesem Kapitel vorgestellten Bibliotheken bzw. Frameworks sollen die Umse
 \subsection{RequireJS}\label{sec:requireJs}
 RequireJS \cite{requirejs} ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\\
 \\
+Das \hyperref[lst:includeRequireJs]{Listing~\ref{lst:includeRequireJs}} zeigt wie RequireJs in einem Gradle Projekt eingebunden werden kann. Dafür müssen diese Zeilen in die \code{build.gradle} eingefügt werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek RequireJs mithilfe von Gradle}, label=lst:includeRequireJs, float]
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.webjars:requirejs:2.3.5"
+}
+\end{lstlisting}
 Für die Modulbeschreibung innerhalb von JavaScript stehen mehrere Formate bereit. RequireJS setzt dabei auf das Format \gls{AMD}. Das \hyperref[lst:amdExample]{Listing~\ref{lst:amdExample}} stellt ein einfaches Beispiel für die Definition eines \gls{AMD}-Moduls bereit. In dem Zeitschriftartikel \cite{jsModuleDefinitions} können zu den einzelnen Modul-Formaten und deren Einsatzmöglichkeiten nähere Informationen nachgelesen werden.
 \begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Moduldefinition mittels \acrfull{AMD} \cite{requirejsExample}}, label=lst:amdExample]
 define(['jquery'] , function ($) {
@@ -21,6 +31,16 @@ define(['jquery'] , function ($) {
 \subsection{kotlinx.html}\label{sec:kotlinxHtml}
 Die Bibliothek kotlinx.html \cite{kotlinxHtml} ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
 \\
+Um die Bibliothek in einem Projekt, mit Gradle als Build Tool zu verwenden, müssen die Zeilen aus \hyperref[lst:includeKotlinxHtml]{Listing~\ref{lst:includeKotlinxHtml}} in die Datei \code{build.gradle} eingefügt werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.html mithilfe von Gradle}, label=lst:includeKotlinxHtml, float]
+repositories {
+	jcenter()
+}
+
+dependencies {
+	compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
+}
+\end{lstlisting}
 Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
 \begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kotlinx.html \cite{kotlinxHtmlExample}}, label=lst:kotlinxHtmlExample]
 import kotlinx.html.*
@@ -41,6 +61,27 @@ val myDiv = document.create.div {
 \subsection{kotlinx.serialization}\label{sec:kotlinxSerialization}
 Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und \gls{Protobuf} von Haus aus.\\
 \\
+Für die Verwendung in einen Gradle-Projekt müssen die Zeilen aus dem \hyperref[lst:includeKotlinxSerialization]{Listing~\ref{lst:includeKotlinxSerialization}} in der Build-Datei von Gradle eingefügt werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.serialization mithilfe von Gradle}, label=lst:includeKotlinxSerialization, float]
+buildscript {
+	repositories {
+		maven { url "https://kotlin.bintray.com/kotlinx" }
+	}
+	dependencies {
+		compile "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:0.5.0"
+	}
+}
+
+apply plugin: 'kotlinx-serialization'
+
+repositories {
+	maven { url "https://kotlin.bintray.com/kotlinx" }
+}
+
+dependencies {
+	compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.5.0"
+}
+\end{lstlisting}
 Um Daten in der \gls{JSON} zu können, müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Properties mithilfe der \code{Optional}-Annotation als Optional zu definieren.\\
 \\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Model-Erweiterung für Unterstützung der Kotlinx.serialization Bibliothek (verändert nach \cite{kotlinxSerializationExample})}, label=lst:kotlinxSerializePrepare, float]
@@ -59,6 +100,22 @@ JSON.parse<Data>("""{"a":42}""") // Data(a=42, b="42")
 \subsection{kotlinx.coroutines}\label{sec:kotlinxCoroutines}
 Die Bibliothek kotlinx.coroutines \cite{kotlinxCoroutines} ist eine weiteres Projekt aus der kotlinx Serie von JetBrains, welche eine Reihe von high-level Coroutinen bereit stellt. Im Falle des Clients soll die Bibliothek dazu genutzt werden auf Funktionen warten zu können. Deshalb beschränkt sich die Erläuterung dieser Bibliothek auf diese Funktionalität. Für weitere Instruktionen bzw. andere Anwendungsfälle können diese in der Dokumentation unter \cite{kotlinxCoroutinesDocu} nachgelesen werden.\\
 \\
+Um die Bibliothek einzubinden müssen die Zeilen des Listing bla in die Build-Datei eingefügt werden. In der verwendeten Version \enquote{0.22.5} sind die letzten vier Zeilen notwendig, weil die Bibliothek derzeit noch in dem Experimentellen Stadium ist und sonst nicht verwendet werden kann. Sobald diese aus diesem Stadium raus ist, können die vier Zeilen weggelassen werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.coroutines mithilfe von Gradle}, label=lst:includeKotlinxCoroutines, float]
+repositories {
+	jcenter()
+}
+
+dependencies {
+	compile "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:0.22.5"
+}
+
+kotlin {
+	experimental {
+		coroutines 'enable'
+	}
+}
+\end{lstlisting}
 Mithilfe der Funktion \code{launch} welche als letzten Parameter einen Lambda-Ausdruck entgegen nimmt, kann innerhalb Beispielsweise auf ein \code{Promise} Objekt gewartet werden. Ein Anwendungsbeispiel für diesen Fall wird im \hyperref[sec:requestFunctionality]{Kapitel~\ref{sec:requestFunctionality}} genauer getrachtet und deshalb an dieser Stelle nicht näher erläutert.\\
 \\
 Im \hyperref[sec:polling]{Kapitel~\ref{sec:polling}} wird mithilfe der Funktion \code{launch} ein weiterer Anwendungsfall betrachtet. Denn es ist außerdem möglich eine gewisse Zeit innerhalb des Lambda-Ausdrucks, mit der Funktion \code{delay}, zu warten und dabei die Anwendung nicht zu blockieren.
