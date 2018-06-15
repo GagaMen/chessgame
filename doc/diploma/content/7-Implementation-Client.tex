@@ -22,7 +22,7 @@ define(['jquery'] , function ($) {
 Die Bibliothek kotlinx.html \cite{kotlinxHtml} ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
 \\
 Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kontlinx.html \cite{kotlinxExample}}, label=lst:kotlinxHtmlExample]
+\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kotlinx.html \cite{kotlinxHtmlExample}}, label=lst:kotlinxHtmlExample]
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
@@ -39,7 +39,7 @@ val myDiv = document.create.div {
 \end{lstlisting}
 
 \subsection{kotlinx.serialization}\label{sec:kotlinxSerialization}
-Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und Protobuf von Haus aus.\\
+Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und \gls{Protobuf} von Haus aus.\\
 \\
 Um Daten in der \gls{JSON} zu können, müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Properties mithilfe der \code{Optional}-Annotation als Optional zu definieren.\\
 \\

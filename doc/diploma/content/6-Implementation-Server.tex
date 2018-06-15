@@ -8,10 +8,10 @@ Inhalt dieses Kapitels soll die Umsetzung des Konzeptes aus \hyperref[sec:concep
 \section{Verwendete Bibliotheken/Frameworks}
 Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibfasterxml]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibfasterxml}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
 
-\subsection{Spring}\label{sec:bibspring}
-Spring wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich das leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können. \cite{proSpring5} Spring biete eine Vielzahl an Einsatzmöglichkeiten, aber für die Umsetzung des Servers soll es für die Erzeugung der \gls{REST}-\gls{API} dienen.\\
+\subsection{Spring Boot}\label{sec:bibspring}
+Spring Boot wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich das leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können. \cite{proSpring5} Spring biete eine Vielzahl an Einsatzmöglichkeiten, aber für die Umsetzung des Servers soll es für die Erzeugung der \gls{REST}-\gls{API} dienen.\\
 \\
-Um Spring in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}}, zusätzlich zu denen welche Kotlin benötigt\todo{ggf. irgendwo beschreiben wie man Kotlin in Gradle einbindet}, in der Build-Datei \code{build.gradle} eingefügt werden.
+Um Spring in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}}, in der Build-Datei \code{build.gradle} eingefügt werden.
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung des Spring Framework mithilfe von Gradle}, label=lst:includeSpring, float]
 buildscript {
 	repositories {
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-	compile "org.springframework.boot:spring-boot-starter-web"
+	compile "org.springframework.boot:spring-boot-starter-web:1.5.4.RELEASE"
 }
 \end{lstlisting}
 Zu beachten ist dabei das Gradle nur eine Lösung für die Einbindung ist. Da aber für die Umsetzung ebenfalls Gradle verwendet wird, werden alle anderen Lösungen an dieser Stelle vernachlässigt.\\
@@ -68,7 +68,7 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
+	compile "org.xerial:sqlite-jdbc:3.21.0.1"
 }
 \end{lstlisting}
 Für ein einfaches Beispiel für die Verbindung zu einer SQLite Datenbank, die Erstellung von Tabellen und für das Absenden von SQL-Abfragen stellt \cite{sqliteJDBCTutorial} ein Tutorial bereit. Da für die Implementierung eine \gls{ORM} Bibliothek, welche im \hyperref[sec:bibormlite]{Kapitel~\ref{sec:bibormlite}} verwendet wird, wird eine nähere Betrachtung für die Verwendung von SQLite mithilfe des \gls{JDBC} Treibers vernachlässigt.
@@ -133,9 +133,9 @@ repositories {
 }
 
 dependencies {
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$fasterxml_jackson_version"
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$fasterxml_jackson_version"
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$fasterxml_jackson_version"
+	compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
+	compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
+	compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 }
 \end{lstlisting}
 Um anschließend den \gls{XML}-Support für ein Spring-Projekt einzurichten, müssen die Modelle mit Annotations erweitert werden. Das \hyperref[lst:exampleFasterxml]{Listing~\ref{lst:exampleFasterxml}} zeigt dabei wie ein Modell zu konfigurieren ist. Mit diesen Einstellungen wird die Content-Negotiation gewährleistet, welche im \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}} näher beleuchtet wird.
