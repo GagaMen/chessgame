@@ -24,6 +24,8 @@ Diploma.acn
 Diploma.acr
 Diploma.alg
 Diploma.pdf
+Diploma.glo
+Diploma.syg
 doc/diploma/**/*.log
 doc/diploma/**/*.aux
 doc/server/javadoc

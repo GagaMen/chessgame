@@ -170,13 +170,23 @@
   \clearpage
   % print out acronym list   
   \IfGlossariesStyleDefined{longtabuFancyHeader}%
-   {\printglossary[type=\acronymtype,style=longtabuFancyHeader]}%
+   {\printglossary[type=\acronymtype,style=longtabuFancyHeader, title={Abkürzungsverzeichnis}]}%
   % print out symbol list 
-  \IfGlossariesStyleDefined{longtabuFancyHeader}%
-   {\printglossary[type=symbolslist,style=longtabuFancyHeader]}%
+%  \IfGlossariesStyleDefined{longtabuFancyHeader}%
+%   {\printglossary[type=symbolslist,style=longtabuFancyHeader]}%
   % print out glossary
-  \printglossary[style=altlist]
+%  \printglossary[style=altlist]
 } % end of glossaries
+
+%% -- list of figures and tables --
+\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lof}
+\listoffigures
+\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lot}
+\listoftables
+
+%% -- List of Listings --
+% _Remove_ if no listing with caption is defined
+\IfDefined{lstlistoflistings}{\cleardoublepage\lstlistoflistings}
 
 % --- Main Document --- --- --- --- --- --- ---
 \mainmatter
@@ -205,16 +215,6 @@
     heading=bibintoc, % (bibintoc, bibnumbered)
   ]	
 }% end of bibliography
-
-%% -- list of figures and tables --
-\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lof}
-\listoffigures
-\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lot}
-\listoftables
-
-%% -- List of Listings --
-% _Remove_ if no listing with caption is defined
-\IfDefined{lstlistoflistings}{\cleardoublepage\lstlistoflistings}
 
 \input{content/Z-Thanks.tex}
 
