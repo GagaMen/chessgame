@@ -1,0 +1,41 @@
+\lstdefinelanguage{html}{
+  sensitive=true,	
+  alsoletter={<>=-},	
+  morecomment=[s]{<!-}{-->},
+  identifierstyle=\color{black},
+  keywordstyle=\color{NavyBlue}\bfseries,
+  ndkeywordstyle=\color{editorGreen}\bfseries,
+  stringstyle=\color{editorOcher}\ttfamily,
+  commentstyle=\color{ForestGreen}\ttfamily,
+  otherkeywords={
+  % General
+  >,
+  % Standard tags
+	<!DOCTYPE,
+  </html, <html, <head, <title, </title, <style, </style, <link, </head, <meta, />,
+	% body
+	</body, <body,
+	% Divs
+	</div, <div, </div>, 
+	% Paragraphs
+	</p, <p, </p>,
+	% scripts
+	</script, <script,
+  % More tags...
+  <canvas, /canvas>, <svg, <rect, <animateTransform, </rect>, </svg>, <video, <source, <iframe, </iframe>, </video>, <image, </image>, <header, </header, <article, </article
+  },
+  ndkeywords={
+  % General
+  =,
+  % HTML attributes
+  charset=, src=, id=, width=, height=, style=, type=, rel=, href=,
+  % SVG attributes
+  fill=, attributeName=, begin=, dur=, from=, to=, poster=, controls=, x=, y=, repeatCount=, xlink:href=,
+  % properties
+  margin:, padding:, background-image:, border:, top:, left:, position:, width:, height:, margin-top:, margin-bottom:, font-size:, line-height:,
+	% CSS3 properties
+  transform:, -moz-transform:, -webkit-transform:,
+  animation:, -webkit-animation:,
+  transition:,  transition-duration:, transition-property:, transition-timing-function:,
+  }
+}

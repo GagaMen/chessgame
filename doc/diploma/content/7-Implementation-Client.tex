@@ -22,7 +22,7 @@ dependencies {
 }
 \end{lstlisting}
 Für die Modulbeschreibung innerhalb von JavaScript stehen mehrere Formate bereit. RequireJS setzt dabei auf das Format \gls{AMD}. Das \hyperref[lst:amdExample]{Listing~\ref{lst:amdExample}} stellt ein einfaches Beispiel für die Definition eines \gls{AMD}-Moduls bereit. In dem Zeitschriftartikel \cite{jsModuleDefinitions} können zu den einzelnen Modul-Formaten und deren Einsatzmöglichkeiten nähere Informationen nachgelesen werden.
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Moduldefinition mittels \acrfull{AMD} \cite{requirejsExample}}, label=lst:amdExample]
+\begin{lstlisting}[style=lstStyleFramed, language=JavaScript, caption={Beispiel: Moduldefinition mittels \acrfull{AMD} \cite{requirejsExample}}, label=lst:amdExample, float]
 define(['jquery'] , function ($) {
 	return function () {};
 });
@@ -42,7 +42,7 @@ dependencies {
 }
 \end{lstlisting}
 Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kotlinx.html \cite{kotlinxHtmlExample}}, label=lst:kotlinxHtmlExample]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Verwendung der Bibliothek kotlinx.html \cite{kotlinxHtmlExample}}, label=lst:kotlinxHtmlExample, float]
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
@@ -50,7 +50,7 @@ val myDiv = document.create.div {
 	p { +"text inside" }
 }
 \end{lstlisting}
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Verwendung der Bibliothek kotlinx.html (Ergebnis)}, label=lst:kotlinxHtmlParseExample]
+\begin{lstlisting}[style=lstStyleFramed, language=html, caption={Beispiel: Verwendung der Bibliothek kotlinx.html (Ergebnis)}, label=lst:kotlinxHtmlParseExample, float]
 <div>
 	<p>
 		text inside
