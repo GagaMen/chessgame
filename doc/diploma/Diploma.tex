@@ -167,10 +167,10 @@
 \tableofcontents
 
 \IfPackagesLoaded{glossaries,longtable,tabu}{%
-  \clearpage
+  \clearpage\IfDefined{phantomsection}{\phantomsection}\label{sec:loa}
   % print out acronym list   
   \IfGlossariesStyleDefined{longtabuFancyHeader}%
-   {\printglossary[type=\acronymtype,style=longtabuFancyHeader, title={Abkürzungsverzeichnis}]}%
+   {\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}\printglossary[type=\acronymtype,style=longtabuFancyHeader, title={Abkürzungsverzeichnis}]}%
   % print out symbol list 
 %  \IfGlossariesStyleDefined{longtabuFancyHeader}%
 %   {\printglossary[type=symbolslist,style=longtabuFancyHeader]}%
@@ -180,13 +180,15 @@
 
 %% -- list of figures and tables --
 \cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lof}
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
 \listoffigures
 \cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lot}
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
 \listoftables
 
 %% -- List of Listings --
 % _Remove_ if no listing with caption is defined
-\IfDefined{lstlistoflistings}{\cleardoublepage\lstlistoflistings}
+\IfDefined{lstlistoflistings}{\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lol}\addcontentsline{toc}{chapter}{Listings}\lstlistoflistings}
 
 % --- Main Document --- --- --- --- --- --- ---
 \mainmatter
