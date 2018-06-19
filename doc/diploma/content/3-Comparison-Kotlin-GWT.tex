@@ -3,32 +3,32 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Vergleich zwischen Kotlin und dem Google Web Toolkit}
-Ziel dieses Kapitels soll der Vergleich von Kotlin und dem \gls{GWT}. Beide können dazu genutzt werden um JavaScript-Code zu generieren. Dabei ist Kotlin eine Programmiersprache und \gls{GWT} ein Framework, welches in und für die Programmiersprache Java implementiert wurde. Um einen sinnvollen Vergleich zu ermöglichen wird im Nachfolgenden \gls{GWT} in Zusammenhang mit Java bzw. als Erweiterung betrachtet.\\
+Ziel dieses Kapitels soll der Vergleich von Kotlin und dem \gls{GWT} sein. Beide können dazu genutzt werden um JavaScript-Code zu generieren. Dabei ist Kotlin eine Programmiersprache und \gls{GWT} ein Framework, welches in und für die Programmiersprache Java implementiert wurde. Um einen sinnvollen Vergleich zu ermöglichen wird im Nachfolgenden \gls{GWT} in Zusammenhang mit Java bzw. als Erweiterung betrachtet.\\
 \\
 In dem ersten \hyperref[sec:comparisonCriteria]{Unterabschnitt~\ref{sec:comparisonCriteria}} werden dafür zu aller erst die Vergleichskriterien ermittelt, welche für den Vergleich benötigt werden. Anschließend dient der \hyperref[sec:comparisonResults]{Unterabschnitt~\ref{sec:comparisonResults}} zur Präsentation des Vergleichsergebnisses.\\
 \\
 Da für diese Arbeit die Benutzung der Programmiersprache Kotlin vorgegeben ist, wird auf eine Bewertung der Vergleichsteilnehmer verzichtet.
 
 \section{Vergleichskriterien}\label{sec:comparisonCriteria}
-Für die Ermittlung der Vergleichskriterien wurde das Paper \cite{frameworkEvaluation} von Jadhav und Sonar verwendet. In diesem werden zwar Bewertungsmethodiken für Software-Produkte ermittelt und näher erläutert, aber viele dieser Kriterien lassen sich auch auf Programmiersprachen anwenden. \\
+Für die Ermittlung der Vergleichskriterien wurde das Paper \cite{frameworkEvaluation} von Jadhav und Sonar verwendet. In diesem werden zwar Bewertungsmethodiken für den Entscheidungsprozess von Software-Produkten ermittelt und näher erläutert, aber viele dieser Kriterien lassen sich auch auf Programmiersprachen anwenden. \\
 \\
-Jadhav und Sonar haben dafür, neben der Vorgehensweise eines Vergleichs, die sieben Hauptkriterien aus der \hyperref[fig:comparisionCriteria]{Abbildung~\ref{fig:comparisionCriteria}} entwickelt und anschließend diesen granularere Kriterien zugeordnet. Um eine Bewertung dieser zu vereinfachen wurden noch die Bedeutungen, in Form von Leitfragen, beigefügt.\\
+Jadhav und Sonar haben dafür, neben der Vorgehensweise eines Vergleichs, die sieben Hauptkriterien aus der \hyperref[fig:comparisionCriteria]{Abbildung~\ref{fig:comparisionCriteria}} entwickelt und anschließend diesen granularere Unterkriterien zugeordnet. Um eine Bewertung der einzelnen Kriterien zu vereinfachen wurden diesen Leitfragen zugewiesen. Mit der Beantwortung dieser Fragen soll die Benotung vereinfacht werden.\\
 \begin{figure}[htb]
 	\includegraphics[width=0.5\textwidth]{images/comparision-criteria.jpg}
 	\caption{Hauptkriterien des Softwarevergleichs von Jadhav und Sonar \cite{frameworkEvaluation}}
 	\label{fig:comparisionCriteria}
 \end{figure}
 \\
-Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprachen anwenden, weshalb für diesen konkreten Fall die Hauptkriterien \enquote{Technical} und \enquote{Output} entfallen. Denn mit \enquote{Technical} sind Hardware- und mit \enquote{Output} Ausgabe-Kriterien gemeint, welche in diesem Vergleich keine Anwendung finden.\\
+Wie schon Anfangs erwähnt lassen sich nicht alle Kriterien auf Programmiersprachen anwenden, weshalb für diesen konkreten Fall die Hauptkriterien \enquote{Technical} und \enquote{Output} entfallen. Da mit \enquote{Technical} Hardware- und mit \enquote{Output} Ausgabe-Kriterien gemeint sind, finden diese keine Verwendung.\\
 \\
-In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unterabschnitten~\ref{sec:functionalCriteria} bis \ref{sec:opinionCriteria}} wurden dafür den Hauptkriterien einzelne Unterkriterien zugeordnet und mit Leitfragen detaillierter beschrieben. Dabei beziehen sich diese auf den konkreten Anwendungsfall des Vergleich zwischen Kotlin und \gls{GWT}, wobei die Kompilierung nach JavaScript im Vordergrund steht.
+In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unterabschnitten~\ref{sec:functionalCriteria} bis \ref{sec:opinionCriteria}} werden dafür den Hauptkriterien einzelne Unterkriterien zugeordnet und mit Leitfragen detaillierter beschrieben. Dabei beziehen sich diese auf den konkreten Anwendungsfall des Vergleichs, wobei die Kompilierung nach JavaScript im Vordergrund stehen soll.
 %Auf Basis des Papers von Jadhav und Sonar wurden die Kriterien, aus der  \hyperref[tab:comparisonCriteria]{Tabelle~\ref{tab:comparisonCriteria}}, für diesen Anwendungsfall ausgearbeitet bzw. angepasst.
  
 \subsection{Funktionale Kriterien (Functional)}\label{sec:functionalCriteria}
 \subsubsection{JavaScript-Kompilierung}
 \begin{itemize}
 	\item In welche JavaScript-Versionen kann kompiliert werden?
-	\item Welche Java-Script Modul-System werden unterstützt?
+	\item Welche Java-Script Modul-Systeme werden unterstützt?
 \end{itemize}
 
 \subsubsection{Build-Tools}
@@ -105,7 +105,7 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 \subsubsection{Beliebtheit}
 \begin{itemize}
 	\item Wie viele Repositories gibt es auf Github, welche mit der Programmiersprache entwickelt wurden?
-	\item Wie viele Fragen wurden auf der Plattform Stack Overflow zu dieser Programmiersprache gestellt?
+	\item Wie viele Fragen wurden auf der Plattform Stack Overflow gestellt?
 \end{itemize}
 
 \subsubsection{Veröffentlichung}
@@ -203,33 +203,34 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 \subsection{Funktionale Kriterien (Functional)}
 \subsubsection{JavaScript-Kompilierung}
 \begin{description}
-	\item[Kotlin] Als Ziel der Kompilierung dient der JavaScript-Standard ECMAScript 5. Es existiert aber bereits Pläne für die Umsetzung des ECMAScript 2015 Standards. Für ein Modul-System kann zwischen \gls{AMD}, CommonJS und \gls{UMD} gewählt werden. \cite{kotlinJavaScript, kotlinJsModules} 
-	\item[GWT(Java)] Der Standard ECMAScript 5 dient an dieser stelle ebenfalls als Kompilierungsziel. Auch hier ist bereits eine Planung für den ECMAScript 2015 Support bekannt, welcher mit der Version 3.0 veröffentlicht werden soll. Mittels \gls{GWT} ist es nicht möglich ein JavaScript Modul-System zu verwenden. \cite{gwtRoadmap}
+	\item[Kotlin] Als Ziel der Kompilierung dient der JavaScript-Standard ECMAScript 5. Es existieren aber bereits Pläne für die Umsetzung des ECMAScript 2015 Standards. Als Modul-System kann zwischen \gls{AMD}, CommonJS und \gls{UMD} gewählt werden. \cite{kotlinJavaScript, kotlinJsModules} 
+	\item[GWT(Java)] Der Standard ECMAScript 5 dient auch für \gls{GWT} als Kompilierungsziel. Aber auch hier ist bereits eine Planung für den ECMAScript 2015 Standard bekannt, welcher mit der Version 3.0 veröffentlicht werden soll. Eine Verwendung eines JavaScript-Modul-Systems ist derzeit mit \gls{GWT} nicht möglich. \cite{gwtRoadmap}
 \end{description}
 
 \subsubsection{Build-Tools}
 \begin{description}
-	\item[Kotlin] Es werden gleich eine ganze Reihe an Build-Tools unterstützt. Vertreten sind dabei Gradle, Maven und Ant, wobei die Nutzung von Gradle für die Kompilierung nach JavaScript offiziell empfohlen wird. \cite{kotlinBuildTools, kotlinToJavaScript}
-	\item[GWT(Java)] Nur Ant wird unterstützt, aber auch andere Build-Tools wie zum Beispiel Maven oder Gradle lassen sich über Drittanbieter-Software verwenden. \cite{gwtGettingStarted}
+	\item[Kotlin] Es werden gleich eine ganze Reihe an Build-Tools unterstützt. Vertreten sind dabei Gradle, Maven und Ant. Dabei wird aber die Nutzung von Gradle für die Kompilierung nach JavaScript offiziell empfohlen. \cite{kotlinBuildTools, kotlinToJavaScript}
+	\item[GWT(Java)] Nur Ant wird unterstützt bzw. gibt es nur zu diesem eine offizielle Dokumentation. Aber dennoch können auch andere Build-Tools wie zum Beispiel Maven oder Gradle über Drittanbieter-Software verwendet werden. \cite{gwtGettingStarted}
 \end{description}
 
 \subsubsection{Bibliotheken}
 \begin{description}
 	\item[Kotlin] Es besteht die Möglichkeit bereits erstellte JavaScript-Bibliotheken, mittels \gls{JsInterop} zu integrieren. Dafür muss die \gls{API} der Bibliothek nachgebaut werden. Da das für große Projekte sehr mühselig sein kann, biete Kotlin dafür das Tool \enquote{ts2kt}\footnote{siehe \url{https://github.com/Kotlin/ts2kt}} an, welches diese Aufgabe übernimmt. Voraussetzung dafür ist nur die Existenz der zugehörigen TypeScript Definitionsdateien. Eine Integration von Java-Bibliotheken ist nicht möglich. \cite{kotlinJsInteop, kotlinJsJavaToJs}
-	\item[GWT(Java)] Ebenso wie in Kotlin besteht die Möglichkeit der Einbindung bereits bestehender JavaScript-Bibliotheken, mithilfe von \gls{JsInterop} oder \gls{JSNI}. Aber es wird jedoch nicht mehr empfohlen  \gls{JSNI} zu benutzen, weil diese Technologie veraltet ist und mit der Version 3.0 entfernt wird. Im Gegensatz zu Kotlin können in \gls{GWT} auch Java-Bibliotheken eingebunden, was daher geschuldet ist das generell Java-Code in JavaScript-Code kompiliert wird. \cite{gwtJsInterop, gwtJSNI}
+	\item[GWT(Java)] Ebenso wie in Kotlin besteht die Möglichkeit der Einbindung bereits bestehender JavaScript-Bibliotheken, mithilfe von \gls{JsInterop} oder den \gls{JSNI}. Aber es wird jedoch nicht mehr empfohlen  \gls{JSNI} zu benutzen, weil diese Technologie veraltet ist und außerdem mit der dritten Version entfernt wird. Im Gegensatz zu Kotlin können in \gls{GWT} auch Java-Bibliotheken eingebunden werden. Was daher kommt das \gls{GWT} generell Java- in JavaScript-Code kompiliert. \cite{gwtJsInterop, gwtJSNI}
 \end{description}
 
 \subsubsection{Programmierung}
 \begin{description}
-	\item[Kotlin] Kotlin ist eine statisch typisierte objekt-orientierte Programmiersprache, welche ebenso Aspekte der Funktionalen Programmierung enthält. \cite{kotlinInfo}
-	\item[GWT(Java)] Auch wie Kotlin ist Java eine statisch typisierte objekt-orientierte Programmiersprache. Funktionale Aspekte wie beispielsweise Lambda-Ausdrücke wurde mit der Version 8 ergänzt. \cite{java8Specification}
+	\item[Kotlin] Kotlin ist eine statisch typisierte und objekt-orientierte Programmiersprache, welche aber ebenso Aspekte der Funktionalen Programmierung enthält. \cite{kotlinInfo}
+	\item[GWT(Java)] Auch wie Kotlin ist Java eine statisch typisierte und objekt-orientierte Programmiersprache. Funktionale Aspekte wie beispielsweise Lambda-Ausdrücke sind seit der Version acht verfügbar. \cite{java8Specification}
 \end{description}
 
 \subsection{Qualitative Kriterien (Quality)}
 \subsubsection{Kommunikationsstandards}
 \begin{description}
-	\item[Kotlin] Mithilfe der Bibliothek \enquote{kotlinx.serialization} können die Formate \gls{JSON}, \gls{CBOR} und Protobuf verarbeitet und auch direkt in Objekte geparst werden. Dabei besteht auch die Möglichkeit die Bibliothek für weitere Formate zu erweitern. Das Format \gls{XML} kann auch mit Standard JavaScript Methoden verarbeitet, aber nicht direkt in Objekte geparst werden. \cite{kotlinxSerialization}
-	\item[GWT(Java)] Auch \gls{GWT} bietet die Möglichkeit \gls{JSON} in Objekte zu parsen, aber genau wie bei Kotlin gilt das nicht für das Format \gls{XML}. Hierfür werden zwar benötigte Funktionen und Methoden durch \gls{GWT} bereitgestellt, aber ein Objekt-Parsing ist dennoch nicht möglich. Andere Formate werden nicht offiziell unterstützt. \cite{gwtJSON, gwtXML}
+	\item[Kotlin] Mithilfe der Bibliothek \enquote{kotlinx.serialization} können die Formate \gls{JSON}, \gls{CBOR} und \gls{Protobuf} verarbeitet und auch direkt in Objekte geparst werden.
+	Dabei besteht auch die Möglichkeit die Bibliothek für andere Formate zu erweitern. Das Format \gls{XML} kann auch mit Standard JavaScript Methoden verarbeitet, aber nicht direkt in Objekte geparst werden. \cite{kotlinxSerialization}
+	\item[GWT(Java)] Auch \gls{GWT} bietet die Möglichkeit \gls{JSON} direkt in Objekte zu parsen, aber genau wie bei Kotlin gilt das nicht für das Format \gls{XML}. Hierfür werden zwar benötigte Funktionen und Methoden durch \gls{GWT} bereitgestellt, aber ein Objekt-Parsing ist dennoch nicht möglich. Andere Formate werden nicht offiziell unterstützt. \cite{gwtJSON, gwtXML}
 \end{description}
 
 \subsubsection{Browser-Support}
@@ -240,8 +241,8 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 
 \subsubsection{Lernkurve}
 \begin{description}
-	\item[Kotlin] Es wird eine kompakte Einführung bereitgestellt, welche auf ein schnelles erfolgreiches Ergebnis abzielt. Des weiteren gibt es eine ganze Reihe an Tutorials, welche sehr ausführlich erläutert und immer mit reichlich Beispielen bestückt sind. Zu dem wird außerdem noch eine Online-Plattform\footnote{siehe \url{https://try.kotlinlang.org/}} angeboten, wo weitere Beispiele direkt ausgeführt und auch eigener Code getestet werden kann. \cite{kotlinReference}
-	\item[GWT(Java)] Auch für die Bibliothek \gls{GWT} wird eine Kompakte Einführung mit schnellem Ergebnis bereit gestellt. Ergänzend dazu gibt es eine ganze Reihe an Tutorials, wo auch etwas größere und komplexere Beispiele vertreten sind. Leider gibt es für \gls{GWT} keine Online-Plattform, um ohne eine Installation diese zu testen, aber für Java\footnote{siehe \url{https://www.jdoodle.com/online-java-compiler}} gibt es solche. \cite{gwtGettingStarted}
+	\item[Kotlin] Es wird eine kompakte Einführung bereitgestellt, welche auf ein schnelles erfolgreiches Ergebnis abzielt. Des Weiteren gibt es eine ganze Reihe an Tutorials, welche sehr ausführlich erläutert und immer mit reichlich Beispielen bestückt sind. Zu dem wird außerdem noch eine Online-Plattform\footnote{siehe \url{https://try.kotlinlang.org/}} angeboten, wo weitere Beispiele direkt ausgeführt und auch eigener Code getestet werden kann. \cite{kotlinReference}
+	\item[GWT(Java)] Auch für die Bibliothek \gls{GWT} wird eine Kompakte Einführung mit schnellem Ergebnis bereitgestellt. Ergänzend dazu gibt es eine ganze Reihe an Tutorials, wo ebenfalls etwas größere und komplexere Beispiele vertreten sind. Leider gibt es aber für \gls{GWT} keine Online-Plattform, um ohne einer Installation diese zu testen. Für reine Java-Projekte\footnote{siehe \url{https://www.jdoodle.com/online-java-compiler}} hingegen gibt es solche.
 \end{description}
 
 
@@ -254,22 +255,22 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 
 \subsubsection{Support}
 \begin{description}
-	\item[Kotlin] Durch die Firma JetBrains, welche für die Entwicklung von Kotlin verantwortlich ist, wird kein offizieller Support angeboten. Fragen können in dem offiziellen Forum\footnote{siehe \url{https://discuss.kotlinlang.org/}} gestellt werden, wo auch jede Menge offizielle Entwickler vertreten sind und auch auf die Fragen eingehen. Zusätzlich können Informationen oder auch Fragen auf den Community-Plattformen Reddit, Slack, Stack Overflow, Twitter oder Google+ erhalten bzw. gestellt werden. \cite{kotlinCommunity}
-	\item[GWT(Java)] Genau wie Kotlin bietet \gls{GWT} eine ganze Reihe von Community-Plattformen an. Darunter Reddit, Stack Overflow, Twitter und Google+. Als Forum dienen verschiedene je nach Anwendungsfall spezialisierte Google Gruppen. \cite{gwtCommunity}
+	\item[Kotlin] Durch die Firma JetBrains, welche für die Entwicklung von Kotlin verantwortlich ist, wird kein offizieller Support angeboten. Fragen können in dem offiziellen Forum\footnote{siehe \url{https://discuss.kotlinlang.org/}} gestellt werden, wo aber jede Menge offizielle Entwickler vertreten sind und auch auf Fragen eingehen. Zusätzlich können Informationen oder auch Fragen auf den Community-Plattformen Reddit, Slack, Stack Overflow, Twitter oder Google+ erhalten bzw. gestellt werden. \cite{kotlinCommunity}
+	\item[GWT(Java)] Auch hier wird kein offizieller Support durch die Entwickler angeboten. Aber genau wie Kotlin bietet \gls{GWT} eine ganze Reihe von Community-Plattformen an. Darunter Reddit, Stack Overflow, Twitter und Google+. Als Foren dienen verschiedene je nach Anwendungsfall spezialisierte Google Gruppen. \cite{gwtCommunity}
 \end{description}
 
 \subsubsection{Community}
 \begin{description}
-	\item[Kotlin] Laut dem Repository auf Github haben sich bisher 233(Stand 13.06.2018) Leute beteiligt. Davon sind laut eigenen Aussagen über 40 Teilnehmer von JetBrains gestellt. \cite{kotlinWhoDevelops}
-	\item[GWT(Java)] Für Java existiert keine konkrete Zahl an beteiligten Entwicklern, bekannt ist nur das die Community von den großen Firmen Oracle und IBM unterstützt wird. \gls{GWT} hat laut Github 87 Beteiligte und wird von der Firma Google entwickelt bzw. unterstützt. \cite{oracleIBMCollaborate, gwtTerms}
+	\item[Kotlin] Laut dem Repository auf Github haben sich bisher 233(Stand 13.06.2018) Leute an dem Projekt beteiligt. Davon sind laut eigenen Aussagen von JetBrains über 40 Teilnehmer von ihnen gestellt. \cite{kotlinWhoDevelops}
+	\item[GWT(Java)] Für Java existiert keine konkrete Zahl an beteiligten Entwicklern, bekannt ist nur das die Community von den großen Firmen Oracle und IBM unterstützt wird. \gls{GWT} hat laut dem Github Repository 87 Beteiligte und wird von der Firma Google entwickelt bzw. unterstützt. \cite{oracleIBMCollaborate, gwtTerms}
 \end{description}
 
 
 \subsection{Kosten- und Nutzenorientierte Kriterien (Cost and benefit)}
 \subsubsection{Lizenz}
 \begin{description}
-	\item[Kotlin] Diese Projekt wurde unter der freien Apache-Lizenz in der zweiten Version verwendet. Daher entstehen bei der Benutzung der Programmiersprache keinerlei Kosten. \cite{kotlinFree}
-	\item[GWT(Java)] Auch Java und \gls{GWT} lassen sich kostenlos nutzen, denn diese werden ebenfalls unter freien Lizenzen veröffentlicht. Im Falle von Java ist das die \gls{GPL} mit Classpath Exception und bei \gls{GWT}, genau wie bei Kotlin, die Apache-Lizenz in der zweiten Version. \cite{javaLicense, gwtTerms}
+	\item[Kotlin] Dieses Projekt wurde unter der freien Apache-Lizenz in der zweiten Version veröffentlicht. Daher entstehen bei der Benutzung der Programmiersprache keinerlei Kosten. \cite{kotlinFree}
+	\item[GWT(Java)] Auch Java und \gls{GWT} lassen sich kostenlos nutzen, denn diese werden ebenfalls unter freien Lizenzen veröffentlicht. Im Falle von Java ist das die \gls{GPL} mit Classpath Exception und bei \gls{GWT} ist das, genau wie bei Kotlin, die Apache-Lizenz in der zweiten Version. \cite{javaLicense, gwtTerms}
 \end{description}
 
 \subsubsection{Benutzungskosten}
@@ -283,7 +284,7 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 \subsubsection{Beliebtheit}
 \begin{description}
 	\item[Kotlin] Laut Github existieren derzeit über 72~590\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Kotlin}} Repositories, welche mit Kotlin entwickelt wurden bzw. noch werden. Die Zahl der auf Stack Overflow gestellten Fragen beläuft sich auf 11~398\footnote{siehe \url{https://stackoverflow.com/questions/tagged/kotlin}}. (Stand: 14.06.2018)
-	\item[GWT(Java)] Die Anzahl der Github-Repositories beträgt derzeit 4~810~228\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Java}} für Java-Projekte. Da \gls{GWT} ein Framework ist lässt es sich über Github nicht ermitteln wie viele Repositories dieses benutzen. Bei den Fragen auf Stack Overflow sieht das anders aus, denn derzeit sind 1~426~726\footnote{siehe \url{https://stackoverflow.com/questions/tagged/java}} mit Java und 20~443\footnote{siehe \url{https://stackoverflow.com/questions/tagged/gwt}} mit \gls{GWT} getaggt. (Stand: 14.06.2018)
+	\item[GWT(Java)] Die Anzahl der Github-Repositories beträgt derzeit 4~810~228\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Java}} für Java-Projekte. Da \gls{GWT} ein Framework ist lässt sich über Github keine verwertbare Zahl ermitteln wie viele Repositories dieses benutzen. Bei den gestellten Fragen auf Stack Overflow sieht das anders aus, denn derzeit sind 1~426~726\footnote{siehe \url{https://stackoverflow.com/questions/tagged/java}} mit Java und 20~443\footnote{siehe \url{https://stackoverflow.com/questions/tagged/gwt}} mit \gls{GWT} getaggt. (Stand: 14.06.2018)
 \end{description}
 
 \subsubsection{Veröffentlichung}
