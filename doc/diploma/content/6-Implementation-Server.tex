@@ -255,7 +255,7 @@ fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> 
 \end{lstlisting}
 \\
 Die ersten beiden Zeilen der Funktion dienen dabei dazu alle Player aus der Datenbank zu holen und alle nachfolgenden zum Linkaufbau. Alle erzeugten Links werden in ein \code{HashSet} gespeichert, anschließend mittels der statischen Methode \code{createLinkHeader} aus dem Objekt \code{HateoasUtility} in einem String geparst. Der erstellte String wird anschließend dem Link-Header des \gls{HTTP}-Response zugewiesen. Das \hyperref[lst:createLinkHeader]{Listing~\ref{lst:createLinkHeader}} zeigt dabei die Implementierung der statischen Methode \code{createLinkHeader}.\\
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Linkaufbau mithilfe des Projektes \enquote{Spring HATEOAS}}, label=lst:createLinkHeader, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung: \enquote{Links zu String} Parse-Funktion}, label=lst:createLinkHeader, float]
 fun createLinkHeader(linkList: HashSet<Pair<Link, String>>): HttpHeaders {
 	val headers = HttpHeaders()
 	val sb = StringBuilder()
@@ -310,7 +310,7 @@ class ExceptionHandler {
 \\
 Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, sondern auch eine verständliche Fehlermeldung, wird zusätzlich im \gls{HTTP}-Response ein Fehlerobjekt mitgeschickt. Dieses Fehlerobjekt ist eine Instanz des \code{ErrorResponseObject} und hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception den Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchen der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei, je nach angeforderten Format, als \gls{JSON} oder \gls{XML} zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration des Exceptionhandling}, label=lst:errorResponseObject, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Das Fehlerobjekt \code{ErrorResponseObject}}, label=lst:errorResponseObject, float]
 class ErrorResponseObject(
 	val timestamp: Date = Date(),
 	val statusCode: Int = 500,
