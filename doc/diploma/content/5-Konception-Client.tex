@@ -3,50 +3,57 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Konzept des Clients}
-In diesem Kapitel soll die Planung des Schachclients näher erläutert werden, welches als Grundbaustein für die Implementierung dienen soll. Dabei dient der erste Abschnitt zur Beschreibung der benötigten Anforderung, welche der Client erfüllen soll. Im zweiten Abschnitt sollen die einzelnen Ansichten, welche für eine bequeme Nutzerinteraktion benötigt werden, näher beschrieben. 
+In diesem Kapitel soll die Planung des Schachclients näher erläutert werden, welches als Grundbaustein für die Implementierung dienen soll. Dabei dient der erste Abschnitt zur Beschreibung der benötigten Anforderung, welche der Client erfüllen soll. Der zweiten Abschnitt sollen der Visualisierung und Beschreibung der einzelnen Ansichten dienen, welche für eine bequeme Nutzerinteraktion benötigt werden.
 
 \section{Anforderungen}\label{sec:anforderungenClient}
-Grundlegen soll der Client als Visualisierung des Servers dienen. Dafür soll dieser eine Verwaltung von Playern und Matches, inklusive dem anlegen neuer und dem bearbeiten, bereitstellen. Um anschließend auch Schach spielen zu können muss der Client dafür eine komfortable Möglichkeit, in Form eines Schachbrettes, bieten.\\
+Grundlegen soll der Client als Visualisierung des Servers dienen. Dafür soll dieser eine Verwaltung von Playern und Matches bereitstellen, inklusive der Möglichkeit zum Anlegen neuer bzw. bearbeiten schon angelegter Einträge. Um anschließend auch Schach spielen zu können muss der Client dafür eine komfortable Möglichkeit, in Form eines virtuellen Schachbrettes, bieten.\\
 \\
-Natürlich muss der Client außerdem mit dem Server kommunizieren können. Dafür muss dieser Requests senden und die empfangenen Response-Nachrichten verarbeiten können. Da der Server für manche Request spezielle Parameter benötigt, wie zum Beispiel einen String in der \gls{SAN}, muss der Client auch diese ermitteln können.\\
+Als Grundanforderung dafür muss der Client natürlich mit dem Server kommunizieren können. Dafür muss dieser Requests senden und die empfangenen Response-Nachrichten verarbeiten können. Da der Server für manche Request spezielle Parameter benötigt, wie zum Beispiel einen String in der \gls{SAN}, müssen diese gegebenenfalls ermittelt werden können.\\
 \\
-Für ein bequemes Spielerlebnis soll der Client ein gestartetes Match automatisch aktualisieren, sobald sich die Daten auf dem Server verändert haben. Dafür soll ein einfaches Polling-Verfahren implementiert werden.\\
+Für ein bequemes Spielerlebnis soll der Client ein gestartetes Match automatisch aktualisieren, sobald sich die Daten auf dem Server verändert haben. Um dies zu realisieren soll ein einfaches Polling-Verfahren implementiert werden.\\
 \\ 
-Als letzte Grundanforderung soll eine innovative und benutzerfreundliche Bedienung der Anwendung sein, so das bis auf die Schachregeln keine weiteren Grundvoraussetzungen benötigt werden.
+Die letzte Grundanforderung soll eine innovative und benutzerfreundliche Bedienung der Anwendung sein, so das der Nutzer keinerlei Kenntnisse, bis auf die Schachregeln, besitzen muss.
 
-\section{Mock-Up-Entwicklung der benötigten Client-Ansichten}\label{sec:views}
-In diesem Abschnitt sollen die im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} zuvor definierten Anforderungen konkretisiert und visuell aufbereitet werden. Die in diesem Kapitel erstellten Mock-Ups sollen die Implementierung vereinfachen bzw. beschleunigen.
+\section{Mockup-Entwicklung der benötigten Client-Ansichten}\label{sec:views}
+In diesem Abschnitt sollen die im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} zuvor definierten Anforderungen konkretisiert und visuell aufbereitet werden. Ziel soll dabei die Erstellung von Mockups der einzelnen Ansichten sein, um die Implementierung zu vereinfachen bzw. zu beschleunigen.
 
 \subsection{Startansicht}\label{sec:startView}
-Diese Ansicht soll als Einstiegspunkte für Nutzer dienen, welche über diese die
-Möglichkeit bekommen sollen zur Player-Ansicht bzw. zur Match-Ansicht zu wechseln. Die \hyperref[fig:startView]{Abbildung~\ref{fig:startView}} visualisiert dabei die zuvor definierten Anforderungen.
+Diese Ansicht soll als Ausgangspunkt für die Nutzer dienen. Sie sollen zurückgegeben werden, sobald die Root-\gls{URL} aufgerufen wurde. Mithilfe der Startansicht soll dem Nutzer die Möglichkeit bereitgestellt werden zur Player-Ansicht bzw. zur Match-Ansicht zu wechseln. Dafür soll ihm jeweils ein Button zum Auslösen dieses Wechsels zur Verfügung gestellt werden.\\
+\\
+Die \hyperref[fig:startView]{Abbildung~\ref{fig:startView}} visualisiert dabei die zuvor definierten Anforderungen an die Startansicht.
 \begin{figure}[htb]
 	\includegraphics[width=0.9\textwidth]{images/start-view.png}
-	\caption{Mock-Up: Startansicht des Clients}
+	\caption{Mockup: Startansicht des Clients}
 	\label{fig:startView}
 \end{figure}
 
 \subsection{Player-Ansicht}\label{sec:playerView}
-Inhalt dieser Ansicht soll die Möglichkeit zur Verwaltung von Playern sein. Dafür soll eine Tabelle mit allen angelegten Playern und ein Formular zum anlegen bzw. bearbeiten bereitstehen. Visuell unterstreicht die \hyperref[fig:playerView]{Abbildung~\ref{fig:playerView}} die definierten Anforderungen.
+Mit dieser Ansicht soll der Nutzer die Möglichkeit erhalten alle angelegten Player zu verwalten. Dafür soll ihm eine Tabelle für die Übersicht und ein Formular zum anlegen neuer oder bearbeiten bereits angelegter Player bereitgestellt werden. Über eine Spalte innerhalb der Tabelle sollen Buttons zur Verfügung stehen, über welche ein Player bearbeitet oder gelöscht werden kann.\\
+\\
+Aus diesen gegebenen Anforderungen wurde das Mockup aus der \hyperref[fig:playerView]{Abbildung~\ref{fig:playerView}} entworfen, um diese visuell hervorzuheben.
 \begin{figure}[htb]
 	\includegraphics[width=0.9\textwidth]{images/player-view.png}
-	\caption{Mock-Up: Player-Ansicht des Clients}
+	\caption{Mockup: Player-Ansicht des Clients}
 	\label{fig:playerView}
 \end{figure}
 
 \subsection{Match-Ansicht}\label{sec:matchView}
-Mithilfe der Match-Ansicht soll die Verwaltung der Matches möglich sein. Hierfür soll wie bei der Player-Ansicht eine Tabelle mit angelegten Matches und ein Formular zum anlegen bereitstehen. Durch die \hyperref[fig:matchView]{Abbildung~\ref{fig:matchView}} werden die Anforderung grafisch dargestellt.
+Mithilfe der Match-Ansicht soll dem Nutzer eine Ansicht zur Match-Verwaltung zur Verfügung stehen. Um dabei die Konsistenz zu wahren ist auch diese genau so aufgebaut wie die Player-Ansicht. Mit dem Unterschied das ein Match nicht gelöscht aber dafür gestartet werden kann. Daher ändern sich geringfügig die Buttons in der Tabelle.\\
+\\
+Dabei werden die Anforderungen durch die \hyperref[fig:matchView]{Abbildung~\ref{fig:matchView}} grafisch dargestellt.
 \begin{figure}[htb]
 	\includegraphics[width=0.9\textwidth]{images/match-view.png}
-	\caption{Mock-Up: Match-Ansicht des Clients}
+	\caption{Mockup: Match-Ansicht des Clients}
 	\label{fig:matchView}
 \end{figure}
 
 \subsection{Ansicht eines gestarteten Matches}\label{sec:gameView}
-Durch diese Ansicht soll die Möglichkeit zum Schach spielen bereitgestellt werden. Um spielen zu können wird in erster Linie ein Schachbrett benötigt, auf welchem die Figuren dargestellt werden. Mittels \enquote{Drag \& Drop} sollen dabei Spielfiguren bewegt und mittels \enquote{Mouseover} sollen möglichen Züge anzeigt werden können. Neben dem Schachbrett soll eine Reihe von Informationen bereitgestellt werden. Inhalt dieser sollen die geschmissenen Figuren, eine Liste aller Züge und ob sich ein Player im Schach befindet sein. Die \hyperref[fig:gameView]{Abbildung~\ref{fig:gameView}} zeigt die visuelle Darstellung der Anforderungen.
+Mithilfe dieser Ansicht soll dem Nutzer ermöglicht werden ein gestartetes Match zu spielen. Dafür wird in erster Linie ein Schachbrett benötigt, auf welchem die Figuren dargestellt werden. Mittels \enquote{Drag \& Drop} soll der Nutzer anschließend Spielfiguren bewegen können. Für eine einfachere Bedienung und zur Unterstützung des Verständnisses der Schachregeln, sollen alle möglichen Züge einer Figur hervorgehoben werden, sobald über diese mit der Maus gefahren wird. Da Informationen über bereits geschmissene Figuren oder welche Züge bisher getätigt wurden sehr hilfreich sein können, sollen diese neben dem Schachbrett dargestellt werden. \\
+\\
+Anhand dieser Kriterien an die Ansicht eines gestarteten Matches wurde das Mockup aus der \hyperref[fig:gameView]{Abbildung~\ref{fig:gameView}} entwickelt.
 \begin{figure}[htb]
 	\includegraphics[width=0.9\textwidth]{images/game-view.png}
-	\caption{Mock-Up: Ansicht eines gestarteten Matches}
+	\caption{Mockup: Ansicht eines gestarteten Matches}
 	\label{fig:gameView}
 \end{figure}
 
