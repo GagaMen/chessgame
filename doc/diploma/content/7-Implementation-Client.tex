@@ -3,15 +3,15 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Implementation des Clients}
-Diese Kapitel beschäftigt sich mit der Umsetzung des Konzeptes aus \hyperref[sec:conceptServer]{Kapitel~\ref{sec:conceptServer}}. Im ersten Abschnitt werden dabei die Bibliotheken bzw. Frameworks, welche bei der Umsetzung zum Einsatz kamen, näher beleuchtet. Der nachfolgende Abschnitt dient als Beschreibung der Implementation der Kommunikation zwischen Client und Server in Form von Requests. Im letzten Abschnitt wird die Implementierung der verwendeten Polling-Funktionalität genauer betrachtet.
+Dieses Kapitel beschäftigt sich mit der Umsetzung des Konzeptes aus \hyperref[sec:conceptClient]{Kapitel~\ref{sec:conceptClient}}. Im ersten Abschnitt werden dabei die Bibliotheken bzw. Frameworks, welche bei der Umsetzung zum Einsatz kamen, näher beleuchtet. Der nachfolgende Abschnitt dient als Beschreibung der Implementation der Kommunikation zwischen Client und Server in Form von Requests. Im letzten Abschnitt wird zuletzt die Implementierung der verwendeten Polling-Funktionalität genauer betrachtet.
 
 \section{Verwendete Bibliotheken/Frameworks}
 Die in diesem Kapitel vorgestellten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} unterstützen. Dabei werden diese in den nachfolgenden \hyperref[sec:requireJs, sec:kotlinxCoroutines]{Unterabschnitten~\ref{sec:requireJs} bis \ref{sec:kotlinxCoroutines}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet.
 
 \subsection{RequireJS}\label{sec:requireJs}
-RequireJS \cite{requirejs} ist ein für JavaScript entwickelte Bibliothek zum laden von Modulen. Dabei ist es für Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\\
+RequireJS \cite{requirejs} ist ein für JavaScript entwickelte Bibliothek zum Laden von Modulen. Dabei ist es für die Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\\
 \\
-Das \hyperref[lst:includeRequireJs]{Listing~\ref{lst:includeRequireJs}} zeigt wie RequireJs in einem Gradle Projekt eingebunden werden kann. Dafür müssen diese Zeilen in die \code{build.gradle} eingefügt werden.
+Das \hyperref[lst:includeRequireJs]{Listing~\ref{lst:includeRequireJs}} zeigt wie RequireJs in einem Gradle Projekt eingebunden werden kann. Dafür müssen diese Zeilen in die \code{build.gradle} eingefügt werden.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek RequireJs mithilfe von Gradle}, label=lst:includeRequireJs, float]
 repositories {
 	mavenCentral()
@@ -21,17 +21,20 @@ dependencies {
 	compile "org.webjars:requirejs:2.3.5"
 }
 \end{lstlisting}
+\\
 Für die Modulbeschreibung innerhalb von JavaScript stehen mehrere Formate bereit. RequireJS setzt dabei auf das Format \gls{AMD}. Das \hyperref[lst:amdExample]{Listing~\ref{lst:amdExample}} stellt ein einfaches Beispiel für die Definition eines \gls{AMD}-Moduls bereit. In dem Zeitschriftartikel \cite{jsModuleDefinitions} können zu den einzelnen Modul-Formaten und deren Einsatzmöglichkeiten nähere Informationen nachgelesen werden.
-\begin{lstlisting}[style=lstStyleFramed, language=JavaScript, caption={Beispiel: Moduldefinition mittels \acrfull{AMD} \cite{requirejsExample}}, label=lst:amdExample, float]
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=JavaScript, caption={Beispiel: Moduldefinition mittels AMD \cite{requirejsExample}}, label=lst:amdExample, float]
 define(['jquery'] , function ($) {
 	return function () {};
 });
 \end{lstlisting}
 
 \subsection{kotlinx.html}\label{sec:kotlinxHtml}
-Die Bibliothek kotlinx.html \cite{kotlinxHtml} ist eine offiziell von JetBrains entwickelte Bibliothek, welche eine \gls{DSL} für das Erstellen bzw. Ergänzen von HTML-Code bereitstellt. Sie kann dabei für die \gls{JVM} oder JavaScript Plattform verwendet werden.\\
+Die Bibliothek kotlinx.html \cite{kotlinxHtml} wird offiziell durch JetBrains entwickelt, welche auch für die Entwicklung von Kotlin verantwortlich sind. Mithilfe dieser wird eine \gls{DSL} bereitgestellt, mit welcher \gls{HTML}-Code erzeugt und ergänzt werden kann. Dabei steht sie für die Plattformen \gls{JVM} und JavaScript bereit.\\
 \\
-Um die Bibliothek in einem Projekt, mit Gradle als Build Tool zu verwenden, müssen die Zeilen aus \hyperref[lst:includeKotlinxHtml]{Listing~\ref{lst:includeKotlinxHtml}} in die Datei \code{build.gradle} eingefügt werden.
+Um die Bibliothek in einem Projekt mit Gradle als Build Tool zu verwenden, müssen die Zeilen aus \hyperref[lst:includeKotlinxHtml]{Listing~\ref{lst:includeKotlinxHtml}} in der Datei \code{build.gradle} ergänzt werden.
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.html mithilfe von Gradle}, label=lst:includeKotlinxHtml, float]
 repositories {
 	jcenter()
@@ -41,7 +44,11 @@ dependencies {
 	compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
 }
 \end{lstlisting}
-Diese Bibliothek ermöglicht es den sämtlichen HTML-Code in Kotlin-Code auszulagern. Das bringt einen großen Vorteil mit, denn das Erstellen des Codes wir durch eine statisch Typisierung abgesichert. Dadurch können mögliche Fehler im HTML-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte HTML-Tags werden dadurch vermieden. Ein Beispiel für die Verwendung stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den HTML-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
+\\
+Mit dieser Bibliothek kann, wie schon kurz zuvor erwähnt, sämtlicher \gls{HTML}-Code in Kotlin-Code ausgelagert werden. Das bringt einen großen Vorteil mit sich, denn das Erstellen des Codes wird dadurch durch eine statische Typisierung abgesichert. Damit können mögliche Fehler im \gls{HTML}-Code bereits während der Übersetzung des Quellcodes erkannt werden. Vergessene oder gar falsch verschachtelte \gls{HTML}-Tags können somit leichter vermieden werden.\\
+\\
+Ein Beispiel für die Verwendung der Bibliothek stellt das \hyperref[lst:kotlinxHtmlExample]{Listing~\ref{lst:kotlinxHtmlExample}} dar, welches den \gls{HTML}-Code aus \hyperref[lst:kotlinxHtmlParseExample]{Listing~\ref{lst:kotlinxHtmlParseExample}} generiert.
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Verwendung der Bibliothek kotlinx.html \cite{kotlinxHtmlExample}}, label=lst:kotlinxHtmlExample, float]
 import kotlinx.html.*
 import kotlinx.html.dom.*
@@ -59,9 +66,10 @@ val myDiv = document.create.div {
 \end{lstlisting}
 
 \subsection{kotlinx.serialization}\label{sec:kotlinxSerialization}
-Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offizielle Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und \gls{Protobuf} von Haus aus.\\
+Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ein offiziell unterstützte Bibliothek, welche in erster Linie für das serialisieren und deserialisieren von Objekten entwickelt wurde. Dabei unterstützt die Bibliothek die Formate \gls{JSON}, \gls{CBOR} und \gls{Protobuf} \enquote{out of the box}.\\
 \\
 Für die Verwendung in einen Gradle-Projekt müssen die Zeilen aus dem \hyperref[lst:includeKotlinxSerialization]{Listing~\ref{lst:includeKotlinxSerialization}} in der Build-Datei von Gradle eingefügt werden.
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.serialization mithilfe von Gradle}, label=lst:includeKotlinxSerialization, float]
 buildscript {
 	repositories {
@@ -82,7 +90,8 @@ dependencies {
 	compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.5.0"
 }
 \end{lstlisting}
-Um Daten in der \gls{JSON} zu können, müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Properties mithilfe der \code{Optional}-Annotation als Optional zu definieren.\\
+\\
+Um Daten im \gls{JSON}-Format zu serialisieren bzw. deserialisieren müssen die Zielobjekte, wie im \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu sehen, mit der Annotation \code{Serializable} erweitert werden. Dabei besteht die Möglichkeit Eigenschaften einer Klasse mithilfe der Annotation \code{Optional} als optional zu definieren, wobei diese Eigenschaften nicht unbedingt existieren müssen.
 \\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Model-Erweiterung für Unterstützung der Kotlinx.serialization Bibliothek (verändert nach \cite{kotlinxSerializationExample})}, label=lst:kotlinxSerializePrepare, float]
 import kotlinx.serialization.*
@@ -90,17 +99,19 @@ import kotlinx.serialization.*
 @Serializable
 data class Data(val a: Int, @Optional val b: String = "42")
 \end{lstlisting}
-Für die Serialisierung der Klasse \code{Data} aus dem
-\hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} kann die erste Zeile und für die Deserialisierung die zweite Zeile aus dem \hyperref[lst:kotlinxSerializeUsage]{Listing~\ref{lst:kotlinxSerializeUsage}} verwendet werden.
+\\
+Um anschließend die Beispielklasse \code{Data} aus dem \hyperref[lst:kotlinxSerializePrepare]{Listing~\ref{lst:kotlinxSerializePrepare}} zu serialisieren muss die erste Zeile und um sie zu deserialisieren die zweite Zeile, aus dem \hyperref[lst:kotlinxSerializeUsage]{Listing~\ref{lst:kotlinxSerializeUsage}}, verwendet werden.
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Serializierung und Deserialisierung der \code{Data} Klasse (verändert nach \cite{kotlinxSerializationExample})}, label=lst:kotlinxSerializeUsage, float]
 JSON.stringify(Data(42))   		   // {"a": 42, "b": "42"}
 JSON.parse<Data>("""{"a":42}""") // Data(a=42, b="42")
 \end{lstlisting}
 
 \subsection{kotlinx.coroutines}\label{sec:kotlinxCoroutines}
-Die Bibliothek kotlinx.coroutines \cite{kotlinxCoroutines} ist eine weiteres Projekt aus der kotlinx Serie von JetBrains, welche eine Reihe von high-level Coroutinen bereit stellt. Im Falle des Clients soll die Bibliothek dazu genutzt werden auf Funktionen warten zu können. Deshalb beschränkt sich die Erläuterung dieser Bibliothek auf diese Funktionalität. Für weitere Instruktionen bzw. andere Anwendungsfälle können diese in der Dokumentation unter \cite{kotlinxCoroutinesDocu} nachgelesen werden.\\
+Die Bibliothek kotlinx.coroutines \cite{kotlinxCoroutines} ist eine weiteres Projekt aus der kotlinx Serie von JetBrains, welche eine Reihe von high-level Coroutinen bereitstellt. Im Falle des Clients soll die Bibliothek dazu genutzt werden auf den Abschluss von Funktionen warten zu können. Deshalb beschränkt sich die Erläuterung dieser Bibliothek auf diese Funktionalität. Für weitere Informationen bzw. für andere Anwendungsfälle können diese in der Dokumentation unter \cite{kotlinxCoroutinesDocu} nachgelesen werden.\\
 \\
-Um die Bibliothek einzubinden müssen die Zeilen des Listing bla in die Build-Datei eingefügt werden. In der verwendeten Version \enquote{0.22.5} sind die letzten vier Zeilen notwendig, weil die Bibliothek derzeit noch in dem Experimentellen Stadium ist und sonst nicht verwendet werden kann. Sobald diese aus diesem Stadium raus ist, können die vier Zeilen weggelassen werden.
+Um die Bibliothek einzubinden müssen die Zeilen aus dem \hyperref[lst:includeKotlinxCoroutines]{Listing~\ref{lst:includeKotlinxCoroutines}} in die Build-Datei eingefügt werden. Zu beachten ist dabei, dass in der verwendeten Version \enquote{0.22.5} zusätzlich die letzten vier Zeilen notwendig sind. Was daran liegt das sich die Bibliothek derzeit noch im experimentellen Stadium befindet und ansonsten nicht verwendet werden kann. Sobald dieses Stadium abgeschlossen ist, können diese Zeilen weggelassen werden.
+\\
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.coroutines mithilfe von Gradle}, label=lst:includeKotlinxCoroutines, float]
 repositories {
 	jcenter()
@@ -116,15 +127,15 @@ kotlin {
 	}
 }
 \end{lstlisting}
-Mithilfe der Funktion \code{launch} welche als letzten Parameter einen Lambda-Ausdruck entgegen nimmt, kann innerhalb Beispielsweise auf ein \code{Promise} Objekt gewartet werden. Ein Anwendungsbeispiel für diesen Fall wird im \hyperref[sec:requestFunctionality]{Kapitel~\ref{sec:requestFunctionality}} genauer getrachtet und deshalb an dieser Stelle nicht näher erläutert.\\
 \\
-Im \hyperref[sec:polling]{Kapitel~\ref{sec:polling}} wird mithilfe der Funktion \code{launch} ein weiterer Anwendungsfall betrachtet. Denn es ist außerdem möglich eine gewisse Zeit innerhalb des Lambda-Ausdrucks, mit der Funktion \code{delay}, zu warten und dabei die Anwendung nicht zu blockieren.
+Mithilfe der Funktion \code{launch} welche als letzten Parameter einen Lambda-Ausdruck entgegennimmt, kann innerhalb dieses Ausdrucks beispielsweise auf ein \code{Promise} Objekt gewartet werden. Ein Anwendungsbeispiel für diesen Fall wird im \hyperref[sec:requestFunctionality]{Kapitel~\ref{sec:requestFunctionality}} genauer getrachtet und deshalb an dieser Stelle nicht näher erläutert.\\
+\\
+Im \hyperref[sec:polling]{Kapitel~\ref{sec:polling}} wird mithilfe der Funktion \code{launch} ein weiterer Anwendungsfall betrachtet. Denn mit Coroutinen ist es außerdem möglich einen Prozess für eine gewisse Zeit zu unterbrechen ohne das dieser sein Zustand verliert oder die Anwendung blockiert.
 
 \section{Implementierung der Request-Funktionalität}\label{sec:requestFunctionality}
-Um die Kommunikation mit dem \gls{REST}ful Server, welche in den Anforderungen im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definiert wurden, zu gewährleisten, bedarf es einer Reihe von Funktionen zum senden eines Requestes. Für jeden Request-Typ wird dabei eine eigene statische Methode definiert. Um anschließend diese Funktionen nutzen zu können, müssen diese gegebenenfalls eine Parameterlist und eine Antwortfunktion verarbeiten können. Als Rückgabe wird das JavaScript \code{Promise} Objekt genutzt, mit wessen Hilfe und der Bibliothek \enquote{kotlinx.coroutines}\footnote{siehe \hyperref[sec:kotlinxCoroutines]{Kapitel~\ref{sec:kotlinxCoroutines}}} die Möglichkeit besteht auf den Abschluss eines Requestes zu warten. Dies ist teilweise notwendig, da JavaScript grundlegend Asynchron arbeitet.\\
+Im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} wurde definiert das der Client mit dem Server kommunizieren können muss. Um das zu gewährleisten bedarf es einer Reihe von Funktionen um einen \gls{HTTP}-Request an den Server zu senden. Dabei wird für jeden Request-Typ eine eigene statische Methode definiert. Anschließend um diese Funktionen nutzen zu können müssen diese gegebenenfalls Parameter und eine Antwort vom Server verarbeiten können. Als Rückgabewert der Methoden dient das JavaScript Objekt \code{Promise}. Mit dessen Hilfe und der Bibliothek \enquote{kotlinx.coroutines}\footnote{siehe \hyperref[sec:kotlinxCoroutines]{Kapitel~\ref{sec:kotlinxCoroutines}}} besteht die Möglichkeit auf den Abschluss eines Requestes zu warten. Dies ist teilweise notwendig, da JavaScript grundlegend asynchron arbeitet und dieses Verhalten bei Requests manchmal unerwünscht sein kann.\\
 \\
-Das \hyperref[lst:requestUtility]{Listing~\ref{lst:requestUtility}} zeigt die Implementierung der statischen Methoden für die Request-Typen \code{GET} und \code{POST}. Alle weiteren Request-Typen sind ebenfalls definiert, werden aber in dieser Veranschaulichung vernachlässigt. Die Funktion \code{parseParams} verarbeitet dabei die übergebene Parameterliste, welche aus Key-Value-Paaren bestehen muss. Dabei dient der Key in Form eines Strings als Parameterindikator und der Value als Wert des Parameters. Der Funktionsparameter \code{callback} kann in Form eines Lambda-Ausdrucks, bei Funktionsaufruf definiert werden und wird anschließen nach Erhalt des \gls{HTTP}-Response ausgeführt.\\
-\\
+Das \hyperref[lst:requestUtility]{Listing~\ref{lst:requestUtility}} zeigt die Implementierung der statischen Methoden für die Request-Typen \code{GET} und \code{POST}. Alle weiteren Request-Typen sind ebenfalls definiert, werden aber in dieser Veranschaulichung vernachlässigt.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung der Request-Methoden \code{GET} und \code{POST}, inklusiver der Parameterverarbeitung}, label=lst:requestUtility, float]
 class RequestUtility {
 	companion object {
@@ -177,7 +188,10 @@ class RequestUtility {
 	}
 }
 \end{lstlisting}
-Wie anschließend ein Request gesendet werden kann, zeigt das \hyperref[lst:requestPlayerList]{Listing~\ref{lst:requestPlayerList}}. In diesem wird das Anfordern der Playerliste mittel \code{GET}-Request gezeigt. Dabei wird es in einer \code{launch}-Umgebung ausgeführt, welche das Warten auf die Antwort ermöglicht. Hinter dem Funktionsaufruf wird der Lambda-Ausdruck definiert, welcher die Antwort parst und anschließend alle Player dem Client-Objekt hinzufügt.
+\\
+Die dargestellte Funktion \code{parseParams} verarbeitet dabei eine übergebene Parameterliste, welche aus \code{Key}-\code{Value}-Paaren bestehen muss. Der \code{Key} dient dafür als Parameterindikator in Form eines Strings und der \code{Value} als Wert des Parameters. Der Funktionsparameter \code{callback} kann, in Form eines Lambda-Ausdrucks, beim Funktionsaufruf definiert werden und wird anschließen nach Erhalt des \gls{HTTP}-Response ausgeführt.\\
+\\
+Wie anschließend ein Request gesendet werden kann, zeigt das \hyperref[lst:requestPlayerList]{Listing~\ref{lst:requestPlayerList}}. In diesem wird eine Anforderung der Playerliste mittels \code{GET}-Request gezeigt. Dabei wird es in einer \code{launch}-Umgebung ausgeführt, welche das Warten auf die Antwort, mit dem Funktionsaufruf \code{await}, ermöglicht. Innerhalb von Kotlin besteht des Weiteren die Möglichkeit den letzten Parameter, sofern dieser ein Funktionsparameter ist, in geschweiften Klammern zu definieren. Daher stellt dieser Code die \code{callback}-Funktion da, welche die Antwort zuerst deserialisiert und anschließend alle daraus resultierenden Player dem Client-Objekt hinzufügt.
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Funktionsaufruf eines \code{GET}-Requestes am Beispiel der Playerliste}, label=lst:requestPlayerList, float]
 launch {
 	get("${client.config.serverRootUrl}players") {
@@ -190,10 +204,10 @@ launch {
 \end{lstlisting}
 
 \section{Implementierung des Polling-Verfahrens}\label{sec:polling}
-Für die Umsetzung des Polling-Verfahrens, welches in den Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}}, verlagt wurde, muss mehreres gewährleistet werden. Zu aller erst muss das Polling gestartet und gestoppt werden können. Des weiteren muss die Möglichkeit bestehen eine Aufgabe zu definieren, welche nach dem Start des Pollings rekursiv ausgeführt wird. Zwischen den rekursiven Aufrufen der Aufgabe soll eine Zeit-Wert definiert werden können, welchen der Prozess wartet bevor er sich erneut selber aufruft. Sobald der Polling-Prozess angehalten wurde, muss der rekursive Aufruf unterbrochen werden.\\
+Für die Umsetzung des Polling-Verfahrens, welches in den Anforderungen aus dem \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}}, verlagt wurde, muss mehreres gewährleistet werden. Zu aller erst muss das Polling gestartet und gestoppt werden können. Des Weiteren muss die Möglichkeit bestehen eine Aufgabe zu definieren, welche nach dem Start des Pollings rekursiv ausgeführt wird. Zwischen diesen rekursiven Aufrufen der Aufgabe soll ein Zeit-Wert definiert werden können, welchen den Prozess für diese Zeit unterbricht bevor sich dieser erneut aufruft. Sobald der Polling-Prozess gestoppt wurde, muss der rekursive Aufruf unterbrochen werden.\\
 \\
-In dem \hyperref[lst:pollingUtility]{Listing~\ref{lst:pollingUtility}} wurden diese Anforderungen an das Polling-Verfahren implementiert. Die Property \code{stopPolling} gibt dabei an, ob der rekursive Prozess unterbrochen werden soll. Mithilfe der Wartezeit und der auszuführende Aufgabe als Parameter der \code{start}-Funktion, kann das Polling eingeleitet werden. Dafür wird die Property \code{stopPolling} auf \code{false} gesetzt und anschließend die Rekursion gestartet. Die \code{stop}-Funktion setzt die Property \code{stopPolling} auf \code{true}, was wiederum in der rekursiven Funktion \code{sendPollingRequest} zu einer Unterbrechung führt.\\
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung des Polling-Verfahrens}, label=lst:pollingUtility, float]
+In dem \hyperref[lst:pollingUtility]{Listing~\ref{lst:pollingUtility}} wurden diese Anforderungen an das Polling-Verfahren implementiert. Die Eigenschaft \code{stopPolling} gibt dabei an, ob der rekursive Prozess unterbrochen werden soll. Mithilfe der Wartezeit und der auszuführende Aufgabe als Parameter, kann das Polling mit der \code{start}-Funktion eingeleitet werden. Dafür wird die Eigenschaft \code{stopPolling} auf \code{false} gesetzt und anschließend die Rekursion gestartet. Sobald die \code{stop}-Funktion aufgerufen wird, wird die Eigenschaft \code{stopPolling} auf \code{true} gesetzt. Das wiederum führt in der Methode \code{sendPollingRequest} zu einem Abbruch, was schließlich die Rekursion unterbricht.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung der Klasse \code{PollingUtility} für die Umsetzung des Polling-Verfahrens}, label=lst:pollingUtility, float]
 class PollingUtility {
 	private var stopPolling = true
 	
@@ -217,7 +231,7 @@ class PollingUtility {
 }
 \end{lstlisting}
 \\
-Um anschließend die Klasse \code{PollingUtility} zu nutzen, muss ausschließlich eine Variable von dieser angelegt und die \code{start}-Funktion gerufen werden. Dabei wird, wie im \hyperref[lst:pollingUsage]{Listing~\ref{lst:pollingUsage}} zu sehen, die Wartezeit in Millisekunden und die Aufgabe übergeben. Als Integer muss dabei die Wartezeit und als Lambda-Ausdruck die Aufgabe übergeben werden. Innerhalb der Polling-Aufgabe werden in dem Beispiel alle Draws eines Matches angefordert, anschließend wird überprüft ob neue Draws existieren und wenn ja werden die neuen zum Match hinzugefügt.
+Um anschließend die Klasse \code{PollingUtility} nutzen zu können, muss ausschließlich eine Instanz dieser angelegt und die \code{start}-Funktion aufgerufen werden. Dabei wird, wie im \hyperref[lst:pollingUsage]{Listing~\ref{lst:pollingUsage}} zu sehen, die Wartezeit in Millisekunden und die Aufgabe der Rekursion übergeben. Dafür muss die Wartezeit als Integer und die Aufgabe als Lambda-Ausdruck übergeben werden. Im gezeigten Beispiel wird dabei im übergebenen Intervall ein Request an den Server gesendet, welcher alle Draws eines Matches anfordert. Der \gls{HTTP}-Response wird daraufhin in eine Draw-Liste deserialisiert, aus welcher zu aller erst alle bereits im Match existierenden Draws entfernt werden. Sollten anschließend noch Draws enthalten sein, so werden diese im dazugehörigen Match ergänzt.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Einbindung bzw. Nutzung der \code{PollingUtility} Klasse}, label=lst:pollingUsage, float]
 val pollingDraw = PollingUtility()
 
