@@ -209,9 +209,9 @@ The files are generated in the ``doc/javadoc`` folder.
 
 AI Server
 ---------
-If you want to start the AI server without docker on an different server for example, then clone the git project from
-<https://github.com/ncksllvn/chess-api> and follow the instruction of this repository.
-After setup the ai server you have to change the ``app.aiServerRootUrl`` config entry in the ``application.yml`` file, 
+If you want to start the AI server without docker on an different server for example, then clone my fork <https://github.com/GagaMen/chess-api> 
+from the git project <https://github.com/ncksllvn/chess-api> and follow the instruction of this repository.
+After setup the ai server you have to change the ``app.aiServerRootUrl`` config entry ([Server Configuration](#server-configuration)) in the ``application.yml`` file, 
 which is located under ``src/main/resources`` and rebuild the project.
 > The default value of this config entry is ``http://chess-ai:5000`` which is intended for the docker setup
 
