@@ -12,7 +12,7 @@ Die in diesem Kapitel vorgestellten Bibliotheken bzw. Frameworks sollen die Umse
 RequireJS \cite{requirejs} ist ein für JavaScript entwickelte Bibliothek zum Laden von Modulen. Dabei ist es für die Nutzung innerhalb des Browsers optimiert, kann aber auch für andere Umgebungen genutzt werden. Ziel von solchen Bibliotheken wie RequireJs soll sein den eigenen Code zu beschleunigen und die Qualität zu steigern.\\
 \\
 Das \hyperref[lst:includeRequireJs]{Listing~\ref{lst:includeRequireJs}} zeigt wie RequireJs in einem Gradle Projekt eingebunden werden kann. Dafür müssen diese Zeilen in die \code{build.gradle} eingefügt werden.\\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek RequireJs mithilfe von Gradle}, label=lst:includeRequireJs, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek RequireJs mittels Gradle}, label=lst:includeRequireJs, float]
 repositories {
 	mavenCentral()
 }
@@ -35,7 +35,7 @@ Die Bibliothek kotlinx.html \cite{kotlinxHtml} wird offiziell durch JetBrains en
 \\
 Um die Bibliothek in einem Projekt mit Gradle als Build Tool zu verwenden, müssen die Zeilen aus \hyperref[lst:includeKotlinxHtml]{Listing~\ref{lst:includeKotlinxHtml}} in der Datei \code{build.gradle} ergänzt werden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.html mithilfe von Gradle}, label=lst:includeKotlinxHtml, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.html mittels Gradle}, label=lst:includeKotlinxHtml, float]
 repositories {
 	jcenter()
 }
@@ -70,7 +70,7 @@ Ebenso wie kotlinx.html ist kotlinx.serialization \cite{kotlinxSerialization} ei
 \\
 Für die Verwendung in einen Gradle-Projekt müssen die Zeilen aus dem \hyperref[lst:includeKotlinxSerialization]{Listing~\ref{lst:includeKotlinxSerialization}} in der Build-Datei von Gradle eingefügt werden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.serialization mithilfe von Gradle}, label=lst:includeKotlinxSerialization, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.serialization mittels Gradle}, label=lst:includeKotlinxSerialization, float]
 buildscript {
 	repositories {
 		maven { url "https://kotlin.bintray.com/kotlinx" }
@@ -112,7 +112,7 @@ Die Bibliothek kotlinx.coroutines \cite{kotlinxCoroutines} ist eine weiteres Pro
 \\
 Um die Bibliothek einzubinden müssen die Zeilen aus dem \hyperref[lst:includeKotlinxCoroutines]{Listing~\ref{lst:includeKotlinxCoroutines}} in die Build-Datei eingefügt werden. Zu beachten ist dabei, dass in der verwendeten Version \enquote{0.22.5} zusätzlich die letzten vier Zeilen notwendig sind. Was daran liegt das sich die Bibliothek derzeit noch im experimentellen Stadium befindet und ansonsten nicht verwendet werden kann. Sobald dieses Stadium abgeschlossen ist, können diese Zeilen weggelassen werden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.coroutines mithilfe von Gradle}, label=lst:includeKotlinxCoroutines, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek kotlinx.coroutines mittels Gradle}, label=lst:includeKotlinxCoroutines, float]
 repositories {
 	jcenter()
 }

@@ -3,7 +3,7 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Implementation des Servers}
-Inhalt dieses Kapitels soll die Umsetzung des Konzeptes aus \hyperref[sec:conceptServer]{Kapitel~\ref{sec:conceptServer}} sein. Dafür wird im ersten Abschnitt auf die Bibliotheken bzw. Frameworks eingegangen, welche für die Umsetzung verwendet wurden. Der zweite Abschnitt behandelt dabei die Anbindung an die SQLite Datenbank. Anschließend folgt eine Erläuterung zur Konfiguration einer Spring-Applikation, welche Content-Negotiation unterstützt. Daraufhin folgt eine Erklärung zur Umsetzung des Designkonzeptes HATEOAS, am Beispiel eines Requestes. Im Abschnitt fünf wird die Fehlerbehandlung bzw. das Exceptionhandling näher beschrieben. Das letzte Unterkapitel befasst sich mit der Ermittlung bzw. der Analyse von Strings, welche eine der Schachnotationen \gls{FEN} oder \gls{SAN} enthalten.
+Inhalt dieses Kapitels soll die Umsetzung des Konzeptes aus \hyperref[sec:conceptServer]{Kapitel~\ref{sec:conceptServer}} sein. Dafür wird im ersten Abschnitt auf die Bibliotheken bzw. Frameworks eingegangen, welche für die Umsetzung verwendet wurden. Der zweite Abschnitt behandelt dabei die Anbindung an die SQLite Datenbank. Anschließend folgt eine Erläuterung zur Konfiguration einer Spring-Applikation, welche Content Negotiation unterstützt. Daraufhin folgt eine Erklärung zur Umsetzung des Designkonzeptes HATEOAS, am Beispiel eines Requestes. Im Abschnitt fünf wird die Fehlerbehandlung bzw. das Exceptionhandling näher beschrieben. Das letzte Unterkapitel befasst sich mit der Ermittlung bzw. der Analyse von Strings, welche eine der Schachnotationen \gls{FEN} oder \gls{SAN} enthalten.
 
 \section{Verwendete Bibliotheken/Frameworks}
 Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibfasterxml]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibfasterxml}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
@@ -12,7 +12,7 @@ Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderun
 Spring Boot wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich das leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können. \cite{proSpring5} Spring biete eine Vielzahl an Einsatzmöglichkeiten, aber für die Umsetzung des Schachservers soll es für die Erzeugung der \gls{REST}-\gls{API} dienen.\\
 \\
 Um Spring Boot in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}}, in der Build-Datei \code{build.gradle} eingefügt werden.
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung des Spring Framework mithilfe von Gradle}, label=lst:includeSpring, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung des Spring Framework mittels Gradle}, label=lst:includeSpring, float]
 buildscript {
 	repositories {
 		mavenCentral()
@@ -66,7 +66,7 @@ SQLite ist eine OpenSource Bibliothek, welche ein dateibasiertes relationales Da
 \\
 Für die Einbindung von SQLite in ein Projekt, mithilfe der Datenbankschnittstelle \gls{JDBC}, sind folgende Zeilen in der Build-Datei von Gradle zu ergänzen:
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek SQLite mithilfe von Gradle}, label=lst:sqlite, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek SQLite mittels Gradle}, label=lst:sqlite, float]
 repositories {
 	mavenCentral()
 }
@@ -83,7 +83,7 @@ ORMLite ist ein OpenSource \gls{ORM} Projekt von Gray Watson, welches für Java 
 \\
 Um ORMLite in ein Gradle Projekt einzubinden müssen die Zeilen aus dem \hyperref[lst:includeORMLite]{Listing~\ref{lst:includeORMLite}} in die Build-Datei übertragen werden. Dabei muss neben der Core-Bibliothek die \gls{JDBC}-Bibliothek von ORMLite eingebunden werden, welches für die Verbindung zur Datenbank zuständig ist. Da aber \gls{JDBC} mit mehreren Datenbank-Systemen kommunizieren kann, muss noch der Datenbank-Treiber für das verwendete Datenbank-System eingebunden\footnote{siehe \hyperref[sec:bibsqlite]{Kapitel~\ref{sec:bibsqlite}}} werden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek ORMLite mithilfe von Gradle}, label=lst:includeORMLite, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek ORMLite mittels Gradle}, label=lst:includeORMLite, float]
 repositories {
 	mavenCentral()
 }
@@ -137,7 +137,7 @@ Mithilfe von Fasterxml werden inkrementelle Parser- und Generator-Abstraktionen 
 \\
 Für die Einbindung in ein Gradle-Projekt müssen die Zeilen aus dem \hyperref[lst:includeFasterxml]{Listing~\ref{lst:includeFasterxml}} zur Build-Datei hinzugefügt werden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek Fasterxml mithilfe von Gradle}, label=lst:includeFasterxml, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek Fasterxml mittels Gradle}, label=lst:includeFasterxml, float]
 repositories {
 	mavenCentral()
 }
@@ -201,10 +201,10 @@ class DatabaseUtility {
 \\
 Dabei wird erst eine Verbindung aufgebaut sobald diese benötigt wird. Da alle Interaktionen mit der Datenbank über \glspl{DAO} erfolgen, wird erst dann eine Verbindung aufgebaut sobald eines dieser mittels \code{get}-Funktion angefordert wird. Es ist zu beachten das bei einer erneuten Anforderung eines \glspl{DAO} die Verbindung nicht erneut aufgebaut wird, dabei ist es egal ob das selbe oder ein anderes angefordert wird. Ähnlich sieht das beim Anlegen der Tabellen aus, denn diese werden ausschließlich nur dann angelegt sofern diese noch nicht in der Datenbank-Datei existieren. Dies tritt beispielsweise auf sollte der Server neu gestartet werden.
 
-\section{Spring-Konfiguration für Content-Negotiation}\label{sec:contentNegotiation}
+\section{Spring-Konfiguration für Content Negotiation}\label{sec:contentNegotiation}
 Content-Negotiation ist laut \hyperref[sec:basePrincipleREST]{Kapitel~\ref{sec:basePrincipleREST}} ein wichtiges Qualitätsmerkmal für eine \gls{REST}-\gls{API}. Das Framework Spring Boot\footnote{siehe \hyperref[sec:bibspring]{Kapitel~\ref{sec:bibspring}}} bietet auch hierfür Lösungen an, welche aber nicht standardmäßig aktiviert stehen. Die \gls{JSON} wird dabei ohne weitere Konfiguration unterstützt, nur für \gls{XML} müssen die Klassenmodelle mithilfe der Bibliothek Fasterxml\footnote{siehe \hyperref[sec:bibfasterxml]{Kapitel~\ref{sec:bibfasterxml}}} angepasst werden. Anschließend ist eine Erweiterung der Spring-Konfiguration, wie in \hyperref[lst:springContentNegotiation]{Listing~\ref{lst:springContentNegotiation}} zu sehen, notwendig. Die Implementierung zeigt dabei die Umsetzung der drei Strategien, welche im \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} gefordert wurden.
 \\
-\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration der drei Content-Negotiation-Strategien}, label=lst:springContentNegotiation, float]
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration der drei Strategien für Content Negotiation}, label=lst:springContentNegotiation, float]
 @Configuration
 class WebConfig : WebMvcConfigurerAdapter() {
 	override fun configureContentNegotiation(configurer: ContentNegotiationConfigurer?) {
