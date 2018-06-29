@@ -179,7 +179,7 @@ Jeder Task verfügt dabei über die Funktionen \code{doFirst} und \code{doLast} 
 \\
 Des Weiteren besteht die Möglichkeit bestimmte Typen für Tasks anzugeben. So können diese standardmäßig als \code{Zip}, \code{Copy}, \code{Exec} oder \code{Delete} definiert werden. \code{Copy} erlaubt dabei zum Beispiel das Kopieren von Dateien und \code{Exec} das Ausführen von Kommandozeilen-Befehlen.\\
 \\
-In dem \hyperref[lst:gradleTask]{Listing~\ref{lst:gradleTask}} wird ein Beispiel für einen kopierenden Task gezeigt. Dieser kopiert alle Dateien mit den Endungen \code{.js} und \code{.js.map}, aus dem Build-Verzeichnis der Source-Dateien in ein Unterverzeichnis \code{js} des \code{dist}-Verzeichnisses. Dabei ist außerdem eine Abhängigkeit zum Build-Task definiert, wodurch dieser immer zuvor ausgeführt wird.
+In dem \hyperref[lst:gradleTask]{Listing~\ref{lst:gradleTask}} wird ein Beispiel für einen kopierenden Task gezeigt. Dieser kopiert alle Dateien mit den Endungen \code{.js} und \code{.js.map}, aus dem Build-Verzeichnis der Source-Dateien in ein Unterverzeichnis \code{js} des \code{dist}-Verzeichnisses. Dabei ist außerdem eine Abhängigkeit zum Build-Task definiert, wodurch dieser immer zuvor ausgeführt wird.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Beispiel: Gradle-Task}, label=lst:gradleTask, float]
 task copyCompiledFilesIntoDist(type: Copy) {
 	from "$buildDir/classes/kotlin/main/"
@@ -197,30 +197,29 @@ Schach ist ein strategisches Spiel zwischen zwei Parteien, bei welchem jeder ver
 \section{Schachnotationen FEN und SAN}\label{sec:chessNotation}
 \gls{FEN} und \gls{SAN} sind Notationen, welche für die elektronische Verarbeitung von Schachspielen entwickelt wurden. Beide Notationen werden als Text dargestellt und ermöglichen so eine statuslose Kommunikation. Die \gls{FEN} dient dabei zur Repräsentation eines ganzen Spielstandes und die \gls{SAN} zur Darstellung eines Spielzuges.\\
 \\
-Die \gls{FEN} setzt sich aus mehreren Teilen zusammen, welche aus der Figurenstellung, dem aktuellen Spieler, der Möglichkeit zur Rochade, dem Feld zum schlagen \enquote{en passant}, den Halbzügen und der aktuellen Zugnummer besteht. Die einzelnen Teile der Notation werden dabei durch Leerzeichen getrennt. Die \hyperref[fig:fen]{Abbildung~\ref{fig:fen}} stellt den Startspielstand eines Schachspiels in der \gls{FEN} dar.\\
-
-\begin{figure}[H]
-	\caption{Startposition eines Schachspiels in der FEN}
-	rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-	\label{fig:fen}
-\end{figure}\noindent
-Die \gls{SAN} besteht im allgemeinen aus dem Buchstaben der bewegenden Spielfigur und dem Zielfeld. Zu beachten ist dabei, dass für eine Bauernfigur kein Buchstabe angegeben wird. Die \hyperref[fig:sanPawn]{Abbildung~\ref{fig:sanPawn}} zeigt den Zug eines Bauern vom Feld a2 nach a4 und die \hyperref[fig:sanKnight]{Abbildung~\ref{fig:sanKnight}} den eines Springers vom Feld b1 nach c3.
-\begin{figure}[H]
-	\IfDefined{RawFloats}{\RawFloats}
-	\begin{minipage}[b]{.5\linewidth}
-		\centering
-		a4
-		\captionsetup{justification=centering}
-		\caption{Beispiel SAN: Bauer zieht von a2 nach a4}\label{fig:sanPawn}
-	\end{minipage}%
-	\begin{minipage}[b]{.5\linewidth}
-		\centering
-		Nc3
-		\captionsetup{justification=centering}
-		\caption{Beispiel SAN: Spring zieht von b1 nach c3}\label{fig:sanKnight}
-	\end{minipage}
-\end{figure}\noindent
-Die Buchstabencodes der einzelnen Figuren sind in der \hyperref[tab:pieces]{Tabelle~\ref{tab:pieces}} für die \gls{FEN} und die \gls{SAN} aufgelistet. Dabei ist zu beachten das die Codes für die Farbe Schwarz klein und für die Farbe Weiß groß geschrieben werden. Dies gilt aber nur für die \gls{FEN}, denn in der \gls{SAN} werden diese immer groß geschrieben. Genauere Informationen zur \gls{FEN} und \gls{SAN} können in der Bachelorarbeit \cite[9-10]{kretzschmar} von Christoph Kretzschmar nachgelesen werden.
+Die \gls{FEN} setzt sich aus mehreren Teilen zusammen, welche aus der Figurenstellung, dem aktuellen Spieler, der Möglichkeit zur Rochade, dem Feld zum schlagen \enquote{en passant}, den Halbzügen und der aktuellen Zugnummer besteht. Die einzelnen Teile der Notation werden dabei durch Leerzeichen getrennt. Das \hyperref[lst:fen]{Listing~\ref{lst:fen}} stellt den Startspielstand eines Schachspiels in der \gls{FEN} dar.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Startposition eines Schachspiels in der FEN}, label=lst:fen, float]
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+\end{lstlisting}
+\\
+%\begin{figure}[H]
+%	\caption{Startposition eines Schachspiels in der FEN}
+%	rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+%	\label{fig:fen}
+%\end{figure}\noindent
+Die \gls{SAN} besteht im allgemeinen aus dem Buchstaben der bewegenden Spielfigur und dem Zielfeld. Zu beachten ist dabei, dass für eine Bauernfigur kein Buchstabe angegeben wird. Das \hyperref[lst:sanPawn]{Listing~\ref{lst:sanPawn}} zeigt den Zug eines Bauern vom Feld a2 nach a4 und das \hyperref[lst:sanKnight]{Listing~\ref{lst:sanKnight}} den eines Springers vom Feld b1 nach c3.\\
+\\
+\begin{minipage}{.45\textwidth}
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel SAN: Bauer zieht von a2 nach a4}, label=lst:sanPawn]
+a4
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{.45\textwidth}
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel SAN: Spring zieht von b1 nach c3}, label=lst:sanKnight]
+Nc3
+\end{lstlisting}
+\end{minipage}
+Die Buchstabencodes der einzelnen Figuren sind in der \hyperref[tab:pieces]{Tabelle~\ref{tab:pieces}} für die \gls{FEN} und die \gls{SAN} aufgelistet. Dabei ist zu beachten das die Codes für die Farbe Schwarz klein und für die Farbe Weiß groß geschrieben werden. Dies gilt aber nur für die \gls{FEN}, denn in der \gls{SAN} werden diese immer groß geschrieben. Genauere Informationen zur \gls{FEN} und \gls{SAN} können in der Bachelorarbeit \cite[9-10]{kretzschmar} von Christoph Kretzschmar nachgelesen werden.\\
 \begin{table}[H]
 	\caption{Figurenbedeutung in der FEN und SAN (Quelle: \cite[Tabelle~2.1]{kretzschmar})}
 	\label{tab:pieces}
