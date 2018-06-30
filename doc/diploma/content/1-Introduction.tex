@@ -5,10 +5,17 @@
 \chapter{Einleitung}
 Laut einer Onlinestudie der ARD/ZDF-Medienkommission von 2017 \cite{onlineStudy2017,resultsOnlineStudy2017} ist die Nutzung des Internets im letzten Jahr um 6\% in Deutschland gestiegen. Dieser große Bedeutungszuwachs allein in Deutschland zeigt auch die immer mehr zunehmende Nachfrage nach Webinhalten. Was wiederum auch ein Indiz für die große Beliebheit der Skriptsprache JavaScript sein könnte, denn diese ist laut der letzten jährlichen Onlineumfrage der Stack Exchange Inc. \cite{developerSurvey2017} auf Platz 1 der beliebtesten Programmiersprachen. Dennoch kann es mitunter schwierig werden, große Applikationen mit JavaScript zu entwickeln. An dieser Stelle kommt die noch sehr junge Programmiersprache Kotlin ins Spiel.\\
 \\
-Kotlin ist eine statisch typisierte objektorientierte Programmiersprache, welche in Java-Bytecode, in JavaScript und in Nativen Code kompiliert werden kann. Des Weiteren ist Kotlin neben Java seit Mai 2017 offizielle Programmiersprache für Android \cite{kotlinAndroidOfficial}. Dadurch ist Kotlin sehr vielseitig und lässt sich für viele Anwendungsfälle einsetzen. \\
+Kotlin ist eine statisch typisierte objektorientierte Programmiersprache, welche in Java-Bytecode, in JavaScript und in Nativen Code kompiliert werden kann. Des Weiteren ist Kotlin neben Java seit Mai 2017 offizielle Programmiersprache für Android \cite{kotlinAndroidOfficial}. Dadurch ist Kotlin sehr vielseitig und lässt sich für viele Anwendungsfälle einsetzen.
+
+\section{Ziel der Arbeit}
+Grundlegend, bis auf Ausnahmen, besteht die Programmierung einer Web-Applikation aus der Erstellung eines Servers sowie eines Clients. Für die serverseitige Programmierung stehen dafür eine ganze Reihe verschiedener Programmiersprachen zur Verfügung, aber für die clientseitige Programmierung ist meistens die Skriptsprache JavaScript das Mittel der Wahl. Nun ist es immer etwas umständlich Web-Applikationen im mehreren Programmiersprachen zu entwickeln und es wäre wesentlich angenehmer nur eine einzige Sprache zu verwenden.\\
 \\
-Wie bereits erwähnt, ist Kotlin noch eine sehr junge Programmiersprache. Deshalb soll mit dieser Arbeit analysiert werden, wie sie sich für die Implementierung von Server- bzw. Client-Anwendungen eignet.\\
+Da mit Kotlin genau dieses ermöglicht wird, diese aber noch eine sehr junge Programmiersprache ist und daher gegebenenfalls derzeit noch Probleme auftreten können, zielt diese Arbeit auf die Analyse von Kotlin ab. Dabei soll, am Beispiel des bekannten Strategiespiels Schach, ein Server und ein Client entwickelt werden. Die daraus resultierende Implementierung soll etwaige auftretende Probleme für diesen Anwendungsfall aufzeigen, um so ein Fazit zum möglichen Einsatz von Kotlin für Server-Client-Anwendungen ziehen zu können.
+
+\section{Aufbau der Arbeit}
+Diese Arbeit ist in acht weitere Kapitel unterteilt. Dabei werden zunächst im zweiten Kapitel grundlegende Themen behandelt, welche für das Verständnis der nachfolgenden Abschnitte von Bedeutung sind. Im Kapitel drei folgt ein Vergleich zwischen der Programmiersprache Kotlin und dem \gls{GWT}, mit wessen Hilfe Java- in JavaScript-Code kompiliert werden kann und somit eine mögliche Alternative zu Kotlin bietet, um mit einer Programmiersprache eine Server-Client-Anwendung zu entwickeln.\\
 \\
-TODO:\\
-- Kapitelverlauf erläutern\\
-- Vorraussetzungen\\
+Die konzeptionelle Ausarbeitung des schon oben erwähnten Beispielspieles Schach soll in den Kapiteln vier für den Server und fünf für den Client erfolgen. Dabei werden alle benötigten Anforderungen und erste Designentscheidungen für die Umsetzung definiert. Auf Grundlage dieser Entwürfe befassen sich die Kapitel sechs und sieben mit der konkreten Erläuterung der Implementierung, wobei im sechsten der Server und im siebten der Client behandelt wird.\\
+\\
+Anschließend dient das achte Kapitel zur Präsentation des aus der Arbeit resultierenden Fazits, in welchen Rückschlüsse zum Einsatz von Kotlin, für die Entwicklung von Server-Client-Anwendungen, gezogen werden. Des Weiteren wird zusätzlich ein Fazit zur server- und clientseitigen Programmierung mit Koltin gegeben.
+Abschließend rundet das Kapitel neun die Arbeit, mit einem Ausblick auf Ideen zur Verbesserungen der Implementierung und für weiterführende wissenschaftliche Arbeiten, ab.
