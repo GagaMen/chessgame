@@ -76,11 +76,13 @@ Die \hyperref[fig:matchController]{Abbildung~\ref{fig:matchController}} bietet f
 \end{figure}
 
 \subsection{Draw Controller}\label{sec:drawController}
-Auch der Draw Controller stellt wieder zwei Einstiegspunkte an den \glspl{URI} \code{/api/draws} und \code{/api/draws/\{id\}} bereit. \\
+Der Draw Controller stellt drei Einstiegspunkte an den \glspl{URI} \code{/api/draws}, \code{/api/draws/\{id\}} und \code{/api/draws/ai} bereit. \\
 \\
 Am ersten Einstiegspunkt soll dabei wieder eine Liste mittels GET- und das Hinzufügen mittels POST-Request von Draws zur Verfügung gestellt werden. Für das Hinzufügen eines neuen Draws ist die ID des Matches und der Draw-Code in der \gls{SAN} als Parameter notwendig. Zusätzlich soll die Möglichkeit bestehen, die Zeilen- und Spaltennummer der Startposition mitzugeben. Wenn diese Informationen nicht mitgegeben werden, soll der Controller die Startposition kalkulieren. Spalten sind dabei als Nummern und nicht als Buchstaben zu übergeben\footnote{A $\rightarrow$ 1; B $\rightarrow$ 2; C $\rightarrow$ 3; D $\rightarrow$ 4; E $\rightarrow$ 5; F $\rightarrow$ 6; G $\rightarrow$ 7; H $\rightarrow$ 8}. Nach erfolgreicher Validierung des Draw-Codes soll der Draw dem zugehörigen Match hinzugefügt und die Match-Daten aktualisiert werden.\\
 \\
 Über den zweiten Einstiegspunkt soll die Abfrage nach einem einzelnen Draw möglich sein, aber eine Löschung oder Aktualisierung nicht. Sonst wäre eine Manipulation der Match-Daten seitens des Nutzers möglich. Die Entfernung von Draws ist ausschließlich über die Löschung des dazugehörigen Matches\footnote{siehe \hyperref[sec:matchController]{Kapitel~\ref{sec:matchController}}} zu erfolgen.\\
+\\
+Der dritte Einstiegspunkt soll mittels POST-Request die Möglichkeit bereitstellen, einen Draw, mithilfe einer künstlichen Intelligenz, zu einem Match hinzuzufügen. Dafür muss ausschließlich die ID des benötigten Matches als Request-Parameter mitgegeben werden.\\
 \\
 Wie in den vorherigen Kapiteln bietet die \hyperref[fig:drawController]{Abbildung~\ref{fig:drawController}} ein Veranschaulichung der definierten Einstiegspunkte.\\
 \begin{figure}[htb]
