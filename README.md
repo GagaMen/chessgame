@@ -58,7 +58,9 @@ Build Server:
 * with jar: ``java -jar server/build/libs/chessgame-server-1.0.0.jar`` (without static resources)
 * with war: ``java -jar server/build/libs/chessgame-server-1.0.0.war`` (with static resources -> client module)
 > You have to configure the chess ai server root url and run it separately, because the chess ai server isn't included
-in the .jar or .war file. (see [AI Server](#ai-server)) 
+in the .jar or .war file. (see [AI Server](#ai-server))
+> The database will persist in the file ``chessgame.db``, in the same directory were you start the server. To reset the 
+data you can simply delete the file and restart the server.
 #### with Docker
 * ``docker-compose build`` (only the first time and after updates necessary)
   * If new updates only affected the chess server you can also rebuild with the following command: 
@@ -67,9 +69,8 @@ in the .jar or .war file. (see [AI Server](#ai-server))
   * If you want to start the server without the client you have to change the ``service.chess-server.build.dockerfile``
   config entry to ``dockerfile-chess-server``
 * ``docker-compose down`` (shutdown the containers)
-* ``docker-compose down -v`` (shutdown the containers and removing volumes)
-> Note: The database will be persist by default over multiple starts of the server using docker. If you use 
-``docker-compose down -v`` the database will be reseted.
+> Note: The database will be persist by default over multiple starts of the server using docker. To reset the data
+clear the content of ``server/src/main/resources/chessgame.db``, but **don't delete** them!
 
 #### Or Server only (without ai server)
 * ``docker build -t chess-server -f dockerfile-chess-server .`` (without static resources)
