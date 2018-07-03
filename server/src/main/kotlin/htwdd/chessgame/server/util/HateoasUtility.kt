@@ -27,7 +27,7 @@ class HateoasUtility {
             val sb = StringBuilder()
 
             linkList.forEach { (link, verb) ->
-                sb.append("<${link.href}>;rel=${link.rel};verb='$verb'")
+                sb.append("<${link.href}>,rel=${link.rel},verb='$verb'; ")
             }
 
             headers.set("Link", sb.toString())
