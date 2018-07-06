@@ -15,7 +15,9 @@ services:
     depends_on:
       - chess-ai
     volumes:
-    - ${PWD}/server/src/main/resources/chessgame.db:/usr/src/chessgame/server/chessgame.db
+    - chessgame_data:/usr/src/chessgame/server/chessgame_data
     ports:
       - "8080:8080"
     restart: always
+volumes:
+  chessgame_data:

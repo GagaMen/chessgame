@@ -5,7 +5,7 @@ dist
 node_modules
 out
 chessgame.db
-!server/src/main/resources/chessgame.db
+chessgame_data
 
 Diploma.bbl
 Diploma.bcf

@@ -13,6 +13,7 @@ import htwdd.chessgame.server.util.DatabaseUtility.Companion.drawDao
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.matchDao
 import htwdd.chessgame.server.util.DatabaseUtility.Companion.playerDao
+import java.io.File
 
 /**
  * Utility class to handle database interactions
@@ -63,7 +64,8 @@ class DatabaseUtility {
          */
         private fun connect() {
             if (connection != null) return
-            connection = JdbcConnectionSource("jdbc:sqlite:chessgame.db")
+            File("./chessgame_data").mkdirs()
+            connection = JdbcConnectionSource("jdbc:sqlite:chessgame_data/chessgame.db")
             createTables()
             createDaos()
         }
