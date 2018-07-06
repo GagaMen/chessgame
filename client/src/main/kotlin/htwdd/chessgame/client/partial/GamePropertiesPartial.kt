@@ -143,10 +143,10 @@ class GamePropertiesPartial(val match: Match) : Partial {
                                         +draw.pieceType.toString()
                                     }
                                     td {
-                                        +"${draw.startField.row}${(draw.startField.column + 64).toChar()}"
+                                        +"${(draw.startField.column + 64).toChar()}${draw.startField.row}"
                                     }
                                     td {
-                                        +"${draw.endField.row}${(draw.endField.column + 64).toChar()}"
+                                        +"${(draw.endField.column + 64).toChar()}${draw.endField.row}"
                                     }
                                 }
                             }

@@ -2,8 +2,33 @@ package htwdd.chessgame.server.util
 
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.PieceType.*
+import htwdd.chessgame.server.util.CheckUtility.Companion.bishop
+import htwdd.chessgame.server.util.CheckUtility.Companion.king
+import htwdd.chessgame.server.util.CheckUtility.Companion.knight
+import htwdd.chessgame.server.util.CheckUtility.Companion.pawn
+import htwdd.chessgame.server.util.CheckUtility.Companion.queen
+import htwdd.chessgame.server.util.CheckUtility.Companion.rook
+import htwdd.chessgame.server.util.CheckUtility.Companion.threatedFields
 
+/**
+ * Utility class handle threated field based on the piece type
+ *
+ * @author Felix Dimmel
+ *
+ * @property threatedFields Container for all threated field of a color
+ * @property bishop utility object to get movement and threated field of a bishop piece
+ * @property king utility object to get movement and threated field of a king piece
+ * @property knight utility object to get movement and threated field of a knight piece
+ * @property pawn utility object to get movement and threated field of a pawn piece
+ * @property queen utility object to get movement and threated field of a queen piece
+ * @property rook utility object to get movement and threated field of a rook piece
+ *
+ * @since 1.0.0
+ */
 class CheckUtility {
+    /**
+     * Static CheckUtility object
+     */
     companion object {
         private var threatedFields = HashSet<Pair<Int, Int>>()
         private val bishop = BishopMovementUtility()
@@ -13,6 +38,17 @@ class CheckUtility {
         private val queen = QueenMovementUtility()
         private val rook = RookMovementUtility()
 
+        /**
+         * Calculate threated fields based on the piece type
+         *
+         * @author Felix Dimmel
+         *
+         * @param match Match reference
+         *
+         * @return True if the opponent is in check otherwise false
+         *
+         * @since 1.0.0
+         */
         fun calcThreatedFields(match: Match): Boolean {
             val currentPieces = match.pieceSets[match.currentColor]?.activePieces
                     ?: throw NullPointerException()
@@ -54,6 +90,17 @@ class CheckUtility {
             return false
         }
 
+        /**
+         * Calcualte possible movement fields based on the piece type
+         *
+         * @author Felix Dimmel
+         *
+         * @param match Match reference
+         *
+         * @return True if no movement field was found otherwise false
+         *
+         * @since 1.0.0
+         */
         fun checkmate(match: Match): Boolean {
             val currentPieces = match.pieceSets[match.currentColor]?.activePieces
                     ?: throw NullPointerException()

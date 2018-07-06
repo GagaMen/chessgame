@@ -1,5 +1,52 @@
-\chapter{First chapter of appendix}
-\label{chap:Appendix:A}
+\chapter{Praktikumsaufgabe}\label{chap:Appendix:A}
+Mithilfe dieses Praktikums soll Ihr Verständnis über Webservices, insbesondere solche welche den REST Architekturstil umsetzen, schulen. Des Weiteren zielt dieses Praktikum auf eine Einführung in das Kommandozeilen Tool cURL ab, welches ein mächtiges Werkzeug für die Kommunikation mit Webservices darstellt.\\
+\\
+Die nachfolgenden Aufgaben sind chronologisch angeordnet und sollten daher in der Vorgegebenen Reihenfolge bearbeitet werden. Die ersten vier Punkte dienen dabei als Erläuterung der Einrichtung und interaktiven Einführung in der Benutzung des Webservices. 
 
-\section{Parameters}
-\label{sec:Appendix:Parameter}
+\section{Einrichtung}
+Laden Sie sich das Repository \url{git@github.com:GagaMen/chessgame.git} mithilfe des Tools git herunter und wechseln Sie zum Tag \enquote{v1.0.0}. Alternativ können Sie das Projekt auch gezippt, direkt über die \gls{URL} \url{https://github.com/GagaMen/chessgame/archive/master.zip}, herunterladen und anschließend entpacken. Haben Sie den richtigen Tag ausgecheckt, können Sie das Projekt mit dem mitgelieferten Gradle-Wrapper erstellen. Nach erfolgreicher Erstellung kann die Anwendung mit Docker ausgeführt werden. Dafür müssen Sie allerdings vorerst die Docker-Services erstellen lassen. Führen Sie für diese Schritte folgende Befehlsabfolge in einem Terminal aus:\\
+\begin{lstlisting}[style=lstStyleFramed, caption={Befehlsabfolge zur Einrichtung des Webservices}, label=lst:startCommands]
+git clone git@github.com:GagaMen/chessgame.git
+cd chessgame
+git checkout v1.0.0
+./gradlew build
+docker-compose build
+docker-compose up -d
+\end{lstlisting}
+Möchten Sie den Server herunterfahren, so können Sie dies über den Befehl \code{docker-compose down} erreichen. Für einen erneuten Start, genügt anschließend der letzte Befehl aus dem \hyperref[lst:startCommands]{Listing~\ref{lst:startCommands}}.
+
+\section{Schachregeln und Schachnotationen}
+\begin{enumerate}
+	\item Sofern Sie die Spielregeln von Schach noch nicht kennen sollten, schauen Sie sich zuallererst diese an. Werfen Sie dafür einen Blick auf die Seite \url{http://www.schachtrainer.de/learn/fide01.php}.
+	\item Machen Sie sich mit der \acrfull{FEN} vertraut. Benutzen Sie dafür folgende \gls{URL} \url{https://en.wikipedia.org/wiki/Forsyth\%E2\%80\%93Edwards_Notation}.
+	\item Untersuchen Sie als nächstes die \acrfull{SAN} unter folgender \gls{URL} \url{https://en.wikipedia.org/wiki/Algebraic_notation_\%28chess\%29}
+\end{enumerate}
+
+\section{Web-Applikation}
+\begin{enumerate}
+	\item Rufen Sie die Web-Applikation, nachdem Sie diese mittels Docker gestartet haben, unter der \gls{URL} \url{http://localhost:8080} auf.\footnote{Beachten Sie dabei, dass es ein paar Sekunden dauern kann bis der Server komplett hochgefahren ist, da der Docker-Befehl nicht darauf wartet.}
+	\item Wechseln Sie zur Player-Ansicht(Players) und legen sich über das Formular einen eigenen Player an. Gehen Sie anschließend über den Return-Button zurück zur Start-Ansicht.\footnote{Beachten Sie hierbei, dass die Browser-Funktion zum zurückkehren zur letzten Seite nicht funktioniert.}
+	\item Wechseln Sie nun zur Match-Ansicht(Matches) und legen ein Match mit dem AI-Player und Ihrem an.
+	\item Starten Sie das eben angelegte Match, über den $\blacktriangleright$-Button in der Übersichtstabelle.
+	\item Spielen Sie nun ein paar Züge, indem Sie Ihre Figuren per Drag\&Drop bewegen. Mögliche Züge werden dabei per Mouseover angezeigt.
+\end{enumerate}
+
+\section{Verwendung der REST-API mithilfe des Browsers}
+\begin{enumerate}
+	\item Lassen Sie sich alle angelegten Player mithilfe der \gls{REST}-\gls{API} anzeigen. Rufen Sie dafür die \gls{URL} \url{http://localhost:8080/api/players} auf.
+	\item In den meisten Browsern wird standardmäßig, im Accept-Header des \gls{HTTP}-Requests, \acrfull{XML} als Rückgabeformat angefordert. Mithilfe der Technik Content Negotiation ist es möglich sich Daten auch in der \acrfull{JSON} ausgeben zu lassen. Fügen Sie dafür den Suffix \enquote{.json} oder den Parameter \enquote{?mediaType=json} an die \gls{URL} an.\footnote{Für ein besseres Verständnis dieser Technik, schauen Sie auch in die README-Datei des Github Repositorys unter \url{https://github.com/GagaMen/chessgame\#content-negotiation}.}
+	\item Machen Sie sich mit den bereitgestellten Ressourcen der \gls{REST}-\gls{API} vertraut und fordern Sie weitere Daten an. Schauen Sie hierfür in der README-Datei unter \url{https://github.com/GagaMen/chessgame\#entry-points} nach, welche \glspl{URL} für einen GET-Request bereitstehen. Die anderen Request-Arten können vorerst vernachlässigt werden.
+\end{enumerate}
+
+\section{Verwendung der REST-API mithilfe des Tools cURL}
+Das Tool cUrl ist ein Kommandozeilenprogramm und steht für \enquote{Client for \glspl{URL}}. Es dient zur Übertragung von Daten in Rechnernetzen und unterstützt dabei eine ganze Reihe von Übertragungsprotokollen. Darunter vertreten sind zum Beispiel HTTP, HTTPS, FTP oder auch FTPS. Nachfolgend soll dieses Tool dazu genutzt werden mit der bereitgestellten \gls{REST}-\gls{API} zu kommunizieren und so Ressourcen abzurufen, zu erstellen, zu aktualisieren oder zu löschen. Verwenden Sie daher für die Erfüllung der nachfolgenden Aufgaben ausschließlich das Tool cURL.
+\begin{enumerate}
+	\item Lernen Sie das Tool Curl kennen und achten Sie dabei besonders auf die Parameter \code{-d}, \code{-v}, \code{-H} und \code{-X}, welche für die Erfüllung der nachfolgenden Aufgaben benötigt werden.
+	\item Wie Sie schon im vorhergehenden Aufgabenblock gesehen haben, gibt es unterschiedliche \gls{HTTP}-Methoden, welche für den Aufruf einer \gls{URI} benutzt werden können. Machen Sie sich mit diesen Vertraut und lernen Sie deren Bedeutung kennen bzw. für welchen Zweck diese gedacht sind.\footnote{Schauen Sie hierfür unter \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods} nach.}
+	\item Wegen des Designkonzeptes HATEOAS, welches für \gls{REST}-\glspl{API}, zwingend umgesetzt werden muss, stellt jeder Response eines Requestes Links zur Navigation bereit. Im vorliegenden Beispiel befinden sich diese Links im Link-Header des Response. Einzelne Links werden dabei durch Semikolons getrennt und bestehen aus der \gls{URI} in spitzen Klammern, der Relation und dem \gls{HTTP}-Verb, welche die \gls{HTTP}-Methode darstellt. Analysieren Sie die \gls{API} weiter, indem Sie beginnend mit der \url{http://localhost:8080/api} und den gelieferten Link-Headern durch diese navigieren.\footnote{Wollen Sie sich ausschließlich die empfangenen Header anzeigen, so können Sie folgenden Befehl benutzen:\\\enquote{curl -sSL -D - localhost:8080/api -o /dev/null}}
+	\item Legen Sie weitere neue Player an.\footnote{\label{foot:readmeEntryPoints}Schauen Sie für weitere Informationen zu den Parametern in der README unter \url{https://github.com/GagaMen/chessgame\#entry-points} nach.} Schicken Sie zunächst die benötigten Daten im Format \code{application/x-www-form-urlencoded} und anschließend im Format \code{application/json}. Benutzen Sie dafür den \gls{HTTP}-Header \enquote{Content-Type}.
+	\item Aktualisieren Sie das Passwort eines Players.\footref{foot:readmeEntryPoints}
+	\item Löschen Sie ein beliebigen zuvor angelegten Player.
+	\item Legen Sie ein weiteres Match an. Lassen Sie sich anschließend alle Matches im \gls{XML}-Format anzeigen.\footref{foot:readmeEntryPoints} Nutzen Sie dafür den Accept-Header des \gls{HTTP}-Requestes.
+	\item Verfestigen Sie Ihre Kenntnisse über die Schachnotationen, indem Sie mehrere Züge dem zuvor angelegten Match hinzufügen.\footref{foot:readmeEntryPoints} Schauen Sie sich dafür nach jedem hinzugefügten Zug das Resultat im Match an.
+\end{enumerate}

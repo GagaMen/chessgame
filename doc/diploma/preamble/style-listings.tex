@@ -1,5 +1,6 @@
 \IfDefined{colorlet}{
-   \colorlet{colorlstNumber}{white!50!black!100}
+   \colorlet{colorlstNumber}{white!25!black!100}
+   \colorlet{colorlstBackground}{white!95!black!100}
 }
 
 \makeatletter
@@ -34,9 +35,9 @@
 
 \lstdefinestyle{lstStyleBase}{
 %%% appearance
-   ,basicstyle=\small\ttfamily % Standardschrift
+   ,basicstyle=\scriptsize\ttfamily % Standardschrift
 %%%  Space and placement
-   ,floatplacement=tbp    % is used as float place specifier
+   ,floatplacement=htbp    % is used as float place specifier
    ,aboveskip=\medskipamount % define the space above and 
    ,belowskip=\medskipamount % below displayed listings.
    ,lineskip=0pt          % specifies additional space between lines in listings.
@@ -77,13 +78,15 @@
    ,breakautoindent=true % apply intendation
    ,columns=flexible     %
    ,keepspaces=true      %
+   ,backgroundcolor=\color{colorlstBackground}
+   ,framexleftmargin=5pt
 }
 
 \lstset{style=lstStyleBase}
 
 \lstdefinestyle{lstStyleFramed}{%
 %%% Frames
-   ,frame=single         % none, leftline, topline, bottomline, lines
+   ,frame=lines         % none, leftline, topline, bottomline, lines
                          % single, shadowbox
    ,framesep=3pt 
    ,rulesep=2pt          % control the space between frame and listing 
@@ -127,5 +130,10 @@
    %,XML
    %,HTML
 }
+
+\input{preamble/listings-kotlin.tex}
+\input{preamble/listings-groovy.tex}
+\input{preamble/listings-javascript.tex}
+\input{preamble/listings-html5.tex}
 
 }% End of \IfPackageLoaded

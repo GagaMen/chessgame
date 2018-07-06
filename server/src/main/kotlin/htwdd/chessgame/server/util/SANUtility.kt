@@ -5,10 +5,33 @@ import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
+import htwdd.chessgame.server.model.PieceType
 import htwdd.chessgame.server.model.PieceType.*
 
+/**
+ * Utility class to handle a String as standard algebraic notation (SAN)
+ *
+ * @author Felix Dimmel
+ *
+ * @since 1.0.0
+ */
 class SANUtility {
+    /**
+     * Static SANUtility object
+     */
     companion object {
+        /**
+         * Validate a given draw based on his SAN code
+         *
+         * @author Felix Dimmel
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return True if the draw is valid otherwise false
+         *
+         * @since 1.0.0
+         */
         fun validateSAN(draw: Draw, match: Match): Boolean {
             val movementFields = HashSet<Pair<Int, Int>>()
             val movementUtility = when (draw.pieceType) {
@@ -46,6 +69,18 @@ class SANUtility {
             return false
         }
 
+        /**
+         * Validate a given draw based on his SAN code if the draw is a castling
+         *
+         * @author Felix Dimmel
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return True if the castling is valid otherwise false
+         *
+         * @since 1.0.0
+         */
         private fun validateCastling(draw: Draw, match: Match): Boolean {
             val activePieces = match.pieceSets[match.currentColor]?.activePieces
                     ?: throw NullPointerException("The HashMap of active pieces for Player ${match.currentColor} is null!")
@@ -76,6 +111,19 @@ class SANUtility {
             return true
         }
 
+        /**
+         * Calculate all possible start field based on the given piece type
+         * Necessary if no start field was handed
+         *
+         * @author Felix Dimmel
+         *
+         * @param draw The draw to be added
+         * @param match The match reference of the draw
+         *
+         * @return A hashset of all possible start fields
+         *
+         * @since 1.0.0
+         */
         private fun calcPossibleStartFields(draw: Draw, match: Match): HashSet<Pair<Int, Int>> {
             var possibleStartFields = HashSet<Pair<Int, Int>>()
             val regex = "([KQBNR])?([a-h]|[1-8])?(x)?([a-h])([1-8])([QBRN])?(e\\.p\\.)?(\\+{1,2}|#)?".toRegex()
@@ -103,6 +151,93 @@ class SANUtility {
             }
 
             return possibleStartFields
+        }
+
+        /**
+         * Calculate SAN string with given information from ai move
+         *
+         * @author Felix Dimmel
+         *
+         * @param startField Start position of moved piece
+         * @param endField End position of moved piece
+         * @param checkmate True if one player is checkmate otherwise false
+         * @param check True if one player is in check otherwise false
+         * @param match The match reference of the draw
+         *
+         * @since 1.0.0
+         */
+        fun calcSANFromAIMove(
+                startField: Field,
+                endField: Field,
+                checkmate: Boolean,
+                check: Boolean,
+                match: Match
+        ): String {
+            val sb = StringBuilder()
+            val activePieces = match.pieceSets[match.currentColor]?.activePieces!!
+            val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces!!
+            val movedPiece = activePieces[startField.asPair()]
+                    ?: throw Exception("Can't find the piece that has been moved!")
+            var throwPiece = opposingPieces.containsKey(endField.asPair())
+            var throwEnPassant = false
+
+            if (match.kingsideCastling[match.currentColor]!! &&
+                    movedPiece.type == KING &&
+                    (endField.column - startField.column) == 2) {
+                return sb.append("O-O").toString()
+            }
+
+            if (match.kingsideCastling[match.currentColor]!! &&
+                    movedPiece.type == KING &&
+                    (startField.column - endField.column) == 2) {
+                return sb.append("O-O-O").toString()
+            }
+
+
+            if (movedPiece.type == PAWN && match.enPassantField?.asPair() == endField.asPair()) {
+                throwEnPassant = true
+                throwPiece = true
+            }
+
+            if (movedPiece.type != PAWN) sb.append(movedPiece.type.getDrawCode())
+
+            opposingPieces.forEach piece@{ piece ->
+                if (movedPiece.type == PieceType.PAWN || piece.value.type != movedPiece.type) return@piece
+                if (piece.value.position.row == endField.row && piece.value.position.column == endField.column) return@piece
+
+                val movementUtility = when (movedPiece.type) {
+                    PieceType.BISHOP -> BishopMovementUtility()
+                    PieceType.KING -> KingMovementUtility()
+                    PieceType.KNIGHT -> KnightMovementUtility()
+                    PieceType.PAWN -> PawnMovementUtility()
+                    PieceType.QUEEN -> QueenMovementUtility()
+                    PieceType.ROOK -> RookMovementUtility()
+                }
+
+                val movementFields = HashSet<Pair<Int, Int>>()
+                movementUtility.getFilteredMovementFields(movementFields, piece.value.position.row, piece.value.position.column, match)
+
+                movementFields.forEach field@{ field ->
+                    if (field.first != endField.row || field.second != endField.column) return@field
+                    if (startField.column == piece.value.position.column) sb.append("${startField.row}")
+                    else sb.append("${startField.column.plus(96).toChar()}")
+                }
+            }
+
+            if (movedPiece.type == PAWN && throwPiece) {
+                sb.append("${startField.column.plus(96).toChar()}")
+            }
+
+            if (throwPiece) sb.append("x")
+
+            sb.append("${endField.column.plus(96).toChar()}${endField.row}")
+
+            if (throwEnPassant) sb.append("e.p.")
+
+            if (checkmate) sb.append("#")
+            else if (check) sb.append("+")
+
+            return sb.toString()
         }
     }
 }

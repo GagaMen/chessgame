@@ -8,8 +8,29 @@ import htwdd.chessgame.server.model.Draw
 import htwdd.chessgame.server.model.Field
 import htwdd.chessgame.server.model.Match
 import htwdd.chessgame.server.model.Player
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.connection
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.drawDao
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.fieldDao
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.matchDao
+import htwdd.chessgame.server.util.DatabaseUtility.Companion.playerDao
 
+/**
+ * Utility class to handle database interactions
+ *
+ * @author Felix Dimmel
+ *
+ * @property connection Holds the connection to the database
+ * @property playerDao Database access object for players
+ * @property matchDao Database access object for matches
+ * @property drawDao Database access object for draws
+ * @property fieldDao Database access object for fields
+ *
+ * @since 1.0.0
+ */
 class DatabaseUtility {
+    /**
+     * Static DatabaseUtility object
+     */
     companion object {
         private var connection: JdbcConnectionSource? = null
         var playerDao: Dao<Player, Int>? = null
@@ -33,6 +54,13 @@ class DatabaseUtility {
                 return field
             }
 
+        /**
+         * Initialize the database connection
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
+         */
         private fun connect() {
             if (connection != null) return
             connection = JdbcConnectionSource("jdbc:sqlite:chessgame.db")
@@ -40,6 +68,13 @@ class DatabaseUtility {
             createDaos()
         }
 
+        /**
+         * Creates all necessary table if these are not exist
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
+         */
         private fun createTables() {
             TableUtils.createTableIfNotExists(connection, Player::class.java)
             TableUtils.createTableIfNotExists(connection, Match::class.java)
@@ -47,6 +82,13 @@ class DatabaseUtility {
             TableUtils.createTableIfNotExists(connection, Field::class.java)
         }
 
+        /**
+         * Initialize all necessary database access objects
+         *
+         * @author Felix Dimmel
+         *
+         * @since 1.0.0
+         */
         private fun createDaos() {
             playerDao = DaoManager.createDao<Dao<Player, Int>, Player>(connection, Player::class.java)
             matchDao = DaoManager.createDao<Dao<Match, Int>, Match>(connection, Match::class.java)

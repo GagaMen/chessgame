@@ -2,11 +2,13 @@ group 'htwdd/chessgame'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.30'
-    ext.spring_boot_version = '1.5.4.RELEASE'
+    ext.kotlin_version = '1.2.41'
+    ext.spring_boot_version = '1.5.13.RELEASE'
     ext.sqlite_driver_version = '3.21.0.1'
     ext.ormlite_version = '5.1'
     ext.fasterxml_jackson_version = '2.9.5'
+    ext.dokka_version = '0.9.16'
+    ext.coroutines_version = '0.22.5'
 
     repositories {
         mavenCentral()
@@ -16,6 +18,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
     }
 }
 
@@ -25,8 +28,19 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'application'
 apply plugin: 'war'
+apply plugin: 'org.jetbrains.dokka'
 
 mainClassName = "htwdd.chessgame.server.ApplicationKt"
+
+dokka {
+    outputFormat = 'javadoc'
+    outputDirectory = "${rootProject.projectDir}/doc/server/javadoc"
+}
+
+task dokkaJekyll(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'jekyll'
+    outputDirectory = "${rootProject.projectDir}/docs/"
+}
 
 jar {
     baseName = 'chessgame-server'
@@ -43,7 +57,6 @@ war {
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
@@ -53,14 +66,23 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
-    compile group: 'org.xerial', name: 'sqlite-jdbc', version: "$sqlite_driver_version"
+    compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
+    compile "org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version"
+    compile "org.xerial:sqlite-jdbc:$sqlite_driver_version"
     compile "com.j256.ormlite:ormlite-core:$ormlite_version"
     compile "com.j256.ormlite:ormlite-jdbc:$ormlite_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$fasterxml_jackson_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$fasterxml_jackson_version"
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-core:$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$fasterxml_jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$fasterxml_jackson_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testCompile("org.springframework.boot:spring-boot-starter-test:$spring_boot_version")
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
 }
 
 compileKotlin {

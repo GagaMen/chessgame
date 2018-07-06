@@ -3,3 +3,346 @@
 % !TeX root = ../Diploma.tex
 
 \chapter{Implementation des Servers}
+Inhalt dieses Kapitels ist die Umsetzung des Konzeptes aus \hyperref[sec:conceptServer]{Kapitel~\ref{sec:conceptServer}}. Dafür wird im ersten Abschnitt auf die Bibliotheken bzw. Frameworks eingegangen, welche für die Umsetzung verwendet wurden. Der zweite Abschnitt behandelt dabei die Anbindung an die SQLite Datenbank. Anschließend folgt eine Erläuterung zur Konfiguration einer Spring-Applikation, welche Content Negotiation unterstützt. Daraufhin folgt eine Erklärung zur Umsetzung des Designkonzeptes HATEOAS am Beispiel eines Requestes. Im Abschnitt fünf wird die Fehlerbehandlung bzw. das Exceptionhandling näher beschrieben. Das letzte Unterkapitel befasst sich mit der Ermittlung bzw. der Analyse von Strings, welche eine der Schachnotationen \gls{FEN} oder \gls{SAN} enthalten.
+
+\section{Verwendete Bibliotheken/Frameworks}
+Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung der Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibfasterxml]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibfasterxml}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
+
+\subsection{Spring Boot}\label{sec:bibspring}
+Spring Boot wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können. \cite{proSpring5} Spring bietet eine Vielzahl an Einsatzmöglichkeiten, aber für die Umsetzung des Schachservers soll es für die Erzeugung der \gls{REST}-\gls{API} dienen.\\
+\\
+Um Spring Boot in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}} in der Build-Datei \code{build.gradle} eingefügt werden.
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung des Spring Framework mittels Gradle}, label=lst:includeSpring, float]
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-allopen:1.2.30"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE"
+	}
+}
+apply plugin: "kotlin-spring"
+apply plugin: "org.springframework.boot"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-web:1.5.4.RELEASE"
+}
+\end{lstlisting}
+Zu beachten ist dabei, dass Gradle nur eine Lösung für die Einbindung ist. Da aber für die Umsetzung ebenfalls Gradle verwendet wird, werden alle anderen Lösungen an dieser Stelle vernachlässigt.\\
+\\ 
+Für die Erstellung einer \gls{REST}-\gls{API} muss zunächst ein Controller für eine Ressource angelegt werden. Dabei ist es sinnvoll für jede Ressource einen eigenen Controller zu definieren. Innerhalb dieser werden anschließend alle Einstiegspunkte erzeugt. Als Beispiel soll das \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} in Form eines klassischen \enquote{Hello World} dienen. Dafür wird eine Klasse \code{GreetingController} mit einer Funktion \code{getGreeting} definiert. Als Parameter bekommt diese Funktion einen Namen übergeben, welcher standardmäßig den String \enquote{World} beinhaltet. An dieser Stelle kommt das Spring Boot Framework ins Spiel. Dieses stellt eine Reihe von Annotationen bereit, über welche eine \gls{REST}-\gls{API} konfiguriert werden kann. Dabei dient die Annotation \code{@RestController} dazu, die Klasse \code{GrettingController} in einen \enquote{RestController} zu portieren, mit welchen anschließend Einstiegspunkte definiert werden können. Innerhalb dieses Controllers besteht daraufhin die Möglichkeit eine Funktion, mit der Annotation \code{@GetMapping}, als Einstiegspunkt für einen \code{GET}-Request an einer Ressource zu definieren. Um nun dem Nutzer der \gls{API} die Möglichkeit zu bieten Parameter im Request mitzugeben, müssen diese mit der Annotation \code{@RequestParam} erweitert werden, wie im \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} am Parameter \code{name} zu sehen.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Spring Controller}, label=lst:springcontroller, float]
+import org.springframework.web.bind.annotation.*
+
+@RestController
+class GreetingController {
+	@GetMapping("/greeting")
+	fun getGreeting(@RequestParam name: String = "World"): String {
+		return "Hello $name!"
+	}
+}
+\end{lstlisting}
+\\
+Abschließend muss nur noch der Startpunkt für die Spring-Applikation definiert werden. Dafür wird mithilfe der Annotation \code{@SpringBootApplication} ein Klasse erweitert, welche aber keinerlei Informationen benötigt. Anschließend muss diese in der Main-Funktion, wie im \hyperref[lst:springmain]{Listing~\ref{lst:springmain}} zu sehen, aufgerufen werden.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Spring Application Class}, label=lst:springmain, float]
+@SpringBootApplication
+class Application
+
+fun main(args: Array<String>) {
+	SpringApplication.run(Application::class.java, *args)
+}
+\end{lstlisting}
+\\
+Für eine detaillierte Beschreibung dieses Beispiels sind auf den Internetseiten \cite{springTutorialKotlin} und \cite{springTutorial} weitere Informationen zu finden.
+
+\subsection{SQLite}\label{sec:bibsqlite}
+SQLite ist eine OpenSource Bibliothek, welche ein dateibasiertes relationales Datenbanksystem bereitstellt. Der größte Unterschied zu anderen relationalen SQL-Datenbanken besteht darin, das SQLite keinen separaten Serverprozess besitzt und somit als eingebettete Datenbank-Engine betrachtet werden kann. Alle Tabellen, Indizes, Trigger und Sichten einer Datenbank werden dabei in einem plattformunabhängigen Format in einer einzigen Datei gespeichert. Das bedeutet, dass Datenbankdateien bequem zwischen 32-Bit und 64-Bit-Systemen oder Little-Endian- und Big-Endian-Architekturen getauscht werden können. \cite{sqliteAbout}\\
+\\
+Für die Einbindung von SQLite in ein Projekt sind, mittels der Datenbankschnittstelle \gls{JDBC}, folgende Zeilen in der Build-Datei von Gradle zu ergänzen:
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek SQLite mittels Gradle}, label=lst:sqlite, float]
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.xerial:sqlite-jdbc:3.21.0.1"
+}
+\end{lstlisting}
+\\
+Da für die Implementierung eine \gls{ORM} Bibliothek\footnote{siehe \hyperref[sec:bibormlite]{Kapitel~\ref{sec:bibormlite}}} Verwendung findet, wird auf eine nähere Erläuterung von SQLite in Kombination mit dem \gls{JDBC} Treiber an dieser Stelle verzichtet. Sollte dieses Szenario dennoch von Interesse sein, ist auf der Internetseite \cite{sqliteJDBCTutorial} ein Beispiel zur Datenbankanbindung, Erstellung von Tabellen und zum Absenden von SQL-Anfragen zu finden.
+
+\subsection{ORMLite}\label{sec:bibormlite}
+ORMLite ist ein OpenSource \gls{ORM} Projekt von Gray Watson, welches für Java entwickelt wurde, aber in Kotlin durch die Möglichkeit der Interoperabilität mit Java ebenfalls verwendet werden kann. Die Bibliothek unterstützt dabei eine Reihe von Datenbank-Systemen, darunter vertreten sind beispielsweise MySQL, Postgres und SQLite.\\
+\\
+Um ORMLite in ein Gradle Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeORMLite]{Listing~\ref{lst:includeORMLite}} in die Build-Datei übertragen werden. Dabei muss neben der Core-Bibliothek die \gls{JDBC}-Bibliothek von ORMLite eingebunden werden, welches für die Verbindung zur Datenbank zuständig ist. Da aber \gls{JDBC} mit mehreren Datenbank-Systemen kommunizieren kann, muss noch der Datenbank-Treiber für das verwendete Datenbank-System eingebunden\footnote{siehe \hyperref[sec:bibsqlite]{Kapitel~\ref{sec:bibsqlite}}} werden.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek ORMLite mittels Gradle}, label=lst:includeORMLite, float]
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "com.j256.ormlite:ormlite-core:5.1"
+	compile "com.j256.ormlite:ormlite-jdbc:5.1"
+}
+\end{lstlisting}
+\\
+Für die Persistierung zeigt das \hyperref[lst:ormPersistExample]{Listing~\ref{lst:ormPersistExample}} wie einzelne Klassen, durch die von ORMLite bereitgestellten Annotationen, vorbereitet werden müssen.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Persistierung einer Klasse mittels ORMLite \cite{ormlite}},label=lst:ormPersistExample, float]
+@DatabaseTable(tableName = "accounts")
+public class Account {
+	@DatabaseField(id = true)
+	private String name;
+	
+	@DatabaseField(canBeNull = false)
+	private String password;
+	...
+	Account() {
+		// all persisted classes must define a no-arg constructor with at least package visibility
+	}
+	...    
+}
+\end{lstlisting}
+\\
+Der Zugriff auf die Datenbank erfolgt mittels \gls{DAO} Klassen, welche für jede Tabelle erzeugt werden müssen. Mit diesen \glspl{DAO} können anschließend Datensätze erstellt, bearbeitet und gelöscht werden. Zu dem stellen diese eine Reihe von Funktionen bereit um Datensätze abzufragen, wie zum Beispiel die Abfrage nach allen Datensätzen in der Datenbank oder nach einem bestimmten Objekt anhand seiner ID. Wenn diese Standard-Funktionen nicht ausreichen sollten, besteht weiterhin die Möglichkeit komplexe Abfragen zu generieren. Für diese Generierung kommen sogenannte \enquote{Query-Builder} zum Einsatz. Zur Veranschaulichung der Verwendung von ORMLite zeigt das \hyperref[lst:ormliteUsageExample]{Listing~\ref{lst:ormliteUsageExample}} ein Minimalbeispiel.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Verwendung von ORMLite (verändert nach \cite{ormlite})}, label=lst:ormliteUsageExample, float]
+String databaseUrl = "jdbc:sqlite:path/to/account.db";
+ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl);
+
+Dao<Account,String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+
+TableUtils.createTable(connectionSource, Account.class);
+
+String name = "Jim Smith";
+Account account = new Account(name, "_secret");
+accountDao.create(account);
+
+Account account2 = accountDao.queryForId(name);
+System.out.println("Account: " + account2.getPassword());
+
+connectionSource.close();
+\end{lstlisting}
+
+\subsection{Fasterxml}\label{sec:bibfasterxml}
+Mithilfe von Fasterxml werden inkrementelle Parser- und Generator-Abstraktionen bereitgestellt, welche in der Standardimplementierung \gls{JSON} verarbeiten können. Dabei bietet das OpenSource-Projekt noch weitere Unterstützung für andere Datenformate an, wie beispielsweise \gls{XML} oder \gls{CSV}.\cite{fasterxml}\\
+\\
+Für die Einbindung in ein Gradle-Projekt müssen die Zeilen aus dem \hyperref[lst:includeFasterxml]{Listing~\ref{lst:includeFasterxml}} zur Build-Datei hinzugefügt werden.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung der Bibliothek Fasterxml mittels Gradle}, label=lst:includeFasterxml, float]
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
+	compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
+	compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
+}
+\end{lstlisting}
+\\
+Um anschließend den \gls{XML}-Support für ein Spring-Projekt einzurichten, müssen die Klassenmodelle mit Annotationen, erweitert werden. Das \hyperref[lst:exampleFasterxml]{Listing~\ref{lst:exampleFasterxml}} zeigt dabei, wie diese zu konfigurieren sind.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Verwendung von Fasterxml}, label=lst:exampleFasterxml, float]
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+data class Player(
+	@XmlElement
+	val id: Int = 0,
+	@XmlElement
+	var name: String = "",
+	@XmlElement
+	var password: String = ""
+)
+\end{lstlisting} 
+
+\section{Anbindung an die Datenbank}
+Für die Anbindung an die Datenbank ist zuallererst die Vorbereitung der Klassenmodelle, wie im \hyperref[sec:bibormlite]{Kapitel~\ref{sec:bibormlite}} erläutert, notwendig.
+Als nächstes muss vor einer Interaktion eine Verbindung zur Datenbank aufgebaut sowie alle benötigten Tabellen und \glspl{DAO} angelegt werden. Das \hyperref[lst:dbConnection]{Listing~\ref{lst:dbConnection}} zeigt dabei die Umsetzung  dieser Notwendigkeiten.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Verbindungsaufbau \& Initialisierung der SQLite Datenbank}, label=lst:dbConnection, float]
+class DatabaseUtility {
+	companion object {
+		private var connection: JdbcConnectionSource? = null
+		var playerDao: Dao<Player, Int>? = null
+			get() {
+				if (field == null) connect()
+				return field
+			}
+		...
+		private fun connect() {
+			if (connection != null) return
+			connection = JdbcConnectionSource("jdbc:sqlite:chessgame.db")
+			createTables()
+			createDaos()
+		}
+
+		private fun createTables() {
+			TableUtils.createTableIfNotExists(connection, Player::class.java)
+			...
+		}
+		
+		private fun createDaos() {
+			playerDao = DaoManager.createDao<Dao<Player, Int>, Player>(connection, Player::class.java)
+			...
+		}
+	}
+}
+\end{lstlisting}
+\\
+Dabei wird erst eine Verbindung aufgebaut sobald diese benötigt wird. Da alle Interaktionen mit der Datenbank über \glspl{DAO} erfolgen, wird erst dann eine Verbindung aufgebaut sobald ein \gls{DAO} mittels \code{get}-Funktion angefordert wird. Es ist zu beachten, dass bei einer erneuten Anforderung eines \glspl{DAO} die Verbindung nicht erneut aufgebaut wird. Dabei ist es egal, ob das selbe oder ein anderes angefordert wird. Ähnlich sieht das beim Anlegen der Tabellen aus, denn diese werden ausschließlich nur dann angelegt, sofern diese noch nicht in der Datenbank-Datei existieren. Dies tritt beispielsweise auf, sollte der Server neu gestartet werden.
+
+\section{Spring-Konfiguration für Content Negotiation}\label{sec:contentNegotiation}
+Content-Negotiation ist laut \hyperref[sec:basePrincipleREST]{Kapitel~\ref{sec:basePrincipleREST}} ein wichtiges Qualitätsmerkmal für eine \gls{REST}-\gls{API}. Das Framework Spring Boot\footnote{siehe \hyperref[sec:bibspring]{Kapitel~\ref{sec:bibspring}}} bietet auch hierfür Lösungen an, welche aber nicht standardmäßig aktiviert stehen. Die \gls{JSON} wird dabei ohne weitere Konfiguration unterstützt, nur für \gls{XML} müssen die Klassenmodelle mithilfe der Bibliothek Fasterxml\footnote{siehe \hyperref[sec:bibfasterxml]{Kapitel~\ref{sec:bibfasterxml}}} angepasst werden. Anschließend ist eine Erweiterung der Spring-Konfiguration, wie in \hyperref[lst:springContentNegotiation]{Listing~\ref{lst:springContentNegotiation}} zu sehen, notwendig. Die Implementierung zeigt dabei die Umsetzung der drei Strategien, welche im \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} gefordert wurden.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration der drei Strategien für Content Negotiation}, label=lst:springContentNegotiation, float]
+@Configuration
+class WebConfig : WebMvcConfigurerAdapter() {
+	override fun configureContentNegotiation(configurer: ContentNegotiationConfigurer?) {
+		configurer!!
+			.favorPathExtension(true)
+			.favorParameter(true)
+			.parameterName("mediaType")
+			.ignoreAcceptHeader(false)
+			.useJaf(false)
+			.defaultContentType(MediaType.APPLICATION_JSON)
+			.mediaType("xml", MediaType.APPLICATION_XML)
+			.mediaType("json", MediaType.APPLICATION_JSON)
+	}
+}
+\end{lstlisting}
+\\
+Die Internetseite \cite{springContentNegotiation} bietet für dieses Thema eine ausführlichere Erläuterung der einzelnen Strategien und wie diese angewendet bzw. eingerichtet werden.
+
+\section{Implementation des HATEOAS-Konzeptes}
+Für die Implementation des Designkonzeptes aus dem \hyperref[sec:konzeptHATEOAS]{Kapitel~\ref{sec:konzeptHATEOAS}} kommt das Projekt \enquote{Spring HATEOAS} zum Einsatz. Mithilfe des Objektes \code{ControllerLinkBuilder}, welches durch die Bibliothek bereitgestellt wird, können anhand der Controller und deren Funktionen Links generiert werden. Durch eine starke Kopplung an die Implementierung wird dabei eine redundante Pflege der Links verhindert. Das \hyperref[lst:springHATEOAS]{Listing~\ref{lst:springHATEOAS}} zeigt dabei am Beispiel des \code{PlayerController} und der Funktion \code{getPlayerList} wie solche Links generiert werden können.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Linkaufbau mithilfe des Projektes \enquote{Spring HATEOAS}}, label=lst:springHATEOAS, float]
+@GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
+fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> {
+	val playerList = HashMap<Int, Player>()
+	playerDao!!.queryForAll().forEach { playerList[it.id] = it }
+	
+	val links = HashSet<Pair<Link, String>>()
+	
+	val selfLink = linkTo(methodOn(PlayerController::class.java).getPlayerList(response))
+			.withSelfRel()
+	links.add(Pair(selfLink, "GET"))
+	val optionsLink = linkTo(methodOn(PlayerController::class.java).playerOptions(response))
+			.withRel("options")
+	links.add(Pair(optionsLink, "OPTIONS"))
+	val newLink = linkTo(methodOn(PlayerController::class.java)
+			.addPlayer("valueOfName", "valueOfPassword", response))
+			.withRel("new")
+	links.add(Pair(newLink, "POST"))
+	
+	playerList.forEach { (playerId, _) ->
+		val playerLink = linkTo(methodOn(PlayerController::class.java).getPlayerById(playerId, response))
+				.withRel("next")
+		links.add(Pair(playerLink, "GET"))
+	}
+
+	return ResponseEntity(PlayerHashMap(playerList), HateoasUtility.createLinkHeader(links), OK)
+}
+\end{lstlisting}
+\\
+Die ersten beiden Zeilen der Funktion dienen dazu alle Player aus der Datenbank zu holen und alle nachfolgenden zum Linkaufbau. Alle erzeugten Links werden in ein \code{HashSet} gespeichert, anschließend mittels der statischen Methode \code{createLinkHeader} aus dem Objekt \code{HateoasUtility} in einem String geparst. Der erstellte String wird anschließend dem Link-Header des \gls{HTTP}-Response zugewiesen. Das \hyperref[lst:createLinkHeader]{Listing~\ref{lst:createLinkHeader}} zeigt dabei die Implementierung der statischen Methode \code{createLinkHeader}.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung: \enquote{Links zu String} Parse-Funktion}, label=lst:createLinkHeader, float]
+fun createLinkHeader(linkList: HashSet<Pair<Link, String>>): HttpHeaders {
+	val headers = HttpHeaders()
+	val sb = StringBuilder()
+	
+	linkList.forEach { (link, verb) ->
+		sb.append("<${link.href}>;rel=${link.rel};verb='$verb'")
+	}
+	
+	headers.set("Link", sb.toString())
+	return headers
+}
+\end{lstlisting}
+
+\section{Exceptionhandling}
+Laut den Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} soll der Server so wenig wie möglich anfällig für Fehler sein. Dafür ist der richtige Umgang und auch eine verständliche und für den Endnutzer lesbare Fehlermeldung unerlässlich. Die auftretenden Fehler können dabei in einzelne Fehlerarten unterteilt werden.\\
+\\
+Wenn ein Nutzer eine Ressource an der \gls{URI} \code{/player/15} anfordert, aber kein Player mit der ID 15 existiert, dann wird ein Fehler mit dem \gls{HTTP}-Statuscode \code{404} zurückgegeben. Schon der Statuscode alleine signalisiert dem Nutzer, dass die angeforderte Ressource nicht gefunden wurde. Sollte ein Benutzer der \gls{API} einen Draw hinzufügen wollen aber der mitgeschickte Draw-Code nicht valide sein, so wird ein Fehler mit dem \gls{HTTP}-Statuscode \code{409} zurückgegeben. Dieser zeigt dem Nutzer an, dass ein durch ihn verursachter Konflikt aufgetreten ist. Wenn ein Nutzer den \gls{HTTP}-Statuscode \code{400} vom Server zurückerhält, so hat dieser eine \gls{URI} angefragt, welcher durch die \gls{REST}-\gls{API} nicht definiert wurde. Für alle weiteren Fehler, welche nicht durch den Nutzer verursacht wurden, wird der \gls{HTTP}-Statuscode \code{500} zurückgeben. Da so ein Fehler nur zurückgegeben wird sofern ein unerwarteter Server-Fehler aufgetreten ist, sollte dieser gar nicht bzw. nur selten auftreten. Ein Beispiel für so einen Fehler könnte ein Verbindungsabbruch zur Datenbank sein, worauf der Nutzer keinerlei Einfluss hat.\\
+\\
+Das \hyperref[lst:springExceptionHandling]{Listing~\ref{lst:springExceptionHandling}} zeigt die notwendige Konfiguration der Spring-Applikation, um mit auftretenden Fehlern umgehen zu können.\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration des Exceptionhandling}, label=lst:springExceptionHandling, float]
+@RestControllerAdvice
+class ExceptionHandler {
+	@ExceptionHandler(value = [BadRequestException::class])
+	@ResponseStatus(BAD_REQUEST)
+	fun handleBadRequestException(ex: Exception, request: WebRequest): ErrorResponseObject {
+		return generateErrorResponseObject(ex, request, BAD_REQUEST)
+	}
+
+	@ExceptionHandler(value = [IllegalArgumentException::class])
+	@ResponseStatus(NOT_FOUND)
+	fun handleIllegalArgumentException(ex: Exception, request: WebRequest): ErrorResponseObject {
+		return generateErrorResponseObject(ex, request, NOT_FOUND)
+	}
+	
+	@ExceptionHandler(value = [RuntimeException::class])
+	@ResponseStatus(CONFLICT)
+	fun handleRuntimeException(ex: Exception, request: WebRequest): ErrorResponseObject {
+		return generateErrorResponseObject(ex, request, CONFLICT)
+	}
+	
+	@ExceptionHandler(value = [Exception::class])
+	@ResponseStatus(INTERNAL_SERVER_ERROR)
+	fun handleUnknownException(ex: Exception, request: WebRequest): ErrorResponseObject {
+		return generateErrorResponseObject(ex, request, INTERNAL_SERVER_ERROR)
+	}
+	
+	private fun generateErrorResponseObject(ex: Exception, request: WebRequest, statusCode: HttpStatus): ErrorResponseObject {
+		return ErrorResponseObject(...)
+	}
+}
+\end{lstlisting}
+\\
+Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, sondern auch eine verständliche Fehlermeldung, wird zusätzlich im \gls{HTTP}-Response ein Fehlerobjekt mitgeschickt. Dieses Fehlerobjekt ist eine Instanz des \code{ErrorResponseObject} und hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception den Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchem der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei, je nach angeforderten Format, als \gls{JSON} oder \gls{XML} zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
+\\
+\begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Das Fehlerobjekt \code{ErrorResponseObject}}, label=lst:errorResponseObject, float]
+class ErrorResponseObject(
+	val timestamp: Date = Date(),
+	val statusCode: Int = 500,
+	val error: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+	val exception: String = "",
+	val message: String = "No message available",
+	val path: String = ""
+) {
+override fun toString(): String {
+	return "ErrorResponseObject{" +
+			"timestamp=" + timestamp +
+			", status=" + statusCode +
+			", error=" + error +
+			", exception=" + exception +
+			", message=" + message +
+			", path=" + path +
+			"}".toString()
+	}
+}
+\end{lstlisting}
+
+\section{Analyse/Ermittlung der FEN bzw. SAN}
+Laut den Anforderungen aus dem \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} wurde definiert, dass Änderungen an einem Match ausschließlich über das Hinzufügen eines Draws erfolgen dürfen. Trotzdem muss eine Validierung des übermittelten Draw-Codes durchgeführt werden, um zu überprüfen, dass dieser auch möglich ist. Dafür wurde der reguläre Ausdruck aus der \hyperref[fig:regexSAN]{Abbildung~\ref{fig:regexSAN}} entwickelt, welcher in acht Teile bzw. Gruppen unterteilt werden kann.\\
+\begin{figure}
+	$\underbrace{([KQBNR])?}_{1}\underbrace{([a-h]|[1-8])?}_{2}\underbrace{(x)?}_{3}\underbrace{([a-h])}_{4}\underbrace{([1-8])}_{5}\underbrace{([QBRN])?}_{6}\underbrace{(e\textbackslash.p\textbackslash.)?}_{7}\underbrace{(\textbackslash+\{1,2\}|\#)?}_{8}$
+\caption{Regulärer Ausdruck zur Validierung eines Strings in der SAN}
+\label{fig:regexSAN}
+\end{figure}
+\\
+Der erste Part ermittelt dabei die Art der Spielfigur. Anhand des Fragezeichen-Symbols ist zu sehen, dass dieser Teil optional ist, was daran liegt, dass kein Buchstabe angegeben wird, wenn eine Bauernfigur gezogen wurde. Der zweite Teil zeigt an, von welcher Spalte oder Reihe die Figur gestartet ist. Diese Information is notwendig, wenn zwei Figuren der selben Art auf das Zielfeld gelangen können. Part drei gibt an, ob eine Figur geschmissen wurde. In den Abschnitten vier und fünf wird das Zielfeld ermittelt, wobei der vierte Part die Spalte und der fünfte die Reihe darstellt. Teil sechs gibt die Art der Spielfigur an, in welche sich ein Bauer umwandelt, wenn er die hinterste Reihe erreicht hat. Der vorletzte Part zeigt an, ob ein \enquote{Schlagen im Vorbeigehen} bzw. ein \enquote{Schlagen en passant} durchgeführt wurde. Im letzten Abschnitt wird ermittelt, ob der Draw zu einem Schach oder einem Schachmatt führt. Dabei werden zwei Schreibweisen für ein Schachmatt akzeptiert, einmal \enquote{++} und zum anderen \enquote{\#}. Zu beachten ist, dass mithilfe des regulären Ausdrucks nicht ermittelt werden kann, ob eine Rochade durchgeführt wurde. Dies muss zuvor separat geprüft werden.\\
+\\
+Mittels des entwickelten regulären Ausdrucks kann anschließend auf Grundlage der Figurenstellung, welche im Match gespeichert ist, überprüft werden, ob der Draw valide ist. Dafür wird als erstes das Startfeld ermittelt, sofern dieses nicht als Request-Parameter mit übergeben wurde. Wichtig hierbei ist, dass immer nur ein einziges Startfeld ermittelt werden darf, hierfür müssen ggf. die Informationen aus dem zweiten Teil des regulären Ausdrucks heran gezogen werden. \\
+\\
+Mit dem ermittelten Startfeld kann nun die zu bewegende Figur ermittelt und anhand dieser alle möglichen Zielfelder berechnet werden. Sollte dabei das mit dem Request übermittelte Zielfeld nicht enthalten sein, so ist der Draw invalide. Wenn hingegen das Zielfeld enthalten ist, so wird überprüft, ob eine Figur des Gegners geschlagen wurde und ob der Draw zu einem Schach oder Schachmatt führen würde. Sollte dabei einer dieser Werte nicht oder falsch angegeben sein, dann ist der Draw ebenfalls invalide.\\
+\\
+Ist der Draw nach allen Überprüfungen valide, wird dieser schließlich in der Datenbank gespeichert und das erzeugte Objekt wird, nach der Aktualisierung des dazugehörigen Matches, als \gls{HTTP}-Response zurückgegeben. Für die Aktualisierung wird dafür die Position der bewegten Figur geändert, gegebenenfalls die geschlagene Figur vom Spielfeld entfernt, die Möglichkeit zur Rochade und der Wert der Halbzüge angepasst. Anhand dieser neuen Werte wird der Match-Code neu kalkuliert. Anschließend wird das geänderte Match in der Datenbank aktualisiert.

@@ -1,0 +1,10 @@
+$dokka.format:jekyll
+$dokka.linkExtension:html
+
+htwdd.chessgame.server
+htwdd.chessgame.server.controller
+htwdd.chessgame.server.dto
+htwdd.chessgame.server.exceptions
+htwdd.chessgame.server.model
+htwdd.chessgame.server.spring.web.config
+htwdd.chessgame.server.util

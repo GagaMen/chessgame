@@ -2,168 +2,103 @@
 % !TeX spellcheck = de_DE
 % !TeX root = ../Diploma.tex
 
-\chapter{Konzeption des Servers}
-Inhalt dieses Kapitels soll die Planung sein, welche für die Umsetzung des RESTful Schachservers benötigt wird. Dabei dient der erste Abschnitt für eine Erläuterung der Anforderungen, welche der Server mitbringen bzw. erfüllen soll. Im zweiten Abschnitt werden die verwendeten Bibliotheken bzw. Frameworks in den Punkten Zweck, Einrichtung und Verwendung näher erläutert. Der letzte Abschnitt dieses Kapitels befasst sich anschließend damit, wie der Zugriff auf einzelne Ressourcen des REST-Server erfolgen soll. Dabei werden alle möglichen Request-Methoden für die jeweiligen Ressourcen näher beleuchtet.
+\chapter{Konzept des Servers}\label{sec:conceptServer}
+Inhalt dieses Kapitels soll die Planung sein, welche für die Umsetzung des RESTful Schachservers benötigt wird. Dabei dient der erste Abschnitt zur Erläuterung der Anforderungen, welche der Server mitbringen bzw. erfüllen soll. Enthalten ist dabei auch eine Erläuterung der benötigten Ressourcen. Der zweite Abschnitt dieses Kapitels befasst sich anschließend damit, wie der Zugriff auf einzelne Ressourcen des \gls{REST}-Servers erfolgen soll. Dabei werden alle möglichen Request-Methoden für die jeweiligen Ressourcen näher beleuchtet. Abschließend wird erläutert, wie das Designkonzept HATEOAS in dieser Anwendung erreicht werden soll.
 
 \section{Anforderungen}\label{sec:anforderungen}
-Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Bereitstellung aller benötigten Ressourcen sein. Dabei sollen Elemente erstellt, ggf. bearbeitet und gelöscht werden können. Zusätzlich soll die Möglichkeit bestehen, einzelne oder alle gespeicherten Elemente einer Ressource abzufragen. Des weiteren sollen alle Ressourcenelemente in einer SQLite Datenbank gespeichert werden, welche für jedes Element eine eindeutige ID generiert.\\
+Die Grundanforderungen an den RESTful Schachserver sollen in erster Linie die Bereitstellung aller benötigten Ressourcen sein. Dabei sollen Elemente erstellt, ggf. bearbeitet und gelöscht werden können. Zusätzlich soll die Möglichkeit bestehen, einzelne oder alle gespeicherten Elemente einer Ressource abzufragen. Beim Erstellen eines neuen Ressourcenelements soll dieses in einer SQLite Datenbank gespeichert und die ID automatisch durch SQLite generiert werden.\\
 \\
-Um ein Schachspiel abzubilden bedarf es dabei der Ressourcen Player (Spieler), Match (Partie) und Draw (Zug), welche in den nachfolgenden \hyperref[sec:resplayer, sec:resdraw]{Unterabschnitten~\ref{sec:resplayer} bis \ref{sec:resdraw}} näher betrachtet werden.\\
+Um ein Schachspiel abzubilden, bedarf es dabei der Ressourcen Player (Spieler), Match (Partie) und Draw (Zug), welche in den nachfolgenden \hyperref[sec:resplayer, sec:resdraw]{Unterabschnitten~\ref{sec:resplayer} bis \ref{sec:resdraw}} näher betrachtet werden.\\
 \\
-Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe \todo[inline]{Verweis auf Praktikumsaufgabe im Anhang} soll durch zukünftige Studenten absolviert werden, wobei der Server als Grundlage dienen soll.
+Als abschließende Anforderung ist noch die Fehlerresistenz zu erwähnen. Denn die im Rahmen dieser Arbeit entstandene Praktikumsaufgabe\footnote{siehe \hyperref[chap:Appendix:A]{Anhang~\ref{chap:Appendix:A}}} soll durch zukünftige Studenten bearbeitet werden, wobei der Server als Grundlage dienen soll.\\
+\\
+Zur Unterstützung der Erläuterungen in den \hyperref[sec:resplayer, sec:resdraw]{Kapiteln~\ref{sec:resplayer} bis \ref{sec:resdraw}} bietet die \hyperref[fig:classdiagram]{Abbildung~\ref{fig:classdiagram}}, in Form eines \gls{UML} Klassendiagramms, eine Veranschaulichung.
+\begin{sidewaysfigure}
+	\includegraphics[width=0.9\textwidth]{images/classdiagram.png}
+	\caption{Klassendiagramm: Modelle des Servers}
+	\label{fig:classdiagram}
+\end{sidewaysfigure}
 
 \subsection{Ressource: Player (Spieler)}\label{sec:resplayer}
-Neben der ID die wie schon in Abschnitt \ref{sec:anforderungen} erwähnt durch die SQLite Datenbank generiert werden soll, besitzt der Player noch die Information über den Name und das Passwort des Players.\\
+Neben der ID, welche schon im Abschnitt \ref{sec:anforderungen} erwähnt und durch die SQLite Datenbank generiert werden soll, besitzt der Player noch Informationen über seinen Namen und sein Passwort.\\
 \\
-Eine nachträgliche Änderung des Namens soll dabei nicht gestattet sein. Das Passwort hingegen soll zu jeder Zeit aktualisierbar sein.
+Nach dem Anlegen eines neuen Players soll eine Änderung des Passwortes möglich, aber die des Namens nicht möglich sein.
 
 \subsection{Ressource: Match (Partie)}\label{sec:resmatch}
-Auch bei der Ressource Match wird die ID durch SQLite generiert. Des weiteren besitzt ein Match Informationen über die beiden Spieler(Weiß/Schwarz) und deren Figurenstellung. Ein Match weiß außerdem welche Farbe am Zug ist, ob einem Spieler eine Rochade zur Verfügung steht, ob ein Feld existiert für ein Schlag en passant und wie viele Halbzüge getätigt wurde seit dem zuletzt ein Bauer gezogen oder eine Figur geschlagen wurde. Zusätzlich kann über ein Match ermittelt werden ob ein Spieler im Schach steht oder das Spiel schon bis zum Schachmatt gespielt wurde. Zuletzt hält das Match noch den aktuellen Stand in der \gls{FEN}.
+Neben der ID besitzt ein Match Informationen über die beiden Spielteilnehmer und deren Figurenstellung auf dem Schachbrett. Zusätzlich wird registriert, welcher der beiden Player als nächstes seinen Zug tätigen muss, welche Möglichkeiten zum rochieren bestehen, ob ein Schlag \enquote{en passant} möglich ist und wenn ja auf welches Feld gezogen werden muss und wie viele Halbzüge gespielt wurden. Der Wert der Halbzüge wird dabei zurückgesetzt, sobald eine Bauernfigur gezogen oder eine beliebige Figur geschmissen wurde. Zusätzlich kann über ein Match ermittelt werden, ob ein Spieler im Schach steht oder ob das Spiel schon bis zum Schachmatt gespielt wurde. All diese Informationen werden zusätzlich noch als String in der \gls{FEN}\footnote{\label{foot:chapter}siehe \hyperref[sec:chessNotation]{Kapitel~\ref{sec:chessNotation}}} gespeichert.
 
 \subsection{Ressource: Draw (Zug)}\label{sec:resdraw}
-Die Ressource Draw speichert zusätzlich zur ID die Farbe des Spielers, die Art der Spielfigur, Start- und Endfeld, ob eine Figur geschlagen wurde und wenn ja ob durch en passant und ob seitens der Dame oder des König rochiert wurde. Zusätzlich hält der Draw seine Daten in der \gls{SAN}.
+Die Ressource Draw speichert zusätzlich zur ID die Farbe des Spielers, die Art der Spielfigur, Start- und Endfeld des Zuges, ob eine Figur geschlagen wurde, wenn ja ob durch \enquote{en passant} und ob seitens der Dame oder des König rochiert wurde. Diese Informationen werden ähnlich zum Match als String aber in diesem Fall in der \gls{SAN}\footref{foot:chapter} gespeichert.
 
-
-\section{Verwendete Bibliotheken/Frameworks}
-Die verwendeten Bibliotheken sollen die Umsetzung des Projektes vereinfachen und beschleunigen. Dabei werden diese in den nachfolgenden \hyperref[sec:bibspring, sec:bibormlite]{Unterabschnitten~\ref{sec:bibspring} bis \ref{sec:bibormlite}} in den Punkten Zweck, Einrichtung und Verwendung näher betrachtet. 
-
-\subsection{Spring}\label{sec:bibspring}
-Spring wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich das leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können.\footnote{siehe \cite{proSpring5}}\\
+\section{Ressourcenzugriffe mithilfe von Controllern}
+Die einzelnen Zugriffe auf die Ressourcen werden in den \hyperref[sec:rootController, sec:errorController]{Kapiteln~\ref{sec:rootController} bis \ref{sec:errorController}} nach ihrer Art bzw. deren Aufgaben in einzelne Controller unterteilt, um eine gute Übersicht zu wahren. Für alle Einstiegspunkte der \gls{REST}-\gls{API} soll die Request-Methode \code{OPTIONS} bereitstehen, über den ermittelt werden kann, welche Methoden für den jeweiligen Einstiegspunkt zur Verfügung stehen.\\
 \\
-Um Spring in einem Projekt einzubinden, müssen folgende Zeilen, zusätzlich zu denen welche Kotlin benötigt, in der Build-Datei \enquote{build.gradle} eingefügt werden:
-\begin{lstlisting}[style=lstStyleFramed, caption={Einbindung des Spring Framework mithilfe von Gradle}]
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-allopen:1.2.30"
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE"
-	}
-}
-apply plugin: "kotlin-spring"
-apply plugin: "org.springframework.boot"
+Etwaige Requestparameter sollen in den Formaten \gls{JSON} oder x-www-form-urlencode an den Request übergeben werden können. Gesendeten Anfragen sollen anschließend ihr Feedback je nach Wunsch des Clients, via Content Negotiation, entweder in der \gls{JSON} oder als \gls{XML} zurückgeben. Dafür sind drei Strategien zur Umsetzung bereitzustellen, entweder mittels Suffix, einem URL-Parameter oder dem \gls{HTTP} Accept-Header. 
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	compile "org.springframework.boot:spring-boot-starter-web"
-}
-\end{lstlisting}
-Zu beachten ist dabei das Gradle nur eine Lösung für die Einbindung ist. Da aber für die Umsetzung ebenfalls Gradle verwendet wird, werden alle anderen Lösungen an dieser Stelle vernachlässigt.\\
-\\ 
-Für die Erstellung eines \gls{REST} \gls{API} muss zunächst ein Controller für eine Ressource angelegt werden, dabei ist es sinnvoll für jede einen eigenen Controller zu definieren. Innerhalb werden anschließend alle Einstiegspunkte erzeugt. Als Beispiel soll ein klassisches \textit{Hello World} dienen siehe \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}}. Dafür wird eine Klasse \textit{GreetingController} mit einer Funktion \textit{getGreeting} definiert. Als Parameter bekommt diese Funktion einen Namen übergeben, welcher standardmäßig den String \textit{World} hält. An dieser Stelle kommt das Spring Framework ins Spiel. Dieses stellt eine Reihe von Annotation bereit, wobei \textit{@RestController} einen Controller für das \gls{API}, \textit{@GetMapping} ein Einstiegspunkt (Request Methode: GET) und \textit{@RequestParam} einen Parameter für diese Funktion definiert. 
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Spring Controller}, label=lst:springcontroller]
-import org.springframework.web.bind.annotation.*
-
-@RestController
-class GreetingController {
-	@GetMapping("/greeting")
-	fun getGreeting(@RequestParam name: String = "World"): String {
-		return "Hello $name!"
-	}
-}
-\end{lstlisting}
-Abschließend muss nur noch der Startpunkt für die Applikation definiert werden. Dafür wird wieder mithilfe einer Annotation ein Klasse erzeugt, welche aber keinerlei Informationen benötigt. Anschließend muss diese in der Main-Funktion gerufen werden siehe \hyperref[lst:springmain]{Listing~\ref{lst:springmain}}.
-\begin{lstlisting}[style=lstStyleFramed, caption={Beispiel: Spring Application Class}, label=lst:springmain]
-@SpringBootApplication
-class Application
-
-fun main(args: Array<String>) {
-	SpringApplication.run(Application::class.java, *args)
-}
-\end{lstlisting}
-Für eine detaillierte Beschreibung dieses Beispiels stehen auf den Internetseiten \cite{springTutorialKotlin} und \cite{springTutorial} weitere Informationen bereit.
-
-\subsection{SQLite}\label{sec:bibsqlite}
-SQLite ist eine OpenSource Bibliothek, welche ein dateibasiertes relationales Datenbanksystem bereitstellt. Der größte Unterschied zu anderen relationalen SQL-Datenbank besteht darin, das SQLite keinen separaten Serverprozess besitzt und somit als eingebettete Datenbank-Engine betrachtet werden kann. Alle Tabellen, Indizes, Trigger und Sichten einer Datenbank werden dabei in einem plattformunabhängigen Format in einer einzigen Datei gespeichert. Das bedeutet, dass Datenbankdateien bequem zwischen 32-Bit und 64-Bit-Systemen oder Little-Endian- und Big-Endian-Architekturen getauscht werden können.\footnote{siehe \cite{sqliteAbout}}\\
+\subsection{Root Controller}\label{sec:rootController}
+Mit dem Root Controller soll der Einstiegspunkt an der \gls{URI} \code{/api} bereitgestellt werden. Ein GET-Request an diesem Einstiegspunkt soll aber ausschließlich Links zu den einzelnen Startpunkten der Ressourcen Player, Match und Draw bereitstellen. Dies wiederum dient der Umsetzung des Konzeptes HATEOAS, welches im \hyperref[sec:konzeptHATEOAS]{Kapitel~\ref{sec:konzeptHATEOAS}} genauer definiert wird und ausführlichere Erläuterungen enthält, wie das Ziel dieses Konzeptes erreicht werden soll.\\
 \\
-Für die Einbindung von SQLite in ein Projekt, mithilfe der Datenbankschnittstelle \gls{JDBC}, sind folgende Zeile in der Build-Datei von Gradle vonnöten:
-\begin{lstlisting}[style=lstStyleFramed, caption={Einbindung der Bibliothek SQLite mithilfe von Gradle}]
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
-}
-\end{lstlisting}
-Ein einfaches Beispiel für die Verbindung zu einer SQLite Datenbank, die Erstellung von Tabellen und für das Absenden von SQL-Abfragen stellt \cite{sqliteJDBCTutorial} ein Tutorial bereit. Da für die Implementierung eine \gls{ORM} Bibliothek verwendet werden soll\footnote{siehe Kapitel \ref{sec:bibormlite}}, wird eine nähere Betrachtung für die Verwendung von SQLite mithilfe des \gls{JDBC} Treibers vernachlässigt.
-
-\subsection{ORMLite}\label{sec:bibormlite}
-ORMLite ist ein OpenSource \gls{ORM} Projekt von Gray Watson, welches für Java entwickelt wurde, aber in Kotlin durch die Möglichkeit der Interoperabilität mit Java ebenfalls verwendet werden kann. Die Bibliothek unterstützt dabei eine Reihe von Datenbank-Systemen, wie zum Beispiel MySQL, Postgres oder SQLite.\\
-\\
-Um ORMLite in ein Gradle Projekt einzubinden müssen die Zeilen aus \hyperref[lst:includeORMLite]{Abbildung~\ref{lst:includeORMLite}} in die Build-Datei eingetragen werden. Dabei muss neben der Core-Bibliothek die \gls{JDBC}-Bibliothek von ORMLite eingebunden werden, welches für die Verbindung zur Datenbank zuständig ist. Da aber \gls{JDBC} mit mehreren Datenbank-Systemen kommunizieren kann muss noch, wie in \hyperref[sec:bibsqlite]{Kapitel~\ref{sec:bibsqlite}} für SQLite erläutert, der Datenbank-Treiber für das verwendete Datenbank-System eingebunden werden.
-\begin{lstlisting}[style=lstStyleFramed, caption={Einbindung der Bibliothek ORMLite mithilfe von Gradle}, label=lst:includeORMLite]
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	compile "com.j256.ormlite:ormlite-core:5.1"
-	compile "com.j256.ormlite:ormlite-jdbc:5.1"
-}
-\end{lstlisting}
-Für die Persitierung einzelner Klassen können durch ORMLite bereitgestellte Annotationen verwendet werden. (siehe \hyperref[lst:ormPersistExample]{Abbildung~\ref{lst:ormPersistExample}})
-\todo[inline]{ggf. Syntax-Highlighting einrichten}
-\begin{lstlisting}[style=lstStyleFramed, caption={[Beispiel: Persistierung einer Klasse mittels ORMLite\protect\footnote{Quelle: \cite{ormlite}}]Beispiel: Persistierung einer Klasse mittels ORMLite\protect\footnotemark},label=lst:ormPersistExample]
-@DatabaseTable(tableName = "accounts")
-public class Account {
-	@DatabaseField(id = true)
-	private String name;
-
-	@DatabaseField(canBeNull = false)
-	private String password;
-	...
-	Account() {
-		// all persisted classes must define a no-arg constructor with at least package visibility
-	}
-	...    
-}
-\end{lstlisting}
-\footnotetext{Quelle: \cite{ormlite}}
-Der Zugriff auf die Datenbank erfolgt mittels \gls{DAO} Klassen, welche für jede Tabelle erzeugt werden müssen. Mit diesen \glspl{DAO} können anschließend Datensätze erstellt, bearbeitet und gelöscht werden. Zu dem stellen die \glspl{DAO} eine Reihe von Funktionen bereit um Datensätze abzufragen, wie zum Beispiel die Abfrage nach alle Datensätzen in der Datenbank oder nach einem bestimmten Objekt anhand seiner ID. Wenn diese Standard Funktionen nicht ausreichen besteht des weiteren die Möglichkeit komplexe Abfragen zu generieren mithilfe von sogenannten Query-Buildern.
-Zur Veranschaulich der Verwendung von ORMLite zeigt die \hyperref[lst:ormliteUsageExample]{Abbildung~\ref{lst:ormliteUsageExample}} ein Minmalbeispiel.
-\begin{lstlisting}[style=lstStyleFramed, caption={[Beispiel: Verwendung von ORMLite\protect\footnote{verändert nach \cite{ormlite}}] Beispiel: Verwendung von ORMLite\protect\footnotemark}, label=lst:ormliteUsageExample]
-String databaseUrl = "jdbc:sqlite:path/to/account.db";
-ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl);
-
-Dao<Account,String> accountDao = DaoManager.createDao(connectionSource, Account.class);
-
-TableUtils.createTable(connectionSource, Account.class);
-
-String name = "Jim Smith";
-Account account = new Account(name, "_secret");
-accountDao.create(account);
-
-Account account2 = accountDao.queryForId(name);
-System.out.println("Account: " + account2.getPassword());
-
-connectionSource.close();
-\end{lstlisting}
-\footnotetext{verändert nach \cite{ormlite}}
-
-\section{Ressourcenzugriffe mithilfe von Spring Controllern}
-\todo{ggf. theoretischer formulieren und erst spezifisch im Implemtierungsteil}
-Die einzelnen Zugriffe auf die Ressourcen werden in den \hyperref[sec:playerController, sec:errorcontroller]{Kapiteln~\ref{sec:playerController} bis \ref{sec:errorController}} nach ihrer Art bzw. deren Aufgaben in einzelne Controller unterteilt, um eine gute Übersicht zu wahren. Für alle Einstiegspunkte der \gls{REST}-\gls{API} soll die Request-Methode \enquote{OPTIONS} bereitstehen. Über diesen Request kann ermittelt werden welche Request-Methoden für den jeweiligen Einstiegspunkt zur Verfügung stehen. Alle Anfragen geben dabei ihr Feedback in der \gls{JSON} zurück. \todo[inline]{ggf. noch XML erwähnen bzw. wenn es nicht mit angeboten wird erwähnen das es vernachlässigt wird.}
+Die nachfolgende \hyperref[fig:rootController]{Abbildung~\ref{fig:rootController}} dient dabei als Veranschaulichung des Einstiegspunktes.\\
+\begin{figure}[htb]
+	\includegraphics[width=0.323\textwidth]{images/root-controller.png}
+	\caption{Root Controller - Übersicht der Einstiegspunkte}
+	\label{fig:rootController}
+\end{figure}
 
 \subsection{Player Controller}\label{sec:playerController}
-Der Player Controller soll zwei Einstiegspunkt an den glspl{URI} \enquote{/player/} und \enquote{/player/{id}}. Der Parameter \textit{{id}} dient dabei als Platzhalter für eine ID eines Players, welche wiederum eine Zahl darstellt.\\
+Der Player Controller soll zwei Einstiegspunkte an den \glspl{URI} \code{/api/players} und \code{/api/players/\{id\}} zur Verfügung stellen. Der Parameter \code{\{id\}} dient dabei als Platzhalter für die ID eines Players.\\
 \\
-Am ersten Einstiegspunkt soll eine Liste aller Spieler über einen GET-Request bereitgestellt werden können. Des weiteren soll an diesem die Möglichkeit bestehen einen neuen Player mithilfe eines POST-Requests zu erzeugen. Dabei muss als Parameter der Name und das Passwort des Players mitgegeben werden. Die ID wird dabei von der SQLite-Datenbank automatisch mittels \textit{Autoincrement} erzeugt. Bei erfolgreicher Erstellung des Players wird dieser als Objekt zurückgegeben, ansonsten \textit{NULL}.\\
+Am ersten Einstiegspunkt ist eine Liste aller Spieler über einen GET-Request bereitzustellen. Des Weiteren soll an diesem die Möglichkeit bestehen, einen neuen Player mithilfe eines POST-Requests zu erzeugen. Dabei muss als Parameter der Name und das Passwort des Players mitgegeben werden. Die ID ist durch die SQlite-Datenbank mittels Autoincrement zu erzeugen. Bei erfolgreicher Erstellung des Players ist dieser als \gls{HTTP}-Response zurück zugegeben. Tritt bei diesem Prozess jedoch ein Fehler auf so muss, anstatt des Players, dieser zurück gegeben werden.\\
 \\
-Am zweiten Einstiegspunkt soll ein einzelner existierender Player über einen GET-Request bereitgestellt, über einen DELETE-Request gelöscht und über einen PATCH-Request soll das Passwort aktualisiert werden können. Der GET- und DELETE-Request beziehen sich dabei auf einen Player anhand der ID innerhalb des \gls{URI} und benötigen keine weiteren Parameter. Um das Passwort des Players zu aktualisieren muss dieses natürlich als Parameter mitgegeben werden, aber auch bei diesem Request wird anhand der ID der Player identifiziert.
+Am zweiten Einstiegspunkt ist ein einzelner existierender Player über einen GET-Request bereitzustellen, über einen DELETE-Request gelöscht und über einen PATCH-Request aktualisiert werden können. Dabei darf bei einer Aktualisierung eines Players nur das Passwort, laut Anforderungen\footnote{siehe \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}}}, geändert werden.\\
+\\
+Für ein besseres Verständnis der einzelnen Einstiegspunkte, mit den dazugehörigen Request-Methoden, bietet die \hyperref[fig:playerController]{Abbildung~\ref{fig:playerController}} eine visuelle Verdeutlichung des Player Controllers.\\
+\begin{figure}[htb]
+	\includegraphics[width=0.816\textwidth]{images/player-controller.png}
+	\caption{Player Controller - Übersicht der Einstiegspunkte}
+	\label{fig:playerController}
+\end{figure}
 
 \subsection{Match Controller}\label{sec:matchController}
-
+Die \glspl{URI} \code{/api/matches}, \code{/api/matches/\{id\}}, \code{/api/matches/\{id\}/draws} und \code{/api/matches/\{id\}/pieceSets} sollen durch den Match Controller bereitgestellt werden.\\
+\\
+Dabei dient die erste \gls{URI} ebenso wie beim Player Controller der Zurverfügungstellung einer Liste aller registrierten Matches und dem Anlegen neuer. Das Bereitstellen der Liste hat mittels GET- und das Anlegen mittels POST-Request zu erfolgen. Der GET-Request soll zwei optionale boolesche Parameter bereitstellen, womit das Senden der Historie von Draws bzw. der Figurenstellung bestimmt wird. Standardmäßig sollen die beiden Parameter \code{true} sein. Nachfolgend wird genauer erläutert wie diese Informationen separat angefordert werden können. Um ein neues Match zu registrieren, müssen dabei die ID's der beiden Spielteilnehmer als Parameter mitgesendet werden. Anhand des Parameternamens wird festgelegt, welcher Spieler Weiß und welcher Schwarz spielt.\\
+\\
+Der zweite Einstiegspunkt in diesem Controller soll ausschließlich dazu verwendet werden, um einzelne Matches mithilfe eines GET-Request anzufordern oder mit einem DELETE-Request zu löschen. Für das Anfordern eines einzelnen Matches stehen dabei, ebenso wie beim Request einer Match-Liste, zwei boolesche Parameter bereit. Sollte ein Nutzer ein Match löschen, so sind die zugehörigen Draws automatisch mit zu löschen. Um eine unrechtmäßige Manipulation der Match-Daten durch einen Nutzer zu verhindern, soll keine Möglichkeit bereitstehen, ein Match direkt zu aktualisieren. Änderungen der Match-Daten dürfen ausschließlich über das Hinzufügen von neuen Draws\footnote{siehe \hyperref[sec:drawController]{Kapitel~\ref{sec:drawController}}} erfolgen.\\
+\\
+Die letzten beiden Einstiegspunkte sollen dazu dienen, große Match bezogene Daten separat zu ermitteln. Dabei ist mittels GET-Request an der \gls{URI} \code{/api/matches/\{id\}/draws} eine Liste aller Draws und über die \gls{URI} \code{/api/matches/\{id\}/pieceSets} eine Map mit allen Figuren der beiden Spielteilnehmer bereitzustellen. Neben den aktuell auf dem Spielfeld stehenden Figuren sollen dabei auch die Daten der bereits Geschmissenen mitgeschickt werden.\\
+\\
+Die \hyperref[fig:matchController]{Abbildung~\ref{fig:matchController}} bietet für die zuvor definierten Einstiegspunkte eine grafische Veranschaulichung.\\
+\begin{figure}[htb]
+	\includegraphics[width=0.85\textwidth]{images/match-controller.png}
+	\caption{Match Controller - Übersicht der Einstiegspunkte}
+	\label{fig:matchController}
+\end{figure}
 
 \subsection{Draw Controller}\label{sec:drawController}
-
-
-\subsection{Game Controller}\label{sec:gameController}
-Der Game Controller soll dazu dienen Match bezogene Daten zu ermitteln. Dabei soll mittels GET-Request ein Liste aller Draws die ein Match besitzt, über den \gls{URI} \enquote{/match/{id}/draw}, bereitgestellt werden. Der Parameter \textit{{id}} dient dabei wieder als Platzhalter für die ID des Matches von welchem alle Draws ermittelt werden sollen.
+Der Draw Controller stellt drei Einstiegspunkte an den \glspl{URI} \code{/api/draws}, \code{/api/draws/\{id\}} und \code{/api/draws/ai} bereit. \\
+\\
+Am ersten Einstiegspunkt soll dabei wieder eine Liste mittels GET- und das Hinzufügen mittels POST-Request von Draws zur Verfügung gestellt werden. Für das Hinzufügen eines neuen Draws ist die ID des Matches und der Draw-Code in der \gls{SAN} als Parameter notwendig. Zusätzlich soll die Möglichkeit bestehen, die Zeilen- und Spaltennummer der Startposition mitzugeben. Wenn diese Informationen nicht mitgegeben werden, soll der Controller die Startposition kalkulieren. Spalten sind dabei als Nummern und nicht als Buchstaben zu übergeben\footnote{A $\rightarrow$ 1; B $\rightarrow$ 2; C $\rightarrow$ 3; D $\rightarrow$ 4; E $\rightarrow$ 5; F $\rightarrow$ 6; G $\rightarrow$ 7; H $\rightarrow$ 8}. Nach erfolgreicher Validierung des Draw-Codes soll der Draw dem zugehörigen Match hinzugefügt und die Match-Daten aktualisiert werden.\\
+\\
+Über den zweiten Einstiegspunkt soll die Abfrage nach einem einzelnen Draw möglich sein, aber eine Löschung oder Aktualisierung nicht. Sonst wäre eine Manipulation der Match-Daten seitens des Nutzers möglich. Die Entfernung von Draws ist ausschließlich über die Löschung des dazugehörigen Matches\footnote{siehe \hyperref[sec:matchController]{Kapitel~\ref{sec:matchController}}} zu erfolgen.\\
+\\
+Der dritte Einstiegspunkt soll mittels POST-Request die Möglichkeit bereitstellen, einen Draw, mithilfe einer künstlichen Intelligenz, zu einem Match hinzuzufügen. Dafür muss ausschließlich die ID des benötigten Matches als Request-Parameter mitgegeben werden.\\
+\\
+Wie in den vorherigen Kapiteln bietet die \hyperref[fig:drawController]{Abbildung~\ref{fig:drawController}} ein Veranschaulichung der definierten Einstiegspunkte.\\
+\begin{figure}[htb]
+	\includegraphics[width=0.7735\textwidth]{images/draw-controller.png}
+	\caption{Draw Controller - Übersicht der Einstiegspunkte}
+	\label{fig:drawController}
+\end{figure}
 
 \subsection{Error Controller}\label{sec:errorController}
-Mithilfe des Error Controllers soll gewährleistet werden, dass alle nicht in der \gls{REST}-\gls{API} definierten Einstiegspunkte, bzw. nicht definierte Request-Methoden an den Einstiegspunkten abgefangen werden. Tritt so ein Fall auf soll \enquote{Wrong Request} vom Server zurückgegeben werden. Somit wird verhindert das ein Nutzer des \gls{API} einen Serverfehler, mit dem HTTP-Statuscode \textit{500}\footnote{siehe \cite[A.2.5]{kretzschmar}}.
+Mithilfe des Error Controllers muss gewährleistet werden, dass alle nicht in der \gls{REST}-\gls{API} definierten Einstiegspunkte bzw. nicht definierte Request-Methoden an den Einstiegspunkten abgefangen werden. Tritt ein solcher Fall auf, so ist ein Fehler vom Server zurück zugeben. Somit wird verhindert, dass ein Nutzer der \gls{API} einen Serverfehler, mit dem HTTP-Statuscode \code{500}\footnote{siehe \cite[A.2.5]{kretzschmar}}, zurückerhält.
+
+\section{Erreichung des Designkonzepts HATEOAS}\label{sec:konzeptHATEOAS}
+Um das Ziel der Selbstbeschreibung, welches das Konzept HATEOAS verfolgt, zu erreichen, gibt es mehrere Lösungswege.\\
+\\
+Zum einen besteht die Möglichkeit der Erweiterung einer Ressource, wodurch diese als Hypermedia Format angesehen werden kann. Ein Beispiel dafür ist die \gls{HAL}, welche in der Spezifikation \cite{halSpezification} definiert wurde. Diese stellt mittels eines Dialektes der \gls{JSON} die \gls{MIME} Typen \code{application/hal+json} und \code{application/hal+xml} bereit, wodurch Ressourcen mit Relationen, in Form von Hyperlinks, ergänzt werden können.\\
+\\
+Eine weitere Lösungsvariante kann durch den Link-Header des \gls{HTTP}-Response realisiert werden. Diesem kann einfach eine Menge von Links in Form eines Strings übergeben werden, welchen der Client anschließend auswerten kann.\\
+\\
+Welche Variante die bessere ist, liegt im Auge des Betrachters. Für die Implementierung des Schach-Servers wurde Variante zwei gewählt, weil dadurch die Trennung der Links und der eigentlichen Ressource strikter wahrgenommen werden kann. Auch Kai Spichale bevorzugt diese Variante, denn dieser betrachtet die Links in seinem Buch \cite[158]{apiDesign} als Metainformationen und diese gehören seiner Meinung nach nicht in die Ressource.

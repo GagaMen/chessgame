@@ -1,0 +1,9 @@
+FROM openjdk:8
+MAINTAINER Felix Dimmel
+
+WORKDIR /usr/src/chessgame/server
+
+RUN touch chessgame.db
+COPY /server/build/libs/chessgame-server-1.0.0.war .
+
+CMD ["java","-jar","chessgame-server-1.0.0.war"]

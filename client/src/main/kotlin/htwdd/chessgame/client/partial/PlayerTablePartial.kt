@@ -27,26 +27,28 @@ class PlayerTablePartial : Partial {
                                 +player.value.name
                             }
                             td {
-                                button(classes = "btn btn--symbol btn--symbol-edit") {
-                                    title = "Edit player"
-                                    attributes["data-id"] = player.value.id.toString()
-                                    span(classes = "sr-only") {
-                                        +"Edit player"
+                                if (player.value.id != 1) {
+                                    button(classes = "btn btn--symbol btn--symbol-edit") {
+                                        title = "Edit player"
+                                        attributes["data-id"] = player.value.id.toString()
+                                        span(classes = "sr-only") {
+                                            +"Edit player"
+                                        }
+                                        onClickFunction = { e ->
+                                            e.preventDefault()
+                                            controller.actionPerformed("editPlayerAction", this)
+                                        }
                                     }
-                                    onClickFunction = { e ->
-                                        e.preventDefault()
-                                        controller.actionPerformed("editPlayerAction", this)
-                                    }
-                                }
-                                button(classes = "btn btn--symbol btn--symbol-delete") {
-                                    title = "Delete player"
-                                    attributes["data-id"] = player.value.id.toString()
-                                    span(classes = "sr-only") {
-                                        +"Delete player"
-                                    }
-                                    onClickFunction = { e ->
-                                        e.preventDefault()
-                                        controller.actionPerformed("removePlayerAction", this)
+                                    button(classes = "btn btn--symbol btn--symbol-delete") {
+                                        title = "Delete player"
+                                        attributes["data-id"] = player.value.id.toString()
+                                        span(classes = "sr-only") {
+                                            +"Delete player"
+                                        }
+                                        onClickFunction = { e ->
+                                            e.preventDefault()
+                                            controller.actionPerformed("removePlayerAction", this)
+                                        }
                                     }
                                 }
                             }

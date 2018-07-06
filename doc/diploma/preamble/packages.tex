@@ -400,8 +400,8 @@
 %%              With this package they can be reset only at 
 %%              defined headings, such as chapters.
 %% Doc: chngcntr.pdf
-% \usepackage{chngcntr}
-% \counterwithout{footnote}{chapter}
+\usepackage{chngcntr}
+\counterwithin*{footnote}{chapter}
 
 %% Description: provides the command \tablefootnote to be used in
 %%              a table or sidewaystable environment, 
@@ -687,7 +687,7 @@
   numberline,     % When used with toc, this will add \numberline{} in
                   % the final argument of \addcontentsline. This will align the
                   % table of contents entry with the numbered section titles.
-  section=section, % Its value should be the name of a sectional unit (e.g. chapter). 
+  section=chapter, % Its value should be the name of a sectional unit (e.g. chapter). 
                   % This will make the glossaries appear in the named sectional unit, 
                   % otherwise each glossary will appear in a chapter, 
                   % if chapters exist, otherwise in a section.                  

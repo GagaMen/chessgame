@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  chess-ai:
+    build:
+      context: .
+      dockerfile: dockerfile-chess-ai
+    restart: always
+
+  chess-server:
+    build:
+      context: .
+      dockerfile: dockerfile-chess-server-client
+#      dockerfile: dockerfile-chess-server
+    depends_on:
+      - chess-ai
+    volumes:
+    - ${PWD}/server/src/main/resources/chessgame.db:/usr/src/chessgame/server/chessgame.db
+    ports:
+      - "8080:8080"
+    restart: always

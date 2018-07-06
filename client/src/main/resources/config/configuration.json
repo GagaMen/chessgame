@@ -1,3 +1,6 @@
 {
-  "serverRootUrl": "http://localhost:8080"
+  "useWindowLocation": true,
+  "serverRootUrl": "",
+  "apiRootEntryPoint": "api/",
+  "pollingDelayTime": 5000
 }

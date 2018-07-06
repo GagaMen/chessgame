@@ -133,16 +133,16 @@
 
 %% document content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \includeonly{
-%	content/0-Title,
-%	content/1-Introduction,
+	content/0-Title,
+	content/1-Introduction,
 	content/2-Basics,
-%	content/3-Comparison-Kotlin-GWT,
-%	content/4-Konception-Server,
-%	content/5-Konception-Client,
-%	content/6-Implementation-Server,
-%	content/7-Implementation-Client,
-%	content/8-Conclusion,
-%	content/9-Outlook
+	content/3-Comparison-Kotlin-GWT,
+	content/4-Konception-Server,
+	content/5-Konception-Client,
+	content/6-Implementation-Server,
+	content/7-Implementation-Client,
+	content/8-Conclusion,
+	content/9-Outlook
 } % end includeonly
 
 %%% document start %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,16 +167,28 @@
 \tableofcontents
 
 \IfPackagesLoaded{glossaries,longtable,tabu}{%
-  \clearpage
+  \clearpage\IfDefined{phantomsection}{\phantomsection}\label{sec:loa}
   % print out acronym list   
   \IfGlossariesStyleDefined{longtabuFancyHeader}%
-   {\printglossary[type=\acronymtype,style=longtabuFancyHeader]}%
+   {\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}\printglossary[type=\acronymtype,style=longtabuFancyHeader, title={Abkürzungsverzeichnis}]}%
   % print out symbol list 
-  \IfGlossariesStyleDefined{longtabuFancyHeader}%
-   {\printglossary[type=symbolslist,style=longtabuFancyHeader]}%
+%  \IfGlossariesStyleDefined{longtabuFancyHeader}%
+%   {\printglossary[type=symbolslist,style=longtabuFancyHeader]}%
   % print out glossary
-  \printglossary[style=altlist]
+%  \printglossary[style=altlist]
 } % end of glossaries
+
+%% -- list of figures and tables --
+\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lof}
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\listoffigures
+\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lot}
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+\listoftables
+
+%% -- List of Listings --
+% _Remove_ if no listing with caption is defined
+\IfDefined{lstlistoflistings}{\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lol}\addcontentsline{toc}{chapter}{Listings}\lstlistoflistings}
 
 % --- Main Document --- --- --- --- --- --- ---
 \mainmatter
@@ -202,21 +214,12 @@
   \cleardoublepage
   \IfDefined{phantomsection}{\phantomsection}\label{sec:bibliography}
   \printbibliography[%
-    heading=bibintoc, % (bibintoc, bibnumbered)
+    heading=bibintoc, % (bibintoc, bibnumbered),
+    title=Literaturverzeichnis
   ]	
 }% end of bibliography
 
-%% -- list of figures and tables --
-\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lof}
-\listoffigures
-\cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:lot}
-\listoftables
-
-%% -- List of Listings --
-% _Remove_ if no listing with caption is defined
-\IfDefined{lstlistoflistings}{\cleardoublepage\lstlistoflistings}
-
-\input{content/Z-Thanks.tex}
+%\input{content/Z-Thanks.tex}
 
 % -- declaration --
 % (only in bachelor/master thesis)
@@ -233,10 +236,10 @@
 %% -- Index --
 % _Remove_ Index unless you really want to invest a large amount
 % of time and effort to create a good index!
-\IfDefined{printindex}{%
-  \cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:index}%
-  \printindex%
-}% end of index
+%\IfDefined{printindex}{%
+%  \cleardoublepage\IfDefined{phantomsection}{\phantomsection}\label{sec:index}%
+%  \printindex%
+%}% end of index
 
 %%% document END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}

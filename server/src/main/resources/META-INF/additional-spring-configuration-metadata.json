@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "app.aiServerRootUrl",
+      "type": "java.lang.String",
+      "description": "Root url for the ai server."
+    }
+  ]
+}

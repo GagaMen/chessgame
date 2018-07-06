@@ -225,7 +225,7 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \BeginCodeSection{StyleFigures}
 \IfPackageLoaded{float} {
-% \floatplacement{figure}{H} % default placement
+ \floatplacement{figure}{htb} % default placement
 }
 
 \IfPackageLoaded{wrapfig} {
@@ -516,7 +516,7 @@
 \setkomafont{paragraph}{\rmfamily\itshape} 
 \setkomafont{subparagraph}{\rmfamily}
 
-\setkomafont{descriptionlabel}{\itshape}
+\setkomafont{descriptionlabel}{\bfseries}
 
 %\setkomafont{dictum}{}
 %\setkomafont{dictumauthor}{}
@@ -639,7 +639,7 @@
 \BeginCodeSection{StyleLayoutTOC}
 %%% === Table of Contents ==============================
 
-\setcounter{tocdepth}{3} % Depth of TOC Display
+\setcounter{tocdepth}{2} % Depth of TOC Display
 
 \KOMAoptions{%
    %%% Setting of 'Style' and 'Content' of TOC

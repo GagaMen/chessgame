@@ -5,11 +5,33 @@ import htwdd.chessgame.server.model.PieceColor
 import htwdd.chessgame.server.model.PieceColor.BLACK
 import htwdd.chessgame.server.model.PieceColor.WHITE
 import htwdd.chessgame.server.model.PieceType
+import htwdd.chessgame.server.util.FENUtility.Companion.drawDao
 
+/**
+ * Utility class to handle a String as Forsyth-Edwards-Notation (FEN)
+ *
+ * @author Felix Dimmel
+ *
+ * @property drawDao Database access object for draws
+ *
+ * @since 1.0.0
+ */
 class FENUtility {
+    /**
+     * Static FENUtility object
+     */
     companion object {
         private val drawDao = DatabaseUtility.drawDao
 
+        /**
+         * Calculate the FEN String based on the match properties
+         *
+         * @author Felix Dimmel
+         *
+         * @param match Match for which the FEN should be calculated
+         *
+         * @since 1.0.0
+         */
         fun calc(match: Match) {
             val sb = StringBuilder()
             val whitePieceSet = match.pieceSets[WHITE] ?: throw NullPointerException()
@@ -78,6 +100,25 @@ class FENUtility {
             sb.append(" ${history.size + 1}")
 
             match.matchCode = sb.toString()
+        }
+
+        /**
+         * Prepares a FEN String as URL parameter
+         *
+         * Replace:
+         * - "/" -> "%2F"
+         * - " " -> "+"
+         *
+         * @author Felix Dimmel
+         *
+         * @param fen String  in the FEN
+         *
+         * @return Prepared FEN string as URL parameter with replaced characters
+         *
+         * @since 1.0.0
+         */
+        fun prepareFENForURLParam(fen: String): String {
+            return fen.replace("/", "%2F").replace(" ", "+")
         }
     }
 }
