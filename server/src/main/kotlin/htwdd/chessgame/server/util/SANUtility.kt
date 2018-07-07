@@ -171,10 +171,12 @@ class SANUtility {
                 endField: Field,
                 checkmate: Boolean,
                 check: Boolean,
+                conversionCode: String,
                 match: Match
         ): String {
             val sb = StringBuilder()
-            val activePieces = match.pieceSets[match.currentColor]?.activePieces!!
+            // use copy to avoid CurrentModificationException in forEach loop
+            val activePieces = HashMap(match.pieceSets[match.currentColor]?.activePieces!!)
             val opposingPieces = match.pieceSets[match.currentColor.getOpposite()]?.activePieces!!
             val movedPiece = activePieces[startField.asPair()]
                     ?: throw Exception("Can't find the piece that has been moved!")
@@ -201,26 +203,32 @@ class SANUtility {
 
             if (movedPiece.type != PAWN) sb.append(movedPiece.type.getDrawCode())
 
-            opposingPieces.forEach piece@{ piece ->
-                if (movedPiece.type == PieceType.PAWN || piece.value.type != movedPiece.type) return@piece
-                if (piece.value.position.row == endField.row && piece.value.position.column == endField.column) return@piece
+            // the run command is only a wrapper to break the inline forEach (unnecessary if the todo below is implemented)
+            // todo: implement rare case if other multiple pieces can move to the end position
+            // this is only possible through pawn conversion
+            run breakForEach@{
+                activePieces.forEach piece@{ piece ->
+                    if (movedPiece.type == PieceType.PAWN || piece.value.type != movedPiece.type) return@piece
+                    if (piece.value.position.row == endField.row && piece.value.position.column == endField.column) return@piece
 
-                val movementUtility = when (movedPiece.type) {
-                    PieceType.BISHOP -> BishopMovementUtility()
-                    PieceType.KING -> KingMovementUtility()
-                    PieceType.KNIGHT -> KnightMovementUtility()
-                    PieceType.PAWN -> PawnMovementUtility()
-                    PieceType.QUEEN -> QueenMovementUtility()
-                    PieceType.ROOK -> RookMovementUtility()
-                }
+                    val movementUtility = when (movedPiece.type) {
+                        PieceType.BISHOP -> BishopMovementUtility()
+                        PieceType.KING -> KingMovementUtility()
+                        PieceType.KNIGHT -> KnightMovementUtility()
+                        PieceType.PAWN -> PawnMovementUtility()
+                        PieceType.QUEEN -> QueenMovementUtility()
+                        PieceType.ROOK -> RookMovementUtility()
+                    }
 
-                val movementFields = HashSet<Pair<Int, Int>>()
-                movementUtility.getFilteredMovementFields(movementFields, piece.value.position.row, piece.value.position.column, match)
+                    val movementFields = HashSet<Pair<Int, Int>>()
+                    movementUtility.getFilteredMovementFields(movementFields, piece.value.position.row, piece.value.position.column, match)
 
-                movementFields.forEach field@{ field ->
-                    if (field.first != endField.row || field.second != endField.column) return@field
-                    if (startField.column == piece.value.position.column) sb.append("${startField.row}")
-                    else sb.append("${startField.column.plus(96).toChar()}")
+                    movementFields.forEach field@{ field ->
+                        if (field.first != endField.row || field.second != endField.column) return@field
+                        if (startField.column == piece.value.position.column) sb.append("${startField.row}")
+                        else sb.append("${startField.column.plus(96).toChar()}")
+                        return@breakForEach
+                    }
                 }
             }
 
@@ -231,6 +239,8 @@ class SANUtility {
             if (throwPiece) sb.append("x")
 
             sb.append("${endField.column.plus(96).toChar()}${endField.row}")
+
+            if (conversionCode != "") sb.append(conversionCode)
 
             if (throwEnPassant) sb.append("e.p.")
 

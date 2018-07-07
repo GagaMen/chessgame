@@ -459,7 +459,7 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
         val urlNextAiDraw = URL("${appProperties.aiServerRootUrl}/game?fen=${prepareFENForURLParam(match.matchCode)}")
         val nextDraw = readFromAIRequest(urlNextAiDraw)
 
-        val regexBestMove = "\"bestMove\": \"([a-h][1-8][a-h][1-8])\"".toRegex()
+        val regexBestMove = "\"bestMove\": \"([a-h][1-8][a-h][1-8][qrnb]?)\"".toRegex()
         val matchResultsBestMove = regexBestMove.find(nextDraw)
                 ?: throw Exception("Can't find best move from ai result!")
         val bestMove = matchResultsBestMove.groups[1]?.value ?: throw Exception("Best move was empty!")
@@ -472,8 +472,9 @@ class DrawController @Autowired constructor(private var appProperties: AppProper
         val fieldInfo = bestMove.split("")
         val startField = Field(column = fieldInfo[1].toCharArray()[0].toInt() % 96, row = fieldInfo[2].toInt())
         val endField = Field(column = fieldInfo[3].toCharArray()[0].toInt() % 96, row = fieldInfo[4].toInt())
+        val conversionCode = fieldInfo[5].toUpperCase()
 
-        val san = calcSANFromAIMove(startField, endField, checkmate, check, match)
+        val san = calcSANFromAIMove(startField, endField, checkmate, check, conversionCode, match)
 
         val draw = Draw(
                 color = match.currentColor,
