@@ -49,5 +49,5 @@ Das Tool cUrl ist ein Kommandozeilenprogramm und steht für \enquote{Client for 
 	\item Aktualisieren Sie das Passwort eines Players.\footref{foot:readmeEntryPoints}
 	\item Löschen Sie ein beliebigen zuvor angelegten Player.
 	\item Legen Sie ein weiteres Match an. Lassen Sie sich anschließend alle Matches im \gls{XML}-Format anzeigen.\footref{foot:readmeEntryPoints} Nutzen Sie dafür den Accept-Header des \gls{HTTP}-Requestes.
-	\item Verfestigen Sie Ihre Kenntnisse über die Schachnotationen, indem Sie mehrere Züge dem zuvor angelegten Match hinzufügen.\footref{foot:readmeEntryPoints} Schauen Sie sich dafür nach jedem hinzugefügten Zug das Resultat im Match an.
+	\item Verfestigen Sie Ihre Kenntnisse über die Schachnotationen, indem Sie mehrere Züge dem zuvor angelegten Match hinzufügen.\footref{foot:readmeEntryPoints} Schauen Sie sich dafür nach jedem hinzugefügten Zug das Resultat im Match an.\footnote{Nutzen Sie dafür den Befehl:\\\code{curl localhost:8080/api/matches/\{id\} | grep -E -w -o \textquotesingle"matchCode":"[\textasciicircum"]*"\textquotesingle}}, welcher Ihnen ausschließlich den Match-Code ausgibt. Ersetzen Sie dabei den Platzhalter \enquote{\{id\}} mit der ID des Matches.
 \end{enumerate}
