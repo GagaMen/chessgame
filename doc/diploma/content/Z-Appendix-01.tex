@@ -1,7 +1,7 @@
 \chapter{Praktikumsaufgabe}\label{chap:Appendix:A}
-Mithilfe dieses Praktikums soll Ihr Verständnis über Webservices, insbesondere solche welche den REST Architekturstil umsetzen, schulen. Des Weiteren zielt dieses Praktikum auf eine Einführung in das Kommandozeilen Tool cURL ab, welches ein mächtiges Werkzeug für die Kommunikation mit Webservices darstellt.\\
+Mithilfe dieses Praktikums soll Ihr Verständnis zu Webservices, die den REST Architekturstil umsetzen, geschult werden. Des Weiteren zielt dieses Praktikum auf eine Einführung in das Kommandozeilentool cURL ab, welches ein mächtiges Werkzeug für die Kommunikation mit Webservices darstellt.\\
 \\
-Die nachfolgenden Aufgaben sind chronologisch angeordnet und sollten daher in der Vorgegebenen Reihenfolge bearbeitet werden. Die ersten vier Punkte dienen dabei als Erläuterung der Einrichtung und interaktiven Einführung in der Benutzung des Webservices. 
+Die nachfolgenden Aufgaben sind chronologisch angeordnet und sollten daher in der Vorgegebenen Reihenfolge bearbeitet werden. Die ersten vier Punkte dienen dabei als Erläuterung der Einrichtung und interaktiven Einführung in der Benutzung des Webservices. Im letzten Punkt finden Sie anschließen Aufgaben, welche Sie mit cURL umsetzen sollen.
 
 \section{Einrichtung}
 Laden Sie sich das Repository \url{git@github.com:GagaMen/chessgame.git} mithilfe des Tools git herunter und wechseln Sie zum Tag \enquote{v1.0.0}. Alternativ können Sie das Projekt auch gezippt, direkt über die \gls{URL} \url{https://github.com/GagaMen/chessgame/archive/master.zip}, herunterladen und anschließend entpacken. Haben Sie den richtigen Tag ausgecheckt, können Sie das Projekt mit dem mitgelieferten Gradle-Wrapper erstellen. Zuvor müssen Sie allerdings dem Bash-Skript die notwendige Berechtigung zum Ausführen geben. Nach erfolgreicher Erstellung kann die Anwendung mit Docker ausgeführt werden. Dafür müssen Sie allerdings vorerst die Docker-Services erstellen lassen. Führen Sie für diese Schritte folgende Befehlsabfolge in einem Terminal aus:\\
@@ -26,8 +26,8 @@ Möchten Sie den Server herunterfahren, so können Sie dies über den Befehl \co
 \section{Web-Applikation}
 \begin{enumerate}
 	\item Rufen Sie die Web-Applikation, nachdem Sie diese mittels Docker gestartet haben, unter der \gls{URL} \url{http://localhost:8080} auf.\footnote{Beachten Sie dabei, dass es ein paar Sekunden dauern kann bis der Server komplett hochgefahren ist, da der Docker-Befehl nicht darauf wartet.}
-	\item Wechseln Sie zur Player-Ansicht(Players) und legen sich über das Formular einen eigenen Player an. Gehen Sie anschließend über den Return-Button zurück zur Start-Ansicht.\footnote{Beachten Sie hierbei, dass die Browser-Funktion zum zurückkehren zur letzten Seite nicht funktioniert.}
-	\item Wechseln Sie nun zur Match-Ansicht(Matches) und legen ein Match mit dem AI-Player und Ihrem an.
+	\item Wechseln Sie zur Player-Ansicht (Players) und legen sich über das Formular einen eigenen Player an. Gehen Sie anschließend über den Return-Button zurück zur Start-Ansicht.\footnote{Beachten Sie hierbei, dass die Browser-Funktion zum zurückkehren zur letzten Seite nicht funktioniert.}
+	\item Wechseln Sie nun zur Match-Ansicht (Matches) und legen sich ein Match mit dem AI-Player und Ihrem zuvor angelegten Player an.
 	\item Starten Sie das eben angelegte Match, über den $\blacktriangleright$-Button in der Übersichtstabelle.
 	\item Spielen Sie nun ein paar Züge, indem Sie Ihre Figuren per Drag\&Drop bewegen. Mögliche Züge werden dabei per Mouseover angezeigt.
 \end{enumerate}
@@ -35,7 +35,7 @@ Möchten Sie den Server herunterfahren, so können Sie dies über den Befehl \co
 \section{Verwendung der REST-API mithilfe des Browsers}
 \begin{enumerate}
 	\item Lassen Sie sich alle angelegten Player mithilfe der \gls{REST}-\gls{API} anzeigen. Rufen Sie dafür die \gls{URL} \url{http://localhost:8080/api/players} auf.
-	\item In den meisten Browsern wird standardmäßig, im Accept-Header des \gls{HTTP}-Requests, \acrfull{XML} als Rückgabeformat angefordert. Mithilfe der Technik Content Negotiation ist es möglich sich Daten auch in der \acrfull{JSON} ausgeben zu lassen. Fügen Sie dafür den Suffix \enquote{.json} oder den Parameter \enquote{?mediaType=json} an die \gls{URL} an.\footnote{Für ein besseres Verständnis dieser Technik, schauen Sie auch in die README-Datei des Github Repositorys unter \url{https://github.com/GagaMen/chessgame\#content-negotiation}.}
+	\item In den meisten Browsern wird standardmäßig, im Accept-Header des \gls{HTTP}-Requests, \acrfull{XML} als Rückgabeformat angefordert. Mithilfe der Technik Content Negotiation ist es möglich sich Daten auch in der \acrfull{JSON} ausgeben zu lassen. Fügen Sie dafür den Suffix \enquote{.json} oder den Parameter \enquote{?mediaType=json} an die \gls{URL} an.\footnote{Für ein besseres Verständnis dieser Technik, schauen Sie in die README-Datei des Github Repositorys unter \url{https://github.com/GagaMen/chessgame\#content-negotiation} nach.}
 	\item Machen Sie sich mit den bereitgestellten Ressourcen der \gls{REST}-\gls{API} vertraut und fordern Sie weitere Daten an. Schauen Sie hierfür in der README-Datei unter \url{https://github.com/GagaMen/chessgame\#entry-points} nach, welche \glspl{URL} für einen GET-Request bereitstehen. Die anderen Request-Arten können vorerst vernachlässigt werden.
 \end{enumerate}
 

@@ -2,13 +2,13 @@
 % !TeX spellcheck = de_DE
 % !TeX root = ../Diploma.tex
 
-\chapter{Grundlagen}
+\chapter{Grundlagen}\label{chap:basics}
 In diesem Kapitel werden die Grundlagen, welche zum besseren Verständnis dieser Arbeit notwendig sind, behandelt. Dabei dient der erste Abschnitt zur Erläuterung der \glspl{API}, welche den \gls{REST} Architekturstil befolgen. Im zweiten Abschnitt wird das Build-Tool \enquote{Gradle} näher betrachtet, welches für die Umsetzung des praktischen Teils dieser Arbeit verwendet werden soll. Eine genauere Analyse der Schachnotationen \gls{FEN} und \gls{SAN} sind Inhalt des dritten Abschnittes. Da zur praktischen Veranschaulichung dieser Arbeit das Brettspiel \enquote{Schach} dienen soll, erfolgt am Ende dieses Kapitel ein kurzer Verweis auf die Schachregeln.
 
 \section{REST-API}
 \gls{REST} ist ein von Roy Fielding entwickelter Architekturstil, welchen er in seiner Dissertation \cite{dissertationFielding} erstmals beschrieb. Dabei geht er ebenfalls auf eine Reihe von Leitsätzen und Praktiken ein, welche sich in Systemen auf Basis von Netzwerken bewährt haben.\\
 \\
-Laut \cite[143]{apiDesign} unterstützt der \gls{REST} Architekturstil eine Reihe von Protokollen, mit welchen diese umgesetzt werden können. Der bekannteste bzw. am häufigsten verwendete Vertreter ist dabei das \gls{HTTP}. Es wird dabei im Zusammenhang mit \gls{REST} als \gls{REST}ful \gls{HTTP} bezeichnet. \\
+Laut \cite[143]{apiDesign} unterstützt der \gls{REST} Architekturstil eine Reihe von Protokollen, mit welchen dieser umgesetzt werden kann. Der bekannteste bzw. am häufigsten verwendete Vertreter ist dabei das \gls{HTTP}. Es wird dabei im Zusammenhang mit \gls{REST} als \gls{REST}ful \gls{HTTP} bezeichnet. \\
 \\
 Da in dieser Arbeit die Webentwicklung im Vordergrund steht und \gls{HTTP} einer der wichtigsten Standards im Web ist, soll im nachfolgenden Verlauf der Arbeit \gls{REST} immer im Sinne von RESTful \gls{HTTP} verstanden werden.\\
 \\
@@ -27,7 +27,7 @@ Mithilfe von \glspl{API} sollen die Abhängigkeiten zum Benutzer minimiert werde
 Es ist möglich für unterschiedliche Plattformen eine einheitliche Implementierung einer \gls{API} bereitzustellen, obwohl diese im inneren unterschiedlich implementiert sind. Ein bekanntes Beispiel ist dabei die \gls{JRE}, welches diese Funktionalität für Java-Programme bereitstellt.
 
 \subsubsection{Komplexitätsreduktion durch Modularisierung}
-Der \gls{API}-Benutzer besitzt in erster Linie keine genauen Informationen über die Komplexität der Implementierung. Diese Tatsache folgt dem Geheimprinzip und soll der Beherrschung großer Projekte in Hinsicht ihrer Komplexität dienen. Zusätzlich bringt dieser Aspekt auch einen wirtschaftlichen Vorteil, denn durch die Modularisierung ist eine bessere Arbeitsteilung möglich. Das wiederum kann Entwicklungskosten sparen.
+Der \gls{API}-Benutzer besitzt in erster Linie keine genauen Informationen über die Komplexität der Implementierung. Diese Tatsache folgt dem Geheimnisprinzip und soll der Beherrschung großer Projekte in Hinsicht ihrer Komplexität dienen. Zusätzlich bringt dieser Aspekt auch einen wirtschaftlichen Vorteil, denn durch die Modularisierung ist eine bessere Arbeitsteilung möglich. Das wiederum kann Entwicklungskosten sparen.
 
 \subsubsection{Softwarewiederverwendung und Integration}
 Neben dem Verbergen von Details zur Implementierung sollten die Funktionen einer Softwarekomponente durch die \gls{API} leicht verständlich bereitgestellt werden. Dies ermöglicht den \gls{API}-Nutzern eine vereinfachte Verwendung bzw. Integration der \gls{API}, weshalb diese auch dahingehend optimiert werden sollte.
@@ -41,7 +41,7 @@ Dadurch das geschlossene \gls{API}-Verträge mit den Benutzern nicht gebrochen w
 
 \subsection{Qualitätsmerkmale}\label{sec:qualityFeatures}
 \subsubsection{Benutzbarkeit}
-Als zentrale Anforderungen an einem guten Design für \glspl{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für \gls{API}-Benutzer. Um diese Anforderung umzusetzen, haben sich ein Reihe von allgemeinen Eigenschaften bzw. Zielen etabliert. Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaften/Ziele, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Detaillierte Informationen zu diesen können im Buch \cite[14-23]{apiDesign} nachgeschlagen werden.
+Als zentrale Anforderungen an einem gutes Design für \glspl{API} stehen die leichte Verständlichkeit, Erlernbarkeit und Benutzbarkeit für \gls{API}-Benutzer. Um diese Anforderung umzusetzen, haben sich ein Reihe von allgemeinen Eigenschaften bzw. Zielen etabliert. Eine Auflistung, inklusive einer kurzen Beschreibung der jeweiligen Eigenschaften/Ziele, werden in der \hyperref[tab:APIUsabilityProperties]{Tabelle~\ref{tab:APIUsabilityProperties}} aufgeführt. Detaillierte Informationen zu diesen können im Buch \cite[14-23]{apiDesign} nachgeschlagen werden.
 {
 \small\renewcommand{\arraystretch}{1.4}
 \begin{longtabu} to \textwidth{X[1,L]X[3,L]}
@@ -62,7 +62,7 @@ Als zentrale Anforderungen an einem guten Design für \glspl{API} stehen die lei
 	\hline
 	\endlastfoot
 	\taburowcolors 2{tablebodycolor .. tablerowcolor}
-	Konsistenz & Damit ist gemeint, dass Entscheidungen hinsichtlich des Entwurfs einheitlich im Quellcode angewandt werden. Das betrifft beispielsweise die Namensgebung von Variablen oder Funktionen.\\
+	Konsistent & Damit ist gemeint, dass Entscheidungen hinsichtlich des Entwurfs einheitlich im Quellcode angewandt werden. Das betrifft beispielsweise die Namensgebung von Variablen oder Funktionen.\\
 	Intuitiv verständlich & Für dieses Ziel ist eine konsistente \gls{API} unter Verwendung von Namenskonventionen unabdingbar. Grundlegend kann dabei gesagt werden, dass gleiche Dinge einheitliche Namen, aber auch ungleiche Dinge unterschiedliche Namen haben sollten. So können bereits durch bekannte Funktionen Rückschlüsse auf andere noch unbekannte gezogen werden. Ein konkretes Beispiel dafür sind \code{get}- und \code{set}-Methoden in der Java-Welt.\\
 	Dokumentiert & Eine ausführliche Dokumentation mit Beschreibungen zu den einzelnen Klassen, Methoden und Parametern ist für eine einfache Benutzung dringend erforderlich. Zusätzlich sollten Beispiele diese Erläuterungen unterstreichen.\\
 	Einprägsam und leicht zu lernen & Damit eine \gls{API} einfach zu erlernen ist, müssen die ersten drei Punkte dieser Tabelle dringend erfüllt werden. Wichtig ist dabei eine geringe  Einstiegshürde, um potenzielle Nutzer nicht abzuschrecken. Prinzipiell ist es immer sehr von Vorteil, wenn mit relativ wenig Code erste sichtbare Ergebnisse erzielt werden können.\\
@@ -114,16 +114,16 @@ Hypermedia setzt sich aus den Begriffen Hypertext und Multimedia zusammen. Dabei
 \subsubsection{Verwendung von HTTP-Standardmethoden}
 Um die vom Server bereitgestellten Links ordnungsgemäß auszuführen, müssen neben den \glspl{URI} auch einheitliche Schnittstellen bekannt sein. Das setzt voraus, dass alle Clients über Verwendung und Semantik der Schnittstellen Bescheid wissen. An dieser Stelle kommen die \gls{HTTP}-Standardmethoden zum Einsatz. Die Schnittstellen von \gls{HTTP} bestehen dabei im wesentlichen aus den Request-Methoden \code{GET}, \code{HEAD}, \code{POST}, \code{PUT} und \code{DELETE}, welche alle in der \gls{HTTP}-Spezifikation \cite{httpSpecification} definiert sind. Die Methoden \code{PATCH} oder auch \code{LINK} waren dabei nicht von Anfang an in der Spezifikation enthalten, sondern wurden erst nachträglich hinzugefügt.\\
 \\
-Ein Client kann beispielsweise mithilfe der Methode \code{GET}, ohne genaueres Wissen über die Ressource, eine Repräsentation dieser abfragen. Diese allgemeinen Schnittstellen werden für jede Ressource verwendet, wodurch eine mögliche Vorhersagbarkeit gewährleistet wird. Dies wiederum erfüllt ein Teil der Qualitätsmerkmale aus dem \hyperref[sec:qualityFeatures]{Kapitel~\ref{sec:qualityFeatures}}. Zusätzlich ist noch anzumerken, dass durch Benutzung der Methode \code{GET} keine unerwünschten Effekte befürchtet werden müssen, denn diese ist idempotent. Einfach ausgedrückt, ist diese Methode ein lesender Zugriff auf eine Ressource und kann daher keine Änderung des Zustands hervorrufen.
+Ein Client kann beispielsweise mithilfe der Methode \code{GET}, ohne genaueres Wissen über die Ressource, eine Repräsentation dieser abfragen. Diese allgemeinen Schnittstellen werden für jede Ressource verwendet, wodurch eine mögliche Vorhersagbarkeit gewährleistet wird. Dies wiederum erfüllt das Qualitätsmerkmal \enquote{Intuitiv verständlich} aus dem \hyperref[sec:qualityFeatures]{Kapitel~\ref{sec:qualityFeatures}}. Zusätzlich ist noch anzumerken, dass durch Benutzung der Methode \code{GET} keine unerwünschten Effekte befürchtet werden müssen, denn diese ist idempotent. Einfach ausgedrückt, ist diese Methode ein lesender Zugriff auf eine Ressource und kann daher keine Änderung des Zustands hervorrufen.
 
 \subsubsection{Unterschiedliche Repräsentationen von Ressourcen}
-Um mit den Daten, welche eine \gls{API} zurückgibt, umgehen zu können, muss der Client wissen, in welchem Format er die Daten zurückbekommen möchte. Mithilfe der Technologie \enquote{Content Negotiation}, welche durch das \gls{HTTP}-Protokoll bereitgestellt wird, kann der Client angeben, in welchem Format er die Antwort erhalten möchte. Dabei besteht die Möglichkeit mehrere Formate mit unterschiedlichen Prioritäten zu übergeben. Die gängigste Methode zur Übergabe der gewünschten Formate ist diese im \code{Accept}-Header des \gls{HTTP}-Request mitzusenden.
+Um mit den Daten, welche eine \gls{API} zurückgibt, umgehen zu können, muss der Client wissen, in welchem Format er die Daten zurückbekommt. Mithilfe der Technologie \enquote{Content Negotiation}, welche durch das \gls{HTTP}-Protokoll bereitgestellt wird, kann der Client angeben, in welchem Format er die Antwort erhalten möchte. Dabei besteht die Möglichkeit mehrere Formate mit unterschiedlichen Prioritäten zu übergeben. Die gängigste Methode zur Übergabe der gewünschten Formate ist diese im \code{Accept}-Header des \gls{HTTP}-Request mitzusenden.
 
 \subsubsection{Statuslose Kommunikation}\label{sec:statelessCommunikation}
 Das letzte Grundprinzip besagt, dass es keinen Sitzungsstatus, welcher auf dem Server über mehrere Anfragen gehalten wird, geben darf. Der Kommunikationsstatus muss demzufolge in der Ressource selber oder im Client gespeichert werden. Durch die statuslose Kommunikation wird die Kopplung zwischen Server und Client verringert. Das wiederum bringt den Vorteil, dass zum Beispiel ein Neustart des Servers den Client nicht stören oder sogar zum Absturz bringen würde. Dieser müsste zwangsläufig davon gar nichts mitbekommen. Ein weiterer nicht unerheblicher Vorteil, welcher daraus resultiert, ist die Möglichkeit der Lastverteilung auf unterschiedliche Serverinstanzen.
 
 \subsection{HATEOAS}
-\enquote{Hypermedia As The Engine Of Application State} oder kurz HATEOAS ist ein Design-Konzept, welches von vielen \glspl{API}, die sich selber als \gls{REST}ful bezeichnen, missachtet wird. \cite{restMustBeHypertextDriven} Der Begriff HATEOAS bzw. die Aussage, die dahinter steckt, kann nach Kai Spichale mit nachfolgenden Bedeutungen beschrieben werden \cite[156]{apiDesign}:
+\enquote{Hypermedia As The Engine Of Application State} oder kurz HATEOAS ist ein Design-Konzept, welches von vielen \glspl{API}, die sich selber als \gls{REST}ful bezeichnen, missachtet wird \cite{restMustBeHypertextDriven}. Der Begriff HATEOAS bzw. die Aussage, die dahinter steckt, kann nach Kai Spichale mit nachfolgenden Bedeutungen beschrieben werden \cite[156]{apiDesign}:
 \begin{itemize}
 	\item \enquote{»Hypermedia« ist eine Verallgemeinerung des Hypertexts mit multimedialen Anteilen. Beziehungen zwischen Objekten werden durch
 		Hypermedia Controls abgebildet.}
@@ -139,7 +139,7 @@ Der Grundgedanke hinter diesem Konzept ist die Selbstbeschreibung einer \gls{API
 Durch dieses Konzept wird ein dynamischer Workflow erzeugt, wodurch der Server die volle Kontrolle über die \gls{API} behält. Damit ist es möglich anhand des anzufragenden Clients unterschiedliche Links bzw. Navigationspunkte auszuliefern oder Links sogar komplett auszutauschen, ohne dass der Client davon etwas bemerken muss. Aber um diese Vorteile nutzen zu können, ist es natürlich notwendig, dass Clients die bereitgestellten Links auch verwenden und diese nicht fest einprogrammiert haben.
 
 \section{Das Build-Tool Gradle}
-\textit{Gradle} ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie \textit{Ant} und \textins{Maven} und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von einigen großen und bekannten Projekten, wie zum Beispiel Android oder das Framework Spring.\\
+\textit{Gradle} ist ein Open-Source Build-Tool, welches in erster Linie für die Java-Welt entwickelt wurde, aber mittlerweile auch andere Sprachen wie zum Beispiel Kotlin unterstützt. Es basiert auf den Erfahrungen von anderen großen Build-Tools wie \textit{Ant} und \textit{Maven} und hat damit große Akzeptanz gefunden. Indiz dafür ist der Wechsel zu Gradle von einigen großen und bekannten Projekten, wie zum Beispiel Android oder das Framework Spring.\\
 \\
 Die in diesem Kapitel behandelten Fakten und Erklärungen entstammen aus dem Buch \cite{introducingGradle} von Balaji Varanasi und Sudha Belida.
 
@@ -154,7 +154,7 @@ Damit Skripte für den Build-Prozess einfach und verständlich sind, verwendet G
 Um den Konfigurationsaufwand von Projekten zu minimieren, bietet Gradle eine Reihe von Standardwerten und Konventionen an. Durch die Einhaltung dieser werden Build-Skripte sehr prägnant, sind aber dennoch nicht an diese gebunden. Da die Skripte auf Groovy basieren, können die Konventionen leicht durch Schreiben von Groovy-Code umgangen werden.
 
 \subsubsection{Incremental Builds}
-In größeren Projekten kommt es oft zu sehr langsamen Build-Zeiten, weil andere Tools, im Gegensatz zu Gradle, versuchen den Code immer zu säubern und neu aufzubauen. Anhand der inkrementellen Builds, welche Gradle bereitstellt, kann dieses Problem umgangen werden. Tasks die der Build-Prozess ausführt, werden übersprungen, sofern keine Änderungen festgestellt wurden. Dafür wird überprüft, ob sich Ein- oder Ausgänge eines Tasks geändert haben.
+In größeren Projekten kommt es oft zu sehr langen Build-Zeiten, weil andere Tools, im Gegensatz zu Gradle, versuchen den Code immer zu säubern und neu aufzubauen. Anhand der inkrementellen Builds, welche Gradle bereitstellt, kann dieses Problem umgangen werden. Tasks die der Build-Prozess ausführt, werden übersprungen, sofern keine Änderungen festgestellt wurden. Dafür wird überprüft, ob sich Ein- oder Ausgänge eines Tasks geändert haben.
 
 \subsubsection{Gradle Wrapper}
 Durch dieses Feature ist es möglich, projektspezifische Tasks auszuführen, obwohl keine Installation von Gradle auf dem System vorhanden ist. Der Gradle Wrapper stellt dafür eine Batch-Datei für Windows- und ein Shell-Skript für Linux- bzw. Mac-Umgebungen bereit. Ein weiterer Vorteil ist der Einsatz in \gls{CI} Servern, welche mithilfe des Gradle-Wrappers keine zusätzlichen Konfigurationen benötigen, um die Build-Prozesse auszuführen.
@@ -166,7 +166,7 @@ Anhand von Plugins bzw. Erweiterungen kann die Funktionalität von Gradle belieb
 Innerhalb von Gradle  wird zwischen zwei grundlegenden Build-Bereichen unterschieden, den Projekten und den Tasks. Gradle kann dabei für ein oder mehrere Projekte verwendet werden, wobei jedes Projekt wiederum einen oder mehrere Tasks beinhalten kann.
 
 \subsubsection{Projekte}
-Standardmäßig wird innerhalb des Projektverzeichnisses nach der Datei \code{build.gradle} gesucht, welche ein Projekt identifiziert und in welcher die benötigten Tasks definiert werden. Es ist dabei möglich, die \code{build.gradle} Datei umzubenennen, wodurch jedoch der geänderte Name bei einem Aufruf eines Tasks explizit mit übergeben werden muss.\\
+Standardmäßig wird innerhalb des Projektverzeichnisses nach der \code{build.gradle}-Datei gesucht, welche ein Projekt identifiziert und in welcher die benötigten Tasks definiert werden. Es ist dabei möglich, diese Datei umzubenennen, wodurch jedoch der geänderte Name bei einem Aufruf eines Tasks explizit mit übergeben werden muss.\\
 \\
 Zusätzlich zur Definition von Tasks dient die Build-Datei dazu weitere Informationen festzulegen. Darunter zählen unter anderem Abhängigkeiten und Repositories. Gradle sucht dann in allen angegebenen Repositories nach den definierten Abhängigkeiten.\\
 \\
