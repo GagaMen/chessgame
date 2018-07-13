@@ -15,12 +15,12 @@ Für ein bequemes Spielerlebnis soll der Client ein gestartetes Match automatisc
 Die letzte Grundanforderung ist eine innovative und benutzerfreundliche Bedienung der Anwendung, so dass der Nutzer keinerlei Kenntnisse außer den Schachregeln besitzen muss.
 
 \section{Mockups der Client-Ansichten}\label{sec:views}
-In diesem Abschnitt wird auf Basis der im Kapitel 5.1\hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definierten Anforderungen ein Konzept entwickelt. Ziel ist dabei die Erstellung von Mockups der einzelnen Ansichten, um die Implementierung zu vereinfachen bzw. zu beschleunigen.
+In diesem Abschnitt wird auf Basis der im \hyperref[sec:anforderungenClient]{Kapitel~\ref{sec:anforderungenClient}} definierten Anforderungen ein Konzept entwickelt. Ziel ist dabei die Erstellung von Mockups der einzelnen Ansichten, um die Implementierung zu vereinfachen bzw. zu beschleunigen.
 
 \subsection{Startansicht}\label{sec:startView}
-Die Startansicht ist der Ausgangspunkt für die Nutzer, welche beim Aufruf der Root-\gls{URL} zurückzugeben ist. Mithilfe der Startansicht soll dem Nutzer die Möglichkeit bereitgestellt werden zur Player-Ansicht bzw. zur Match-Ansicht zu wechseln. Dafür ist ihm jeweils ein Button zum Auslösen dieses Wechsels zur Verfügung zustellen.\\
+Die Startansicht ist der Ausgangspunkt für die Nutzer, welche beim Aufruf der Root-\gls{URL} zurückgegeben wird. Mithilfe der Startansicht wird dem Nutzer die Möglichkeit bereitgestellt zur Player-Ansicht bzw. zur Match-Ansicht zu wechseln. Dafür steht ihm jeweils ein Button zum Auslösen dieses Wechsels zur Verfügung.\\
 \\
-Die \hyperref[fig:startView]{Abbildung~\ref{fig:startView}} visualisiert dabei die zuvor definierten Anhaltspunkte der Startansicht.
+In der \hyperref[fig:startView]{Abbildung~\ref{fig:startView}} werden das zuvor beschriebene visualisiert.
 \begin{figure}[htb]
 	\includegraphics[width=0.234\textwidth]{images/start-view.png}
 	\caption{Mockup: Startansicht des Clients}
@@ -28,9 +28,9 @@ Die \hyperref[fig:startView]{Abbildung~\ref{fig:startView}} visualisiert dabei d
 \end{figure}
 
 \subsection{Player-Ansicht}\label{sec:playerView}
-Mit dieser Ansicht ist dem Nutzer die Möglichkeit bereitzustellen, alle angelegten Player zu verwalten. Dafür muss ihm eine Tabelle für die Übersicht und ein Formular zum Anlegen neuer oder Bearbeiten bereits angelegter Player bereitgestellt werden. Über eine Spalte innerhalb der Tabelle sollen Buttons zur Verfügung stehen, über welche ein Player bearbeitet oder gelöscht werden kann.\\
+Dieser Ansicht stellt dem Nutzer die Möglichkeit bereit, um alle angelegten Player zu verwalten. Dafür wird ihm eine Tabelle für die Übersicht und ein Formular zum Anlegen neuer oder Bearbeiten bereits angelegter Player bereitgestellt. Über eine Spalte innerhalb der Tabelle stehen Buttons zur Verfügung, über welche ein Player bearbeitet oder gelöscht werden kann.\\
 \\
-Aus diesen ermittelten Punkten wurde das Mockup aus der \hyperref[fig:playerView]{Abbildung~\ref{fig:playerView}} entworfen, um diese visuell hervorzuheben.
+Anhand dieser Beschreibung wurde das Mockup aus der \hyperref[fig:playerView]{Abbildung~\ref{fig:playerView}} als Visualisierung entworfen.
 \begin{figure}[htb]
 	\includegraphics[width=0.84\textwidth]{images/player-view.png}
 	\caption{Mockup: Player-Ansicht des Clients}
@@ -38,9 +38,9 @@ Aus diesen ermittelten Punkten wurde das Mockup aus der \hyperref[fig:playerView
 \end{figure}
 
 \subsection{Match-Ansicht}\label{sec:matchView}
-Mithilfe der Match-Ansicht ist dem Nutzer eine Match-Verwaltung zur Verfügung zustellen. Um dabei die Konsistenz zu wahren, ist auch diese genau so aufgebaut wie die Player-Ansicht, mit dem Unterschied, dass ein Match nicht gelöscht aber dafür gestartet werden kann. Daher ändern sich geringfügig die Buttons in der Tabelle.\\
+Mithilfe der Match-Ansicht wird dem Nutzer eine Match-Verwaltung zur Verfügung gestellt. Um dabei die Konsistenz zu wahren, ist auch diese genau so aufgebaut wie die Player-Ansicht, mit dem Unterschied, dass ein Match nicht gelöscht aber dafür gestartet werden kann. Daher ändern sich geringfügig die Buttons in der Tabelle.\\
 \\
-Dabei werden die gefundenen Fakten durch die \hyperref[fig:matchView]{Abbildung~\ref{fig:matchView}} grafisch dargestellt.
+Die Beschreibung dieser Ansicht wird durch die \hyperref[fig:matchView]{Abbildung~\ref{fig:matchView}} grafisch dargestellt.
 \begin{figure}[htb]
 	\includegraphics[width=0.84\textwidth]{images/match-view.png}
 	\caption{Mockup: Match-Ansicht des Clients}
@@ -48,9 +48,9 @@ Dabei werden die gefundenen Fakten durch die \hyperref[fig:matchView]{Abbildung~
 \end{figure}
 
 \subsection{Ansicht eines gestarteten Matches}\label{sec:gameView}
-Mithilfe dieser Ansicht soll dem Nutzer ermöglicht werden ein gestartetes Match zu spielen. Dafür wird in erster Linie ein Schachbrett benötigt, auf welchem die Figuren dargestellt werden. Mittels \enquote{Drag \& Drop} soll der Nutzer anschließend Spielfiguren bewegen können. Für eine einfachere Bedienung und zur Unterstützung des Verständnisses der Schachregeln sollen alle möglichen Züge einer Figur hervorgehoben werden, sobald über diese mit der Maus gefahren wird. Da Informationen über bereits geschmissene Figuren oder welche Züge bisher getätigt wurden sehr hilfreich sein können, sollen diese neben dem Schachbrett dargestellt werden. \\
+Durch diese Ansicht wird dem Nutzer ermöglicht ein gestartetes Match zu spielen. Dafür wird in erster Linie ein Schachbrett bereitgestellt, auf welchem die Figuren dargestellt werden. Mittels \enquote{Drag \& Drop} kann der Nutzer anschließend Spielfiguren bewegen. Für eine einfachere Bedienung und zur Unterstützung des Verständnisses der Schachregeln werden alle möglichen Züge einer Figur hervorgehoben, sobald über diese mit der Maus gefahren wird. Da Informationen über bereits geschmissene Figuren oder welche Züge bisher getätigt wurden sehr hilfreich sein können, werden diese neben dem Schachbrett dargestellt.\\
 \\
-Anhand dieser Kriterien an die Ansicht eines gestarteten Matches wurde das Mockup aus der \hyperref[fig:gameView]{Abbildung~\ref{fig:gameView}} entwickelt.\\
+Auf Grundlage dieser Beschreibung wurde das Mockup aus der \hyperref[fig:gameView]{Abbildung~\ref{fig:gameView}} entwickelt.\\
 \begin{figure}[htb]
 	\includegraphics[width=0.84\textwidth]{images/game-view.png}
 	\caption{Mockup: Ansicht eines gestarteten Matches}

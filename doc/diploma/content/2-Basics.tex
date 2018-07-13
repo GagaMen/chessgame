@@ -73,34 +73,12 @@ Als zentrale Anforderungen an einem gutes Design für \glspl{API} stehen die lei
 	Einfach erweiterbar & Um den Aufwand der Erweiterung einer \gls{API} möglichst einfach zu halten, muss die Anpassung von bestehenden Clients berücksichtigt werden. Der Idealfall ist dabei, wenn Clients von Änderungen unberührt bleiben. Ein solches Verhalten kann beispielsweise durch Vererbung im Falle einer objektorientierten Programmiersprache erreicht werden.\\
 \end{longtabu}
 }\label{tab:APIUsabilityProperties}
-%\begin{table}
-%	\caption{Eigenschaften/Ziele des Qualitätsmerkmals \enquote{Benutzbarkeit}\newline (verändert nach \cite[14-23]{apiDesign})}
-%	\label{tab:APIUsabilityProperties}
-%	\begin{tabu}{|p{0.25\textwidth}|p{0.7\textwidth}|}
-%		\hline
-%		\rowfont[c]{\bfseries}
-%		\taburowcolors 1{tableheadcolor .. tableheadcolor}
-%		Eigenschaft/Ziel & Beschreibung\\
-%		\hline
-%		\taburowcolors 2{tablebodycolor .. tablerowcolor}
-%		Konsistent & Gemeint ist damit das Entscheidungen, hinsichtlich des Entwurfs, einheitlich im Quellcode angewandt werden. Das betrifft beispielsweise die Namensgebung von Variablen oder Funktionen.\\
-%		Intuitiv verständlich & Für dieses Ziel ist eine Konsistente \gls{API} unter Verwendung von Namenskonventionen unabdingbar. Grundlegend kann dabei gesagt werden das gleiche Dinge einheitliche Namen, aber auch ungleiche Dinge unterschiedliche Namen haben sollten. So können bereits durch bekannte Funktionen Rückschlüsse auf andere noch unbekannte gezogen werden. Ein konkretes Beispiel dafür sind \code{get}- und \code{set}-Methoden in der Java-Welt.\\
-%		Dokumentiert & Eine ausführliche Dokumentation mit Beschreibungen zu den einzelnen Klassen, Methoden und Parametern, ist für eine einfache Benutzung dringend erforderlich. Zusätzlich sollten Beispiele diese Erläuterungen unterstreichen.\\
-%		Einprägsam und leicht zu lernen & Damit eine \gls{API} einfach zu erlernen ist, sollten die ersten drei Punkte dieser Tabelle dringend erfüllt werden. Wichtig ist dabei eine geringe  Einstiegshürde, um potenzielle Nutzer nicht abzuschrecken. Prinzipiell ist es dabei immer sehr von Vorteil, wenn mit relativ wenig Code erste sichtbare Ergebnisse erzielt werden können.\\
-%		Lesbaren Code fördern & Eine \gls{API} kann großen Einfluss auf die Lesbarkeit des Client-Codes haben und diesen so signifikant verbessern. Durch eine gute Lesbarkeit können zum Beispiel besser bzw. schneller Fehler entdeckt werden. Um einen möglichst schmalen Client-Code zu fördern, sollten \glspl{API} benötigte Hilfsmethoden bereitstellen, sofern dies möglich ist. Als Prämisse kann dabei angesehen werden, dass die \gls{API} alle Funktionen bereitstellen sollte, welche sie dem Client auch abnehmen kann.\\
-%		Schwer falsch zu benutzen & Unerwartetes Verhalten aus Sicht den Nutzers sollte vermieden werden, um unerwartete Fehler zu verhindern und um die \gls{API} intuitiv bedienbar zu halten.\\
-%		Minimal & Prinzipiell gilt es eine \gls{API} so klein wie möglich zu halten und Funktionen welche nicht unbedingt benötigt werden im zweifel weg zu lassen. Denn nachträglich können solche Elemente nicht mehr mit trivialen Aufwand entfernt werden. Außerdem lässt sich sagen das je größer die \gls{API}, desto größer die Komplexität.\\
-%		Stabil & Durch Stabilität soll sichergestellt werden das Änderungen keine Auswirkung auf die Benutzer hat, welche eine ältere Version benutzen. Sind auftretende negative Auswirkungen unvermeidbar, sollten diese entweder ausführlich kommuniziert oder durch eine neue Version gekapselt werden.\\
-%		Einfach erweiterbar & Um den Aufwand der Erweiterung einer \gls{API} möglichst einfach zu halten, muss die Anpassung von bestehenden Clients berücksichtigt werden. Der Idealfall ist dabei, wenn Client von Änderungen unberührt bleiben. Ein solches Verhalten kann beispielsweise durch Vererbung, im Falle einer objektorientierten Programmiersprache, erreicht werden.\\
-%		\hline
-%	\end{tabu}
-%\end{table}
 
 \subsubsection{Effizienz}
 Unter dem Qualitätsmerkmal Effizienz kann beispielsweise der geringe Verbrauch von Akkuleistung oder an Datenvolumen bei mobilen Geräten verstanden werden. Ein weiterer Aspekt ist aber auch die Skalierbarkeit einer \gls{API}, welche bei einem großen Zuwachs von Aufrufen durchaus entscheidend für die Stabilität oder die Performance sein kann.
 
 \subsubsection{Zuverlässigkeit}
-Unter der Zuverlässigkeit einer \gls{API} wird die geringe Fehleranfälligkeit verstanden bzw. wie gut diese auf Fehler reagiert. Ein wichtiger Punkt, der dabei auf jeden Fall beachtet werden sollte, ist die Rückgabe von standardisierten HTTP-Statuscodes. Dies ermöglicht dem Benutzer ein ordentliches und verständliches Feedback. Dieses kann noch, wenn notwendig, durch konkretisierte Fehlermeldungen ergänzt werden.
+Unter der Zuverlässigkeit einer \gls{API} wird die geringe Fehleranfälligkeit verstanden bzw. wie gut diese auf Fehler reagiert. Ein wichtiger Punkt, der dabei auf jeden Fall beachtet werden sollte, ist die Rückgabe von standardisierten HTTP-Statuscodes. Dies ermöglicht dem Benutzer ein ordentliches und verständliches Feedback. Dieses kann noch, wenn notwendig, durch konkretisierte Fehlermeldungen ergänzt werden. Ein weiterer Aspekt, welcher unter Zuverlässigkeit verstanden werden kann, ist die Verfügbarkeit einer \gls{API}. Dies ist insbesondere bei Remote-\glspl{API} von großer Bedeutung, da die Verfügbarkeit, im Gegensatz zu Programmier-\glspl{API}, von weiteren Faktoren abhängt, wie zum Beispiel die Erreichbarkeit des Web-Servers auf welchen diese veröffentlicht wurde.
 
 \subsection{Grundprinzipien von REST}\label{sec:basePrincipleREST}
 \subsubsection{Eindeutige Identifikation von Ressourcen}
