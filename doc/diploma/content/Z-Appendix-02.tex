@@ -18,4 +18,97 @@
 			\item[PATCH] Mit dieser Methode lassen sich partielle Änderungen an einer Ressource vornehmen.
 			\item[DELETE] Ein Aufruf dieser Methode führt zur Löschung der angegebenen Ressource.
 		\end{description}
+	\item Navigation durch die \gls{REST}-\gls{API}
+		\begin{itemize}
+			\item curl -sSL -D - localhost:8080/api -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.1.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/players -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.2.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/players/1 -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.3.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api -o /dev/null
+			\item curl -sSL -D - localhost:8080/api/matches -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.6.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/matches/1 -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.7.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/matches/1/draws -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.8.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/matches/1 -o /dev/null
+			\item curl -sSL -D - localhost:8080/api/matches/1/pieceSets -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.10.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/matches/1 -o /dev/null
+			\item curl -sSL -D - localhost:8080/api/matches -o /dev/null
+			\item curl -sSL -D - localhost:8080/api -o /dev/null
+			\item curl -sSL -D - localhost:8080/api/draws -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.14.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/draws/1 -o /dev/null
+				\begin{figure}[h]
+					\includegraphics[width=0.8\textwidth]{images/question3.15.png}
+				\end{figure}
+			\item curl -sSL -D - localhost:8080/api/draws -o /dev/null
+			\item curl -sSL -D - localhost:8080/api -o /dev/null
+		\end{itemize}
+	\item Anlegen neuer Player
+		\begin{itemize}
+			\item curl -v -H \textquotesingle Content-Type: application/x-www-form-urlencoded\textquotesingle\\-d \textquotesingle name=Test\&password=123456\textquotesingle\ localhost:8080/api/players
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question4.1.png}
+			\end{figure}
+			\item curl -v -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle\{ "name": "Test", "password": "123456"\ \}\textquotesingle\ localhost:8080/api/players
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question4.2.png}
+			\end{figure}
+		\end{itemize}
+	\item Aktualisierung eines Players
+		\begin{itemize}
+			\item curl -v -X PATCH -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle\{ "password": "987654"\ \}\textquotesingle\ localhost:8080/api/players/3
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question5.png}
+			\end{figure}
+		\end{itemize}
+	\item Löschen eines Players
+		\begin{itemize}
+			\item curl -v -X DELETE localhost:8080/api/players/3
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question6.png}
+			\end{figure}
+		\end{itemize}
+	\item Anlegen eines neuen Matches
+		\begin{itemize}
+			\item curl -v -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle\{ "playerWhiteId": 1, "playerBlackId": 2\ \}\textquotesingle\ localhost:8080/api/matches
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question7.png}
+			\end{figure}
+		\end{itemize}
+	\item Anlegen neuer Draws
+		\begin{itemize}
+			\item curl -v -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle\{ "matchId": 2, "drawCode": \textquotesingle\textquotesingle e4", \textquotesingle\textquotesingle startColumn": 5, \textquotesingle\textquotesingle startRow": 2\ \}\textquotesingle\\localhost:8080/api/draws
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question8.1.png}
+			\end{figure}
+			\item curl -v -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle \{ "matchId": 2, "drawCode": "d5", \textquotesingle\textquotesingle startColumn": 4, \textquotesingle\textquotesingle startRow": 7\ \}\textquotesingle\\localhost:8080/api/draws
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question8.2.png}
+			\end{figure}
+			\item curl -v -H \textquotesingle Content-Type: application/json\textquotesingle\\-d \textquotesingle \{ "matchId": 2, "drawCode": \textquotesingle\textquotesingle exd5", \textquotesingle\textquotesingle startColumn": 5, \textquotesingle\textquotesingle startRow": 4\ \}\textquotesingle\\localhost:8080/api/draws
+			\begin{figure}[h]
+				\includegraphics[width=0.8\textwidth]{images/question8.3.png}
+			\end{figure}
+		\end{itemize}
 \end{enumerate}
