@@ -1,0 +1,21 @@
+\chapter{Lösung der Praktikumsaufgabe}
+\section{Verwendung der REST-API mithilfe des Tools cURL}
+\begin{enumerate}
+	\item Lernen Sie das Tool cURL kennen
+		\begin{description}
+			\item[-v, --verbose] Stellt weitere Informationen zum abgesendeten Request, unter anderem gesendete bzw. empfangene \gls{HTTP}-Header, bereit. Mit \enquote{>} beginnende Zeilen stellen gesendete und mit einem \enquote{<} beginnende Zeilen stellen empfangene Header dar.
+			\item[-H, --header] Mithilfe dieses Parameters lassen sich weitere \gls{HTTP}-Header definieren, welche dem Request hinzugefügt werden sollen.
+			\item[-X, --request] Definiert den zu verwendenden Request-Typ, welcher für die Kommunikation mit dem Server verwendet werden soll.  
+			\item[-d, --data] Spezifiziert die Daten, welche mittels POST-Request gesendet werden sollen. Ist dieser Parameter gesetzt wird der Request-Typ POST automatisch gewählt.
+		\end{description}
+	\item Bedeutung der HTTP-Methoden
+		\begin{description}
+			\item[OPTIONS] Die Methode OPTIONS wird dazu verwendet, um die Optionen der Kommunikation für die Zielressource zu beschreiben.
+			\item[GET] Mithilfe dieser Methode wird eine Präsentation einer Ressource angefordert. Dabei sollte sie nur dazu genutzt werden, um Daten abzufragen.
+			\item[HEAD] Mit dieser Methode wird dieselbe Anfrage wie mit einem GET-Request gestellt, jedoch wird der Antworttext nicht mitgesendet.
+			\item[POST] Diese Methode dient zur Übermittlung von Daten an die angegebene Ressource, was häufig Statusänderungen oder anderweitige Nebenwirkungen nach sich zieht. 
+			\item[PUT] Mithilfe dieser Methode werden alle Daten einer Ressource, durch die übermittelten Daten ersetzt.
+			\item[PATCH] Mit dieser Methode lassen sich partielle Änderungen an einer Ressource vornehmen.
+			\item[DELETE] Ein Aufruf dieser Methode führt zur Löschung der angegebenen Ressource.
+		\end{description}
+\end{enumerate}
