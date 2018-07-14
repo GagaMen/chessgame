@@ -11,7 +11,7 @@ Die verwendeten Bibliotheken bzw. Frameworks sollen die Umsetzung des Konzepts a
 \subsection{Spring Boot}\label{sec:bibspring}
 Spring Boot wird als ein leichtgewichtiges Framework für die Umsetzung von Java Applikationen beschrieben. Dabei bezieht sich leichtgewichtig nicht auf die Größe oder Anzahl der enthaltenen Klassen. Es ist eher als geringer Aufwand an Änderungen am eigenen Programmcode zu verstehen, um die Vorteile des Frameworks nutzen zu können. \cite{proSpring5} Spring bietet eine Vielzahl an Einsatzmöglichkeiten, aber für die Umsetzung des Schachservers soll es für die Erzeugung der \gls{REST}-\gls{API} dienen.\\
 \\
-Um Spring Boot in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}} in der Build-Datei \code{build.gradle} eingefügt werden.
+Um Spring Boot in einem Projekt einzubinden, müssen die Zeilen aus dem \hyperref[lst:includeSpring]{Listing~\ref{lst:includeSpring}} in der Build-Datei \path{build.gradle} eingefügt werden.
 \begin{lstlisting}[style=lstStyleFramed, language=Gradle, caption={Einbindung des Spring Framework mittels Gradle}, label=lst:includeSpring, float]
 buildscript {
 	repositories {
@@ -35,7 +35,7 @@ dependencies {
 \end{lstlisting}
 Zu beachten ist dabei, dass Gradle nur eine Lösung für die Einbindung ist. Da aber für die Umsetzung Gradle verwendet wird, werden alle anderen Lösungen an dieser Stelle vernachlässigt.\\
 \\ 
-Für die Erstellung einer \gls{REST}-\gls{API} muss zunächst ein Controller für den Zugriff auf Ressourcen angelegt werden. Dabei ist es sinnvoll für jeden Ressourcentyp einen eigenen Controller zu definieren. Innerhalb dieser werden anschließend alle Einstiegspunkte erzeugt. Als Beispiel soll das \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} in Form eines klassischen \enquote{Hello World} dienen. Dafür wird eine Klasse \code{GreetingController} mit einer Funktion \code{getGreeting} definiert. Als Parameter bekommt diese Funktion einen Namen übergeben, welcher standardmäßig den String \enquote{World} beinhaltet. An dieser Stelle kommt das Spring Boot Framework ins Spiel. Dieses stellt eine Reihe von Annotationen bereit, über welche eine \gls{REST}-\gls{API} konfiguriert werden kann. Dabei dient die Annotation \code{@RestController} dazu, die Klasse \code{GrettingController} als Controller einer \gls{REST}-\gls{API} zu definieren, mit welchen anschließend Einstiegspunkte definiert werden können. Innerhalb dieses Controllers besteht daraufhin die Möglichkeit eine Funktion, mit der Annotation \code{@GetMapping}, als Einstiegspunkt für einen \code{GET}-Request an einer Ressource zu definieren. Um nun dem Nutzer der \gls{API} die Möglichkeit zu bieten Parameter im Request mitzugeben, müssen diese mit der Annotation \code{@RequestParam} erweitert werden, wie im \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} am Parameter \code{name} zu sehen.\\
+Für die Erstellung einer \gls{REST}-\gls{API} muss zunächst ein Controller für den Zugriff auf Ressourcen angelegt werden. Dabei ist es sinnvoll für jeden Ressourcentyp einen eigenen Controller zu definieren. Innerhalb dieser werden anschließend alle Einstiegspunkte erzeugt. Als Beispiel soll das \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} in Form eines klassischen \enquote{Hello World} dienen. Dafür wird eine Klasse \path{GreetingController} mit einer Funktion \path{getGreeting} definiert. Als Parameter bekommt diese Funktion einen Namen übergeben, welcher standardmäßig den String \enquote{World} beinhaltet. An dieser Stelle kommt das Spring Boot Framework ins Spiel. Dieses stellt eine Reihe von Annotationen bereit, über welche eine \gls{REST}-\gls{API} konfiguriert werden kann. Dabei dient die Annotation \path{@RestController} dazu, die Klasse \path{GrettingController} als Controller einer \gls{REST}-\gls{API} zu definieren, mit welchen anschließend Einstiegspunkte definiert werden können. Innerhalb dieses Controllers besteht daraufhin die Möglichkeit eine Funktion, mit der Annotation \path{@GetMapping}, als Einstiegspunkt für einen \path{GET}-Request an einer Ressource zu definieren. Um nun dem Nutzer der \gls{API} die Möglichkeit zu bieten Parameter im Request mitzugeben, müssen diese mit der Annotation \path{@RequestParam} erweitert werden, wie im \hyperref[lst:springcontroller]{Listing~\ref{lst:springcontroller}} am Parameter \path{name} zu sehen.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Spring Controller}, label=lst:springcontroller, float]
 import org.springframework.web.bind.annotation.*
 
@@ -48,7 +48,7 @@ class GreetingController {
 }
 \end{lstlisting}
 \\
-Abschließend muss nur noch der Startpunkt für die Spring-Applikation definiert werden. Dafür wird mithilfe der Annotation \code{@SpringBootApplication} ein Klasse erweitert, welche aber keine weiteren Implementierungen enthält. Anschließend muss diese in der Main-Funktion, wie im \hyperref[lst:springmain]{Listing~\ref{lst:springmain}} zu sehen, aufgerufen werden.
+Abschließend muss nur noch der Startpunkt für die Spring-Applikation definiert werden. Dafür wird mithilfe der Annotation \path{@SpringBootApplication} ein Klasse erweitert, welche aber keine weiteren Implementierungen enthält. Anschließend muss diese in der Main-Funktion, wie im \hyperref[lst:springmain]{Listing~\ref{lst:springmain}} zu sehen, aufgerufen werden.
 \\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Beispiel: Spring Application Class}, label=lst:springmain, float]
 @SpringBootApplication
@@ -166,8 +166,9 @@ data class Player(
 
 \section{Anbindung an die Datenbank}\label{sec:conncectionDB}
 Für die Anbindung an die Datenbank ist zuallererst die Vorbereitung der Klassenmodelle, wie im \hyperref[sec:bibormlite]{Kapitel~\ref{sec:bibormlite}} erläutert, notwendig.
-Als nächstes muss vor einer Interaktion eine Verbindung zur Datenbank aufgebaut sowie alle benötigten Tabellen und \glspl{DAO} angelegt werden. Das \hyperref[lst:dbConnection]{Listing~\ref{lst:dbConnection}} zeigt dabei die Umsetzung  dieser Notwendigkeiten.
+Als nächstes muss vor einer Interaktion eine Verbindung zur Datenbank aufgebaut sowie alle benötigten Tabellen und \glspl{DAO} angelegt werden. Das \hyperref[lst:dbConnection]{Listing~\ref{lst:dbConnection}} zeigt dabei die Umsetzung  dieser Notwendigkeiten.\\
 \\
+Dabei wird erst eine Verbindung aufgebaut, sobald diese benötigt wird. Da alle Interaktionen mit der Datenbank über \glspl{DAO} erfolgen, wird erst dann eine Verbindung aufgebaut sobald ein \gls{DAO} mittels \path{get}-Funktion angefordert wird. Es ist zu beachten, dass bei einer erneuten Anforderung eines \glspl{DAO} die Verbindung nicht erneut aufgebaut wird. Dabei ist es egal, ob dasselbe oder ein anderes angefordert wird. Ähnlich sieht das beim Anlegen der Tabellen aus, denn diese werden ausschließlich nur dann angelegt, sofern diese noch nicht in der Datenbank-Datei existieren. Dies tritt beispielsweise auf, sollte der Server zum ersten mal gestartet werden.
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Verbindungsaufbau \& Initialisierung der SQLite Datenbank}, label=lst:dbConnection, float]
 class DatabaseUtility {
 	companion object {
@@ -184,7 +185,7 @@ class DatabaseUtility {
 			createTables()
 			createDaos()
 		}
-
+		
 		private fun createTables() {
 			TableUtils.createTableIfNotExists(connection, Player::class.java)
 			...
@@ -197,8 +198,6 @@ class DatabaseUtility {
 	}
 }
 \end{lstlisting}
-\\
-Dabei wird erst eine Verbindung aufgebaut, sobald diese benötigt wird. Da alle Interaktionen mit der Datenbank über \glspl{DAO} erfolgen, wird erst dann eine Verbindung aufgebaut sobald ein \gls{DAO} mittels \code{get}-Funktion angefordert wird. Es ist zu beachten, dass bei einer erneuten Anforderung eines \glspl{DAO} die Verbindung nicht erneut aufgebaut wird. Dabei ist es egal, ob dasselbe oder ein anderes angefordert wird. Ähnlich sieht das beim Anlegen der Tabellen aus, denn diese werden ausschließlich nur dann angelegt, sofern diese noch nicht in der Datenbank-Datei existieren. Dies tritt beispielsweise auf, sollte der Server zum ersten mal gestartet werden.
 
 \section{Spring-Konfiguration für Content Negotiation}\label{sec:contentNegotiation}
 Content Negotiation ist laut \hyperref[sec:basePrincipleREST]{Kapitel~\ref{sec:basePrincipleREST}} ein wichtiges Qualitätsmerkmal für eine \gls{REST}-\gls{API}. Das Framework Spring Boot\footnote{siehe \hyperref[sec:bibspring]{Kapitel~\ref{sec:bibspring}}} bietet auch hierfür Lösungen an, welche aber nicht standardmäßig aktiviert sind. \gls{JSON} wird dabei ohne weitere Konfiguration unterstützt, nur für \gls{XML} müssen die Klassenmodelle mithilfe der Bibliothek Fasterxml\footnote{siehe \hyperref[sec:bibfasterxml]{Kapitel~\ref{sec:bibfasterxml}}} angepasst werden. Anschließend ist eine Erweiterung der Spring-Konfiguration, wie in \hyperref[lst:springContentNegotiation]{Listing~\ref{lst:springContentNegotiation}} zu sehen, notwendig. Die Implementierung zeigt dabei die Umsetzung der drei Strategien, welche im \hyperref[sec:controller]{Kapitel~\ref{sec:controller}} gefordert wurden.
@@ -223,7 +222,7 @@ class WebConfig : WebMvcConfigurerAdapter() {
 Die Internetseite \cite{springContentNegotiation} bietet für dieses Thema eine ausführlichere Erläuterung der einzelnen Strategien und wie diese angewendet bzw. eingerichtet werden.
 
 \section{Implementation des HATEOAS-Konzeptes}
-Für die Implementation des Designkonzeptes aus dem \hyperref[sec:konzeptHATEOAS]{Kapitel~\ref{sec:konzeptHATEOAS}} kommt das Projekt \enquote{Spring HATEOAS} zum Einsatz. Mithilfe des Objektes \code{ControllerLinkBuilder}, welches durch die Bibliothek bereitgestellt wird, können anhand der Controller und deren Funktionen Links generiert werden. Durch eine starke Kopplung an die Implementierung wird dabei eine redundante Pflege der Links verhindert. Das \hyperref[lst:springHATEOAS]{Listing~\ref{lst:springHATEOAS}} zeigt dabei am Beispiel des \code{PlayerController} und der Funktion \code{getPlayerList} wie solche Links generiert werden können.\\
+Für die Implementation des Designkonzeptes aus dem \hyperref[sec:konzeptHATEOAS]{Kapitel~\ref{sec:konzeptHATEOAS}} kommt das Projekt \enquote{Spring HATEOAS} zum Einsatz. Mithilfe des Objektes \path{ControllerLinkBuilder}, welches durch die Bibliothek bereitgestellt wird, können anhand der Controller und deren Funktionen Links generiert werden. Durch eine starke Kopplung an die Implementierung wird dabei eine redundante Pflege der Links verhindert. Das \hyperref[lst:springHATEOAS]{Listing~\ref{lst:springHATEOAS}} zeigt dabei am Beispiel des \path{PlayerController} und der Funktion \path{getPlayerList} wie solche Links generiert werden können.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Linkaufbau mithilfe des Projektes \enquote{Spring HATEOAS}}, label=lst:springHATEOAS, float]
 @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
 fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> {
@@ -253,7 +252,7 @@ fun getPlayerList(response: HttpServletResponse): ResponseEntity<PlayerHashMap> 
 }
 \end{lstlisting}
 \\
-Die ersten beiden Zeilen der Funktion dienen dazu alle Player aus der Datenbank zu holen und alle nachfolgenden zum Linkaufbau. Alle erzeugten Links werden in ein \code{HashSet} gespeichert und anschließend mittels der statischen Methode \code{createLinkHeader} aus dem Objekt \code{HateoasUtility} in einen String geparst. Der erstellte String wird danach dem Link-Header des \gls{HTTP}-Response zugewiesen. Das \hyperref[lst:createLinkHeader]{Listing~\ref{lst:createLinkHeader}} zeigt dabei die Implementierung der statischen Methode \code{createLinkHeader}.\\
+Die ersten beiden Zeilen der Funktion dienen dazu alle Player aus der Datenbank zu holen und alle nachfolgenden zum Linkaufbau. Alle erzeugten Links werden in ein \path{HashSet} gespeichert und anschließend mittels der statischen Methode \path{createLinkHeader} aus dem Objekt \path{HateoasUtility} in einen String geparst. Der erstellte String wird danach dem Link-Header des \gls{HTTP}-Response zugewiesen. Das \hyperref[lst:createLinkHeader]{Listing~\ref{lst:createLinkHeader}} zeigt dabei die Implementierung der statischen Methode \path{createLinkHeader}.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Implementierung: \enquote{Links zu String} Parse-Funktion}, label=lst:createLinkHeader, float]
 fun createLinkHeader(linkList: HashSet<Pair<Link, String>>): HttpHeaders {
 	val headers = HttpHeaders()
@@ -271,7 +270,7 @@ fun createLinkHeader(linkList: HashSet<Pair<Link, String>>): HttpHeaders {
 \section{Fehlerbehandlung}\label{sec:exceptionsHandling}
 Laut den Anforderungen aus \hyperref[sec:anforderungen]{Kapitel~\ref{sec:anforderungen}} soll der Server so wenig wie möglich anfällig für Fehler sein. Dafür ist der richtige Umgang und auch eine verständliche und für den Endnutzer lesbare Fehlermeldung unerlässlich. Die auftretenden Fehler werden dabei in einzelne Fehlerarten bzw. \gls{HTTP}-Statuscodes unterteilt und nachfolgend näher erläutert.\\
 \\
-Wenn ein Nutzer eine Ressource an der \gls{URI} \code{/player/15} anfordert, aber kein Player mit der ID 15 existiert, dann wird ein Fehler mit dem \gls{HTTP}-Statuscode \code{404 Not Found} zurückgegeben. Schon der Statuscode alleine signalisiert dem Nutzer, dass die angeforderte Ressource nicht gefunden wurde. Sollte ein Benutzer der \gls{API} einen Draw hinzufügen wollen aber der mitgeschickte Draw-Code nicht valide sein, so wird ein Fehler mit dem \gls{HTTP}-Statuscode \code{409 Conflict} zurückgegeben. Dieser zeigt dem Nutzer an, dass ein durch ihn verursachter Konflikt aufgetreten ist. Wenn ein Nutzer den \gls{HTTP}-Statuscode \code{400 Bad Request} vom Server zurückerhält, so hat dieser eine \gls{URI} angefragt, welcher durch die \gls{REST}-\gls{API} nicht definiert wurde. Für alle weiteren Fehler, welche nicht durch den Nutzer verursacht wurden, wird der \gls{HTTP}-Statuscode \code{500 Internal Server Error} zurückgeben. Da so ein Fehler nur zurückgegeben wird sofern ein unerwarteter Server-Fehler aufgetreten ist, sollte dieser gar nicht bzw. nur selten auftreten. Ein Beispiel für so einen Fehler könnte ein Verbindungsabbruch zur Datenbank sein, worauf der Nutzer keinerlei Einfluss hat.\\
+Wenn ein Nutzer eine Ressource an der \gls{URI} \path{/player/15} anfordert, aber kein Player mit der ID 15 existiert, dann wird ein Fehler mit dem \gls{HTTP}-Statuscode \path{404 Not Found} zurückgegeben. Schon der Statuscode alleine signalisiert dem Nutzer, dass die angeforderte Ressource nicht gefunden wurde. Sollte ein Benutzer der \gls{API} einen Draw hinzufügen wollen aber der mitgeschickte Draw-Code nicht valide sein, so wird ein Fehler mit dem \gls{HTTP}-Statuscode \path{409 Conflict} zurückgegeben. Dieser zeigt dem Nutzer an, dass ein durch ihn verursachter Konflikt aufgetreten ist. Wenn ein Nutzer den \gls{HTTP}-Statuscode \path{400 Bad Request} vom Server zurückerhält, so hat dieser eine \gls{URI} angefragt, welcher durch die \gls{REST}-\gls{API} nicht definiert wurde. Für alle weiteren Fehler, welche nicht durch den Nutzer verursacht wurden, wird der \gls{HTTP}-Statuscode \path{500 Internal Server Error} zurückgeben. Da so ein Fehler nur zurückgegeben wird sofern ein unerwarteter Server-Fehler aufgetreten ist, sollte dieser gar nicht bzw. nur selten auftreten. Ein Beispiel für so einen Fehler könnte ein Verbindungsabbruch zur Datenbank sein, worauf der Nutzer keinerlei Einfluss hat.\\
 \\
 Das \hyperref[lst:springExceptionHandling]{Listing~\ref{lst:springExceptionHandling}} zeigt die notwendige Konfiguration der Spring-Applikation, um mit auftretenden Fehlern umgehen zu können.\\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Spring-Konfiguration der Fehlerbehandlung}, label=lst:springExceptionHandling, float]
@@ -307,7 +306,7 @@ class ExceptionHandler {
 }
 \end{lstlisting}
 \\
-Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, sondern auch eine verständliche Fehlermeldung, wird zusätzlich im \gls{HTTP}-Response ein Fehlerobjekt mitgeschickt. Dieses Fehlerobjekt ist eine Instanz des \code{ErrorResponseObject} aus \hyperref[lst:errorResponseObject]{Listing~\ref{lst:errorResponseObject}} und hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception den Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchem der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei, je nach angeforderten Format, als \gls{JSON} oder \gls{XML} zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
+Damit der \gls{API}-Benutzer nicht nur einen Statuscode zum aufgetretenen Fehler erhält, sondern auch eine verständliche Fehlermeldung, wird zusätzlich im \gls{HTTP}-Response ein Fehlerobjekt mitgeschickt. Dieses Fehlerobjekt ist eine Instanz des \path{ErrorResponseObject} aus \hyperref[lst:errorResponseObject]{Listing~\ref{lst:errorResponseObject}} und hält einen Zeitstempel, den Statuscode, die Bezeichnung des Statuscodes, welche Exception den Fehler verursacht hat, eine detaillierte Fehlermeldung und den Pfad an welchem der Fehler aufgetreten ist. Das Fehlerobjekt wird dabei, je nach angeforderten Format, als \gls{JSON} oder \gls{XML} zurückgegeben\footnote{siehe \hyperref[sec:contentNegotiation]{Kapitel~\ref{sec:contentNegotiation}}}.
 \\
 \begin{lstlisting}[style=lstStyleFramed, language=Kotlin, caption={Das Fehlerobjekt \code{ErrorResponseObject}}, label=lst:errorResponseObject, float]
 class ErrorResponseObject(
@@ -318,15 +317,10 @@ class ErrorResponseObject(
 	val message: String = "No message available",
 	val path: String = ""
 ) {
-override fun toString(): String {
-	return "ErrorResponseObject{" +
-			"timestamp=" + timestamp +
-			", status=" + statusCode +
-			", error=" + error +
-			", exception=" + exception +
-			", message=" + message +
-			", path=" + path +
-			"}".toString()
+	override fun toString(): String {
+		return "ErrorResponseObject{ timestamp=$timestamp" +
+				", status=$statusCode, error=$error, exception=$exception" +
+				", message=$message, path=$path }".toString()
 	}
 }
 \end{lstlisting}

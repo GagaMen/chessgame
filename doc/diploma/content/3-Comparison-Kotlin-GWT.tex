@@ -7,23 +7,16 @@ Ziel dieses Kapitels soll der Vergleich von Kotlin und \gls{GWT} sein, da es im 
 \\
 In dem ersten \hyperref[sec:comparisonCriteria]{Unterabschnitt~\ref{sec:comparisonCriteria}} werden dafür zuallererst die Vergleichskriterien ermittelt, welche für den Vergleich benötigt werden. Anschließend dient der \hyperref[sec:comparisonResults]{Unterabschnitt~\ref{sec:comparisonResults}} zur Präsentation des Vergleichsergebnisses.\\
 \\
-Da für diese Arbeit die Benutzung der Programmiersprache Kotlin vorgegeben ist, wird auf eine Benotung der Vergleichsteilnehmer verzichtet.
+Da für diese Arbeit die Benutzung der Programmiersprache Kotlin vorgegeben ist, wird auf eine Benotung der Vergleichsteilnehmer verzichtet. Dennoch kann das Vergleichsergebnis dazu genutzt werden den Entscheidungsprozess für geplante Projekte zu beschleunigen. Dafür sollte im Vorfeld jedes Kriterium gewichtet werden, um so eine individuelle und präzise Benotung zu ermöglichen.
 
 \section{Vergleichskriterien}\label{sec:comparisonCriteria}
 Für die Ermittlung der Vergleichskriterien wurde das Paper \cite{frameworkEvaluation} von Jadhav und Sonar verwendet. In diesem werden zwar Bewertungsmethodiken für den Entscheidungsprozess von Software-Produkten ermittelt und näher erläutert, aber viele dieser Kriterien lassen sich auch auf Programmiersprachen anwenden. \\
 \\
 Jadhav und Sonar haben dafür, neben der Vorgehensweise eines Vergleichs, die sieben Hauptkriterien \enquote{Functional}, \enquote{Technical}, \enquote{Quality}, \enquote{Vendor}, \enquote{Output}, \enquote{Cost and Benefit} und \enquote{Opinion} entwickelt. Anschließend haben sie diesen granularere Unterkriterien zugeordnet. Um eine Bewertung der einzelnen Kriterien zu vereinfachen, sind diesen Leitfragen zugewiesen.\\
-%\begin{figure}[htb]
-%	\includegraphics[width=0.5\textwidth]{images/comparision-criteria.jpg}
-%	\caption{Hauptkriterien des Softwarevergleichs von Jadhav und Sonar \cite{frameworkEvaluation}}
-%	\label{fig:comparisionCriteria}
-%\end{figure}
 \\
 Wie schon Anfangs erwähnt, lassen sich nicht alle Kriterien auf Programmiersprachen anwenden, weshalb für diesen konkreten Fall die Hauptkriterien \enquote{Technical} und \enquote{Output} entfallen. Da mit \enquote{Technical} Hardware- und mit \enquote{Output} Ausgabe-Kriterien gemeint sind.\\
 \\
 In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unterabschnitten~\ref{sec:functionalCriteria} bis \ref{sec:opinionCriteria}} werden dafür den Hauptkriterien einzelne Unterkriterien zugeordnet und mit Leitfragen detaillierter beschrieben. Dabei beziehen sich diese auf den konkreten Anwendungsfall des Vergleichs, wobei die Kompilierung nach JavaScript im Vordergrund steht.
-%Auf Basis des Papers von Jadhav und Sonar wurden die Kriterien, aus der  \hyperref[tab:comparisonCriteria]{Tabelle~\ref{tab:comparisonCriteria}}, für diesen Anwendungsfall ausgearbeitet bzw. angepasst.
- 
 \subsection{Funktionale Kriterien (Functional)}\label{sec:functionalCriteria}
 \subsubsection{JavaScript-Kompilierung}
 \begin{itemize}
@@ -255,7 +248,7 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 
 \subsubsection{Support}
 \begin{description}
-	\item[Kotlin] Durch die Firma JetBrains, welche für die Entwicklung von Kotlin verantwortlich ist, wird kein offizieller Support angeboten. Fragen können im Forum\footnote{siehe \url{https://discuss.kotlinlang.org/}} gestellt werden, wo jede Menge JetBrains-Entwickler vertreten sind und auch auf Fragen eingehen. Zusätzlich können Informationen oder auch Fragen auf den Community-Plattformen Reddit, Slack, Stack Overflow, Twitter oder Google+ erhalten bzw. gestellt werden. \cite{kotlinCommunity}
+	\item[Kotlin] Durch die Firma JetBrains, welche für die Entwicklung von Kotlin verantwortlich ist, wird kein offizieller Support angeboten. Fragen können im Forum\footnote{siehe \url{https://discuss.kotlinlang.org/} (besucht am 10.07.2018)} gestellt werden, wo jede Menge JetBrains-Entwickler vertreten sind und auch auf Fragen eingehen. Zusätzlich können Informationen oder auch Fragen auf den Community-Plattformen Reddit, Slack, Stack Overflow, Twitter oder Google+ erhalten bzw. gestellt werden. \cite{kotlinCommunity}
 	\item[GWT(Java)] Auch hier wird kein offizieller Support durch die Entwickler angeboten. Aber genau wie Kotlin bietet \gls{GWT} eine ganze Reihe von Community-Plattformen an -- darunter Reddit, Stack Overflow, Twitter und Google+. Als Foren dienen verschiedene je nach Anwendungsfall spezialisierte Google Gruppen. \cite{gwtCommunity}
 \end{description}
 
@@ -283,8 +276,8 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 \subsection{Kriterien an die öffentliche Meinung (Opinion)}
 \subsubsection{Beliebtheit}
 \begin{description}
-	\item[Kotlin] Laut Github existieren derzeit über 72~590\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Kotlin}} Repositories, welche mit Kotlin entwickelt wurden bzw. noch werden. Die Zahl der auf Stack Overflow gestellten Fragen beläuft sich auf 11~398\footnote{siehe \url{https://stackoverflow.com/questions/tagged/kotlin}}. (Stand: 14.06.2018)
-	\item[GWT(Java)] Die Anzahl der Github-Repositories beträgt derzeit 4~810~228\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Java}} für Java-Projekte. Da \gls{GWT} ein Framework ist, lässt sich über Github keine verwertbare Zahl ermitteln, wie viele Repositories dieses benutzen. Bei den gestellten Fragen auf Stack Overflow sieht das anders aus, denn derzeit sind 1~426~726\footnote{siehe \url{https://stackoverflow.com/questions/tagged/java}} mit Java und 20~443\footnote{siehe \url{https://stackoverflow.com/questions/tagged/gwt}} mit \gls{GWT} getaggt. (Stand: 14.06.2018)
+	\item[Kotlin] Laut Github existieren derzeit über 72~590\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Kotlin} (besucht am 14.06.2018)} Repositories, welche mit Kotlin entwickelt wurden bzw. noch werden. Die Zahl der auf Stack Overflow gestellten Fragen beläuft sich auf 11~398\footnote{siehe \url{https://stackoverflow.com/questions/tagged/kotlin} (besucht am 14.06.2018)}. (Stand: 14.06.2018)
+	\item[GWT(Java)] Die Anzahl der Github-Repositories beträgt derzeit 4~810~228\footnote{siehe \url{https://api.github.com/search/repositories?q=language:Java} (besucht am 14.06.2018)} für Java-Projekte. Da \gls{GWT} ein Framework ist, lässt sich über Github keine verwertbare Zahl ermitteln, wie viele Repositories dieses benutzen. Bei den gestellten Fragen auf Stack Overflow sieht das anders aus, denn derzeit sind 1~426~726\footnote{siehe \url{https://stackoverflow.com/questions/tagged/java} (besucht am 14.06.2018)} mit Java und 20~443\footnote{siehe \url{https://stackoverflow.com/questions/tagged/gwt} (besucht am 14.06.2018)} mit \gls{GWT} getaggt. (Stand: 14.06.2018)
 \end{description}
 
 \subsubsection{Veröffentlichung}
@@ -296,31 +289,6 @@ In den nachfolgenden \hyperref[sec:functionalCriteria, sec:opinionCriteria]{Unte
 \subsubsection{Indizes}
 \begin{description}
 	\item[Kotlin] Laut Tiobe Index landet Kotlin im Ranking der beliebtesten Programmiersprache auf Platz 49, laut RedMonk Index auf Platz 27 und laut PYPL Index auf Platz 16. \cite{tiobeIndex, redMonkIndex, pyplIndex}
+	\newpage
 	\item[GWT(Java)] Da \gls{GWT} keine Programmiersprache ist, beziehen sich die Platzierungen nur auf Java, welche laut Tiobe Index den Platz eins und laut RedMonk sowie PYPL Index den Platz zwei belegt. \cite{tiobeIndex, redMonkIndex, pyplIndex}
 \end{description}
-
-
-%\begin{longtabu} to \textwidth {X[L]X[L]X[L]}
-%	\captionabove{Vergleichsergebnis zwischen Kotlin und dem Google Web Toolkit in Zusammenhang mit Java} \\
-%	\hline
-%	\taburowcolors 1{tableheadcolor .. tableheadcolor}
-%	\bfseries Leitfrage &
-%	\bfseries Kotlin &
-%	\bfseries Google Web Toolkit/Java\\ \hline
-%	\endfirsthead
-%	\hline
-%	Leitfrage &
-%	Kotlin &
-%	Google Web Toolkit/Java\\ \hline
-%	\endhead
-%	\hline
-%	\taburowcolors 1{white .. white}
-%	\multicolumn{3}{r}{\emph{weiter auf der nächsten Seite \ldots}}
-%	\endfoot
-%	\hline
-%	\endlastfoot
-%	\taburowcolors 2{tablebodycolor .. tablerowcolor}
-%	L-1.1 
-%		& ECMAScript 5 (ECMAScript 2015 Support ist in Bearbeitung) \cite{kotlinJavaScript}
-%			& ECMAScript 5\\
-%\end{longtabu}
